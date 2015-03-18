@@ -2,6 +2,7 @@
 
 Use uRank to visualize a colleciton of documents and rank them according to keywords selected by the user
 
+![alt tag](https://cloud.githubusercontent.com/assets/6489976/6713829/25e9161e-cd95-11e4-88b5-6cf0ba685d9d.png)
 
 Include the following files in the header:
  * jquery (version 1.10.2 or higher)
