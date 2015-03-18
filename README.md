@@ -29,12 +29,11 @@ Example (assume urank folder is inside the folder scripts/):
 <script type="text/javascript" src="scripts/urank/urank.js" charset="utf-8"></script>
 ```
 
-Create the DOM elements that will serve as containers for the 5 aforementioned blocks
-
+Create the DOM elements that will serve as containers for the 5 aforementioned blocks.
 In your code, call the Urank function passing 3 arguments: 
-  1. A callback function that will receive a UrankController object as argument
-  2. An object specifying initialization settings
-  3. A string with the path to urank folder
+ 1. A callback function that will receive a UrankController object as argument
+ 2. An object specifying initialization settings
+ 3. A string with the path to urank folder
 
 Example:
 ```
@@ -60,29 +59,29 @@ Urank(init, options, 'scripts/urank/');
  
 ## Full list of initizialization options
 
-   * tagCloudRoot: {string} DOM selector for tagCloud container
-   * tagBoxRoot:  {string} DOM selector for tagBox container
-   * contentListRoot:  {string} DOM selector for contentList container
-   * visCanvasRoot:  {string} DOM selector for visCanvas container
-   * docViewerRoot:  {string} DOM selector for docViewer container
-   * tagColorArray: {array} (optional) HEX color strings for tags in Tag Cloud. It should be a palette for sequential data (see colorbrewer2.org)
-   * queryTermColorArray: {array} (optional) HEX color strings for tags in Tag Box. It should be a palette for qualitative data (see colorbrewer2.org)
-   
-   ###Callbacks to be executed after homonymous methods (optional)
-   * onLoad: receives array with keywords extracted from loaded data
-   * onChange: receives two parameters: ranking data array and seleced keywords array
-   * onReset
-   * onRankByOverallScore
-   * onRankByMaximumScore
-   * onItemClicked: receives document id as parameter
-   * onItemMouseEnter: receives document id as parameter
-   * onItemMouseLeave: receives document id as parameter
-   * onFaviconClicked: receives document id as parameter
-   * onWatchiconClicked: receives document id as parameter
-   * onTagInCloudMouseEnter: receives tag index in keywords array
-   * onTagInCloudMouseLeave: receives tag index in keywords array
-   * onTagInCloudClick: receives tag index in keywords array
-   * onTagDeleted: receives tag index in keywords array
-   * onTagInBoxMouseEnter: receives tag index in keywords array
-   * onTagInBoxMouseLeave: receives tag index in keywords array
-   * onTagInBoxClick: receives tag index in keywords array
+ * tagCloudRoot: {string} DOM selector for tagCloud container
+ * tagBoxRoot:  {string} DOM selector for tagBox container
+ * contentListRoot:  {string} DOM selector for contentList container
+ * visCanvasRoot:  {string} DOM selector for visCanvas container
+ * docViewerRoot:  {string} DOM selector for docViewer container
+ * tagColorArray: {array} (optional) HEX color strings for tags in Tag Cloud. It should be a palette for sequential data (see colorbrewer2.org)
+ * queryTermColorArray: {array} (optional) HEX color strings for tags in Tag Box. It should be a palette for qualitative data (see colorbrewer2.org)
+ 
+####Callbacks to be executed after homonymous methods (optional)
+ * onLoad: receives array with keywords extracted from loaded data
+ * onChange: receives two parameters: ranking data array and seleced keywords array
+ * onReset
+ * onRankByOverallScore
+ * onRankByMaximumScore
+ * onItemClicked: receives document id as parameter
+ * onItemMouseEnter: receives document id as parameter
+ * onItemMouseLeave: receives document id as parameter
+ * onFaviconClicked: receives document id as parameter
+ * onWatchiconClicked: receives document id as parameter
+ * onTagInCloudMouseEnter: receives tag index in keywords array
+ * onTagInCloudMouseLeave: receives tag index in keywords array
+ * onTagInCloudClick: receives tag index in keywords array
+ * onTagDeleted: receives tag index in keywords array
+ * onTagInBoxMouseEnter: receives tag index in keywords array
+ * onTagInBoxMouseLeave: receives tag index in keywords array
+ * onTagInBoxClick: receives tag index in keywords array
