@@ -1,5 +1,8 @@
 # uRank
 
+Use uRank to visualize a colleciton of documents and rank them according to keywords selected by the user
+
+
 Include the following files in the header:
  * jquery (version 1.10.2 or higher)
  * modernizr (urank/dependencies/modernizr.js)
@@ -41,11 +44,11 @@ method and passing your data array
  
 Full list of initizialization options:
 
-   * tagCloudRoot: {string} DOM selector for tag cloud container
-   * tagBoxRoot:  {string} DOM selector for tag box container
-   * contentListRoot:  {string} DOM selector for tag content list container
-   * visCanvasRoot:  {string} DOM selector for tag cloud container
-   * docViewerRoot:  {string} DOM selector for tag cloud container
+   * tagCloudRoot: {string} DOM selector for tagCloud container
+   * tagBoxRoot:  {string} DOM selector for tagBox container
+   * contentListRoot:  {string} DOM selector for contentList container
+   * visCanvasRoot:  {string} DOM selector for visCanvas container
+   * docViewerRoot:  {string} DOM selector for docViewer container
    * tagColorArray: {array} (optional) HEX color strings for tags in Tag Cloud. It should be a palette for sequential data (see colorbrewer2.org)
    * queryTermColorArray: {array} (optional) HEX color strings for tags in Tag Box. It should be a palette for qualitative data (see colorbrewer2.org)
    
