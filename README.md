@@ -1,8 +1,8 @@
 # uRank
 
 Include the following files in the header:
- * jquery in header (version 1.10.2 or higher)
- * modernizr in header (urank/dependencies/modernizr.js)
+ * jquery (version 1.10.2 or higher)
+ * modernizr (urank/dependencies/modernizr.js)
  * urank entry point (urank/urank.js)
  See the following example (assume urank folder is inside the folder scripts/)
 <script type="text/javascript" src="libs/jquery-1.10.2.js" charset="utf-8"></script>
