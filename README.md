@@ -23,11 +23,11 @@ Include the following files in the header:
  * urank entry point (urank/urank.js)
  
 Example (assume urank folder is inside the folder scripts/):
-'''
+```
 <script type="text/javascript" src="libs/jquery-1.10.2.js" charset="utf-8"></script>
 <script type="text/javascript" src="scripts/urank/dependencies/modernizr.js" charset="utf-8"></script>
 <script type="text/javascript" src="scripts/urank/urank.js" charset="utf-8"></script>
-'''
+```
 
 Create the DOM elements that will serve as containers for the 5 aforementioned blocks
 
@@ -37,7 +37,7 @@ In your code, call the Urank function passing 3 arguments:
   3. A string with the path to urank folder
 
 Example:
-'''
+```
 var options = {
    tagCloudRoot: '#tag_cloud',
    tagBoxRoot: '#tag_box',
@@ -54,9 +54,9 @@ var init = function(urank){
 };
 
 Urank(init, options, 'scripts/urank/');
-'''
+```
 
-'options' passes the DOM elements that will be roots for each specific component (see full list below). 'init' is the callback function that receives a UrankController object: 'urank'. This controller provides three event handlers that can be bound to your own DOM elements: 'reset', 'rankByOverallScore' and 'rankByMaximumScore'. To load a collection of documents, call urank's 'loadData' method passing your data array as argument.
+`options` passes the DOM elements that will be roots for each specific component (see full list below). `init` is the callback function that receives a UrankController object: `urank`. This controller provides three event handlers that can be bound to your own DOM elements: `reset`, `rankByOverallScore` and `rankByMaximumScore`. To load a collection of documents, call urank's `loadData` method passing your data array as argument.
  
 ## Full list of initizialization options
 
