@@ -23,7 +23,7 @@ var ContentList = (function(){
         faviconClass = 'urank-list-li-button-favicon',
         faviconOffClass = 'urank-list-li-button-favicon-off',
         faviconOnClass = 'urank-list-li-button-favicon-on',
-        watchiconClass = 'urank-list-li-button-watchicon-on',
+        watchiconClass = 'urank-list-li-button-watchicon',
         watchiconOffClass = 'urank-list-li-button-watchicon-off',
         watchiconOnClass = 'urank-list-li-button-watchicon-on',
         liWatchedClass = 'urank-list-li-watched';
@@ -387,7 +387,7 @@ var ContentList = (function(){
         var classToAdd = watchIcon.hasClass(watchiconOffClass) ? watchiconOnClass : watchiconOffClass;
         var classToRemove = classToAdd === watchiconOnClass ? watchiconOffClass : watchiconOnClass;
         watchIcon.switchClass(classToRemove, classToAdd);
-        $(liItem + '' + d.id).toggleClass(liWatchedClass);
+        $(liItem + '' + id).toggleClass(liWatchedClass);
     };
 
 

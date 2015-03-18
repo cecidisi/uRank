@@ -612,7 +612,6 @@ CANVAS PANEL (bottom-center)
     float: left;
     margin-top: 7px;
     padding: 9px;
-    background-size: 14px;
 }
 
 
@@ -631,7 +630,7 @@ CANVAS PANEL (bottom-center)
 }
 
 .urank-list-li:hover .urank-list-li-button-favicon-off,
-.urank-list-li:hover .urank-list-li-button--off {
+.urank-list-li:hover .urank-list-li-button-watchicon-off {
     display: inline-block;
     transition: all .2s ease-in-out;
 }
