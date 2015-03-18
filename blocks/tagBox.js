@@ -93,8 +93,6 @@ var TagBox = (function(){
                 .click(function(){
                 s.onTagDeleted($tag.attr('tag-pos'));
                 $(s.root).trigger('tagBoxChange');
-                //s.onChange(_this.getKeywordsInBox(), s.colorScale);
-
             });
 
             // Add new div to make it a slider

@@ -1,5 +1,5 @@
 
-var Urank = (function(){
+var UrankController = (function(){
 
     var _this,
         s = {},
@@ -24,6 +24,7 @@ var Urank = (function(){
             docViewer.build();
             _this.selectedId = STR_UNDEFINED;
             _this.selectedKeywords = [];
+            s.onLoad.call(this, _this.keywords);
         },
         onChange: function(selectedKeywords, newQueryTermColorScale) {
 
@@ -36,35 +37,41 @@ var Urank = (function(){
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
             visCanvas.update(rankingModel, $(s.contentListRoot).height(), _this.queryTermColorScale);
             docViewer.clear();
+            s.onChange.call(this, rankingData, _this.selectedKeywords);
         },
         onTagInCloudMouseEnter: function(index) {
             tagCloud.hoverTag(index);
+            s.onTagInCloudMouseEnter.call(this, index);
         },
         onTagInCloudMouseLeave: function(index) {
             tagCloud.unhoverTag(index);
+            s.onTagInCloudMouseLeave.call(this, index);
         },
         onTagInCloudClick: function(index) {
             // TODO
+            s.onTagInCloudClick.call(this, index);
         },
-        onTagDeleted: function($tag) {
-            tagCloud.restoreTag($tag);
-            //EVTHANDLER.onChange.call(this, selectedKeywords, newQueryTermColorScale);
+        onTagDeleted: function(index) {
+            tagCloud.restoreTag(index);
+            s.onTagDeleted.call(this, index);
         },
         onTagInBoxMouseEnter: function(index) {
             // TODO
+            s.onTagInBoxMouseEnter.call(this, index);
         },
         onTagInBoxMouseLeave: function(index) {
             // TODO
+            s.onTagInBoxMouseLeave.call(this, index);
         },
         onTagInBoxClick: function(index) {
             // TODO
+            s.onTagInBoxClick.call(this, index);
         },
         onItemClicked : function(documentId) {
             _this.selectedId = _this.selectedId === documentId ? STR_UNDEFINED : documentId;
             if(_this.selectedId !== STR_UNDEFINED) {    // select
                 contentList.selectListItem(documentId);
                 visCanvas.selectItem(documentId);
-                console.log(rankingModel.getDocumentById(documentId));
                 docViewer.showDocument(rankingModel.getDocumentById(documentId), _this.selectedKeywords.map(function(k){return k.stem}), _this.queryTermColorScale);
             }
             else {                   // deselect
@@ -72,30 +79,37 @@ var Urank = (function(){
                 visCanvas.deselectAllItems();
                 docViewer.clear();
             }
+            s.onItemClicked.call(this, documentId);
         },
         onItemMouseEnter: function(documentId) {
             contentList.hover(documentId);
             visCanvas.hoverItem(documentId);
+            s.onItemMouseEnter.call(this, documentId);
         },
         onItemMouseLeave: function(documentId) {
             contentList.unhover(documentId);
             visCanvas.unhoverItem(documentId);
+            s.onItemMouseLeave.call(this, documentId);
         },
         onFaviconClicked: function(documentId){
             //this.data[i].isSelected = ! this.data[index].isSelected;         //CHECK
             contentList.switchFaviconOnOrOff(documentId);
+            s.onFaviconClicked.call(this, documentId);
         },
         onWatchiconClicked: function(documentId) {
             contentList.watchOrUnwatchListItem(documentId);
+            s.onWatchiconClicked.call(this, documentId);
         },
         // Event handlers to return
         onRankByOverallScore: function() {
             _this.rankingMode = RANKING_MODE.overall_score;
             EVTHANDLER.onChange(tagBox.getKeywordsInBox(), _this.queryTermColorScale);
+            s.onRankByOverallScore.call(this);
         },
         onRankByMaximumScore: function() {
             _this.rankingMode = RANKING_MODE.max_score;
             EVTHANDLER.onChange(tagBox.getKeywordsInBox(), _this.queryTermColorScale);
+            s.onRankByMaximumScore.call(this);
         },
         onReset: function() {
             rankingModel.reset();
@@ -106,6 +120,7 @@ var Urank = (function(){
             docViewer.clear();
             _this.selectedId = STR_UNDEFINED;
             _this.selectedKeywords = [];
+            s.onReset.call(this);
         },
         onResize: function() {
             visCanvas.resize();
@@ -129,7 +144,7 @@ var Urank = (function(){
             docViewerRoot: '',
             tagColorArray: tagColorRange,
             queryTermColorArray: queryTermColorRange,
-            onLoad: function(data, keywords){},
+            onLoad: function(keywords){},
             onChange: function(rankingData, selecedKeywords){},
             onItemClicked: function(documentId){},
             onItemMouseEnter: function(documentId){},
@@ -142,7 +157,10 @@ var Urank = (function(){
             onTagDeleted: function(index){},
             onTagInBoxMouseEnter: function(index){},
             onTagInBoxMouseLeave: function(index){},
-            onTagInBoxClick: function(index){}
+            onTagInBoxClick: function(index){},
+            onReset: function(){},
+            onRankByOverallScore: function(){},
+            onRankByMaximumScore: function(){}
         }, arguments);
 
         // Set color scales
@@ -199,6 +217,8 @@ var Urank = (function(){
         tagBox = new TagBox(options.tagBox);
         visCanvas = new VisCanvas(options.visCanvas);
         docViewer = new DocViewer(options.docViewer);
+
+        $(window).resize(EVTHANDLER.onResize);
     }
 
 
@@ -263,17 +283,12 @@ var Urank = (function(){
         EVTHANDLER.onRankByMaximumScore.call(this);
     };
 
-    var _resize = function() {
-        EVTHANDLER.onResize.call(this);
-    };
-
 
     Urank.prototype = {
         loadData: _loadData,
         reset: _reset,
         rankByOverallScore: _rankByOverallScore,
-        rankByMaximumScore: _rankByMaximumScore,
-        resize: _resize
+        rankByMaximumScore: _rankByMaximumScore
     };
 
     return Urank;
