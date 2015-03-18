@@ -68,7 +68,7 @@ Urank(init, options, 'scripts/urank/');
    * tagColorArray: {array} (optional) HEX color strings for tags in Tag Cloud. It should be a palette for sequential data (see colorbrewer2.org)
    * queryTermColorArray: {array} (optional) HEX color strings for tags in Tag Box. It should be a palette for qualitative data (see colorbrewer2.org)
    
-   Callbacks to be executed after homonymous methods (optional)
+   ###Callbacks to be executed after homonymous methods (optional)
    * onLoad: receives array with keywords extracted from loaded data
    * onChange: receives two parameters: ranking data array and seleced keywords array
    * onReset
