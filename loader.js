@@ -32,7 +32,6 @@ Modernizr.load([{
     ],
     complete: function(){
         console.log('urank loaded');
-        Vis();      // call entry point
     }
 
 }]);

@@ -1,0 +1,28 @@
+{
+  "name": "uRank",
+  "version": "0.0.1",
+  "homepage": "https://github.com/cecidisi/uRank",
+  "description": "rank documents",
+  "main": "[\"css/urank.css\", \"libs/natural-adapted.js\", \"libs/outerHTML.js\", \"libs/scrollTo.js\", \"libs/pos/lexer.js\", \"libs/pos/lexicon.js\", \"libs/pos/pos.js\", \"libs/pos/POSTagger.js\", \"blocks/contentList.js\", \"blocks/docViewer.js\", \"blocks/tagBox.js\", \"blocks/tagCloud.js\", \"blocks/visCanvas.js\", \"helper/globals.js\", \"helper/keywordExtractor.js\", \"helper/settings.js\", \"helper/utils.js\", \"model/rankingArray.js\", \"model/rankingModel.js\", \"vis/ranking.js\", \"media/sprites.png\"]",
+  "moduleType": [
+    "globals"
+  ],
+  "authors": [
+    "Cecilia di Sciascio"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "colorbrewer": "~1.0.0",
+    "d3": "~3.5.5",
+    "underscore": "~1.8.2",
+    "jquery": "~2.1.3",
+    "jquery-ui": "~1.11.4"
+  }
+}
