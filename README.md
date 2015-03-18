@@ -1,25 +1,43 @@
 # uRank
 
+## Description
+
 Use uRank to visualize a colleciton of documents and rank them according to keywords selected by the user
 
 ![alt tag](https://cloud.githubusercontent.com/assets/6489976/6713829/25e9161e-cd95-11e4-88b5-6cf0ba685d9d.png)
+
+uRank consists of 5 components:
+ * Tag Cloud: shows keywords extracted for the whole collection as tags. Color intensity indicates term frequency
+ * Tag Box: the user can drag and drop tags here to query the collection, which in turns creates or updates the document ranking
+ * Content List: displays documents in a list. As the ranking is updated, it shows additional information, such as ranking position and number of positions changed respect to the last ranking state
+ * Vis Canvas: displays a ranking visualization as stacked bars. It depicts overall scores and query term contribution. Alternatively, documents can be ranked by maximum term score
+ * Doc Viewer: when a document is selected, its title, content and other metadata are displayed here
+
+![alt-tag](https://cloud.githubusercontent.com/assets/6489976/6714765/5c18502e-cd9a-11e4-95f3-925c0eeb9da4.png)
+
+## How to use it
 
 Include the following files in the header:
  * jquery (version 1.10.2 or higher)
  * modernizr (urank/dependencies/modernizr.js)
  * urank entry point (urank/urank.js)
- See the following example (assume urank folder is inside the folder scripts/)
+ 
+Example (assume urank folder is inside the folder scripts/):
+'''
 <script type="text/javascript" src="libs/jquery-1.10.2.js" charset="utf-8"></script>
 <script type="text/javascript" src="scripts/urank/dependencies/modernizr.js" charset="utf-8"></script>
 <script type="text/javascript" src="scripts/urank/urank.js" charset="utf-8"></script>
+'''
+
+Create the DOM elements that will serve as containers for the 5 aforementioned blocks
 
 In your code, call the Urank function passing 3 arguments: 
-  * A callback function that will receive a UrankController object in the parameters
-  * An object specifying initialization settings
-  * A string with the path to urank folder
+  1. A callback function that will receive a UrankController object as argument
+  2. An object specifying initialization settings
+  3. A string with the path to urank folder
 
 Example:
- 
+'''
 var options = {
    tagCloudRoot: '#tag_cloud',
    tagBoxRoot: '#tag_box',
@@ -36,14 +54,11 @@ var init = function(urank){
 };
 
 Urank(init, options, 'scripts/urank/');
+'''
 
-options passes the DOM elements that will be roots for each specific component (see full list below). init is the callback function that receives a UrankController object: urank
-This controller provides three event handlers that can be bound to your own DOM elements: reset, rankByOverallScore and rankByMaximumScore. Call urank's loadData
-method and passing your data array
+'options' passes the DOM elements that will be roots for each specific component (see full list below). 'init' is the callback function that receives a UrankController object: 'urank'. This controller provides three event handlers that can be bound to your own DOM elements: 'reset', 'rankByOverallScore' and 'rankByMaximumScore'. To load a collection of documents, call urank's 'loadData' method passing your data array as argument.
  
- 
- 
-Full list of initizialization options:
+## Full list of initizialization options
 
    * tagCloudRoot: {string} DOM selector for tagCloud container
    * tagBoxRoot:  {string} DOM selector for tagBox container
