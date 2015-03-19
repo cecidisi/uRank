@@ -49,7 +49,7 @@ var init = function(urank){
    $('#btn_reset').click(urank.reset);
    $('#btn_sort_by_overall_score').click(urank.rankByOverallScore);
    $('#btn_sort_by_max_score').click(urank.rankByMaximumScore);
-   urank.loadData(data));
+   urank.loadData(data);
 };
 
 Urank(init, options, 'scripts/urank/');
