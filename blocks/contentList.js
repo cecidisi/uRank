@@ -12,6 +12,7 @@ var ContentList = (function(){
         liHoverClass = 'urank-list-li-hover',
         liLightBackground = 'urank-list-li-lightbackground',
         liDarkBackground = 'urank-list-li-darkbackground',
+        liUnrankedClass = 'urank-list-li-unranked',
         liMovingUpClass = 'urank-list-li-movingup',
         liMovingDownClass = 'urank-list-li-movingdown',
         liNotMovingClass = 'urank-list-li-notmoving',
@@ -49,31 +50,30 @@ var ContentList = (function(){
     var _build = function(data) {
 
         this.data = data;
-        var root = $(s.root);
-        root.empty().addClass(contentListContainerClass).scrollTo('top');
+        var $root = $(s.root);
+        $root.empty().addClass(contentListContainerClass).scrollTo('top');
 
-        var ul = $("<ul class='" + ulClass + "'></ul>").appendTo(root);
+        var $ul = $("<ul class='" + ulClass + "'></ul>").appendTo($root);
 
         data.forEach(function(d, i){
             // li element
-            var li = $("<li class='" + liClass + "' id='urank-list-li-" + d.id + "' pos='" + i + "'></li>").appendTo(ul);
+            var $li = $('<li></li>', { id: 'urank-list-li-' + d.id }).appendTo($ul).addClass(liClass);
             // ranking container
-            var rankingDiv = $("<div class='" + liRankingContainerClass + "'></div>").appendTo(li);
-            rankingDiv.css('visibility', 'hidden');
-            $("<div class='" + rankingPosClass + "'></div>").appendTo(rankingDiv);
-            $("<div class='" + rankingPosMovedClass + "'></div>").appendTo(rankingDiv);
+            var $rankingDiv = $("<div></div>").appendTo($li).addClass(liRankingContainerClass).css('visibility', 'hidden');
+            $("<div></div>").appendTo($rankingDiv).addClass(rankingPosClass);
+            $("<div></div>").appendTo($rankingDiv).addClass(rankingPosMovedClass);
             // title container
-            var titleDiv = $("<div class='" + liTitleContainerClass + "'></div>").appendTo(li);
-            $("<h3><a href='#' id='urank-list-li-title-" + i + "'>" + d.title + "</a></h3>").appendTo(titleDiv);
+            var $titleDiv = $("<div></div>").appendTo($li).addClass(liTitleContainerClass);
+            $('<h3></h3>').appendTo($titleDiv).append('<a>', { ref: '#', id: 'urank-list-li-title-' + i, text: d.title});
             // buttons container
-            var buttonsDiv = $("<div class='" + liButtonsContainerClass + "'></div>").appendTo(li);
-            $("<span class='" + watchiconClass + " " + watchiconOffClass + "'></span>").appendTo(buttonsDiv);
-            $("<span class='" + faviconClass + " " + faviconOffClass + "'></span>").appendTo(buttonsDiv);
+            var $buttonsDiv = $("<div></div>").appendTo($li).addClass(liButtonsContainerClass);
+            $("<span>").appendTo($buttonsDiv).addClass(watchiconClass).addClass(watchiconOffClass);
+            $("<span>").appendTo($buttonsDiv).addClass(faviconClass).addClass(faviconOffClass);
             // Subtle animation
-            li.animate({'top': 5}, {
+            $li.animate({'top': 5}, {
                 'complete': function(){
                     $(this).animate({"top": 0}, (i+1)*100, 'swing', function(){
-                        _this.bindEvenHandlers(li, d.id);
+                        _this.bindEvenHandlers($li, d.id);
                     });
                 }
             });
@@ -101,7 +101,7 @@ var ContentList = (function(){
             removeDelay = 3000,
             timeout;
 
-        this.stopAnimation(this.timeout);
+        this.stopAnimation();
         this.deselectAllListItems();
         this.formatTitles(data, keywords, colorScale);
         this.showRankingPositions(data);
@@ -134,7 +134,7 @@ var ContentList = (function(){
         updateFunc[RANKING_STATUS.no_ranking] = _this.reset;
         //  When animations are triggered too fast and they can't finished in order, older timeouts are canceled and only the last one is executed
         //  (list is resorted according to last ranking state)
-        this.timeout = updateFunc[status].call(this);
+        this.animationTimeout = updateFunc[status].call(this);
 
         setTimeout(function() {
             _this.removeShadowEffect();
@@ -221,15 +221,17 @@ var ContentList = (function(){
         var listTop = $(s.root).position().top;
 
         data.forEach(function(d, i){
+
+            var $item = $(liItem +''+ d.id);
+            var itemTop = $item.position().top;
+            var newPos = listTop + acumHeight - itemTop;
+
             if(d.rankingPos > 0) {
-                var item = $(liItem +''+ d.id);
-                var itemTop = $(item).position().top;
-                var newPos = listTop +  acumHeight - itemTop;
                 var shift = (i+1) * 5;
                 var shiftedPos = newPos + shift;
                 var duration = initialDuration + timeLapse * i;
 
-                item.animate({top: shiftedPos}, 0, easing)
+                $item.animate({top: shiftedPos}, 0, easing)
                     .queue(function(){
                         $(this).animate({top: newPos}, duration, easing);
                     })
@@ -237,8 +239,12 @@ var ContentList = (function(){
                         $(this).animate({top: newPos}, 0);
                     })
                     .dequeue();
-                acumHeight += $(item).height();
+                //acumHeight += $item.height();
             }
+            else {
+               $item.css('top', newPos);
+            }
+            acumHeight += $item.height();
         });
     };
 
@@ -269,7 +275,6 @@ var ContentList = (function(){
 
 
     var _animateUnchangedEffect = function (data, duration, easing) {
-        console.log('entra');
         duration = duration || 1000;
         easing = easing || 'linear';
 
@@ -287,7 +292,7 @@ var ContentList = (function(){
 
 
     var _updateLiBackground = function(data){
-        $('.'+liClass).removeClass(liLightBackground).removeClass(liDarkBackground);
+        $('.'+liClass).removeClass(liLightBackground).removeClass(liDarkBackground).removeClass(liUnrankedClass);
 
         data.forEach(function(d, i) {
             var backgroundClass = (i % 2 == 0) ? liLightBackground : liDarkBackground;
@@ -305,7 +310,7 @@ var ContentList = (function(){
 
 
     var _deselectAllListItems = function() {
-        $('.'+liClass).css("opacity", "1");
+        $('.'+liClass).css('opacity', '');
     };
 
 
@@ -320,11 +325,23 @@ var ContentList = (function(){
     };
 
 
-    var _stopAnimation = function(timeout){
+    var _highlightListItems = function(idArray) {
+        this.stopAnimation();   // fix bug
+        $('.'+liClass).css('opacity', .2);
+        idArray.forEach(function(id){
+            var $li = $(liItem+''+id);
+            if(!$li.is(':visible'))
+                $li.removeClass(liDarkBackground).removeClass(liLightBackground).addClass(liUnrankedClass);
+            $li.css({ display: '', opacity: ''});
+        });
+    };
+
+
+    var _stopAnimation = function(){
         $('.'+liClass).stop(true, true);
         this.removeShadowEffect();
        // console.log(timeout);
-        if(timeout) clearTimeout(timeout);
+        if(this.animationTimeout) clearTimeout(this.animationTimeout);
     };
 
 
@@ -404,6 +421,7 @@ var ContentList = (function(){
         updateLiBackground: _updateLiBackground,
         selectListItem: _selectListItem,
         deselectAllListItems: _deselectAllListItems,
+        highlightListItems: _highlightListItems,
         stopAnimation: _stopAnimation,
         removeShadowEffect: _removeShadowEffect,
         hideUnrankedListItems: _hideUnrankedListItems,

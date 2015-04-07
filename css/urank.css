@@ -1,177 +1,10 @@
 
 
-
-
-
-
-/********************************************************************************************************************************************
-
-Header panel (top of screen)
-
-********************************************************************************************************************************************/
-
-
-#eexcess_vis{
-    width:100%;
-}
-
-
-
-/*
-Div wrapping the whole header (green bar on the top of the iFrame)
-*/
-#eexcess_header {
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    width: 100%;
-    height: 5em;
-    padding: .5em 0em;
-    background: -webkit-linear-gradient(top, rgba(102, 102, 102, 1), rgba(115, 115, 115, 1), rgba(102, 102, 102, 1));
-}
-
-
-/*
-<span> inside #eexcess_message_and_task_section
-Displays message like "Query Results : xx"
-*/
-#eexcess_header_info_section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    float: left;
-    width: 16%;
-    text-align: center;
-    color: #fff;
-}
-
-
-#eexcess_header_info_section span {
-    font-size: 1.2em;
-    font-weight: bold;
-    /*text-shadow: 0em 0.1em #888;*/
-    text-shadow: 0em .1em green;
-}
-
-/*
-<div> on the left side of header
-Wraps the message and task
-*/
-#eexcess_header_task_section {
-    display: flex;
-    overflow: auto;
-    width: 65%;
-    height: 100%;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    background: white;
-    box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
-}
-
-#eexcess_header_task_section p {
-    width: calc(100% - 1em);
-    //height: calc(500% - .4em);
-    height  20px;
-    margin: .5em;
-    font-size: 1.1em;
-    line-height: 1.3em;
-    color: #444;
-    -webkit-margin-before: 0.2em;
-    -webkit-margin-after: 0.2em;
-}
-
-
-p#p_question {
-    font-weight: bold;
-}
-
-
-/*
-Third and last <div> aligned inside "#eexcess_inner_header"
-Currently Unused
-*/
-#eexcess_header_control_section {
-    float: right;
-    display: flex;
-    justify-content: center;
-    width: 20%;
-}
-
-
-#eexcess_header_control_section input[type="button"] {
-    align-self: center;
-    margin: 0em .3em;
-}
-
-
-
-#eexcess_selected_items_section,
-#eexcess_topic_text_section {
-    display: block;
-    position: absolute;
-    float: right;
-    overflow: hidden;
-    padding: .4em 0em;
-    z-index: 999;
-    background: white;
-    box-shadow: .5em .5em 1em #555, -.5em .5em 1em #555;
-    text-align: center;
-}
-
-.eexcess_selected_item {
-    display: inline-flex;
-    align-items: center;
-    padding: .15em;
-    width: 94%;
-    margin: .1em auto;
-    text-align: left;
-    border: solid 1px #ccc;
-    background: rgba(250, 250, 250, 1);
-    box-shadow: 0em 0.1em 0.2em -0.1em #888;
-    color: #529CBF;
-}
-
-
-.eexcess_selected_item span {
-    display: inline-block;
-    float: left;
-    width: calc(100% - 22px);
-    margin-right: 2px;
-}
-
-.eexcess_selected_item img {
-    display: inline-block;
-    float: right;
-    width: 12px;
-    margin: 0px 2px 0px 4px;
-    z-index: 999;
-}
-
-
-#eexcess_topic_text_section p {
-    font-size: 1.1em;
-    -webkit-margin-before: 0em;
-    -webkit-margin-after: 0em;
-    margin: .2em .7em;
-    text-align: left;
-}
-
-
-/*
-Contains icon expand/contract
-*/
-#eexcess_expand_contract_icon_section {
-    display: flex;
-    align-items: flex-end;
-    width: 2em;
-}
-
-/********************************************************************************************************************************************
+/************************************************************************************************************************************
 
 Main Containers
 
-********************************************************************************************************************************************/
+************************************************************************************************************************************/
 
 
 
@@ -213,12 +46,12 @@ Main Containers
 .urank-tagcloud-container {
     overflow-y: auto;
     width: 100%;
-    /* max-height: 50%;*/
     padding: 8px 4px;
-    /*background: white;*/
-    background: -webkit-linear-gradient(top, rgba(30, 30, 30, 1), rgba(50, 50, 50, 0.5), rgba(30, 30, 30, 1));
+    /*background: -webkit-linear-gradient(top, rgba(30, 30, 30, 1), rgba(50, 50, 50, 0.5), rgba(30, 30, 30, 1));*/
+    background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
     box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
 }
+
 
 /*  keywords in keyword container  */
 .urank-tagcloud-tag {
@@ -226,7 +59,6 @@ Main Containers
     pointer-events: all;
     margin: 0.2em;
     padding: 3px 5px;
-    /*border: 0.1em #222 solid;*/
     -webkit-border-radius: 7px;
     border-radius: 7px;
     -webkit-box-shadow: 0em 0.1em 0.3em #222;
@@ -234,24 +66,97 @@ Main Containers
     box-shadow: 0em 0.1em 0.3em #222;
     color: #111;
     text-shadow: -0.1em 0.1em 0.5em #eee;
-    opacity: 1.0;
     cursor: move;
 }
 
-.urank-tagcloud-tag:hover {
+
+.urank-tagcloud-tag:hover, .urank-tagcloud-tag.selected {
+
+    background: -webkit-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
+    border: solid 1px rgb(0, 102, 255);
     color: #eee;
     text-shadow: none;
 }
 
 
+.urank-tagcloud-tag.dimmed {
+    border: 1px solid rgba(202, 202, 202, 0.2);
+    background: rgba(202, 202, 202, 0.2);
+    color: #111;
+    text-shadow: -0.1em 0.1em 0.5em #eee;
+    cursor: default;
+}
 
 
+.urank-keyword-hint {
+    position: absolute;
+    display: inline;
+    width: 14px;
+    height: 14px;
+    background: red;
+    border-radius: 8px;
+    color: #eee;
+    text-align: center;
+    font-size: 8px;
+    line-height: 14px;
+    box-shadow: 0 1px 1px #777;
+    cursor: pointer;
+}
 
-/********************************************************************************************************************************************
+
+.urank-tagcloud-tag .urank-keyword-hint {
+    visibility: hidden;
+}
+
+
+.urank-tagcloud-tag:hover.active .urank-keyword-hint {
+    visibility: visible;
+}
+
+
+.urank-tagcloud-tag:hover.active .urank-keyword-hint:hover {
+    transform: scale(1.1);
+}
+
+
+.urank-documents-hint {
+    position: absolute;
+    display: inline;
+    width: 14px;
+    height: 14px;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+.urank-tagcloud-tag .urank-documents-hint {
+    visibility: hidden;
+}
+
+.urank-tagcloud-tag:hover.active .urank-documents-hint {
+    visibility: visible;
+}
+
+.urank-tagcloud-tag:hover.active .urank-documents-hint:hover {
+    transform: scale(1.1);
+}
+
+
+.urank-tagcloud-tag.dimmed .urank-documents-hint, .urank-tagcloud-tag.dimmed .urank-documents-hint {
+    display: none;
+}
+
+
+.hint--right:after {
+    font-size: 10px;
+}
+
+
+/************************************************************************************************************************************
 
 VIS PANEL (center of screen)
 
-********************************************************************************************************************************************/
+************************************************************************************************************************************/
 
 #eexcess_vis_panel {
     display: inline-block;
@@ -363,38 +268,29 @@ VIS PANEL CONTROLS
 
 /* slider div*/
 .urank-tagbox-tag-weight-slider {
-    height: .5em;
+    height: .4em;
     margin: .1em;
-    font-size: 1em;
 }
 
 
 /* ui-slider-range */
-.urank-tagbox-tag-weight-slider div {
-
+.urank-tagbox-tag-weight-slider .urank-tagbox-tag-weight-slider-range
+ {
+    height: 100%;
+    font-size: 0.9em;
+    font-weight: normal;
+    border-radius: 0.3em;
+    -webkit-border-radius: 0.3em;
 }
 
 /* ui-slider-handle */
-.urank-tagbox-tag-weight-slider a {
-    top:-0.2em;
-    width: 0.4em;
+.urank-tagbox-tag-weight-slider .urank-tagbox-tag-weight-slider-handle  {
+    top: -0.3em;
+    width: 0.45em;
     height: .8em;
     border-radius: 0.2em;
     -webkit-border-radius: 0.2em;
 }
-
-/*
-
-.eexcess_weight_slider .ui-slider-range {
-    height: 100%;
-    font-size: 0.9em;
-    font-weight: normal;
-
-    border-radius: 0.3em;
-    -webkit-border-radius: 0.3em;
-}
-*/
-
 
 
 .urank-tagbox-tag .urank-tagbox-tag-delete-button {
@@ -422,6 +318,10 @@ VIS PANEL CONTROLS
     transform: scale(1.0);
 }
 
+.urank-tagbox-tag .urank-keyword-hint,
+.urank-tagbox-tag .urank-documents-hint {
+    display: none;
+}
 
 /********************************************************************************************************************************************
 
@@ -487,6 +387,16 @@ CANVAS PANEL (bottom-center)
 
 .urank-list-li-darkbackground {
     background: #ddd;
+}
+
+.urank-list-li-unranked {
+    background: white;
+    height: 24px;
+    border: 1px dashed #bbb;
+}
+
+.urank-list-li-unranked:hover {
+    background: #eee;
 }
 
 /* <li> itmes' hover style */
@@ -759,15 +669,15 @@ Document Panel (right) - for visualizing highlighted text
     display: inline-block;
     width: 100%;
     height: calc(100% - 9em);
-    /*background: white;*/
-    background: -webkit-linear-gradient(top, rgba(30, 30, 30, 1), rgba(60, 60, 60, 1), rgba(30, 30, 30, 1));
+    /*background: -webkit-linear-gradient(top, rgba(30, 30, 30, 1), rgba(60, 60, 60, 1), rgba(30, 30, 30, 1));*/
+    background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
     box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
     overflow-y: auto;
 }
 
 .urank-docviewer-content-section p {
     margin: .5em 1em;
-    font-size: .9em;
+    font-size: .95em;
     text-align: left;
     /*color: #444;*/
     color: white;

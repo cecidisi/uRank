@@ -18,7 +18,7 @@ var UrankController = (function(){
 
         onLoad: function(data, keywords) {
             contentList.build(data);
-            tagCloud.build(keywords);
+            tagCloud.build(keywords, data.length);
             tagBox.build();
             visCanvas.build();
             docViewer.build();
@@ -37,6 +37,7 @@ var UrankController = (function(){
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
             visCanvas.update(rankingModel, $(s.contentListRoot).height(), _this.queryTermColorScale);
             docViewer.clear();
+            tagCloud.removeEffects();
             s.onChange.call(this, rankingData, _this.selectedKeywords);
         },
         onTagInCloudMouseEnter: function(index) {
@@ -50,6 +51,25 @@ var UrankController = (function(){
         onTagInCloudClick: function(index) {
             // TODO
             s.onTagInCloudClick.call(this, index);
+        },
+        onKeywordHintEnter: function(index) {
+            tagCloud.keywordHintMouseEntered(index);
+            s.onKeywordHintMouseEnter.call(this, index);
+        },
+        onKeywordHintLeave: function(index) {
+            tagCloud.keywordHintMouseLeft(index);
+            s.onKeywordHintMouseLeave.call(this, index);
+        },
+        onKeywordHintClick: function(index) {
+            tagCloud.keywordHintClicked(index);
+            s.onKeywordHintClick.call(this, index);
+        },
+        onDocumentHintClick: function(index) {
+            tagCloud.documentHintClicked(index);
+            var idsArray = _this.keywords[index].inDocument;
+            contentList.highlightListItems(idsArray);
+            visCanvas.highlightItems(idsArray);
+            s.onDocumentHintClick.call(this, index);
         },
         onTagDeleted: function(index) {
             tagCloud.restoreTag(index);
@@ -79,6 +99,7 @@ var UrankController = (function(){
                 visCanvas.deselectAllItems();
                 docViewer.clear();
             }
+            tagCloud.removeEffects();
             s.onItemClicked.call(this, documentId);
         },
         onItemMouseEnter: function(documentId) {
@@ -122,8 +143,17 @@ var UrankController = (function(){
             _this.selectedKeywords = [];
             s.onReset.call(this);
         },
-        onResize: function() {
+        onResize: function(event) {
             visCanvas.resize();
+        },
+        onClear: function(event){
+            console.log('click controller');
+            event.stopPropagation();
+            contentList.deselectAllListItems();
+            contentList.hideUnrankedListItems(rankingModel.getRanking());
+            visCanvas.deselectAllItems();
+            docViewer.clear();
+            tagCloud.removeEffects();
         }
     };
 
@@ -136,6 +166,7 @@ var UrankController = (function(){
         this.selectedKeywords = [];
         this.selectedId = STR_UNDEFINED;
 
+        // user-defined arguments
         s = $.extend({
             tagCloudRoot: '',
             tagBoxRoot: '',
@@ -154,6 +185,10 @@ var UrankController = (function(){
             onTagInCloudMouseEnter: function(index){},
             onTagInCloudMouseLeave: function(index){},
             onTagInCloudClick: function(index){},
+            onDocumentHintClick: function(index){},
+            onKeywordHintMouseEnter: function(index){},
+            onKeywordHintMouseLeave: function(index){},
+            onKeywordHintClick: function(index){},
             onTagDeleted: function(index){},
             onTagInBoxMouseEnter: function(index){},
             onTagInBoxMouseLeave: function(index){},
@@ -185,13 +220,16 @@ var UrankController = (function(){
                 dropIn: s.tagBoxRoot,
                 onTagInCloudMouseEnter: EVTHANDLER.onTagInCloudMouseEnter,
                 onTagInCloudMouseLeave: EVTHANDLER.onTagInCloudMouseLeave,
-                onTagInCloudClick: EVTHANDLER.onTagInCloudClick
+                onTagInCloudClick: EVTHANDLER.onTagInCloudClick,
+                onDocumentHintClick: EVTHANDLER.onDocumentHintClick,
+                onKeywordHintMouseEnter : EVTHANDLER.onKeywordHintEnter,
+                onKeywordHintMouseLeave : EVTHANDLER.onKeywordHintLeave,
+                onKeywordHintClick : EVTHANDLER.onKeywordHintClick
             },
 
             tagBox: {
                 root: s.tagBoxRoot,
                 colorScale: _this.queryTermColorScale,
-                //droppableClass: 'urank-tagcloud-tag',
                 onChange: EVTHANDLER.onChange,
                 onTagDeleted: EVTHANDLER.onTagDeleted,
                 onTagInBoxMouseEnter: EVTHANDLER.onTagInBoxMouseEnter,
@@ -219,6 +257,7 @@ var UrankController = (function(){
         docViewer = new DocViewer(options.docViewer);
 
         $(window).resize(EVTHANDLER.onResize);
+        $('body').on('mousedown', EVTHANDLER.onClear);
     }
 
 
@@ -243,7 +282,7 @@ var UrankController = (function(){
 
         data = JSON.parse(data);
         var kwOptions = {
-            minRepetitions : (parseInt(data.length * 0.05) > 1) ? parseInt(data.length * 0.05) : 2
+            minRepetitions : (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5
         };
 
         var keywordExtractor = new KeywordExtractor(kwOptions);
@@ -253,7 +292,7 @@ var UrankController = (function(){
             d.title = d.title.clean();
             d.description = d.description.clean();
             var document = (d.description) ? d.title +'. '+ d.description : d.title;
-            keywordExtractor.addDocument(document.removeUnnecessaryChars());
+            keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id);
         });
 
         keywordExtractor.processCollection();

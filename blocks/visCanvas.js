@@ -47,21 +47,23 @@ var VisCanvas = (function(){
 
     var _selectItem =function(id) {
         this.vis.selectItem(id);
-    }
+    };
 
     var _deselectAllItems =function() {
         this.vis.deselectAllItems();
-    }
+    };
 
     var _hoverItem = function(id) {
-//        console.log('hover in viscanvas = ' + document.id);
         this.vis.hoverItem(id);
-    }
+    };
 
     var _unhoverItem = function(id) {
         this.vis.unhoverItem(id);
-    }
+    };
 
+    var _highlightItems = function(idsArray) {
+        this.vis.highlightItems(idsArray);
+    };
 
     VisCanvas.prototype = {
         build: _build,
@@ -71,7 +73,8 @@ var VisCanvas = (function(){
         selectItem: _selectItem,
         deselectAllItems: _deselectAllItems,
         hoverItem: _hoverItem,
-        unhoverItem: _unhoverItem
+        unhoverItem: _unhoverItem,
+        highlightItems: _highlightItems
     };
 
     return VisCanvas;

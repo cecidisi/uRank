@@ -1,14 +1,23 @@
 
 var KeywordExtractor = (function(){
 
+    var s = {};
     //  CONSTRUCTOR
     function KeywordExtractor(arguments) {
-        this.minRepetitions = arguments['minRepetitions'] || 2;
+        s = $.extend({
+            minDocFrequency: 5,
+            minRepetitionsInDocument: 1,
+            maxKeywordDistance: 5,
+            minRepetitionsProxKeywords: 4
+        }, arguments);
+
+
     }
 
     var collection = [],
         documentKeywords = [],
-        collectionKeywords = [];
+        collectionKeywords = [],
+        allTokens = [];
 
     var stemmer = natural.PorterStemmer; //natural.LancasterStemmer;
     var tokenizer = new natural.WordTokenizer;
@@ -32,12 +41,11 @@ var KeywordExtractor = (function(){
 
 
 
-/********************************************************************************************************************************************
+/************************************************************************************************************************************
 *
 *   PRIVATE METHODS
 *
-*********************************************************************************************************************************************/
-
+************************************************************************************************************************************/
 
 
 
@@ -54,6 +62,8 @@ var KeywordExtractor = (function(){
         // Create each item's document to be processed by tf*idf
         collection.forEach(function(d) {
             d.tokens = getFilteredTokens(d.taggedWords, keyAdjectives);                                       // d.tokens contains raw nouns and important adjectives
+
+            $.merge(allTokens, d.tokens);
             tfidf.addDocument(d.tokens.map(function(term){ return term.stem(); }).join(' '));                 // argument = string of stemmed terms in document array
         });
 
@@ -118,10 +128,8 @@ var KeywordExtractor = (function(){
         var docKeywords = {};
 
         tfidf.listTerms(dIndex).forEach(function(item){
-            if(isNaN(item.term) && parseFloat(item.tfidf) > 0 ){
-                //docKeywords.push({ 'term': item.term, 'score': item.tfidf });
+            if(isNaN(item.term) && parseFloat(item.tfidf) > 0 )
                 docKeywords[item.term] = item.tfidf;
-            }
         });
         return docKeywords;
     }
@@ -131,21 +139,47 @@ var KeywordExtractor = (function(){
 
     /////////////////////////////////////////////////////////////////////////////
 
-    var extractGlobalKeywords = function(minRepetitions) {
+    var extractGlobalKeywords = function() {
 
-        collectionKeywords = getCandidateKeywords(documentKeywords).filter(function(ck){ return ck.repeated >= minRepetitions });
+        var keywordDictionary = getKeywordDictionary(documentKeywords);
 
-        collectionKeywords.sort(function(k1, k2){
-            if(k1.repeated < k2.repeated) return 1;
-            if(k1.repeated > k2.repeated) return -1;
-            return 0;
+        // get keyword variations
+        allTokens.forEach(function(token){
+            var stem = token.stem();
+            if(keywordDictionary[stem] && stopWords.indexOf(token.toLowerCase()) == -1)
+                keywordDictionary[stem].variations[token] =
+                    keywordDictionary[stem].variations[token] ? keywordDictionary[stem].variations[token] + 1 : 1;
         });
 
-        getAllTokens(collection).forEach(function(token){
-            var kIndex = _.findIndex(collectionKeywords, function(k){ return k.stem == token.stem() });
-            if(kIndex >= 0 && stopWords.indexOf(token.toLowerCase()) == -1)
-                collectionKeywords[kIndex].variations[token] = collectionKeywords[kIndex].variations[token] ? collectionKeywords[kIndex].variations[token] + 1 : 1;
+        // compute keywords in proximity
+        keywordDictionary = computeKeywordsInProximity(keywordDictionary);
+
+
+        // object to array
+        _.keys(keywordDictionary).forEach(function(keyword){
+            var proxKeywords = [];
+            _.keys(keywordDictionary[keyword].keywordsInProximity).forEach(function(proxKeyword){
+                var proxKeywordsRepetitions = keywordDictionary[keyword].keywordsInProximity[proxKeyword];
+                if(proxKeywordsRepetitions >= s.minRepetitionsProxKeywords)
+                    proxKeywords.push({ stem: proxKeyword, repeated: proxKeywordsRepetitions });
+            });
+            keywordDictionary[keyword].keywordsInProximity = proxKeywords.sort(function(proxK1, proxK2){
+                if(proxK1.repeated < proxK2.repeated) return 1;
+                if(proxK1.repeated > proxK2.repeated) return -1;
+                return 0;
+            });
+
+            collectionKeywords.push(keywordDictionary[keyword]);
         });
+
+
+        collectionKeywords = collectionKeywords
+            //.filter(function(ck){ return ck.repeated >= minRepetitions })
+            .sort(function(k1, k2){
+                if(k1.repeated < k2.repeated) return 1;
+                if(k1.repeated > k2.repeated) return -1;
+                return 0;
+            });
 
         collectionKeywords.forEach(function(k, i){
             k.term = getRepresentativeTerm(k);
@@ -155,45 +189,78 @@ var KeywordExtractor = (function(){
 
 
 
-    var getCandidateKeywords = function(_documentKeywords) {
+    var getKeywordDictionary = function(_documentKeywords) {
 
-        var candidateKeywords = [];
+        var keywordDictionary = {};
         _documentKeywords.forEach(function(docKeywords, i){
 
-            var sum = 0;
-            Object.keys(docKeywords).forEach(function(term){
-                sum += docKeywords[term];
-            });
-            var mean = sum / Object.keys(docKeywords).length;
+//            var sum = 0;
+//            _.keys(docKeywords).forEach(function(term){
+//                sum += docKeywords[term];
+//            });
+//            var mean = sum / _.keys(docKeywords).length;
 
-            Object.keys(docKeywords).forEach(function(stemmedTerm){
-                var kIndex = _.findIndex(candidateKeywords, function(element){ return element.stem === stemmedTerm});
-                if(docKeywords[stemmedTerm] >= mean && kIndex == -1)
-                    candidateKeywords.push({ 'stem': stemmedTerm, 'term': '', 'repeated': 1, 'variations': {} });
-                else if(kIndex > -1)
-                    candidateKeywords[kIndex].repeated++;
+            _.keys(docKeywords).forEach(function(stemmedTerm){
+                if(!keywordDictionary[stemmedTerm]) {
+                    keywordDictionary[stemmedTerm] = {
+                        stem: stemmedTerm,
+                        term: '',
+                        repeated: 1,
+                        variations: {},
+                        inDocument : [collection[i].id],
+                        keywordsInProximity: {}
+                    };
+                }
+                else {
+                    keywordDictionary[stemmedTerm].repeated++;
+                    keywordDictionary[stemmedTerm].inDocument.push(collection[i].id);
+                }
             });
         });
-        return candidateKeywords;
+
+
+        _.keys(keywordDictionary).forEach(function(keyword){
+            if(keywordDictionary[keyword].repeated < s.minDocFrequency)
+                delete keywordDictionary[keyword];
+        });
+        return keywordDictionary;
+    };
+
+
+    var computeKeywordsInProximity = function(_keywordDictionary) {
+        collection.forEach(function(d){
+            tokenizer.tokenize(d.text).forEach(function(word, i, text){
+
+                var current = word.stem();
+                if(_keywordDictionary[current]) {   // current word is keyword
+
+                    for(var j=i-s.maxKeywordDistance; j <= i+s.maxKeywordDistance; j++){
+                        var prox = text[j] ? text[j].stem() : STR_UNDEFINED;
+
+                        if(_keywordDictionary[prox] && current != prox) {
+                            var proxStem = prox.stem();
+                            _keywordDictionary[current].keywordsInProximity[proxStem] =
+                                _keywordDictionary[current].keywordsInProximity[proxStem] ?
+                                _keywordDictionary[current].keywordsInProximity[proxStem] + 1 : 1;
+                        }
+                    }
+                }
+
+
+            });
+        });
+
+        return _keywordDictionary;
     }
 
 
-    function getAllTokens(_collection) {
 
-        var allTokens = [];
-        _collection.forEach(function(d){
-            d.tokens.forEach(function(term){
-                allTokens.push(term);
-            });
-        });
-        return allTokens;
-    }
 
 
 
     var getRepresentativeTerm = function(k){
 
-        var keys = Object.keys(k.variations);
+        var keys = _.keys(k.variations);
 
         // Only one variations
         if(keys.length == 1)
@@ -228,7 +295,7 @@ var KeywordExtractor = (function(){
                 shortestTerm = keys[i];
         }
         return shortestTerm.toLowerCase();
-    }
+    };
 
 
 
@@ -242,16 +309,18 @@ var KeywordExtractor = (function(){
 
 
     KeywordExtractor.prototype = {
-        addDocument: function(document) {
+        addDocument: function(document, id) {
             document = (!Array.isArray(document)) ? document : document.join(' ');
-            collection.push({ text: document });
+            id = id || collection.length;
+            collection.push({ id: id, text: document });
         },
         processCollection: function() {
-            console.log('start keyword extraction');
+            console.log('Started keyword extraction');
             var timestamp = $.now();
             extractDocumentKeywords();
-            extractGlobalKeywords(this.minRepetitions);
-            console.log(parseInt($.now() - timestamp).toTime());
+            extractGlobalKeywords();
+            console.log('Finished keyword extraction in ' + parseInt($.now() - timestamp).toTime());
+            //console.log(collectionKeywords);
         },
         listDocumentKeywords: function(index) {
             return documentKeywords[index];

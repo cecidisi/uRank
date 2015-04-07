@@ -20,25 +20,27 @@ var DocViewer = (function(){
 
     var _build = function() {
 
-        var docViewerContainer = $(s.root);
-        docViewerContainer.addClass(docViewerContainerClass);
+        var $docViewerContainer = $(s.root);
+        $docViewerContainer.addClass(docViewerContainerClass);
 
         // Append details section, titles and placeholders for doc details
-        var detailsSection = $("<div class='" + docViewerDetailsSectionClass + "'></div>").appendTo(docViewerContainer);
+        var $detailsSection = $("<div class='" + docViewerDetailsSectionClass + "'></div>").appendTo($docViewerContainer);
 
-        var titleContainer = $('<div></div>').appendTo(detailsSection);
-        $("<label>Title:</label>").appendTo(titleContainer);
-        $("<h3 id='urank-docviewer-details-title'></h3>").appendTo(titleContainer);
+        var $titleContainer = $('<div></div>').appendTo($detailsSection);
+        $("<label>Title:</label>").appendTo($titleContainer);
+        $("<h3 id='urank-docviewer-details-title'></h3>").appendTo($titleContainer);
 
         s.facetsToShow.forEach(function(facetName){
-            var facetContainer = $('<div></div>').appendTo(detailsSection);
-            $("<label>" + facetName.capitalizeFirstLetter() + ":</label>").appendTo(facetContainer);
-            $("<span id='urank-docviewer-details-" + facetName + "'></span>").appendTo(facetContainer);
+            var $facetContainer = $('<div></div>').appendTo($detailsSection);
+            $("<label>" + facetName.capitalizeFirstLetter() + ":</label>").appendTo($facetContainer);
+            $("<span id='urank-docviewer-details-" + facetName + "'></span>").appendTo($facetContainer);
         });
 
         // Append content section for snippet placeholder
-        var contentSection = $("<div class='" + docViewerContentSectionClass + "'></div>").appendTo(docViewerContainer);
-        $('<p></p>').appendTo(contentSection);
+        var $contentSection = $("<div class='" + docViewerContentSectionClass + "'></div>").appendTo($docViewerContainer);
+        $('<p></p>').appendTo($contentSection);
+
+        $docViewerContainer.on('mousedown', function(event){ event.stopPropagation(); });
     };
 
 

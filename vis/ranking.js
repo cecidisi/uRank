@@ -368,8 +368,9 @@ function Ranking(arguments){
     *
     * ***************************************************************************************************************/
     RANKING.Render.selectItem = function(id){
+        id = _.isArray(id) ? id : [id];
         if(isRankingDrawn)
-            svg.selectAll('.stackedbar').style('opacity', function(d){ return d.id == id ? 1 : 0.3; });
+            svg.selectAll('.stackedbar').style('opacity', function(d){ return id.indexOf(d.id) > -1 ? 1 : 0.3; });
     };
 
 
@@ -396,7 +397,10 @@ function Ranking(arguments){
     };
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    RANKING.Render.highlightItems = function(idsArray) {
+        RANKING.Render.selectItem(idsArray);
+    };
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     RANKING.Ext = {
@@ -406,7 +410,8 @@ function Ranking(arguments){
         selectItem: RANKING.Render.selectItem,
         deselectAllItems : RANKING.Render.deSelectAllItems,
         hoverItem: RANKING.Render.hoverItem,
-        unhoverItem: RANKING.Render.unhoverItem
+        unhoverItem: RANKING.Render.unhoverItem,
+        highlightItems: RANKING.Render.highlightItems
     };
 
     return RANKING.Ext;
