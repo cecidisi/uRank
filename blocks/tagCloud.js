@@ -4,7 +4,8 @@ var TagCloud = (function(){
     // Settings
     var s = {}, $root;
     //  Classes
-    var tagCloudContainerClass = 'urank-tagcloud-container',
+    var tagCloudRootClass = 'urank-tagcloud-root',
+        tagCloudContainerClass = 'urank-tagcloud-container',
         tagClass = 'urank-tagcloud-tag',
         selectedClass = 'selected',
         dimmedClass = 'dimmed',
@@ -31,7 +32,7 @@ var TagCloud = (function(){
             zIndex: 999,
             appendTo: s.dropIn,
             start: function(event, ui){ $(this).hide(); },
-            stop: function(event, ui){ $(this).removeClass(draggingClass).show(); }
+            stop: function(event, ui){ $(this).show(); }
         },
         documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagCloudContainerClass },
         keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagCloudContainerClass },
@@ -60,6 +61,7 @@ var TagCloud = (function(){
         };
 
 
+    //  Constructor
     function TagCloud(arguments) {
         _this = this;
         s = $.extend({
@@ -75,14 +77,15 @@ var TagCloud = (function(){
             onKeywordHintClick : function(index){}
         }, arguments);
 
-        $root = $(s.root);
+        $root = $(s.root).addClass(tagCloudContainerClass);
+        //$container = $('<div></div>').appendTo($root).addClass(tagCloudContainerClass);
         this.keywords = [];
         this.proxKeywordsMode = false;
         this.docHintMode = false;
     }
 
 
-    /// Tag Cloud root event handlers
+    /// Tag Cloud root and container event handlers
 
     var onRootScrolled = function(event) {
         event.stopPropagation();
@@ -97,7 +100,6 @@ var TagCloud = (function(){
         }
     };
 
-
     var onRootMouseDowned = function(event) {
         event.stopPropagation();
         if(event.which == 1) {
@@ -107,12 +109,13 @@ var TagCloud = (function(){
                 $('.'+tagClass).each(function(i, tag){
                     _this.setTagProperties($(tag));
                 });
-
                 _this.proxKeywordsMode = false;
                 _this.docHintMode = false;
             }
         }
     };
+
+
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +128,7 @@ var TagCloud = (function(){
         this.collectionSize = collectionSize;
 
         // Empty tag container and add appropriateclass
-        $root.empty().addClass(tagCloudContainerClass);
+        $root.empty();
 
         keywords.forEach(function(k, i){
             var $tag = $('<div></div>', { class: tagClass, id: 'urank-tag-' + i, 'tag-pos': i, stem: k.stem, text: k.term }).appendTo($root);
@@ -150,7 +153,7 @@ var TagCloud = (function(){
             _this.setTagProperties($tag);
         });
 
-        $root.off().on('mousedown', onRootMouseDowned);
+      //  $root.off().on('mousedown', onRootMouseDowned);
     };
 
 
@@ -161,6 +164,7 @@ var TagCloud = (function(){
 
     var _setTagProperties = function($tag) {
 
+        console.log('tag setting');
         if(!$tag.hasClass(draggingClass)) {
             $tag.removeClass(selectedClass)
             .css({
@@ -181,6 +185,7 @@ var TagCloud = (function(){
                             $(this).find('.'+documentHintClass).css('visibility', '');
                         }
                     },
+                    mouseup: function(event){ event.stopPropagation(); $(this).removeClass(draggingClass); },
                     mouseenter: function(event){ s.onTagInCloudMouseEnter.call(this, $(this).attr(tagPosAttr)) },
                     mouseleave: function(event){ s.onTagInCloudMouseLeave.call(this, $(this).attr(tagPosAttr)) },
                     click: function(event){ event.stopPropagation(); s.onTagInCloudClick.call(this, $(this).attr(tagPosAttr)) }
@@ -315,6 +320,9 @@ var TagCloud = (function(){
             $('.'+tagClass).each(function(i, tag){
                 _this.setTagProperties($(tag));
             });
+
+            _this.proxKeywordsMode = false;
+            _this.docHintMode = false;
         }
     };
 

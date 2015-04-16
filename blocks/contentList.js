@@ -53,7 +53,7 @@ var ContentList = (function(){
         var $root = $(s.root);
         $root.empty().addClass(contentListContainerClass).scrollTo('top');
 
-        var $ul = $("<ul class='" + ulClass + "'></ul>").appendTo($root);
+        var $ul = $('<ul></ul>').appendTo($root).addClass(ulClass);
 
         data.forEach(function(d, i){
             // li element

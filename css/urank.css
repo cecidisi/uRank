@@ -1,56 +1,22 @@
 
 
-/************************************************************************************************************************************
-
-Main Containers
-
-************************************************************************************************************************************/
-
-
-
-/*
-<div> containing everything below the header ("#eexcess_header")
-*/
-#eexcess_main_panel{
-    display: inline-flex;
-    justify-content: space-between;
-    width: 100%;
-    height: calc(100% - 6em);
-    text-align: center;
-    vertical-align: top;
-}
-
-
-
-/********************************************************************************************************************************************
+/************************************************************************************************
 
     TAG CLOUD
 
-********************************************************************************************************************************************/
-
-/* Put in wrappers css */
-#eexcess_controls_left_panel {
-    float: left;
-    display: flex;
-    align-items: stretch;
-    width: 17%;
-    height: calc(100% - 1em);
-    padding: .5em;
-    z-index: 2;
-    background: -webkit-linear-gradient(top, rgba(175, 175, 175, 1), rgba(170, 170, 170, 1));
-    box-shadow: inset .1em .1em .5em #aaa, inset -.1em -.1em .5em #aaa;
-}
+************************************************************************************************/
 
 
-/*  Keyword cloud containing keywords in blue sclae  */
+
 .urank-tagcloud-container {
     overflow-y: auto;
     width: 100%;
-    padding: 8px 4px;
-    /*background: -webkit-linear-gradient(top, rgba(30, 30, 30, 1), rgba(50, 50, 50, 0.5), rgba(30, 30, 30, 1));*/
+    padding: 8px 2px;
     background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
     box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
 }
+
+
 
 
 /*  keywords in keyword container  */
@@ -152,82 +118,24 @@ Main Containers
 }
 
 
-/************************************************************************************************************************************
-
-VIS PANEL (center of screen)
-
-************************************************************************************************************************************/
-
-#eexcess_vis_panel {
-    display: inline-block;
-    width: 61%;
-    height: 100%;
-}
-
-/********************************************************************************************************************************************
-
-VIS PANEL CONTROLS
-
-********************************************************************************************************************************************/
 
 
-#eexcess_vis_panel_controls {
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: stretch;
-    width: 100%;
-    height: 9%;
-    min-height: 4.5em;
-}
+/************************************************************************************************
+
+    TAG BOX
+
+************************************************************************************************/
 
 
-/*
-*   Ranking Controls (upper mid-left)
-*
-*/
-
-#eexcess_ranking_controls {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    width: 45%;
-    background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
-    box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;
-}
-
-
-#eexcess_ranking_controls button {
-    min-width: 2.1em;
-    height: 1.7em;
-    margin: .6em .3em;
-    padding: .3em .6em;
-    border-radius: .9em;
-}
-
-
-#eexcess_ranking_controls button img {
-    width: 100%;
-    height: 100%;
-}
-
-
-/*
-*   TAG BOX (upper mid-right header)
-*
-*/
 .urank-tagbox-container {
     overflow-x: hidden;
     overflow-y: auto;
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
-    float: right;
-    width: 55%;
     padding: 0em .3em;
-    background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
     list-style-type: none;
     text-align: left;
-    box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;
 }
 
 .urank-tagbox-container p {
@@ -277,10 +185,8 @@ VIS PANEL CONTROLS
 .urank-tagbox-tag-weight-slider .urank-tagbox-tag-weight-slider-range
  {
     height: 100%;
-    font-size: 0.9em;
-    font-weight: normal;
-    border-radius: 0.3em;
-    -webkit-border-radius: 0.3em;
+     -webkit-border-radius: 0.3em;
+     border-radius: 0.3em;
 }
 
 /* ui-slider-handle */
@@ -288,8 +194,8 @@ VIS PANEL CONTROLS
     top: -0.3em;
     width: 0.45em;
     height: .8em;
-    border-radius: 0.2em;
     -webkit-border-radius: 0.2em;
+    border-radius: 0.2em;
 }
 
 
@@ -323,33 +229,19 @@ VIS PANEL CONTROLS
     display: none;
 }
 
-/********************************************************************************************************************************************
 
-CANVAS PANEL (bottom-center)
 
-********************************************************************************************************************************************/
+/**********************************************************************************************************************
 
-#eexcess_vis_panel_canvas {
-    display: inline-block;
-    width: 100%;
-    height: 90%;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
+                                                    CONTENT LIST (center-left)
 
-/********************************************************************************************************************************************
-
-                                                    CONTENT LIS (left-center)
-
-********************************************************************************************************************************************/
+**********************************************************************************************************************/
 
 
 /* <div> container for the list of recommendations */
 .urank-list-container {
     display: inline-block;
-    float: left;
     vertical-align: top;
-    width: 45%;
 }
 
 
@@ -372,10 +264,12 @@ CANVAS PANEL (bottom-center)
     height: 26px;
     vertical-align: top;
     -webkit-transition: box-shadow 4s ease-in/* linear*/;
+    cursor: pointer;
 }
 
 .urank-list-li a {
     color: #333;
+    cursor: inherit;
 }
 
 
@@ -569,11 +463,11 @@ CANVAS PANEL (bottom-center)
 }
 
 
-/********************************************************************************************************************************************
+/*****************************************************************************************************************
 
 Canvas section (right-center) - displays ranking vis
 
-********************************************************************************************************************************************/
+*****************************************************************************************************************/
 
 
 /*
@@ -581,14 +475,12 @@ Canvas section (right-center) - displays ranking vis
 */
 .urank-viscanvas-container {
     display: inline-block;
-    width: 55%;
-    min-height: 99%;
     text-align: center;
 }
 
 
 /*
-<div> appended to #eexcess_canvas when a message should be displayed. E.g. when a new search is triggered or no data are received.
+<div> appended to canvas when a message should be displayed. E.g. when a new search is triggered or no data are received.
 Contains a <span> for the message and optionally an <img> tag (for the loading icon, only for the case of a new search )
 */
 .urank-viscanvas-message {
@@ -597,6 +489,11 @@ Contains a <span> for the message and optionally an <img> tag (for the loading i
     text-align: center;
     color: #777;
     font-size: .9em;
+}
+
+.urank-viscanvas-message span{
+    display: block;
+    font-size: 1.1em;
 }
 
 

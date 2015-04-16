@@ -3,12 +3,11 @@ var UrankController = (function(){
 
     var _this,
         s = {},
-        rankingModel,
         contentList, tagCloud, tagBox, visCanvas, docViewer;
 
     // Color scales
     var tagColorRange = colorbrewer.Blues[TAG_CATEGORIES + 1].slice(1, TAG_CATEGORIES+1);
-    tagColorRange.splice(tagColorRange.indexOf("#08519c"), 1, "#2171b5");
+  //  tagColorRange.splice(tagColorRange.indexOf("#08519c"), 1, "#2171b5");
     var queryTermColorRange = colorbrewer.Set1[9];
     queryTermColorRange.splice(queryTermColorRange.indexOf("#ffff33"), 1, "#ffd700");
 
@@ -32,10 +31,10 @@ var UrankController = (function(){
             _this.queryTermColorScale = newQueryTermColorScale;
             _this.selectedId = STR_UNDEFINED;
 
-            var rankingData = rankingModel.update(selectedKeywords, _this.rankingMode);
-            var status = rankingModel.getStatus();
+            var rankingData = _this.rankingModel.update(selectedKeywords, _this.rankingMode);
+            var status = _this.rankingModel.getStatus();
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
-            visCanvas.update(rankingModel, $(s.contentListRoot).height(), _this.queryTermColorScale);
+            visCanvas.update(_this.rankingModel, $(s.contentListRoot).height(), _this.queryTermColorScale);
             docViewer.clear();
             tagCloud.removeEffects();
             s.onChange.call(this, rankingData, _this.selectedKeywords);
@@ -92,7 +91,7 @@ var UrankController = (function(){
             if(_this.selectedId !== STR_UNDEFINED) {    // select
                 contentList.selectListItem(documentId);
                 visCanvas.selectItem(documentId);
-                docViewer.showDocument(rankingModel.getDocumentById(documentId), _this.selectedKeywords.map(function(k){return k.stem}), _this.queryTermColorScale);
+                docViewer.showDocument(_this.rankingModel.getDocumentById(documentId), _this.selectedKeywords.map(function(k){return k.stem}), _this.queryTermColorScale);
             }
             else {                   // deselect
                 contentList.deselectAllListItems();
@@ -133,7 +132,7 @@ var UrankController = (function(){
             s.onRankByMaximumScore.call(this);
         },
         onReset: function() {
-            rankingModel.reset();
+            _this.rankingModel.reset();
             contentList.reset();
             tagCloud.reset();
             tagBox.clear();
@@ -147,13 +146,14 @@ var UrankController = (function(){
             visCanvas.resize();
         },
         onClear: function(event){
-            console.log('click controller');
             event.stopPropagation();
-            contentList.deselectAllListItems();
-            contentList.hideUnrankedListItems(rankingModel.getRanking());
-            visCanvas.deselectAllItems();
-            docViewer.clear();
-            tagCloud.removeEffects();
+            if(event.which == 1) {
+                contentList.deselectAllListItems();
+                contentList.hideUnrankedListItems(_this.rankingModel.getRanking());
+                visCanvas.deselectAllItems();
+                docViewer.clear();
+                tagCloud.removeEffects();
+            }
         }
     };
 
@@ -163,6 +163,7 @@ var UrankController = (function(){
     function Urank(arguments) {
 
         _this = this;
+        this.rankingModel = new RankingModel();
         this.selectedKeywords = [];
         this.selectedId = STR_UNDEFINED;
 
@@ -304,7 +305,7 @@ var UrankController = (function(){
         var keywords = keywordExtractor.getCollectionKeywords();
         this.keywords = extendKeywordsWithColorCategory(keywords);
         this.rankingMode = RANKING_MODE.overall_score;
-        rankingModel = new RankingModel(this.data);
+        _this.rankingModel.setData(this.data);
 
         EVTHANDLER.onLoad.call(this, this.data, this.keywords);
     };

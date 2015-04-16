@@ -1,10 +1,12 @@
 
 var RankingModel = (function(){
 
+    var _this = this;
+
     function RankingModel(data) {
         this.ranking = new RankingArray();
         this.previousRanking = new RankingArray();
-        this.data = data;
+        this.data = data || [];
         this.status = RANKING_STATUS.no_ranking;
         this.mode = RANKING_MODE.overall_score;
     }
@@ -76,6 +78,15 @@ var RankingModel = (function(){
  *
  ****************************************************************************************************/
     RankingModel.prototype = {
+
+        setData: function(data) {
+            this.data = data;
+        },
+
+        addData: function(moreData) {
+            $.merge(this.data, moreData)
+        },
+
         update: function(keywords, rankingMode) {
             this.mode = rankingMode || RANKING_MODE.overall_score;
             this.previousRanking.set(this.ranking);
