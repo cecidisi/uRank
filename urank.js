@@ -1,10 +1,16 @@
 function Urank(callback, args, pathToUrank) {
 
-    Modernizr.load([{
+
+    Modernizr.addTest('defaultstyle', function(){
+        if(args.style && args.style != 'default') return false; return true;
+    })
+    .load([{
+        test: Modernizr.defaultstyle,
+        yep: [pathToUrank + 'css/urank-blocks-default.css'],
         load: [
             pathToUrank + 'dependencies/colorbrewer.js',
             pathToUrank + 'dependencies/d3.v3.js',
-            pathToUrank + 'dependencies/d3pie.min.js',
+            pathToUrank + 'dependencies/d3pie.js',
             pathToUrank + 'dependencies/jquery-ui.js',
             pathToUrank + 'dependencies/ui/jquery-ui-1.10.4.custom.min.css',
             pathToUrank + 'dependencies/natural-adapted.js',
@@ -35,6 +41,10 @@ function Urank(callback, args, pathToUrank) {
             pathToUrank + 'css/urank.css',
             pathToUrank + 'urank-controller.js'
         ],
+/*        callback: function(testResult, key) {
+            console.log(testResult);
+            console.log(key);
+        },*/
         complete: function(){
             console.log('urank loaded');
             var urank = new UrankController(args);

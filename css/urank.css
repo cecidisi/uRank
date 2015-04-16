@@ -12,8 +12,8 @@
     overflow-y: auto;
     width: 100%;
     padding: 8px 2px;
-    background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
-    box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
+  /*  background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+    box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;*/
 }
 
 
@@ -516,8 +516,6 @@ Document Panel (right) - for visualizing highlighted text
     width: 21%;
     height: calc(100% - 1em);
     padding: .5em;
-    background: -webkit-linear-gradient(top, rgba(175, 175, 175, 1), rgba(170, 170, 170, 1));
-    box-shadow: inset .1em .1em .5em #aaa, inset -.1em -.1em .5em #aaa;
 }
 
 .urank-docviewer-details-section {

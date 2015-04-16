@@ -51,7 +51,7 @@ var ContentList = (function(){
     var _build = function(data) {
 
         this.data = data;
-        $root.empty();
+        $root.empty().addClass(contentListContainerClass);
 
         var $ul = $('<ul></ul>').appendTo($root).addClass(ulClass);
 

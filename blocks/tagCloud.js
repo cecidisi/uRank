@@ -24,7 +24,6 @@ var TagCloud = (function(){
             color: '#eee',
             'text-shadow': ''
         },
-
         draggableOptions = {
             revert: 'invalid',
             helper: 'clone',
@@ -71,21 +70,6 @@ var TagCloud = (function(){
         else if(_this.docHintMode) {
             $tag.find('.'+documentHintClass).css('visibility', 'visible').pin(documentHintPinOptions);
             $tag.find('.'+keywordHintClass).css('visibility', 'hidden');
-        }
-    };
-
-    var onRootMouseDowned = function(event) {
-        event.stopPropagation();
-        if(event.which == 1) {
-            $root.off('scroll', onRootScrolled);
-
-            if(_this.proxKeywordsMode || _this.docHintMode) {
-                $('.'+tagClass).each(function(i, tag){
-                    _this.setTagProperties($(tag));
-                });
-                _this.proxKeywordsMode = false;
-                _this.docHintMode = false;
-            }
         }
     };
 
@@ -148,8 +132,6 @@ var TagCloud = (function(){
             $tag.data({ 'originalColor': s.colorScale(k.colorCategory) });
             _this.setTagProperties($tag);
         });
-
-      //  $root.off().on('mousedown', onRootMouseDowned);
     };
 
 

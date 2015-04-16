@@ -80,7 +80,7 @@ var DocViewer = (function(){
             $(detailItemIdPrefix + '' + facet).empty();
         });
         // Clear content section
-        $('.' + docViewerContentSectionClass + ' p').fadeOut('slow');
+        $('.' + docViewerContentSectionClass + ' p').hide();
     };
 
 
