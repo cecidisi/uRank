@@ -23,6 +23,10 @@ var UrankController = (function(){
             docViewer.build();
             _this.selectedId = STR_UNDEFINED;
             _this.selectedKeywords = [];
+
+            $(window).resize(EVTHANDLER.onResize);
+            $(s.root).off('mousedown', EVTHANDLER.onClear).on('mousedown', EVTHANDLER.onClear);
+
             s.onLoad.call(this, _this.keywords);
         },
         onChange: function(selectedKeywords, newQueryTermColorScale) {
@@ -169,6 +173,7 @@ var UrankController = (function(){
 
         // user-defined arguments
         s = $.extend({
+            root: 'body',
             tagCloudRoot: '',
             tagBoxRoot: '',
             contentListRoot: '',
@@ -257,8 +262,8 @@ var UrankController = (function(){
         visCanvas = new VisCanvas(options.visCanvas);
         docViewer = new DocViewer(options.docViewer);
 
-        $(window).resize(EVTHANDLER.onResize);
-        $('body').on('mousedown', EVTHANDLER.onClear);
+/*        $(window).resize(EVTHANDLER.onResize);
+        $(s.root).on('mousedown', EVTHANDLER.onClear);*/
     }
 
 
