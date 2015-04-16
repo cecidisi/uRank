@@ -1,5 +1,6 @@
 var DocViewer = (function(){
 
+    var $root;
     // Settings
     var s = {};
     // Classes
@@ -15,16 +16,15 @@ var DocViewer = (function(){
             root: '',
             facetsToShow: ['year']
         }, arguments);
+
+        $root = $(s.root).addClass(docViewerContainerClass);
     }
 
 
     var _build = function() {
 
-        var $docViewerContainer = $(s.root);
-        $docViewerContainer.addClass(docViewerContainerClass);
-
         // Append details section, titles and placeholders for doc details
-        var $detailsSection = $("<div class='" + docViewerDetailsSectionClass + "'></div>").appendTo($docViewerContainer);
+        var $detailsSection = $("<div class='" + docViewerDetailsSectionClass + "'></div>").appendTo($root);
 
         var $titleContainer = $('<div></div>').appendTo($detailsSection);
         $("<label>Title:</label>").appendTo($titleContainer);
@@ -37,10 +37,10 @@ var DocViewer = (function(){
         });
 
         // Append content section for snippet placeholder
-        var $contentSection = $("<div class='" + docViewerContentSectionClass + "'></div>").appendTo($docViewerContainer);
+        var $contentSection = $("<div class='" + docViewerContentSectionClass + "'></div>").appendTo($root);
         $('<p></p>').appendTo($contentSection);
 
-        $docViewerContainer.on('mousedown', function(event){ event.stopPropagation(); });
+        $root.on('mousedown', function(event){ event.stopPropagation(); });
     };
 
 
@@ -84,11 +84,17 @@ var DocViewer = (function(){
     };
 
 
+    var _destroy = function() {
+        $root.empty().removeClass(docViewerContainerClass)
+    };
 
+
+    // Prototype
     DocViewer.prototype = {
         build: _build,
         clear: _clear,
-        showDocument: _showDocument
+        showDocument: _showDocument,
+        destroy: _destroy
     };
 
     return DocViewer;

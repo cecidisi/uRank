@@ -2,7 +2,7 @@
 
 var ContentList = (function(){
 
-    var _this;
+    var _this, $root;
     // Settings
     var s = {};
     // Classes
@@ -44,14 +44,14 @@ var ContentList = (function(){
         }, arguments);
 
         this.data = [];
+        $root = $(s.root).addClass(contentListContainerClass);
     }
 
 
     var _build = function(data) {
 
         this.data = data;
-        var $root = $(s.root);
-        $root.empty().addClass(contentListContainerClass).scrollTo('top');
+        $root.empty();
 
         var $ul = $('<ul></ul>').appendTo($root).addClass(ulClass);
 
@@ -145,7 +145,7 @@ var ContentList = (function(){
 
     var _sort = function(data){
 
-        $(s.root).parent().scrollTo('top');
+        $root.parent().scrollTo('top');
         var liHtml = new Array();
 
         data.forEach(function(d, i){
@@ -218,7 +218,7 @@ var ContentList = (function(){
         easing = easing || 'swing';
 
         var acumHeight = 0;
-        var listTop = $(s.root).position().top;
+        var listTop = $root.position().top;
 
         data.forEach(function(d, i){
 
@@ -255,7 +255,7 @@ var ContentList = (function(){
         easing = easing || 'swing';
 
         var acumHeight = 0;
-        var listTop = $(s.root).position().top;
+        var listTop = $root.position().top;
 
         data.forEach(function(d, i){
             if(d.rankingPos > 0) {
@@ -408,6 +408,11 @@ var ContentList = (function(){
     };
 
 
+    var _destroy = function() {
+        $root.empty().removeClass(contentListContainerClass);
+    };
+
+    // Prototype
     ContentList.prototype = {
         build: _build,
         sort: _sort,
@@ -430,7 +435,8 @@ var ContentList = (function(){
         showRankingPositions: _showRankingPositions,
         clearAllFavicons: _clearAllFavicons,
         switchFaviconOnOrOff: _switchFaviconOnOrOff,
-        watchOrUnwatchListItem: _watchOrUnwatchListItem
+        watchOrUnwatchListItem: _watchOrUnwatchListItem,
+        destroy: _destroy
     };
 
     return ContentList;

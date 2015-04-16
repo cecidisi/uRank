@@ -4,8 +4,7 @@ var TagCloud = (function(){
     // Settings
     var s = {}, $root;
     //  Classes
-    var tagCloudRootClass = 'urank-tagcloud-root',
-        tagCloudContainerClass = 'urank-tagcloud-container',
+    var tagCloudContainerClass = 'urank-tagcloud-container',
         tagClass = 'urank-tagcloud-tag',
         selectedClass = 'selected',
         dimmedClass = 'dimmed',
@@ -61,32 +60,7 @@ var TagCloud = (function(){
         };
 
 
-    //  Constructor
-    function TagCloud(arguments) {
-        _this = this;
-        s = $.extend({
-            root: '',
-            colorScale: function(){},
-            dropIn: '.urank-tagbox-container',
-            onTagInCloudMouseEnter: function(index){},
-            onTagInCloudMouseLeave: function(index){},
-            onTagInCloudClick: function(index){},
-            onDocumentHintClick: function(index){},
-            onKeywordHintMouseEnter : function(index){},
-            onKeywordHintMouseLeave : function(index){},
-            onKeywordHintClick : function(index){}
-        }, arguments);
-
-        $root = $(s.root).addClass(tagCloudContainerClass);
-        //$container = $('<div></div>').appendTo($root).addClass(tagCloudContainerClass);
-        this.keywords = [];
-        this.proxKeywordsMode = false;
-        this.docHintMode = false;
-    }
-
-
     /// Tag Cloud root and container event handlers
-
     var onRootScrolled = function(event) {
         event.stopPropagation();
         var $tag = $('.'+selectedClass);
@@ -115,6 +89,28 @@ var TagCloud = (function(){
         }
     };
 
+
+    //  Constructor
+    function TagCloud(arguments) {
+        _this = this;
+        s = $.extend({
+            root: '',
+            colorScale: function(){},
+            dropIn: '.urank-tagbox-container',
+            onTagInCloudMouseEnter: function(index){},
+            onTagInCloudMouseLeave: function(index){},
+            onTagInCloudClick: function(index){},
+            onDocumentHintClick: function(index){},
+            onKeywordHintMouseEnter : function(index){},
+            onKeywordHintMouseLeave : function(index){},
+            onKeywordHintClick : function(index){}
+        }, arguments);
+
+        $root = $(s.root).addClass(tagCloudContainerClass);
+        this.keywords = [];
+        this.proxKeywordsMode = false;
+        this.docHintMode = false;
+    }
 
 
 
@@ -365,6 +361,9 @@ var TagCloud = (function(){
     };
 
 
+    var _destroy = function() {
+        $root.empty().removeClass(tagCloudContainerClass);
+    };
 
     TagCloud.prototype = {
         build: _build,
@@ -378,7 +377,8 @@ var TagCloud = (function(){
         keywordHintMouseEntered: _keywordHintMouseEntered,
         keywordHintMouseLeft: _keywordHintMouseLeft,
         documentHintClicked: _documentHintClicked,
-        removeEffects: _removeEffects
+        removeEffects: _removeEffects,
+        destroy: _destroy
     };
 
     return TagCloud;

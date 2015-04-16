@@ -1,5 +1,6 @@
 var TagBox = (function(){
 
+    var $root;
     // Settings
     var s = {};
     //  Classes
@@ -17,6 +18,7 @@ var TagBox = (function(){
 
     function Tagbox(arguments) {
 
+        _this = this;
         s = $.extend({
             root: '',
             colorScale: function(){},
@@ -28,16 +30,14 @@ var TagBox = (function(){
             onTagInBoxClick: function(index){}
         }, arguments);
 
-        _this = this;
-
-        // Bind onChange event handler for custom event
-        $(s.root).on('tagBoxChange', function(){ s.onChange.call(this, _this.getKeywordsInBox(), s.colorScale) });
+        $root = $(s.root).addClass(tagboxContainerClass)
+            .on('tagBoxChange', function(){ s.onChange.call(this, _this.getKeywordsInBox(), s.colorScale) }); // Bind onChange event handler for custom event
 
         this.droppableOptions = {
             tolerance: 'touch',
             drop: function(event, ui){
                 _this.dropTag(ui.draggable);
-                $(s.root).trigger('tagBoxChange');
+                $root.trigger('tagBoxChange');
             }
         };
 
@@ -53,7 +53,7 @@ var TagBox = (function(){
                 _this.updateTagStyle(this.parentNode, ui.value);
             },
             stop: function(event, ui) {
-                $(s.root).trigger('tagBoxChange');
+                $root.trigger('tagBoxChange');
             }
         };
     }
@@ -62,15 +62,13 @@ var TagBox = (function(){
 
     var _build = function() {
         // bind droppable behavior to tag box
-        $(s.root)
-            .addClass(tagboxContainerClass)
-            .droppable(this.droppableOptions);
+        $root.droppable(this.droppableOptions);
     };
 
 
     var _clear = function() {
-        $(s.root).empty();
-        $('<p></p>').appendTo($(s.root)).text(STR_DROP_TAGS_HERE);
+        $root.empty();
+        $('<p></p>').appendTo($root).text(STR_DROP_TAGS_HERE);
         //TAGCLOUD.updateTagColor();
     };
 
@@ -78,11 +76,11 @@ var TagBox = (function(){
     var _dropTag = function(tag){
         var $tag = $(tag);
         // Set tag box legend
-        $(s.root).find('p').remove();
+        $root.find('p').remove();
 
         if ($tag.hasClass(s.droppableClass)) {
             // Append dragged tag to tag box
-            $(s.root).append($tag);
+            $root.append($tag);
 
             // Change tag's class
             $tag.removeClass().addClass(tagInBoxClass);
@@ -92,7 +90,7 @@ var TagBox = (function(){
                 $tag.find('.'+tagDeleteButtonClass).remove();
                 $tag.find('.'+tagWeightsliderClass).remove();
                 s.onTagDeleted.call(this, $tag.attr('tag-pos'));
-                $(s.root).trigger('tagBoxChange');
+                $root.trigger('tagBoxChange');
             });
 
             // Add new div to make it a slider
@@ -143,13 +141,18 @@ var TagBox = (function(){
     }
 
 
+    var _destroy = function() {
+        $root.empty().removeClass(tagboxContainerClass).droppable('destroy');
+    };
+
+    // Prototype
     Tagbox.prototype = {
         build: _build,
         clear: _clear,
         dropTag: _dropTag,
         updateTagStyle: _updateTagStyle,
-        getKeywordsInBox: _getKeywordsInBox
-
+        getKeywordsInBox: _getKeywordsInBox,
+        destroy: _destroy
     };
 
     return Tagbox;

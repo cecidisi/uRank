@@ -1,7 +1,7 @@
 var VisCanvas = (function(){
 
     //  Settings
-    var s = {};
+    var s = {}, $root;
     // Classes
     var visCanvasContainerClass = 'urank-viscanvas-container',
         visCanvasMessageClass = 'urank-viscanvas-message';
@@ -14,11 +14,12 @@ var VisCanvas = (function(){
             onItemHovered: function(id){},
             onItemUnhovered: function(id){}
         }, arguments);
+
+        $root = $(s.root).addClass(visCanvasContainerClass);
     }
 
 
     var _build = function() {
-        $(s.root).addClass(visCanvasContainerClass);
         var visArguments = {
             root: s.root,
             onItemClicked: s.onItemClicked,
@@ -42,7 +43,7 @@ var VisCanvas = (function(){
 
     var _clear = function(){
         this.vis.clear();
-        $(s.root).append("<p class='" + visCanvasMessageClass + "'>" + STR_NO_VIS + "</p>");
+        $root.append("<p class='" + visCanvasMessageClass + "'>" + STR_NO_VIS + "</p>");
     };
 
     var _selectItem =function(id) {
@@ -65,6 +66,12 @@ var VisCanvas = (function(){
         this.vis.highlightItems(idsArray);
     };
 
+    var _destroy = function() {
+        this.vis.clear();
+        $root.removeClass(visCanvasContainerClass);
+    };
+
+
     VisCanvas.prototype = {
         build: _build,
         update: _update,
@@ -74,7 +81,8 @@ var VisCanvas = (function(){
         deselectAllItems: _deselectAllItems,
         hoverItem: _hoverItem,
         unhoverItem: _unhoverItem,
-        highlightItems: _highlightItems
+        highlightItems: _highlightItems,
+        destroy: _destroy
     };
 
     return VisCanvas;
