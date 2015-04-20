@@ -1,8 +1,8 @@
 var TagCloud = (function(){
 
-    var _this;
+    var _this, $root = $('');
     // Settings
-    var s = {}, $root;
+    var s = {};
     //  Classes
     var tagCloudContainerClass = 'urank-tagcloud-container',
         tagClass = 'urank-tagcloud-tag',
@@ -90,10 +90,11 @@ var TagCloud = (function(){
             onKeywordHintClick : function(index){}
         }, arguments);
 
-        $root = $(s.root).addClass(tagCloudContainerClass);
         this.keywords = [];
         this.proxKeywordsMode = false;
         this.docHintMode = false;
+
+        $(s.root).addClass(tagCloudContainerClass);
     }
 
 
@@ -108,10 +109,11 @@ var TagCloud = (function(){
         this.collectionSize = collectionSize;
 
         // Empty tag container and add appropriateclass
-        $root.empty();
+        $root = $(s.root).empty().addClass(tagCloudContainerClass);
 
-        keywords.forEach(function(k, i){
+        this.keywords.forEach(function(k, i){
             var $tag = $('<div></div>', { class: tagClass, id: 'urank-tag-' + i, 'tag-pos': i, stem: k.stem, text: k.term }).appendTo($root);
+            $tag.hide().fadeIn((i+1)*20);
 
             // Append pie chart section for document indicator
             var termUpperCase = k.term.toUpperCase(),
@@ -132,6 +134,7 @@ var TagCloud = (function(){
             $tag.data({ 'originalColor': s.colorScale(k.colorCategory) });
             _this.setTagProperties($tag);
         });
+        $root.scrollTo('top');
     };
 
 
@@ -142,7 +145,6 @@ var TagCloud = (function(){
 
     var _setTagProperties = function($tag) {
 
-        console.log('tag setting');
         if(!$tag.hasClass(draggingClass)) {
             $tag.removeClass(selectedClass)
             .css({
@@ -156,7 +158,6 @@ var TagCloud = (function(){
                 $tag.removeClass(dimmedClass).addClass(activeClass)
                 .off().on({
                     mousedown: function(event){
-                        console.log('mousedown tag / type = ' + event.which);
                         if(event.which == 1) {
                             $(this).addClass(draggingClass);
                             $(this).find('.'+keywordHintClass).css('visibility', '');
@@ -343,6 +344,10 @@ var TagCloud = (function(){
     };
 
 
+    var _clear = function() {
+        $root.empty();
+    };
+
     var _destroy = function() {
         $root.empty().removeClass(tagCloudContainerClass);
     };
@@ -360,6 +365,7 @@ var TagCloud = (function(){
         keywordHintMouseLeft: _keywordHintMouseLeft,
         documentHintClicked: _documentHintClicked,
         removeEffects: _removeEffects,
+        clear: _clear,
         destroy: _destroy
     };
 

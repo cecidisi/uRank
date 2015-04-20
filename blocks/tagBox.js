@@ -1,6 +1,6 @@
 var TagBox = (function(){
 
-    var $root;
+    var $root = $('');
     // Settings
     var s = {};
     //  Classes
@@ -30,9 +30,6 @@ var TagBox = (function(){
             onTagInBoxClick: function(index){}
         }, arguments);
 
-        $root = $(s.root).addClass(tagboxContainerClass)
-            .on('tagBoxChange', function(){ s.onChange.call(this, _this.getKeywordsInBox(), s.colorScale) }); // Bind onChange event handler for custom event
-
         this.droppableOptions = {
             tolerance: 'touch',
             drop: function(event, ui){
@@ -56,13 +53,16 @@ var TagBox = (function(){
                 $root.trigger('tagBoxChange');
             }
         };
+
+        $(s.root).addClass(tagboxContainerClass)
     }
 
 
 
     var _build = function() {
-        // bind droppable behavior to tag box
-        $root.droppable(this.droppableOptions);
+        $root = $(s.root).addClass(tagboxContainerClass)
+            .on('tagBoxChange', function(){ s.onChange.call(this, _this.getKeywordsInBox(), s.colorScale) })    // Bind onChange event handler for custom event
+            .droppable(this.droppableOptions);                                                                  // bind droppable behavior to tag box
     };
 
 
@@ -131,8 +131,7 @@ var TagBox = (function(){
 
         var  weightedKeywords = [];
         $('.'+tagInBoxClass).each(function(i, tag){
-            var term = $(tag).text();
-            console.log('term in box = ' + term);
+            var term = $(tag).getText();
             var stem = $(tag).attr('stem');
             var weight = parseFloat( $(tag).find('.'+tagWeightsliderClass).slider("value"));
             weightedKeywords.push({ 'term': term, 'stem': stem, 'weight': weight });

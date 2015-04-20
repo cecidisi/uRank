@@ -2,7 +2,7 @@
 
 var ContentList = (function(){
 
-    var _this, $root;
+    var _this, $root = $('');
     // Settings
     var s = {};
     // Classes
@@ -44,14 +44,14 @@ var ContentList = (function(){
         }, arguments);
 
         this.data = [];
-        $root = $(s.root).addClass(contentListContainerClass);
+        $(s.root).addClass(contentListContainerClass);
     }
 
 
     var _build = function(data) {
 
         this.data = data;
-        $root.empty().addClass(contentListContainerClass);
+        $root = $(s.root).empty().addClass(contentListContainerClass);
 
         var $ul = $('<ul></ul>').appendTo($root).addClass(ulClass);
 

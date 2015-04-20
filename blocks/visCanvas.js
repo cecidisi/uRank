@@ -1,7 +1,7 @@
 var VisCanvas = (function(){
 
     //  Settings
-    var s = {}, $root;
+    var s = {}, $root = $('');
     // Classes
     var visCanvasContainerClass = 'urank-viscanvas-container',
         visCanvasMessageClass = 'urank-viscanvas-message';
@@ -15,11 +15,13 @@ var VisCanvas = (function(){
             onItemUnhovered: function(id){}
         }, arguments);
 
-        $root = $(s.root).addClass(visCanvasContainerClass);
+        $(s.root).addClass(visCanvasContainerClass);
     }
 
 
     var _build = function() {
+        $root = $(s.root).addClass(visCanvasContainerClass);
+
         var visArguments = {
             root: s.root,
             onItemClicked: s.onItemClicked,
@@ -34,7 +36,7 @@ var VisCanvas = (function(){
 
     var _update = function(rankingModel, containerHeight, colorScale) {
         this.vis.update(rankingModel, containerHeight, colorScale);
-        $(s.root).scrollTo('top');
+        $root.scrollTo('top');
     };
 
     var _resize = function(){
@@ -67,7 +69,7 @@ var VisCanvas = (function(){
     };
 
     var _destroy = function() {
-        this.vis.clear();
+        if(this.vis)this.vis.clear();
         $root.removeClass(visCanvasContainerClass);
     };
 

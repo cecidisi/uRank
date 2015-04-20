@@ -1,6 +1,6 @@
 var DocViewer = (function(){
 
-    var $root;
+    var $root = $('');
     // Settings
     var s = {};
     // Classes
@@ -17,11 +17,13 @@ var DocViewer = (function(){
             facetsToShow: ['year']
         }, arguments);
 
-        $root = $(s.root).addClass(docViewerContainerClass);
+        $(s.root).addClass(docViewerContainerClass);
     }
 
 
     var _build = function() {
+
+        $root = $(s.root).empty().addClass(docViewerContainerClass);
 
         // Append details section, titles and placeholders for doc details
         var $detailsSection = $("<div class='" + docViewerDetailsSectionClass + "'></div>").appendTo($root);

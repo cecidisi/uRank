@@ -24,7 +24,6 @@ var UrankController = (function(){
             //  Initialize keyword extractor
             keywordExtractorOptions.minRepetitions = (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5;
             keywordExtractor = new KeywordExtractor(keywordExtractorOptions);
-
             //  Clean documents and add them to the keyword extractor
             _this.data = cleanData(data);
             _this.data.forEach(function(d){
@@ -215,12 +214,20 @@ var UrankController = (function(){
             s.onReset.call(this);
         },
 
-        onDestroy : function() {
+        onDestroy: function() {
             tagCloud.destroy();
             tagBox.destroy();
             contentList.destroy();
             visCanvas.destroy();
             docViewer.destroy();
+        },
+
+        onClear: function() {
+            tagCloud.clear();
+            tagBox.clear();
+            docViewer.clear();
+            contentList.destroy();
+            visCanvas.destroy();
         }
     };
 
@@ -359,7 +366,9 @@ var UrankController = (function(){
         loadData: EVTHANDLER.onLoad,
         reset: EVTHANDLER.onReset,
         rankByOverallScore: EVTHANDLER.onRankByOverallScore,
-        rankByMaximumScore: EVTHANDLER.onRankByMaximumScore
+        rankByMaximumScore: EVTHANDLER.onRankByMaximumScore,
+        clear: EVTHANDLER.onClear,
+        destroy: EVTHANDLER.onDestroy
     };
 
     return Urank;

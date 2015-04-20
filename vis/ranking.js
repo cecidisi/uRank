@@ -18,6 +18,20 @@ function Ranking(arguments){
     var data;
     var isRankingDrawn = false;
 
+    //  Classes
+    var svgClass = 'urank-ranking-svg',
+        axisClass = 'urank-ranking-axis',
+        xClass = 'urank-ranking-x',
+        xAxisLabelClass = 'urank-ranking-label',
+        yClass = 'urank-ranking-y',
+        stackedbarClass = 'urank-ranking-stackedbar',
+        lightBackgroundClass = 'urank-ranking-light-background',
+        darkBackgroundClass = 'urank-ranking-dark-background',
+        barClass = 'urank-ranking-bar';
+
+    // Id
+    var stackedbarPrefix = '#urank-ranking-stackedbar-';
+
     RANKING.Settings = new Settings();
 
 
@@ -85,8 +99,6 @@ function Ranking(arguments){
 		******************************************************/
 
         x = d3.scale.linear()
-        //.domain( [0, RANKING.Internal.topLimit(data, rankingCriteria)] )
-        //.domain( [0, data[0][rankingModel.getMode()]] )
         .domain([0, 1])
         .rangeRound( [0, width] );
 
@@ -102,15 +114,15 @@ function Ranking(arguments){
 
         // X Axis
         xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom")
-        .tickFormat(function(value){ if(value > 0 && value < 1) return (value * 100) + '%'; return ''; });
+            .scale(x)
+            .orient("bottom")
+            .tickFormat(function(value){ if(value > 0 && value < 1) return (value * 100) + '%'; return ''; });
 
         // Y Axis
         yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .tickValues("");
+            .scale(y)
+            .orient("left")
+            .tickValues("");
 
         /******************************************************
 		*	Draw chart main components
@@ -118,29 +130,29 @@ function Ranking(arguments){
 
         //// Add svg main components
         svg = d3.select(root).append("svg")
-        .attr("class", "svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom + 30)
-        .append("g")
-        .attr("width", width)
-        .attr("height", height + 30)
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+            .attr("class", svgClass)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom + 30)
+            .append("g")
+                .attr("width", width)
+                .attr("height", height + 30)
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + (height) + ")")
-        .call(xAxis)
-        .append("text")
-        .attr("class", "label")
-        .attr("x", width)
-        .attr("y", -6)
-        .style("text-anchor", "end")
-        .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
+            .attr("class", xClass + ' ' + axisClass)
+            .attr("transform", "translate(0," + (height) + ")")
+            .call(xAxis)
+            .append("text")
+                .attr("class", xAxisLabelClass)
+                .attr("x", width)
+                .attr("y", -6)
+                .style("text-anchor", "end")
+                .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
 
         svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-        .selectAll("text");
+            .attr("class", yClass +' '+axisClass)
+            .call(yAxis)
+            .selectAll("text");
 
         //// Create drop shadow to use as filter when a bar is hovered or selected
         RANKING.Render.createShadow();
@@ -175,21 +187,17 @@ function Ranking(arguments){
 
         color = colorScale;
 
-        svg.select('.x.axis .label')
-        .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
+        svg.select('.'+xClass+'.'+axisClass+' .'+xAxisLabelClass)
+            .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
 
         var transition = svg.transition().duration(750),
             delay = function(d, i) { return i * 50; };
 
-        transition.select(".x.axis")
-        .call(xAxis)
-        .selectAll("g")
-        .delay(delay);
+        transition.select('.'+xClass+'.'+axisClass).call(xAxis)
+            .selectAll("g").delay(delay);
 
-        transition.select(".y.axis")
-        .call(yAxis)
-        .selectAll("g")
-        .delay(delay)
+        transition.select('.'+yClass+'.'+axisClass).call(yAxis)
+            .selectAll("g").delay(delay);
 
         RANKING.Render.drawStackedBars();
     };
@@ -204,44 +212,42 @@ function Ranking(arguments){
 	* ***************************************************************************************************************/
     RANKING.Render.drawStackedBars = function(){
 
-        svg.selectAll(".stackedbar").data([]).exit();
-        svg.selectAll(".stackedbar").remove();
-        svg.selectAll(".stackedbar").data(data).enter();
+        svg.selectAll('.'+stackedbarClass).data([]).exit();
+        svg.selectAll('.'+stackedbarClass).remove();
+        svg.selectAll('.'+stackedbarClass).data(data).enter();
 
         setTimeout(function(){
-            var stackedBars = svg.selectAll(".stackedbar")
-            .data(data)
-            .enter().append("g")
-            .attr("class", "stackedbar")
-            .attr("id", function(d, i){ return "stackedbar-" + d.id; })
-            .attr( "transform", function(d, i) { return "translate(0, " + y(i) + ")"; } )
-            .on('click', RANKING.Evt.itemClicked)
-            .on('mouseover', RANKING.Evt.itemMouseEntered)
-            .on('mouseout', RANKING.Evt.itemMouseLeft);
+            var stackedBars = svg.selectAll('.'+stackedbarClass)
+                .data(data).enter()
+                .append("g")
+                    .attr("class", stackedbarClass)
+                    .attr("id", function(d, i){ return "urank-ranking-stackedbar-" + d.id; })
+                    .attr( "transform", function(d, i) { return "translate(0, " + y(i) + ")"; } )
+                    .on('click', RANKING.Evt.itemClicked)
+                    .on('mouseover', RANKING.Evt.itemMouseEntered)
+                    .on('mouseout', RANKING.Evt.itemMouseLeft);
 
             stackedBars.append('rect')
-            .attr('class', function(d, i){ if(i%2 == 0) return 'light_background'; return 'dark_background'; })
-            .attr('x', 0)
-            .attr('width', width)
-            .attr('height', y.rangeBand());
+                .attr('class', function(d, i){ if(i%2 == 0) return lightBackgroundClass; return darkBackgroundClass; })
+                .attr('x', 0)
+                .attr('width', width)
+                .attr('height', y.rangeBand());
 
-            stackedBars.selectAll(".bar")
-            .data(function(d) { return d.weightedKeywords; })
-            .enter()
-            .append("rect")
-            .attr("class", "bar")
-            .attr("height", y.rangeBand())
-            .attr("x", function(d) { return x(d.x0); })
-            .attr("width", 0)
-            .style("fill", function(d) { return color(d.stem); });
+            stackedBars.selectAll('.'+barClass)
+                .data(function(d) { return d.weightedKeywords; })
+                .enter()
+                .append("rect")
+                    .attr("class", barClass)
+                    .attr("height", y.rangeBand())
+                    .attr("x", function(d) { return x(d.x0); })
+                    .attr("width", 0)
+                    .style("fill", function(d) { return color(d.stem); });
 
-            var bars = stackedBars.selectAll(".bar");
+            var bars = stackedBars.selectAll('.'+barClass);
 
             var t0 = bars.transition()
-            .duration(500)
-            .attr({
-                "width": function(d) { return x(d.x1) - x(d.x0); }
-            });
+                .duration(500)
+                .attr({ "width": function(d) { return x(d.x1) - x(d.x0); } });
         }, 800);
 
     };
@@ -261,33 +267,30 @@ function Ranking(arguments){
         // create filter with id #drop-shadow
         // height=130% so that the shadow is not clipped
         var filter = defs.append("filter")
-        .attr("id", "drop-shadow")
-        .attr("height", "130%");
+            .attr("id", "drop-shadow")
+            .attr("height", "130%");
 
         // SourceAlpha refers to opacity of graphic that this filter will be applied to
         // convolve that with a Gaussian with standard deviation 3 and store result
         // in blur
         filter.append("feGaussianBlur")
-        .attr("in", "SourceAlpha")
-        .attr("stdDeviation", 2)
-        .attr("result", "blur");
+            .attr("in", "SourceAlpha")
+            .attr("stdDeviation", 2)
+            .attr("result", "blur");
 
         // translate output of Gaussian blur to the right and downwards with 2px
         // store result in offsetBlur
         filter.append("feOffset")
-        .attr("in", "blur")
-        .attr("dx", 0)
-        .attr("dy", 2)
-        .attr("result", "offsetBlur");
+            .attr("in", "blur")
+            .attr("dx", 0)
+            .attr("dy", 2)
+            .attr("result", "offsetBlur");
 
         // overlay original SourceGraphic over translated blurred opacity by using
         // feMerge filter. Order of specifying inputs is important!
         var feMerge = filter.append("feMerge");
-
-        feMerge.append("feMergeNode")
-        .attr("in", "offsetBlur")
-        feMerge.append("feMergeNode")
-        .attr("in", "SourceGraphic");
+        feMerge.append("feMergeNode").attr("in", "offsetBlur")
+        feMerge.append("feMergeNode").attr("in", "SourceGraphic");
     };
 
 
@@ -335,16 +338,16 @@ function Ranking(arguments){
         svg.attr("width", width);
 
         // update x-axis
-        svg.select('.x.axis').call(xAxis.orient('bottom'));
+        svg.select('.'+xClass + '.'+axisClass).call(xAxis.orient('bottom'));
 
         // Update bars
-        svg.selectAll(".stackedbar").attr('width', width);
-        svg.selectAll("rect.light_background").attr('width', width);
-        svg.selectAll("rect.dark_background").attr('width', width);
+        svg.selectAll('.'+stackedbarClass).attr('width', width);
+        svg.selectAll('rect.'+lightBackgroundClass).attr('width', width);
+        svg.selectAll('rect.'+darkBackgroundClass).attr('width', width);
 
-        svg.selectAll(".bar")
-        .attr("x", function(d) { return x(d.x0); })
-        .attr("width", function(d) { return x(d.x1) - x(d.x0); });
+        svg.selectAll('.'+barClass)
+            .attr("x", function(d) { return x(d.x0); })
+            .attr("width", function(d) { return x(d.x1) - x(d.x0); });
     };
 
 
@@ -370,19 +373,19 @@ function Ranking(arguments){
     RANKING.Render.selectItem = function(id){
         id = _.isArray(id) ? id : [id];
         if(isRankingDrawn)
-            svg.selectAll('.stackedbar').style('opacity', function(d){ return id.indexOf(d.id) > -1 ? 1 : 0.3; });
+            svg.selectAll('.'+stackedbarClass).style('opacity', function(d){ return id.indexOf(d.id) > -1 ? 1 : 0.3; });
     };
 
 
     RANKING.Render.deSelectAllItems = function(){
         if(isRankingDrawn)
-            svg.selectAll('.stackedbar').style('opacity', 1);
+            svg.selectAll('.'+stackedbarClass).style('opacity', 1);
     };
 
 
     RANKING.Render.hoverItem = function(id) {
         if(isRankingDrawn) {
-            svg.select('#stackedbar-' +''+ id).selectAll('.bar')
+            svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
             .attr('transform', 'translate(0, 0)')
             .style('filter', 'url(#drop-shadow)');
         }
@@ -391,7 +394,7 @@ function Ranking(arguments){
 
     RANKING.Render.unhoverItem = function(id) {
         if(isRankingDrawn)
-            svg.select('#stackedbar-' +''+ id).selectAll('.bar')
+            svg.select(stackedbarPrefix +''+ id).selectAll('.bar')
                 .attr('transform', 'translate(0, 0.2)')
                 .style('filter', '');
     };

@@ -1,7 +1,23 @@
 
 var KeywordExtractor = (function(){
 
-    var s = {};
+    var s = {},
+        allTokens = [],
+        stemmer = natural.PorterStemmer, //natural.LancasterStemmer;
+        tokenizer = new natural.WordTokenizer,
+        nounInflector = new natural.NounInflector(),
+        tfidf = new natural.TfIdf(),
+        stopWords = natural.stopwords,
+        pos = new Pos(),
+        lexer = new pos.Lexer(),
+        tagger = new pos.Tagger(),
+        POS = {
+            NN: 'NN',           // singular noun
+            NNS: 'NNS',         // plural noun
+            NNP: 'NNP',         // proper noun
+            JJ: 'JJ'            // adjective
+        };
+
     //  CONSTRUCTOR
     function KeywordExtractor(arguments) {
         s = $.extend({
@@ -11,34 +27,14 @@ var KeywordExtractor = (function(){
             minRepetitionsProxKeywords: 4
         }, arguments);
 
+        this.collection = [];
+        this.documentKeywords = [];
+        this.collectionKeywords = [];
+
+        stemmer.attach();
+        nounInflector.attach();
 
     }
-
-    var collection = [],
-        documentKeywords = [],
-        collectionKeywords = [],
-        allTokens = [];
-
-    var stemmer = natural.PorterStemmer; //natural.LancasterStemmer;
-    var tokenizer = new natural.WordTokenizer;
-    var nounInflector = new natural.NounInflector();
-    var tfidf = new natural.TfIdf();
-    var stopWords = natural.stopwords;
-    stemmer.attach();
-    nounInflector.attach();
-
-    var pos = new Pos();
-    var lexer = new pos.Lexer();
-    var tagger = new pos.Tagger();
-
-    var POS = {
-        NN: 'NN',           // singular noun
-        NNS: 'NNS',         // plural noun
-        NNP: 'NNP',         // proper noun
-        JJ: 'JJ'            // adjective
-    };
-
-
 
 
 /************************************************************************************************************************************
@@ -49,7 +45,7 @@ var KeywordExtractor = (function(){
 
 
 
-    var extractDocumentKeywords = function() {
+    var extractDocumentKeywords = function(collection) {
 
         //POS tagging
         collection.forEach(function(d, i) {
@@ -59,18 +55,21 @@ var KeywordExtractor = (function(){
         // Find out which adjectives are potentially important and worth keeping
         var keyAdjectives = getKeyAdjectives(collection);
 
+        allTokens = [];
         // Create each item's document to be processed by tf*idf
         collection.forEach(function(d) {
             d.tokens = getFilteredTokens(d.taggedWords, keyAdjectives);                                       // d.tokens contains raw nouns and important adjectives
-
             $.merge(allTokens, d.tokens);
             tfidf.addDocument(d.tokens.map(function(term){ return term.stem(); }).join(' '));                 // argument = string of stemmed terms in document array
         });
 
         // Save keywords for each document
+        var documentKeywords = [];
         collection.forEach(function(d, i){
             documentKeywords.push(getDocumentKeywords(i));
         });
+
+        return documentKeywords;
     };
 
 
@@ -139,9 +138,9 @@ var KeywordExtractor = (function(){
 
     /////////////////////////////////////////////////////////////////////////////
 
-    var extractGlobalKeywords = function() {
+    var extractGlobalKeywords = function(collection, documentKeywords) {
 
-        var keywordDictionary = getKeywordDictionary(documentKeywords);
+        var keywordDictionary = getKeywordDictionary(collection, documentKeywords);
 
         // get keyword variations
         allTokens.forEach(function(token){
@@ -152,8 +151,8 @@ var KeywordExtractor = (function(){
         });
 
         // compute keywords in proximity
-        keywordDictionary = computeKeywordsInProximity(keywordDictionary);
-
+        keywordDictionary = computeKeywordsInProximity(collection, keywordDictionary);
+        var collectionKeywords = [];
 
         // object to array
         _.keys(keywordDictionary).forEach(function(keyword){
@@ -172,7 +171,6 @@ var KeywordExtractor = (function(){
             collectionKeywords.push(keywordDictionary[keyword]);
         });
 
-
         collectionKeywords = collectionKeywords
             //.filter(function(ck){ return ck.repeated >= minRepetitions })
             .sort(function(k1, k2){
@@ -184,12 +182,14 @@ var KeywordExtractor = (function(){
         collectionKeywords.forEach(function(k, i){
             k.term = getRepresentativeTerm(k);
         });
+
+        return collectionKeywords;
     };
 
 
 
 
-    var getKeywordDictionary = function(_documentKeywords) {
+    var getKeywordDictionary = function(_collection, _documentKeywords) {
 
         var keywordDictionary = {};
         _documentKeywords.forEach(function(docKeywords, i){
@@ -207,13 +207,13 @@ var KeywordExtractor = (function(){
                         term: '',
                         repeated: 1,
                         variations: {},
-                        inDocument : [collection[i].id],
+                        inDocument : [_collection[i].id],
                         keywordsInProximity: {}
                     };
                 }
                 else {
                     keywordDictionary[stemmedTerm].repeated++;
-                    keywordDictionary[stemmedTerm].inDocument.push(collection[i].id);
+                    keywordDictionary[stemmedTerm].inDocument.push(_collection[i].id);
                 }
             });
         });
@@ -227,8 +227,8 @@ var KeywordExtractor = (function(){
     };
 
 
-    var computeKeywordsInProximity = function(_keywordDictionary) {
-        collection.forEach(function(d){
+    var computeKeywordsInProximity = function(_collection, _keywordDictionary) {
+        _collection.forEach(function(d){
             tokenizer.tokenize(d.text).forEach(function(word, i, text){
 
                 var current = word.stem();
@@ -251,11 +251,7 @@ var KeywordExtractor = (function(){
         });
 
         return _keywordDictionary;
-    }
-
-
-
-
+    };
 
 
     var getRepresentativeTerm = function(k){
@@ -305,30 +301,27 @@ var KeywordExtractor = (function(){
 *
 *********************************************************************************************************************************************/
 
-
-
-
     KeywordExtractor.prototype = {
         addDocument: function(document, id) {
             document = (!Array.isArray(document)) ? document : document.join(' ');
-            id = id || collection.length;
-            collection.push({ id: id, text: document });
+            id = id || this.collection.length;
+            this.collection.push({ id: id, text: document });
         },
         processCollection: function() {
             console.log('Started keyword extraction');
+            tfidf = new natural.TfIdf();
             var timestamp = $.now();
-            extractDocumentKeywords();
-            extractGlobalKeywords();
+            this.documentKeywords = [];
+            this.documentKeywords = extractDocumentKeywords(this.collection);
+            this.collectionKeywords = extractGlobalKeywords(this.collection, this.documentKeywords);
             console.log('Finished keyword extraction in ' + parseInt($.now() - timestamp).toTime());
-            //console.log(collectionKeywords);
         },
         listDocumentKeywords: function(index) {
-            return documentKeywords[index];
+            return this.documentKeywords[index];
         },
         getCollectionKeywords: function() {
-            return collectionKeywords;
+            return this.collectionKeywords;
         }
-
     };
 
     return KeywordExtractor;
