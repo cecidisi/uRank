@@ -59,6 +59,7 @@ Urank(init, options, 'scripts/urank/');
  
 ## Full list of initizialization options
 
+ * root: {string} DOM selector for element that captures mousedown events and causes certain effects to disappear. Default: 'body'
  * tagCloudRoot: {string} DOM selector for tagCloud container
  * tagBoxRoot:  {string} DOM selector for tagBox container
  * contentListRoot:  {string} DOM selector for contentList container
@@ -85,3 +86,14 @@ Urank(init, options, 'scripts/urank/');
  * onTagInBoxMouseEnter: receives tag index in keywords array
  * onTagInBoxMouseLeave: receives tag index in keywords array
  * onTagInBoxClick: receives tag index in keywords array
+ * onDocumentHintClick: receives tag index in keywords array
+ * onKeywordHintMouseEnter: receives tag index in keywords array
+ * onKeywordHintMouseLeave: receives tag index in keywords array
+ * onKeywordHintClick: receives tag index in keywords array
+
+######Notes:
+  * Document Hint: green pie chart shown when a tag in the Tagcloud is hovered. Depicts the amount of documents in the collection containing the keyword. If this hint is clicked, the corresponding documents are highlighted in the content list and ranking view
+  * Keyword Hint: red circle shown when a tag in the Tagcloud is hovered. The white number indicates the number frequently co-occurring keywords. If the red circle is clicked, the view is "frozen" so it is possible to navigate in the Tagcloud.
+
+
+
