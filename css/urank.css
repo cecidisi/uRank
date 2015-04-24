@@ -10,10 +10,7 @@
 
 .urank-tagcloud-container {
     overflow-y: auto;
-    width: 100%;
     padding: 8px 2px;
-  /*  background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
-    box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;*/
 }
 
 
@@ -151,12 +148,12 @@
     cursor: default;
     display: inline-block;
     text-align: left;
-    min-width: 14%;
-    height: 2em;
-    margin: 0.8em .3em 0.2em 0.3em;
+    min-width: 65px;
+    height: 24px;
+    margin: 14px 3px 0px 3px;
     padding: .2em;
-    border-radius: 0.3em;
-    -webkit-border-radius: 0.3em;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
     -webkit-box-shadow: 0em 7px 6px -6px #333;
     box-shadow: 0em 7px 6px -6px #333;
     -webkit-text-shadow: -0.1em 0.1em 0.5em #eee;
@@ -176,26 +173,26 @@
 
 /* slider div*/
 .urank-tagbox-tag-weight-slider {
-    height: .4em;
-    margin: .1em;
+    height: 6px !important;
+    margin: 1px !important;
 }
 
 
 /* ui-slider-range */
 .urank-tagbox-tag-weight-slider .urank-tagbox-tag-weight-slider-range
  {
-    height: 100%;
-     -webkit-border-radius: 0.3em;
-     border-radius: 0.3em;
+     height: 100% !important;
+     -webkit-border-radius: 0.3em !important;
+     border-radius: 0.3em !important;
 }
 
 /* ui-slider-handle */
 .urank-tagbox-tag-weight-slider .urank-tagbox-tag-weight-slider-handle  {
-    top: -0.3em;
-    width: 0.45em;
-    height: .8em;
-    -webkit-border-radius: 0.2em;
-    border-radius: 0.2em;
+    top: -0.3em !important;
+    width: 0.45em !important;
+    height: .8em !important;
+    -webkit-border-radius: 0.2em !important;
+    border-radius: 0.2em !important;
 }
 
 
@@ -513,7 +510,6 @@ Document Panel (right) - for visualizing highlighted text
     display: flex;
     flex-direction: column;
     float: right;
-    width: 21%;
     height: calc(100% - 1em);
     padding: .5em;
 }

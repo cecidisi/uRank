@@ -32,6 +32,7 @@
         contentListRoot: '#contentlist',
         visCanvasRoot: '#viscanvas',
         docViewerRoot: '#docviewer'
+        //,style: 'custom'
     };
 
     // uRank initialization function to be passed as callback
