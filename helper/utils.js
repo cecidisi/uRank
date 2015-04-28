@@ -157,7 +157,7 @@ stemmer.attach();
 nounInflector.attach();
 
 
-function getStyledText (text, keywords, colorScale){
+function getStyledText (text, stemmedKeywords, colorScale){
     var styledText = '',
         word = '';
     text.split('').forEach(function(c){
@@ -169,27 +169,27 @@ function getStyledText (text, keywords, colorScale){
         }
         else {
             if(word != '')
-                word = getStyledWord(word, keywords, colorScale);
+                word = getStyledWord(word,stemmedKeywords, colorScale);
             styledText += word + c;
             word = '';
         }
     });
-    //console.log('last word = ' + word);
     if(word != '')
-        styledText += getStyledWord(word, keywords, colorScale);
+        styledText += getStyledWord(word, stemmedKeywords, colorScale);
     return styledText;
 }
 
 
-function getStyledWord (word, keywords, colorScale){
-    var trickyWords = ['it', 'is', 'us', 'ar'];
-    var word = word.replace(/our$/, 'or');
+function getStyledWord (word, stemmedKeywords, colorScale){
+
+    var trickyWords = ['it', 'is', 'us', 'ar'],
+        word = word.replace(/our$/, 'or'),
+        wordStem = word.stem();
     // First clause solves words like 'IT', second clause that the stem of the doc term (or the singularized term) matches the keyword stem
-    var kIndex = keywords.indexOf(word.stem());
-    if(trickyWords.indexOf(word.stem()) == -1 || word.isAllUpperCase()) {
-        if(keywords.indexOf(word.stem()) > -1 )
-            return "<strong style='color:" + colorScale(word.stem()) + "'>" + word + "</strong>";
-        if(keywords.indexOf(word.singularizeNoun().stem()) > -1)
+    if(trickyWords.indexOf(wordStem) == -1 || word.isAllUpperCase()) {
+        if(stemmedKeywords.indexOf(wordStem) > -1 )
+            return "<strong style='color:" + colorScale(wordStem) + "'>" + word + "</strong>";
+        if(stemmedKeywords.indexOf(word.singularizeNoun().stem()) > -1 )
             return "<strong style='color:" + colorScale(word.singularizeNoun().stem()) + "'>" + word + "</strong>";
     }
     return word;

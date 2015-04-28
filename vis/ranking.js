@@ -394,7 +394,7 @@ function Ranking(arguments){
 
     RANKING.Render.unhoverItem = function(id) {
         if(isRankingDrawn)
-            svg.select(stackedbarPrefix +''+ id).selectAll('.bar')
+            svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')
                 .style('filter', '');
     };

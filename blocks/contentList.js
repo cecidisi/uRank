@@ -64,7 +64,8 @@ var ContentList = (function(){
             $("<div></div>").appendTo($rankingDiv).addClass(rankingPosMovedClass);
             // title container
             var $titleDiv = $("<div></div>").appendTo($li).addClass(liTitleContainerClass);
-            $('<h3></h3>').appendTo($titleDiv).append('<a>', { ref: '#', id: 'urank-list-li-title-' + i, text: d.title});
+            var $h3Title = $('<h3></h3>').appendTo($titleDiv);
+            $('<a>', { ref: '#', id: 'urank-list-li-title-' + i/*, html: d.title*/}).appendTo($h3Title).html(d.title);
             // buttons container
             var $buttonsDiv = $("<div></div>").appendTo($li).addClass(liButtonsContainerClass);
             $("<span>").appendTo($buttonsDiv).addClass(watchiconClass).addClass(watchiconOffClass);
@@ -103,7 +104,7 @@ var ContentList = (function(){
 
         this.stopAnimation();
         this.deselectAllListItems();
-        this.formatTitles(data, keywords, colorScale);
+        this.formatTitles(data, keywords.map(function(k){ return k.stem }), colorScale);
         this.showRankingPositions(data);
         this.hideUnrankedListItems(data);
 
@@ -177,10 +178,10 @@ var ContentList = (function(){
     };
 
 
-    var _formatTitles = function(data, keywords, colorScale) {
+    var _formatTitles = function(data, stemmedKeywords, colorScale) {
         data.forEach(function(d, i){
             var title = (d.title.length > 60) ? (d.title.substring(0, 56) + '...') : d.title + '';
-            title = (!keywords || !colorScale) ? title : getStyledText(title, keywords, colorScale);
+            title = (!stemmedKeywords || !colorScale) ? title : getStyledText(title, stemmedKeywords, colorScale);
             $(liItem +''+ d.id).find('a').html(title);
         });
     }
