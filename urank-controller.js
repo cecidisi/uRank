@@ -60,7 +60,7 @@ var UrankController = (function(){
             s.onLoad.call(this, _this.keywords);
         },
 
-        onChange: function(selectedKeywords, /*newQueryTermColorScale, */actionLog) {
+        onChange: function(selectedKeywords, actionLog) {
 
             console.log(actionLog);
             _this.selectedKeywords = selectedKeywords;
