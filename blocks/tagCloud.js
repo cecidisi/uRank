@@ -24,16 +24,20 @@ var TagCloud = (function(){
             color: '#eee',
             'text-shadow': ''
         },
+
         draggableOptions = {
             revert: 'invalid',
             helper: 'clone',
+            appendTo: '.urank-tagbox-container',
             zIndex: 999,
-            appendTo: s.dropIn,
             start: function(event, ui){ $(this).hide(); },
             stop: function(event, ui){ $(this).show(); }
         },
+
         documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagCloudContainerClass },
+
         keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagCloudContainerClass },
+
         pieOptions = {
             size: { pieOuterRadius: '100%', canvasHeight: '14', canvasWidth: '14' },
             effects: {
@@ -80,7 +84,6 @@ var TagCloud = (function(){
         s = $.extend({
             root: '',
             colorScale: function(){},
-            dropIn: '.urank-tagbox-container',
             onTagInCloudMouseEnter: function(index){},
             onTagInCloudMouseLeave: function(index){},
             onTagInCloudClick: function(index){},
@@ -145,6 +148,7 @@ var TagCloud = (function(){
 
     var _setTagProperties = function($tag) {
 
+        $tag.removeAttr('data-hint');
         if(!$tag.hasClass(draggingClass)) {
             $tag.removeClass(selectedClass)
             .css({
@@ -172,10 +176,13 @@ var TagCloud = (function(){
             }
 
             // Set draggable
+            console.log('is draggable before = ' + $tag.is('.ui-draggable'));
             if($tag.is('.ui-draggable'))
                 $tag.draggable('destroy');
             $tag.draggable(draggableOptions);
+            console.log('is draggable after = ' + $tag.is('.ui-draggable'));
 
+            //  Set keyword hint properties
             $tag.find('.'+keywordHintClass).css('visibility', '').off().on({
                 mouseenter: function(event){ s.onKeywordHintMouseEnter.call(this, $(this).parent().attr(tagPosAttr)) },
                 mouseleave: function(event){ s.onKeywordHintMouseLeave.call(this, $(this).parent().attr(tagPosAttr)) },
@@ -186,6 +193,7 @@ var TagCloud = (function(){
                 mousedown: function(event){ event.stopPropagation(); }
             });
 
+            //  Set document hint properties
             $tag.find('.'+documentHintClass).css('visibility', '').off().on({
                 click: function(event){
                     event.stopPropagation();
@@ -199,6 +207,47 @@ var TagCloud = (function(){
         return $tag;
     };
 
+
+
+    /**
+	 *	Detach tag from tag box and return it to container (tag cloud)
+	 *
+	 * */
+    var _restoreTag = function(index){
+
+        var $tag = $(tagIdPrefix + '' + index);
+        // Change class
+        $tag.removeClass().addClass(tagClass);
+
+        //        this.setTagProperties($tag);
+
+        // Re-append to tag container, in the corresponding postion
+        var tagIndex = parseInt($tag.attr(tagPosAttr));
+        var i = tagIndex - 1;
+        var firstTagIndex = $root.find('.'+ tagClass + ':eq(0)').attr(tagPosAttr);
+        // second condition checks if the tag is NOT in Tag Cloud
+        while(i >= firstTagIndex && !$(tagIdPrefix + '' + i).hasClass(tagClass))
+            --i;
+
+        var oldOffset = { top: $tag.offset().top, left: $tag.offset().left};
+        // Remove from tag box
+        $tag = $tag.detach();
+
+        if(i >= firstTagIndex)    // Current tag inserted after another (tag-pos == i)
+            $(tagIdPrefix + '' + i).after($tag);
+        else                      // Current tag inserted in first position of tag container
+            $root.prepend($tag);
+
+
+        var currentOffset = { top: $tag.offset().top, left: $tag.offset().left };
+        // Animate tag moving from ta box to tag cloud
+        $tag.css({ position: 'absolute', top: oldOffset.top, left: oldOffset.left, 'z-index': 999 });
+        $tag.animate({ top: currentOffset.top, left: currentOffset.left }, 1000, 'swing', function(){
+            $(this).css({ position: '', top: '', left: '', 'z-index': '' });
+            _this.setTagProperties($tag);
+        });
+
+    };
 
 
     var _hoverTag = function(index) {
@@ -258,12 +307,20 @@ var TagCloud = (function(){
         $tag.find('.'+keywordHintClass).css('visibility', 'visible');
         $tag.find('.'+documentHintClass).css('visibility', 'hidden');
 
-        $tag.siblings().each(function(i, siblingTag){
-            $(siblingTag).find('.'+keywordHintClass).off().css('visibility', 'hidden');
-            $(siblingTag).find('.'+documentHintClass).off().css('visibility', 'hidden');
+        $tag.siblings().each(function(i, sibling){
+            var $siblingTag = $(sibling);
+            $siblingTag.find('.'+keywordHintClass).off().css('visibility', 'hidden');
+            $siblingTag.find('.'+documentHintClass).off().css('visibility', 'hidden');
 
-            if($(siblingTag).hasClass(dimmedClass))
-                $(siblingTag).removeClass(activeClass).off();
+            if($siblingTag.hasClass(dimmedClass))       // Dimmed tags get active class removed
+                $siblingTag.removeClass(activeClass).off();
+            else {                                      // Active tags are the ones co-occuring with the selected tag. A tooltip is added during proxKeywordsmode
+                var selectedKeyword = $tag.getText();
+                var currentKeyword = $siblingTag.getText();
+                var numberCoOccurrences = _this.keywords[index].keywordsInProximity[$siblingTag.attr('stem')];
+                var tooltip = currentKeyword + ' and ' + selectedKeyword + ' appear in proximity ' + numberCoOccurrences + ' times';
+                $siblingTag.addClass('hint--right hint--rounded').attr('data-hint', tooltip);
+            }
         });
 
         $root.on('scroll', onRootScrolled);
@@ -306,42 +363,6 @@ var TagCloud = (function(){
     };
 
 
-    /**
-	 *	Detach tag from tag box and return it to container (tag cloud)
-	 *
-	 * */
-    var _restoreTag = function(index){
-
-        var $tag = $(tagIdPrefix + '' + index);
-        // Change class
-        $tag.removeClass().addClass(tagClass);
-        this.setTagProperties($tag);
-
-        // Re-append to tag container, in the corresponding postion
-        var tagIndex = parseInt($tag.attr(tagPosAttr));
-        var i = tagIndex - 1;
-        var firstTagIndex = $root.find('.'+ tagClass + ':eq(0)').attr(tagPosAttr);
-        // second condition checks if the tag is NOT in Tag Cloud
-        while(i >= firstTagIndex && !$(tagIdPrefix + '' + i).hasClass(tagClass))
-            --i;
-
-        var oldOffset = { top: $tag.offset().top, left: $tag.offset().left};
-        // Remove from tag box
-        $tag = $tag.detach();
-
-        if(i >= firstTagIndex)    // Current tag inserted after another (tag-pos == i)
-            $(tagIdPrefix + '' + i).after($tag);
-        else                      // Current tag inserted in first position of tag container
-            $root.prepend($tag);
-
-        var currentOffset = { top: $tag.offset().top, left: $tag.offset().left };
-        // Animate tag moving from ta box to tag cloud
-        $tag.css({ position: 'absolute', top: oldOffset.top, left: oldOffset.left, 'z-index': 999 });
-        $tag.animate({ top: currentOffset.top, left: currentOffset.left }, 1000, 'swing', function(){
-            $(this).css({ position: '', top: '', left: '', 'z-index': '' });
-        });
-
-    };
 
 
     var _clear = function() {

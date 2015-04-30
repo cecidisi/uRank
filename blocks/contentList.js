@@ -44,6 +44,7 @@ var ContentList = (function(){
         }, arguments);
 
         this.data = [];
+        this.actionLog = {};    // fields: doc_id, doc_title, timestamp
         $(s.root).addClass(contentListContainerClass);
     }
 
@@ -65,7 +66,8 @@ var ContentList = (function(){
             // title container
             var $titleDiv = $("<div></div>").appendTo($li).addClass(liTitleContainerClass);
             var $h3Title = $('<h3></h3>').appendTo($titleDiv);
-            $('<a>', { ref: '#', id: 'urank-list-li-title-' + i/*, html: d.title*/}).appendTo($h3Title).html(d.title);
+            $('<a>', { ref: '#', id: 'urank-list-li-title-' + i, html: d.title, title: d.title + '\n' + d.description }).appendTo($h3Title);
+        //    $('<h3></h3>', { id: 'urank-list-li-title-' + i, html: d.title, title: d.title + '\n' + d.description }).appendTo($titleDiv);
             // buttons container
             var $buttonsDiv = $("<div></div>").appendTo($li).addClass(liButtonsContainerClass);
             $("<span>").appendTo($buttonsDiv).addClass(watchiconClass).addClass(watchiconOffClass);

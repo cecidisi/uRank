@@ -28,5 +28,14 @@ var RANKING_MODE = {
     max_score: 'maxScore'
 };
 
-
+window.USER_ACTION = {
+    added: 'keyword added',
+    deleted: 'keyword deleted',
+    weighted: 'changed weight',
+    bookmarked: 'document bookmarked',
+    unbookmarked: 'document unbookmarked',
+    watched: 'watching document',
+    unwatched: 'document unwatched',
+    mode: 'ranking mode changed'
+};
 

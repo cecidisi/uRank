@@ -10,31 +10,40 @@ var TagBox = (function(){
         tagWeightsliderClass = 'urank-tagbox-tag-weight-slider',
         weightSliderRangeClass = '.urank-tagbox-tag-weight-slider-range',
         weightSliderHandleClass = 'urank-tagbox-tag-weight-slider-handle';
-    //  Ids
+    //  Id prefix
+    var tagIdPrefix = '#urank-tag-';
+    //  Attribute
+    var tagPosAttr = 'tag-pos';
+    //  Custom Event
+    var tagBoxChangeEvent = 'tagBoxChange';
 
 
     var _this;
-
 
     function Tagbox(arguments) {
 
         _this = this;
         s = $.extend({
             root: '',
-            colorScale: function(){},
+            //colorScale: function(){},
             droppableClass: 'urank-tagcloud-tag',
-            onChange: function(selectedKeywords, colorscale){},
+            onChange: function(selectedKeywords, actionLog){},
+            onTagDropped: function(index, queryTermColor){},
             onTagDeleted: function(index){},
+            onTagWeightchanged: function(){},
             onTagInBoxMouseEnter: function(index){},
             onTagInBoxMouseLeave: function(index){},
             onTagInBoxClick: function(index){}
         }, arguments);
 
+        this.selectedKeywords = [];
+        this.actionLog = {};  // fields: action, keyword, color, oldWeight, newWeight, timestamp -- not all of them used for every case
+
         this.droppableOptions = {
             tolerance: 'touch',
             drop: function(event, ui){
-                _this.dropTag(ui.draggable);
-                $root.trigger('tagBoxChange');
+                s.onTagDropped.call(this, $(ui.draggable).attr(tagPosAttr));
+                $root.trigger(tagBoxChangeEvent);
             }
         };
 
@@ -44,13 +53,29 @@ var TagBox = (function(){
             range: "min",
             min: 0,
             max: 1,
-            step: 0.2,
+            step: 0.1,
             value: 1,
+            start: function(event, ui) {
+                _this.actionLog = {
+                    action: USER_ACTION.weighted,
+                    keyword: $(this.parentNode).getText(),
+                    color: $(this.parentNode).data('queryTermColor'),
+                    oldWeight: ui.value
+                };
+            },
             slide: function(event, ui) {
                 _this.updateTagStyle(this.parentNode, ui.value);
             },
             stop: function(event, ui) {
-                $root.trigger('tagBoxChange');
+
+                var weight = ui.value;
+                var indexToChange = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == _this.actionLog.keyword });
+                _this.selectedKeywords[indexToChange].weight = weight;
+
+                _this.actionLog.newWeight = weight;
+                _this.actionLog.timestamp = $.now();
+
+                $root.trigger(tagBoxChangeEvent);
             }
         };
 
@@ -61,8 +86,10 @@ var TagBox = (function(){
 
     var _build = function() {
         $root = $(s.root).addClass(tagboxContainerClass)
-            .on('tagBoxChange', function(){ s.onChange.call(this, _this.getKeywordsInBox(), s.colorScale) })    // Bind onChange event handler for custom event
-            .droppable(this.droppableOptions);                                                                  // bind droppable behavior to tag box
+        .on(tagBoxChangeEvent, function(){
+            s.onChange.call(this, _this.selectedKeywords, /*s.colorScale,*/ _this.actionLog)   // Bind onChange event handler for custom event
+        })
+        .droppable(this.droppableOptions);                   // bind droppable behavior to tag box;
     };
 
 
@@ -73,9 +100,8 @@ var TagBox = (function(){
     };
 
 
-    var _dropTag = function(tag){
-        var $tag = $(tag);
-        // Set tag box legend
+    var _dropTag = function(index, color){
+        var $tag = $(tagIdPrefix + '' + index);
         $root.find('p').remove();
 
         if ($tag.hasClass(s.droppableClass)) {
@@ -85,13 +111,8 @@ var TagBox = (function(){
             // Change tag's class
             $tag.removeClass().addClass(tagInBoxClass);
 
-            // Append "delete" icon to tag and bind event handler
-            $("<span class='" + tagDeleteButtonClass + "'/></span>").appendTo(tag).click(function(){
-                $tag.find('.'+tagDeleteButtonClass).remove();
-                $tag.find('.'+tagWeightsliderClass).remove();
-                s.onTagDeleted.call(this, $tag.attr('tag-pos'));
-                $root.trigger('tagBoxChange');
-            });
+            // Append "delete" button
+            $('<span></span>').appendTo($tag).addClass(tagDeleteButtonClass);
 
             // Add new div to make it a slider
             var weightSlider = $("<div class='" + tagWeightsliderClass + "'></div>").appendTo($tag).slider(this.sliderOptions);
@@ -99,45 +120,59 @@ var TagBox = (function(){
             weightSlider.find('a').addClass(weightSliderHandleClass);
 
             // Retrieve color in weightColorScale for the corresponding label
-            var color = s.colorScale($tag.attr('stem'));
+           // var color = s.colorScale($tag.attr('stem'));
             var rgbSequence = hexToR(color) + ', ' + hexToG(color) + ', ' + hexToB(color);
 
             // Set tag's style
-            $tag.data('keywordColor', color).css({
+            $tag.data('queryTermColor', color).css({
                 background: 'rgba(' + rgbSequence + ', 1)',
                 color: '',
                 border: 'solid 2px ' + color
             }).off().on({
-                mouseenter: s.onTagInBoxMouseEnter($tag.attr('tag-pos')),
-                mouseleave: s.onTagInBoxMouseLeave($tag.attr('tag-pos')),
-                click: s.onTagInBoxClick($tag.attr('tag-pos'))
+                mouseenter: s.onTagInBoxMouseEnter($tag.attr(tagPosAttr)),
+                mouseleave: s.onTagInBoxMouseLeave($tag.attr(tagPosAttr)),
+                click: s.onTagInBoxClick($tag.attr(tagPosAttr))
+            }).on('click', '.'+tagDeleteButtonClass, $tag.attr(tagPosAttr), function(event){     //  Event handler for delete button
+                event.stopPropagation(); s.onTagDeleted.call(this, event.data);
             });
+
+            var term = $tag.getText(), stem = $tag.attr('stem');
+
+            _this.selectedKeywords.push({ term: term, stem: stem, weight: 1  });
+
+            _this.actionLog = {
+                action: USER_ACTION.added,
+                keyword: term,
+                color: color,
+                timestamp: $.now()
+            };
         }
     };
 
 
-    var _updateTagStyle = function(tag, weight){
-        var color = s.colorScale($(tag).attr('stem'));
-        $(tag).css("background", "rgba("+ hexToR(color) + ', ' + hexToG(color) + ', ' + hexToB(color) + "," + weight + ")");
+    var _deleteTag = function(index) {
+        var $tag = $(tagIdPrefix + '' + index),
+            term = $tag.getText();
+        $tag.find('.'+tagDeleteButtonClass).remove();
+        $tag.find('.'+tagWeightsliderClass).remove();
+
+        var indexToDelete = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
+        _this.selectedKeywords.splice(indexToDelete, 1);
+
+        _this.actionLog = {
+            action: USER_ACTION.deleted,
+            keyword: term
+        };
+
+        $root.trigger(tagBoxChangeEvent);
     };
 
 
+    var _updateTagStyle = function(tag, weight){
+        var color = $(tag).data('queryTermColor'); //s.colorScale($(tag).attr('stem'));
+        $(tag).css("background", "rgba("+ hexToR(color) + ', ' + hexToG(color) + ', ' + hexToB(color) + "," + weight + ")");
+    };
 
-    /**
-	 *	Retrieves the selected keywords (in tag box) and the weight assigned by the user
-	 *	@return array. Each item is an object containing 'term' and 'weight'
-	 * */
-    var _getKeywordsInBox = function() {
-
-        var  weightedKeywords = [];
-        $('.'+tagInBoxClass).each(function(i, tag){
-            var term = $(tag).getText();
-            var stem = $(tag).attr('stem');
-            var weight = parseFloat( $(tag).find('.'+tagWeightsliderClass).slider("value"));
-            weightedKeywords.push({ 'term': term, 'stem': stem, 'weight': weight });
-        });
-        return weightedKeywords;
-    }
 
 
     var _destroy = function() {
@@ -149,8 +184,8 @@ var TagBox = (function(){
         build: _build,
         clear: _clear,
         dropTag: _dropTag,
+        deleteTag: _deleteTag,
         updateTagStyle: _updateTagStyle,
-        getKeywordsInBox: _getKeywordsInBox,
         destroy: _destroy
     };
 
