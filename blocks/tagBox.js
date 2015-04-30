@@ -27,7 +27,7 @@ var TagBox = (function(){
             root: '',
             //colorScale: function(){},
             droppableClass: 'urank-tagcloud-tag',
-            onChange: function(selectedKeywords, actionLog){},
+            onChange: function(selectedKeywords){},
             onTagDropped: function(index, queryTermColor){},
             onTagDeleted: function(index){},
             onTagWeightchanged: function(){},
@@ -42,6 +42,9 @@ var TagBox = (function(){
         this.droppableOptions = {
             tolerance: 'touch',
             drop: function(event, ui){
+                setTimeout(function() {
+                    $(ui.draggable).draggable("destroy");
+                }, 0);
                 s.onTagDropped.call(this, $(ui.draggable).attr(tagPosAttr));
                 $root.trigger(tagBoxChangeEvent);
             }
@@ -55,26 +58,19 @@ var TagBox = (function(){
             max: 1,
             step: 0.1,
             value: 1,
-            start: function(event, ui) {
-                _this.actionLog = {
-                    action: USER_ACTION.weighted,
-                    keyword: $(this.parentNode).getText(),
-                    color: $(this.parentNode).data('queryTermColor'),
-                    oldWeight: ui.value
-                };
-            },
+            start: function(event, ui) {},
             slide: function(event, ui) {
-                _this.updateTagStyle(this.parentNode, ui.value);
+
+                var $tag  = $(this.parentNode);
+                var color = $tag.data('queryTermColor');
+                $tag.css("background", "rgba("+ hexToR(color) + ', ' + hexToG(color) + ', ' + hexToB(color) + "," + ui.value + ")");
             },
             stop: function(event, ui) {
 
-                var weight = ui.value;
-                var indexToChange = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == _this.actionLog.keyword });
-                _this.selectedKeywords[indexToChange].weight = weight;
+                var term = $(this.parentNode).getText(),
+                    indexToChange = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
 
-                _this.actionLog.newWeight = weight;
-                _this.actionLog.timestamp = $.now();
-
+                _this.selectedKeywords[indexToChange].weight = ui.value;
                 $root.trigger(tagBoxChangeEvent);
             }
         };
@@ -87,7 +83,7 @@ var TagBox = (function(){
     var _build = function() {
         $root = $(s.root).addClass(tagboxContainerClass)
         .on(tagBoxChangeEvent, function(){
-            s.onChange.call(this, _this.selectedKeywords, /*s.colorScale,*/ _this.actionLog)   // Bind onChange event handler for custom event
+            s.onChange.call(this, _this.selectedKeywords)   // Bind onChange event handler for custom event
         })
         .droppable(this.droppableOptions);                   // bind droppable behavior to tag box;
     };
@@ -105,6 +101,7 @@ var TagBox = (function(){
         $root.find('p').remove();
 
         if ($tag.hasClass(s.droppableClass)) {
+
             // Append dragged tag to tag box
             $root.append($tag);
 
@@ -137,15 +134,7 @@ var TagBox = (function(){
             });
 
             var term = $tag.getText(), stem = $tag.attr('stem');
-
-            _this.selectedKeywords.push({ term: term, stem: stem, weight: 1  });
-
-            _this.actionLog = {
-                action: USER_ACTION.added,
-                keyword: term,
-                color: color,
-                timestamp: $.now()
-            };
+            _this.selectedKeywords.push({ term: term, stem: stem, weight: 1 });
         }
     };
 
@@ -158,21 +147,8 @@ var TagBox = (function(){
 
         var indexToDelete = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
         _this.selectedKeywords.splice(indexToDelete, 1);
-
-        _this.actionLog = {
-            action: USER_ACTION.deleted,
-            keyword: term
-        };
-
         $root.trigger(tagBoxChangeEvent);
     };
-
-
-    var _updateTagStyle = function(tag, weight){
-        var color = $(tag).data('queryTermColor'); //s.colorScale($(tag).attr('stem'));
-        $(tag).css("background", "rgba("+ hexToR(color) + ', ' + hexToG(color) + ', ' + hexToB(color) + "," + weight + ")");
-    };
-
 
 
     var _destroy = function() {
@@ -185,7 +161,6 @@ var TagBox = (function(){
         clear: _clear,
         dropTag: _dropTag,
         deleteTag: _deleteTag,
-        updateTagStyle: _updateTagStyle,
         destroy: _destroy
     };
 

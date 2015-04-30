@@ -157,7 +157,7 @@ var TagCloud = (function(){
                 color: '', textShadow: '', cursor: ''
             });
 
-            //  Restore non-active classes (dimmed)
+            //  Restore non-active classes (is dimmed or just initialized)
             if(!$tag.hasClass(activeClass)) {
                 $tag.removeClass(dimmedClass).addClass(activeClass)
                 .off().on({
@@ -176,14 +176,13 @@ var TagCloud = (function(){
             }
 
             // Set draggable
-            console.log('is draggable before = ' + $tag.is('.ui-draggable'));
             if($tag.is('.ui-draggable'))
                 $tag.draggable('destroy');
             $tag.draggable(draggableOptions);
-            console.log('is draggable after = ' + $tag.is('.ui-draggable'));
 
             //  Set keyword hint properties
-            $tag.find('.'+keywordHintClass).css('visibility', '').off().on({
+            $tag.find('.'+keywordHintClass).css('visibility', '')
+            .off().on({
                 mouseenter: function(event){ s.onKeywordHintMouseEnter.call(this, $(this).parent().attr(tagPosAttr)) },
                 mouseleave: function(event){ s.onKeywordHintMouseLeave.call(this, $(this).parent().attr(tagPosAttr)) },
                 click: function(event){
@@ -194,7 +193,8 @@ var TagCloud = (function(){
             });
 
             //  Set document hint properties
-            $tag.find('.'+documentHintClass).css('visibility', '').off().on({
+            $tag.find('.'+documentHintClass).css('visibility', '')
+            .off().on({
                 click: function(event){
                     event.stopPropagation();
                     s.onDocumentHintClick.call(this, $(this).parent().attr(tagPosAttr));
@@ -219,7 +219,8 @@ var TagCloud = (function(){
         // Change class
         $tag.removeClass().addClass(tagClass);
 
-        //        this.setTagProperties($tag);
+
+        this.setTagProperties($tag);
 
         // Re-append to tag container, in the corresponding postion
         var tagIndex = parseInt($tag.attr(tagPosAttr));
@@ -244,7 +245,8 @@ var TagCloud = (function(){
         $tag.css({ position: 'absolute', top: oldOffset.top, left: oldOffset.left, 'z-index': 999 });
         $tag.animate({ top: currentOffset.top, left: currentOffset.left }, 1000, 'swing', function(){
             $(this).css({ position: '', top: '', left: '', 'z-index': '' });
-            _this.setTagProperties($tag);
+            //_this.setTagProperties($tag);
+            $tag.draggable(draggableOptions);
         });
 
     };

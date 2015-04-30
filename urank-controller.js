@@ -60,9 +60,8 @@ var UrankController = (function(){
             s.onLoad.call(this, _this.keywords);
         },
 
-        onChange: function(selectedKeywords, actionLog) {
+        onChange: function(selectedKeywords) {
 
-            console.log(actionLog);
             _this.selectedKeywords = selectedKeywords;
             _this.selectedId = STR_UNDEFINED;
 
@@ -199,17 +198,13 @@ var UrankController = (function(){
         // Event handlers to return
         onRankByOverallScore: function() {
             _this.rankingMode = RANKING_MODE.overall_score;
-            var log = { action: USER_ACTION.mode, mode: _this.rankingMode };
-
-            EVTHANDLER.onChange(_this.selectedKeywords, log);
+            EVTHANDLER.onChange(_this.selectedKeywords);
             s.onRankByOverallScore.call(this);
         },
 
         onRankByMaximumScore: function() {
             _this.rankingMode = RANKING_MODE.max_score;
-            var log = { action: USER_ACTION.mode, mode: _this.rankingMode };
-
-            EVTHANDLER.onChange(_this.selectedKeywords, log);
+            EVTHANDLER.onChange(_this.selectedKeywords);
             s.onRankByMaximumScore.call(this);
         },
 
