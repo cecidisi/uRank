@@ -1,5 +1,0 @@
-main:
-['dependencies/ui/jquery-ui-1.10.4.custom.min.css", "dependencies/natural-adapted.js", "dependencies/pos/lexer.js", "dependencies/pos/lexicon.js", "dependencies/pos/pos.js", "dependencies/pos/POSTagger.js", "dependencies/custom/outerHTML.js", "dependencies/custom/scrollTo.js", "model/keywordExtractor.js", "model/rankingArray.js", "model/rankingModel.js", "blocks/contentList.js", "blocks/docViewer.js", "blocks/tagBox.js", "blocks/tagCloud.js", "blocks/visCanvas.js", "vis/ranking.js", "helper/globals.js", "helper/settings.js", "helper/utils.js", "css/urank.css", "urank-controller.js"]
-
-ignore:
-["README.md", "strings.txt", ".gitignore", "media/add.png", "media/favicon_off.png", "media/favicon_on.png", "media/favorites.png", "media/no-img.png", "media/refresh.png", "media/remove.png", "media/remove2.png", "media/sort-down.png", "media/sprites.css", "media/watch.png", "media/watch2.png"]
