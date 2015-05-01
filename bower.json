@@ -1,7 +1,7 @@
 {
   "name": "urank",
   "main": "urank.js",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "https://github.com/cecidisi/uRank",
   "authors": [
     "cdisciascio <cecidisi@gmail.com>"
