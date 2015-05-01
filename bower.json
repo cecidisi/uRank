@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "homepage": "https://github.com/cecidisi/uRank",
   "authors": [
-    "cecidisi <cecidisi@gmail.com>"
+    "cdisciascio <cecidisi@gmail.com>"
   ],
   "description": "pluggable visualization for text documents",
   "keywords": [
