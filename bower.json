@@ -1,0 +1,33 @@
+{
+  "name": "urank",
+  "main": "urank.js",
+  "version": "0.0.0",
+  "homepage": "https://github.com/cecidisi/uRank",
+  "authors": [
+    "cecidisi <cecidisi@gmail.com>"
+  ],
+  "description": "pluggable visualization for text documents",
+  "keywords": [
+    "documents",
+    "ranking",
+    "visualization"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "dependencies"
+  ],
+  "dependencies": {
+    "colorbrewer": "~1.0.0",
+    "d3pie": "~0.1.7",
+    "d3": "~3.5.5",
+    "hint": "~1.4.0",
+    "jquery": "~2.1.4",
+    "underscore": "~1.8.3",
+    "jquery-ui": "~1.11.4"
+  }
+}
