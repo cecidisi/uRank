@@ -1,6 +1,37 @@
 {
   "name": "urank",
-  "main": "urank.js",
+  "main": [
+      "urank.js",
+      "urank/dependencies/hint.min.css",
+      "urank/dependencies/theme/jquery-ui.min.css,
+      "urank/libs/natural-custom.js",
+      "urank/libs/pos/lexer.js",
+      "urank/libs/pos/lexicon.js",
+      "urank/libs/pos/pos.js",
+      "urank/libs/pos/POSTagger.js",
+      "urank/model/keywordExtractor.js",
+      "urank/model/rankingArray.js",
+      "urank/model/rankingModel.js",
+      "urank/blocks/contentList.js",
+      "urank/blocks/docViewer.js",
+      "urank/blocks/tagBox.js",
+      "urank/blocks/tagCloud.js",
+      "urank/'blocks/visCanvas.js",
+      "urank/vis/ranking.js",
+      "urank/helper/globals.js",
+      "urank/helper/settings.js",
+      "urank/helper/utils.js",
+      "urank/helper/jquery_functions/outerHTML.js",
+      "urank/helper/jquery_functions/scrollTo.js",
+      "urank/helper/jquery_functions/fullOffset.js",
+      "urank/helper/jquery_functions/fullWidth.js",
+      "urank/helper/jquery_functions/fullHeight.js",
+      "urank/helper/jquery_functions/getText.js",
+      "urank/helper/jquery_functions/pin.js",
+      "urank/css/urank.css",
+      "urank/css/vis-ranking.css",
+      "urank/urank-controller.js"
+  ],
   "version": "0.0.1",
   "homepage": "https://github.com/cecidisi/uRank",
   "authors": [
@@ -28,7 +59,6 @@
     "hint": "~1.4.0",
     "jquery": "~2.1.4",
     "underscore": "~1.8.3",
-    "jquery-ui": "~1.11.4",
-    "modernizr": "~2.8.3"
+    "jquery-ui": "~1.11.4"
   }
 }
