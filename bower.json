@@ -2,8 +2,6 @@
   "name": "urank",
   "main": [
       "urank.js",
-      "urank/dependencies/hint.min.css",
-      "urank/dependencies/theme/jquery-ui.min.css,
       "urank/libs/natural-custom.js",
       "urank/libs/pos/lexer.js",
       "urank/libs/pos/lexicon.js",
