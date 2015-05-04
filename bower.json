@@ -2,7 +2,6 @@
   "name": "urank",
   "version": "0.0.1",
   "main": [
-    "libs/modernizr-custom.js",
     "libs/natural-custom.js",
     "libs/pos/lexer.js",
     "libs/pos/lexicon.js",
@@ -51,6 +50,7 @@
     "tests",
     "dependencies",
     "urank-loader.js",
+    "libs/modernizr-custom.js"
   ],
   "dependencies": {
     "colorbrewer": "~1.0.0",
