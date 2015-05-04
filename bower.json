@@ -1,5 +1,6 @@
 {
   "name": "urank",
+  "version": "0.0.1",
   "main": [
       "urank.js",
       "urank/libs/natural-custom.js",
@@ -30,7 +31,6 @@
       "urank/css/vis-ranking.css",
       "urank/urank-controller.js"
   ],
-  "version": "0.0.1",
   "homepage": "https://github.com/cecidisi/uRank",
   "authors": [
     "cdisciascio <cecidisi@gmail.com>"
