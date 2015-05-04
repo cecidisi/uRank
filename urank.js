@@ -1,5 +1,5 @@
 
-window.Urank = (function(){
+var Urank = (function(){
 
     var _this,
         s = {},

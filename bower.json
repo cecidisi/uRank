@@ -2,7 +2,6 @@
   "name": "urank",
   "version": "0.0.1",
   "main": [
-    "urank.js",
     "libs/modernizr-custom.js",
     "libs/natural-custom.js",
     "libs/pos/lexer.js",
@@ -31,7 +30,7 @@
     "css/urank.css",
     "css/urank-blocks-default.css",
     "css/vis-ranking.css",
-    "urank-controller.js"
+    "urank.js"
   ],
   "homepage": "https://github.com/cecidisi/uRank",
   "authors": [
@@ -50,7 +49,8 @@
     "bower_components",
     "test",
     "tests",
-    "dependencies"
+    "dependencies",
+    "urank-loader.js",
   ],
   "dependencies": {
     "colorbrewer": "~1.0.0",

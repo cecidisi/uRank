@@ -4,10 +4,10 @@ function UrankLoader(callback, args) {
     var scripts = document.getElementsByTagName('script'),
         i = 0;
 
-    while(i<scripts.length && scripts[i].src.indexOf('urank.js') == -1)
+    while(i<scripts.length && scripts[i].src.indexOf('urank-loader.js') == -1)
         i++;
 
-    var pathToUrank = scripts[i].src.replace('urank.js', '');
+    var pathToUrank = scripts[i].src.replace('urank-loader.js', '');
 
     var loadAll = function() {
 
@@ -66,7 +66,8 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'helper/jquery_functions/pin.js',
                     pathToUrank + 'css/urank.css',
                     pathToUrank + 'css/urank-blocks-default.css',
-                    pathToUrank + 'css/vis-ranking.css'
+                    pathToUrank + 'css/vis-ranking.css',
+                    pathToUrank + 'urank.js'
                 ],
                 complete: function(){
                     console.log('urank loaded');
