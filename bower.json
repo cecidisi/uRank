@@ -15,7 +15,7 @@
       "blocks/docViewer.js",
       "blocks/tagBox.js",
       "blocks/tagCloud.js",
-      "'blocks/visCanvas.js",
+      "blocks/visCanvas.js",
       "vis/ranking.js",
       "helper/globals.js",
       "helper/settings.js",
