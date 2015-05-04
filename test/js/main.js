@@ -50,7 +50,7 @@
     };
 
     //  Calling Urank
-    Urank(init, urankOptions);
+    UrankLoader(init, urankOptions);
 
 })();
 

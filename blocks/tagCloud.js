@@ -5,6 +5,7 @@ var TagCloud = (function(){
     var s = {};
     //  Classes
     var tagCloudContainerClass = 'urank-tagcloud-container',
+        defaultTagCloudContainerClass = 'urank-tagcloud-container-default',
         tagClass = 'urank-tagcloud-tag',
         selectedClass = 'selected',
         dimmedClass = 'dimmed',
@@ -18,7 +19,9 @@ var TagCloud = (function(){
     //   Attributes
     var tagPosAttr = 'tag-pos';
     //  Helpers
-    var tagHoverStyle = {
+    var containerClasses,
+
+        tagHoverStyle = {
             background: '-webkit-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255))',
             border: 'solid 1px rgb(0, 102, 255)',
             color: '#eee',
@@ -90,14 +93,16 @@ var TagCloud = (function(){
             onDocumentHintClick: function(index){},
             onKeywordHintMouseEnter : function(index){},
             onKeywordHintMouseLeave : function(index){},
-            onKeywordHintClick : function(index){}
+            onKeywordHintClick : function(index){},
+            defaultStyle: true
         }, arguments);
 
         this.keywords = [];
         this.proxKeywordsMode = false;
         this.docHintMode = false;
 
-        $(s.root).addClass(tagCloudContainerClass);
+        containerClasses = (s.defaultStyle) ? tagCloudContainerClass +' '+ defaultTagCloudContainerClass : tagCloudContainerClass;
+        $(s.root).addClass(containerClasses);
     }
 
 
@@ -112,7 +117,7 @@ var TagCloud = (function(){
         this.collectionSize = collectionSize;
 
         // Empty tag container and add appropriateclass
-        $root = $(s.root).empty().addClass(tagCloudContainerClass);
+        $root = $(s.root).empty().addClass(containerClasses);
 
         this.keywords.forEach(function(k, i){
             var $tag = $('<div></div>', { class: tagClass, id: 'urank-tag-' + i, 'tag-pos': i, stem: k.stem, text: k.term }).appendTo($root);

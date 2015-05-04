@@ -5,25 +5,30 @@ var DocViewer = (function(){
     var s = {};
     // Classes
     var docViewerContainerClass = 'urank-docviewer-container',
+        defaultDocViewerContainerClass = 'urank-docviewer-container-default',
         docViewerDetailsSectionClass = 'urank-docviewer-details-section',
         docViewerContentSectionClass = 'urank-docviewer-content-section';
     // Id prefix
     var detailItemIdPrefix = '#urank-docviewer-details-';
+    // Helper
+    var containerClasses;
 
 
     function DocViewer(arguments) {
         s = $.extend({
             root: '',
-            facetsToShow: ['year']
+            facetsToShow: ['year'],
+            defaultStyle: true
         }, arguments);
 
-        $(s.root).addClass(docViewerContainerClass);
+        containerClasses = (s.defaultStyle) ? docViewerContainerClass +' '+ defaultDocViewerContainerClass : docViewerContainerClass;
+        $(s.root).addClass(containerClasses);
     }
 
 
     var _build = function() {
 
-        $root = $(s.root).empty().addClass(docViewerContainerClass);
+        $root = $(s.root).empty().addClass(containerClasses);
 
         // Append details section, titles and placeholders for doc details
         var $detailsSection = $("<div class='" + docViewerDetailsSectionClass + "'></div>").appendTo($root);

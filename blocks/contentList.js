@@ -7,6 +7,7 @@ var ContentList = (function(){
     var s = {};
     // Classes
     var contentListContainerClass = 'urank-list-container',
+        defaultContentListContainerClass = 'urank-list-container-default',
         ulClass = 'urank-list-ul',
         liClass = 'urank-list-li',
         liHoverClass = 'urank-list-li-hover',
@@ -30,6 +31,8 @@ var ContentList = (function(){
         liWatchedClass = 'urank-list-li-watched';
     // Ids
     var liItem = '#urank-list-li-';
+    // Helper
+    var containerClasses;
 
 
     function ContentList(arguments) {
@@ -40,19 +43,22 @@ var ContentList = (function(){
             onItemMouseEnter: function(document){},
             onItemMouseLeave: function(document){},
             onFaviconClicked: function(document){},
-            onWatchiconClicked: function(document){}
+            onWatchiconClicked: function(document){},
+            defaultStyle: true
         }, arguments);
 
         this.data = [];
         this.actionLog = {};    // fields: doc_id, doc_title, timestamp
-        $(s.root).addClass(contentListContainerClass);
+
+        containerClasses = (s.defaultStyle) ? contentListContainerClass +' '+ defaultContentListContainerClass : contentListContainerClass;
+        $(s.root).addClass(containerClasses);
     }
 
 
     var _build = function(data) {
 
         this.data = data;
-        $root = $(s.root).empty().addClass(contentListContainerClass);
+        $root = $(s.root).empty().addClass(containerClasses);
 
         var $ul = $('<ul></ul>').appendTo($root).addClass(ulClass);
 

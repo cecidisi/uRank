@@ -1,2 +1,5 @@
 /strings.txt
 /bower_components/
+/node_modules/
+/test/bower_components/
+/test/node_modules/

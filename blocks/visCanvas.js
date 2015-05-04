@@ -4,7 +4,10 @@ var VisCanvas = (function(){
     var s = {}, $root = $('');
     // Classes
     var visCanvasContainerClass = 'urank-viscanvas-container',
+        defaultVisCanvasContaienrClass = 'urank-viscanvas-container-default',
         visCanvasMessageClass = 'urank-viscanvas-message';
+    // Helepr
+    var containerClasses;
 
     function VisCanvas(arguments) {
         s = $.extend({
@@ -12,15 +15,17 @@ var VisCanvas = (function(){
             visModule: VIS_MODULES.ranking,
             onItemClicked: function(id){},
             onItemHovered: function(id){},
-            onItemUnhovered: function(id){}
+            onItemUnhovered: function(id){},
+            defaultStyle: true
         }, arguments);
 
-        $(s.root).addClass(visCanvasContainerClass);
+        containerClasses = (s.defaultStyle) ? visCanvasContainerClass +' '+ defaultVisCanvasContaienrClass : VisCanvas;
+        $(s.root).addClass(containerClasses);
     }
 
 
     var _build = function() {
-        $root = $(s.root).addClass(visCanvasContainerClass);
+        $root = $(s.root).addClass(containerClasses);
 
         var visArguments = {
             root: s.root,

@@ -5,6 +5,7 @@ var TagBox = (function(){
     var s = {};
     //  Classes
     var tagboxContainerClass = 'urank-tagbox-container',
+        defaultTagBoxContainerClass = 'urank-tagbox-container-default',
         tagInBoxClass = 'urank-tagbox-tag',
         tagDeleteButtonClass = 'urank-tagbox-tag-delete-button',
         tagWeightsliderClass = 'urank-tagbox-tag-weight-slider',
@@ -16,7 +17,8 @@ var TagBox = (function(){
     var tagPosAttr = 'tag-pos';
     //  Custom Event
     var tagBoxChangeEvent = 'tagBoxChange';
-
+    // Helper
+    var containerClasses;
 
     var _this;
 
@@ -33,7 +35,8 @@ var TagBox = (function(){
             onTagWeightchanged: function(){},
             onTagInBoxMouseEnter: function(index){},
             onTagInBoxMouseLeave: function(index){},
-            onTagInBoxClick: function(index){}
+            onTagInBoxClick: function(index){},
+            defaultStyle: true
         }, arguments);
 
         this.selectedKeywords = [];
@@ -75,13 +78,14 @@ var TagBox = (function(){
             }
         };
 
-        $(s.root).addClass(tagboxContainerClass)
+        containerClasses = (s.defaultStyle) ? tagboxContainerClass +' '+ defaultTagBoxContainerClass : tagboxContainerClass;
+        $(s.root).addClass(containerClasses);
     }
 
 
 
     var _build = function() {
-        $root = $(s.root).addClass(tagboxContainerClass)
+        $root = $(s.root).addClass(containerClasses)
         .on(tagBoxChangeEvent, function(){
             s.onChange.call(this, _this.selectedKeywords)   // Bind onChange event handler for custom event
         })
