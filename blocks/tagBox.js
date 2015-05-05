@@ -117,8 +117,8 @@ var TagBox = (function(){
 
             // Add new div to make it a slider
             var weightSlider = $("<div class='" + tagWeightsliderClass + "'></div>").appendTo($tag).slider(this.sliderOptions);
-            weightSlider.find('div').addClass(weightSliderRangeClass);
-            weightSlider.find('a').addClass(weightSliderHandleClass);
+            weightSlider.find('.ui-slider-range').addClass(weightSliderRangeClass);
+            weightSlider.find('.ui-slider-handle').addClass(weightSliderHandleClass);
 
             // Retrieve color in weightColorScale for the corresponding label
            // var color = s.colorScale($tag.attr('stem'));
