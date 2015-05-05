@@ -23,9 +23,12 @@ var Urank = (function(){
             //  Initialize keyword extractor
             keywordExtractorOptions.minRepetitions = (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5;
             keywordExtractor = new KeywordExtractor(keywordExtractorOptions);
+
             //  Clean documents and add them to the keyword extractor
-            _this.data = cleanData(data);
+            _this.data = typeof data == 'string' ? JSON.parse(data) : data;
             _this.data.forEach(function(d){
+                d.title = d.title.clean();
+                d.description = d.description.clean();
                 var document = (d.description) ? d.title +'. '+ d.description : d.title;
                 keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id);
             });
@@ -39,7 +42,7 @@ var Urank = (function(){
             });
 
             //  Assign collection keywords and set other necessary variables
-            _this.keywords = extendKeywordsWithColorCategory(keywordExtractor.getCollectionKeywords());
+            _this.keywords = keywordExtractor.getCollectionKeywords();
             _this.rankingMode = RANKING_MODE.overall_score;
             _this.rankingModel.setData(_this.data);
             _this.selectedKeywords = [];
@@ -170,7 +173,6 @@ var Urank = (function(){
         },
 
         onFaviconClicked: function(documentId){
-            //this.data[i].isSelected = ! this.data[index].isSelected;         //CHECK
             contentList.switchFaviconOnOrOff(documentId);
             s.onFaviconClicked.call(this, documentId);
         },
@@ -342,32 +344,33 @@ var Urank = (function(){
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  Miscelaneous
+
+    var _getUrankState = function(){
+        return {
+            mode: _this.rankingMode,
+            status: _this.rankingModel.getStatus(),
+            selectedKeywords: _this.selectedKeywords,
+            ranking: _this.rankingModel.getRanking().map(function(d){
+                return {
+                    id: d.id,
+                    title: d.title,
+                    rankingPos: d.rankingPos,
+                    overallScore: d.overallScore,
+                    maxScore: d.maxScore,
+                    weightedKeywords: d.weightedKeywords,
+                    lastIndex: d.lastIndex,
+                    positionsChanged: d.positionsChanged
+                }
+            })
+        };
+    };
 
 
-    function cleanData(data) {
-        data = typeof data == 'string' ? JSON.parse(data) : data;
-        data.forEach(function(d){
-            d.title = d.title.clean();
-            d.description = d.description.clean();
-        });
-        return data;
-    }
 
-
-
-    function extendKeywordsWithColorCategory(keywords){
-
-        var extent = d3.extent(keywords, function(k){ return k['repeated']; });
-        var range = (extent[1] - 1) * 0.1;   // / TAG_CATEGORIES;
-
-        keywords.forEach(function(k){
-            var colorCategory = parseInt((k['repeated'] - 1/*extent[0]*/) / range);
-            k['colorCategory'] = (colorCategory < TAG_CATEGORIES) ? colorCategory : TAG_CATEGORIES - 1;
-        });
-        return keywords;
-    }
-
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //  Prototype
 
 
     Urank.prototype = {
@@ -376,7 +379,8 @@ var Urank = (function(){
         rankByOverallScore: EVTHANDLER.onRankByOverallScore,
         rankByMaximumScore: EVTHANDLER.onRankByMaximumScore,
         clear: EVTHANDLER.onClear,
-        destroy: EVTHANDLER.onDestroy
+        destroy: EVTHANDLER.onDestroy,
+        getUrankState: _getUrankState
     };
 
     return Urank;

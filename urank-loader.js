@@ -8,13 +8,14 @@ function UrankLoader(callback, args) {
         i++;
 
     var pathToUrank = scripts[i].src.replace('urank-loader.js', '');
+    console.log(pathToUrank);
 
     var loadAll = function() {
 
         Modernizr.load([
             {
                 test: window.jQuery,
-                nope: pathToUrank + 'dependencies/jquery.js'
+                nope: pathToUrank + 'dependencies/jquery.min.js'
             },
             {
                 test: window.jQuery.ui,
@@ -34,7 +35,7 @@ function UrankLoader(callback, args) {
             },
             {
                 test: window._,
-                nope: pathToUrank + 'dependencies/underscore.js'
+                nope: pathToUrank + 'dependencies/underscore-min.js'
             },
             {
                 load: [
