@@ -359,9 +359,9 @@ var Urank = (function(){
                     rankingPos: d.rankingPos,
                     overallScore: d.overallScore,
                     maxScore: d.maxScore,
-                    weightedKeywords: d.weightedKeywords,
                     lastIndex: d.lastIndex,
-                    positionsChanged: d.positionsChanged
+                    positionsChanged: d.positionsChanged,
+                    weightedKeywords: d.weightedKeywords.map(function(wk){ return { term: wk.term, weightedScore: wk.weightedScore }; })
                 }
             })
         };
