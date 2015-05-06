@@ -351,7 +351,7 @@ var Urank = (function(){
         return {
             mode: _this.rankingMode,
             status: _this.rankingModel.getStatus(),
-            selectedKeywords: _this.selectedKeywords,
+            selectedKeywords: _this.selectedKeywords.map(function(sk){ return { term: sk.term, weight: sk.weight } }),
             ranking: _this.rankingModel.getRanking().map(function(d){
                 return {
                     id: d.id,
@@ -359,9 +359,8 @@ var Urank = (function(){
                     rankingPos: d.rankingPos,
                     overallScore: d.overallScore,
                     maxScore: d.maxScore,
-                    lastIndex: d.lastIndex,
                     positionsChanged: d.positionsChanged,
-                    weightedKeywords: d.weightedKeywords.map(function(wk){ return { term: wk.term, weightedScore: wk.weightedScore }; })
+                    weightedKeywords: d.weightedKeywords.map(function(wk){ return { term: wk.term, weightedScore: wk.weightedScore } })
                 }
             })
         };
