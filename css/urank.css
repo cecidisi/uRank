@@ -268,7 +268,7 @@
     cursor: pointer;
 }
 
-.urank-list-li a {
+.urank-list-li .urank-list-li-title {
     color: #333;
     cursor: inherit;
 }

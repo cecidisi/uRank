@@ -404,6 +404,11 @@ function Ranking(arguments){
         RANKING.Render.selectItem(idsArray);
     };
 
+
+    RANKING.Render.clearEffects = function() {
+        this.deselectAllItems();
+    };
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     RANKING.Ext = {
@@ -414,7 +419,8 @@ function Ranking(arguments){
         deselectAllItems : RANKING.Render.deSelectAllItems,
         hoverItem: RANKING.Render.hoverItem,
         unhoverItem: RANKING.Render.unhoverItem,
-        highlightItems: RANKING.Render.highlightItems
+        highlightItems: RANKING.Render.highlightItems,
+        clearEffects: RANKING.Render.clearEffects
     };
 
     return RANKING.Ext;

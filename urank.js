@@ -44,7 +44,7 @@ var Urank = (function(){
             //  Assign collection keywords and set other necessary variables
             _this.keywords = keywordExtractor.getCollectionKeywords();
             _this.rankingMode = RANKING_MODE.overall_score;
-            _this.rankingModel.setData(_this.data);
+            _this.rankingModel.clear().setData(_this.data);
             _this.selectedKeywords = [];
             _this.selectedId = STR_UNDEFINED;
 
@@ -68,12 +68,12 @@ var Urank = (function(){
             _this.selectedKeywords = selectedKeywords;
             _this.selectedId = STR_UNDEFINED;
 
-            var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode);
+            var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode).getRanking();
             var status = _this.rankingModel.getStatus();
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
             visCanvas.update(_this.rankingModel, $(s.contentListRoot).height(), _this.queryTermColorScale);
             docViewer.clear();
-            tagCloud.removeEffects();
+            tagCloud.clearEffects();
 
             s.onChange.call(this, rankingData, _this.selectedKeywords, status);
         },
@@ -156,7 +156,7 @@ var Urank = (function(){
                 visCanvas.deselectAllItems();
                 docViewer.clear();
             }
-            tagCloud.removeEffects();
+            tagCloud.clearEffects();
             s.onItemClicked.call(this, documentId);
         },
 
@@ -173,23 +173,22 @@ var Urank = (function(){
         },
 
         onFaviconClicked: function(documentId){
-            contentList.switchFaviconOnOrOff(documentId);
+            contentList.toggleFavicon(documentId);
             s.onFaviconClicked.call(this, documentId);
         },
 
         onWatchiconClicked: function(documentId) {
-            contentList.watchOrUnwatchListItem(documentId);
+            contentList.toggleWatchListItem(documentId);
             s.onWatchiconClicked.call(this, documentId);
         },
 
         onRootMouseDown: function(event){
             event.stopPropagation();
             if(event.which == 1) {
-                contentList.deselectAllListItems();
-                contentList.hideUnrankedListItems(_this.rankingModel.getRanking());
-                visCanvas.deselectAllItems();
+                tagCloud.clearEffects();
+                contentList.clearEffects();
+                visCanvas.clearEffects();
                 docViewer.clear();
-                tagCloud.removeEffects();
             }
         },
 
@@ -347,7 +346,7 @@ var Urank = (function(){
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Miscelaneous
 
-    var _getUrankState = function(){
+    var _getCurrentState = function(){
         return {
             mode: _this.rankingMode,
             status: _this.rankingModel.getStatus(),
@@ -379,7 +378,7 @@ var Urank = (function(){
         rankByMaximumScore: EVTHANDLER.onRankByMaximumScore,
         clear: EVTHANDLER.onClear,
         destroy: EVTHANDLER.onDestroy,
-        getUrankState: _getUrankState
+        getCurrentState: _getCurrentState
     };
 
     return Urank;

@@ -73,6 +73,10 @@ var VisCanvas = (function(){
         this.vis.highlightItems(idsArray);
     };
 
+    var _clearEffects = function() {
+        if(this.vis) this.vis.clearEffects();
+    };
+
     var _destroy = function() {
         if(this.vis)this.vis.clear();
         $root.removeClass(visCanvasContainerClass);
@@ -89,6 +93,7 @@ var VisCanvas = (function(){
         hoverItem: _hoverItem,
         unhoverItem: _unhoverItem,
         highlightItems: _highlightItems,
+        clearEffects: _clearEffects,
         destroy: _destroy
     };
 

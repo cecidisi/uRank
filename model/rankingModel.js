@@ -4,11 +4,7 @@ var RankingModel = (function(){
     var _this = this;
 
     function RankingModel(data) {
-        this.ranking = new RankingArray();
-        this.previousRanking = new RankingArray();
-        this.data = data || [];
-        this.status = RANKING_STATUS.no_ranking;
-        this.mode = RANKING_MODE.overall_score;
+        this.clear().setData(data);
     }
 
 
@@ -80,11 +76,13 @@ var RankingModel = (function(){
     RankingModel.prototype = {
 
         setData: function(data) {
-            this.data = data;
+            this.data = data || [];
+            return this;
         },
 
         addData: function(moreData) {
             $.merge(this.data, moreData)
+            return this;
         },
 
         update: function(keywords, rankingMode) {
@@ -95,13 +93,23 @@ var RankingModel = (function(){
                 .assignRankingPositions(this.mode)
                 .addPositionsChanged(this.previousRanking);
             this.status = updateStatus(this.ranking, this.previousRanking);
-            return this.ranking;
+            return this;
         },
 
         reset: function() {
             this.previousRanking.clear();
             this.ranking.clear();
             this.status = updateStatus();
+            return this;
+        },
+
+        clear: function() {
+            this.ranking = new RankingArray();
+            this.previousRanking = new RankingArray();
+            this.data = [];
+            this.status = RANKING_STATUS.no_ranking;
+            this.mode = RANKING_MODE.overall_score;
+            return this;
         },
 
         getRanking: function() {

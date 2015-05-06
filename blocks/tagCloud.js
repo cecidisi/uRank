@@ -107,7 +107,7 @@ var TagCloud = (function(){
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //  Helper functions
+    //  Internal functions
 
     var extendKeywordsWithColorCategory = function(keywords){
 
@@ -369,7 +369,7 @@ var TagCloud = (function(){
 
 
 
-    var _removeEffects = function() {
+    var _clearEffects = function() {
 
         if(_this.docHintMode || _this.proxKeywordsMode) {
             $root.off('scroll', onRootScrolled);
@@ -406,7 +406,7 @@ var TagCloud = (function(){
         keywordHintMouseEntered: _keywordHintMouseEntered,
         keywordHintMouseLeft: _keywordHintMouseLeft,
         documentHintClicked: _documentHintClicked,
-        removeEffects: _removeEffects,
+        clearEffects: _clearEffects,
         clear: _clear,
         destroy: _destroy
     };
