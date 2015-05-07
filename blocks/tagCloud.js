@@ -86,7 +86,6 @@ var TagCloud = (function(){
         _this = this;
         s = $.extend({
             root: '',
-            colorScale: function(){},
             onTagInCloudMouseEnter: function(index){},
             onTagInCloudMouseLeave: function(index){},
             onTagInCloudClick: function(index){},
@@ -192,8 +191,9 @@ var TagCloud = (function(){
     /**
     * * @param {array of objects} keywords Description
     */
-    var _build = function(keywords, collectionSize){
+    var _build = function(keywords, colorScale, collectionSize){
         this.keywords = extendKeywordsWithColorCategory(keywords);
+        this.colorScale = colorScale;
         this.collectionSize = collectionSize;
 
         // Empty tag container and add appropriateclass
@@ -206,7 +206,7 @@ var TagCloud = (function(){
             // Append pie chart section for document indicator
             var termUpperCase = k.term.toUpperCase(),
                 percentage = Math.floor(k.inDocument.length/collectionSize * 100),
-                tooltipMsg = k.inDocument.length + " (" + percentage + "%) documents contain " + termUpperCase + ". Click here to highlight documents";
+                tooltipMsg = k.inDocument.length + " (" + percentage + "%) documents contain " + termUpperCase + ". Click to highlight documents";
 
             var $docHint = $('<div></div>', { class: documentHintClass+' hint--right hint--info hint--rounded', id: 'urank-tag-pie-' + i, 'data-hint': tooltipMsg }).appendTo($tag);
             pieOptions.data.content[0].value = k.inDocument.length;
@@ -215,11 +215,11 @@ var TagCloud = (function(){
 
             // Append red circle section for keywords in proximity indicator
             if(k.keywordsInProximity.length > 0) {
-                tooltipMsg = k.keywordsInProximity.length + " other keywords frequently found close to " + termUpperCase + "\n Click here to lock view";
+                tooltipMsg = k.keywordsInProximity.length + " other keywords frequently found close to " + termUpperCase + "\n Click to lock view";
                 var $proyKeywordsIndicator = $('<div></div>', { class: keywordHintClass+' hint--right hint--info hint--rounded', 'data-hint': tooltipMsg, text: k.keywordsInProximity.length}).appendTo($tag);
             }
 
-            $tag.data({ 'originalColor': s.colorScale(k.colorCategory) });
+            $tag.data({ 'originalColor': _this.colorScale(k.colorCategory) });
             setTagProperties($tag);
         });
         $root.scrollTo('top');
@@ -228,7 +228,7 @@ var TagCloud = (function(){
 
 
     var _reset = function() {
-        this.build(this.keywords, this.collectionSize);
+        this.build(this.keywords, this.colorScale, this.collectionSize);
     };
 
 

@@ -52,6 +52,7 @@ var ContentList = (function(){
 
         this.data = [];
         this.selectedKeywords = [];
+        this.multipleHighlightMode = false;
         this.actionLog = {};    // fields: doc_id, doc_title, timestamp
 
         containerClasses = (s.defaultStyle) ? contentListContainerClass +' '+ defaultContentListContainerClass : contentListContainerClass;
@@ -136,6 +137,7 @@ var ContentList = (function(){
             var display = d.rankingPos > 0 ? '' : 'none';
             $(liItem + '' + d.id).css('display', display);
         });
+        _this.multipleHighlightMode = false;
     };
 
 
@@ -261,7 +263,7 @@ var ContentList = (function(){
 
     var _build = function(data) {
 
-        this.data = data;
+        this.data = data.slice();
         this.selectedKeywords = [];
         this.status = RANKING_STATUS.no_ranking;
 
@@ -307,7 +309,7 @@ var ContentList = (function(){
     */
     var _update = function(data, status, selectedKeywords, colorScale) {
 
-        this.data = data;
+        this.data = data.slice();
         this.selectedKeywords = selectedKeywords.map(function(k){ return k.stem });
         this.status = status;
 
@@ -401,6 +403,7 @@ var ContentList = (function(){
                 $li.removeClass(liDarkBackground).removeClass(liLightBackground).addClass(liUnrankedClass);
             $li.css({ display: '', opacity: ''});
         });
+        _this.multipleHighlightMode = true;
     };
 
 
@@ -429,7 +432,7 @@ var ContentList = (function(){
 
     var _clearEffects = function() {
         this.deselectAllListItems();
-        if(this.status !== RANKING_STATUS.no_ranking) hideUnrankedListItems();
+        if(this.multipleHighlightMode) hideUnrankedListItems();
     };
 
 

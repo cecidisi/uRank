@@ -177,8 +177,8 @@
 
 /* slider div*/
 .urank-tagbox-tag-weight-slider {
-    height: 6px !important;
-    margin: 1px !important;
+    height: 3px !important;
+    margin: 2px 0px 1px 0px !important;
 }
 
 
@@ -192,11 +192,11 @@
 
 /* ui-slider-handle */
 .urank-tagbox-tag-weight-slider .urank-tagbox-tag-weight-slider-handle  {
-    top: -0.3em !important;
-    width: 0.45em !important;
-    height: .8em !important;
-    -webkit-border-radius: 0.2em !important;
-    border-radius: 0.2em !important;
+    top: -4px !important;
+    width: 6px !important;
+    height: 9px !important;
+    -webkit-border-radius: 3px !important;
+    border-radius: 3px !important;
 }
 
 

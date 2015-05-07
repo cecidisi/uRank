@@ -20,12 +20,17 @@ var Urank = (function(){
 
         onLoad: function(data) {
 
+            //  Set color scales (need to be reset every time a new dataset is loaded)
+            _this.tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(s.tagColorArray);
+            _this.queryTermColorScale = null;
+            _this.queryTermColorScale = d3.scale.ordinal().range(s.queryTermColorArray);
+
             //  Initialize keyword extractor
             keywordExtractorOptions.minRepetitions = (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5;
             keywordExtractor = new KeywordExtractor(keywordExtractorOptions);
 
             //  Clean documents and add them to the keyword extractor
-            _this.data = typeof data == 'string' ? JSON.parse(data) : data;
+            _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
             _this.data.forEach(function(d){
                 d.title = d.title.clean();
                 d.description = d.description.clean();
@@ -50,14 +55,21 @@ var Urank = (function(){
 
             //  Build blocks
             contentList.build(_this.data);
-            tagCloud.build(_this.keywords, _this.data.length);
+            tagCloud.build(_this.keywords, _this.tagColorScale, _this.data.length);
             tagBox.build();
             visCanvas.build();
             docViewer.build();
 
             //  Bind event handlers to resize window and undo effects on random click
             $(window).off('resize', EVTHANDLER.onResize).resize(EVTHANDLER.onResize);
-            $(s.root).off('mousedown', EVTHANDLER.onRootMouseDown).on('mousedown', EVTHANDLER.onRootMouseDown);
+            $(s.root)
+            .off({
+                'mousedown': EVTHANDLER.onRootMouseDown,
+                'click': EVTHANDLER.onRootClick
+            }).on({
+                'mousedown': EVTHANDLER.onRootMouseDown,
+                'click': EVTHANDLER.onRootClick
+            });
 
             //  Custom callback
             s.onLoad.call(this, _this.keywords);
@@ -186,10 +198,19 @@ var Urank = (function(){
             event.stopPropagation();
             if(event.which == 1) {
                 tagCloud.clearEffects();
+                /*contentList.clearEffects();
+                visCanvas.clearEffects();
+                docViewer.clear();*/
+            }
+        },
+
+        onRootClick: function(event) {
+            if(event.which == 1) {
                 contentList.clearEffects();
                 visCanvas.clearEffects();
                 docViewer.clear();
             }
+
         },
 
         onResize: function(event) {
@@ -210,12 +231,12 @@ var Urank = (function(){
         },
 
         onReset: function() {
-            _this.rankingModel.reset();
             contentList.reset();
             tagCloud.reset();
             tagBox.clear();
             visCanvas.clear();
             docViewer.clear();
+            _this.rankingModel.reset();
             _this.selectedId = STR_UNDEFINED;
             _this.selectedKeywords = [];
             s.onReset.call(this);
@@ -281,9 +302,9 @@ var Urank = (function(){
 
         // Set color scales
         s.tagColorArray = s.tagColorArray.length >= TAG_CATEGORIES ? s.tagColorArray : tagColorRange;
-        this.tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(s.tagColorArray);
+       // this.tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(s.tagColorArray);
         s.queryTermColorArray = s.queryTermColorArray.length >= TAG_CATEGORIES ? s.queryTermColorArray : queryTermColorRange;
-        this.queryTermColorScale = d3.scale.ordinal().range(s.queryTermColorArray);
+      // this.queryTermColorScale = d3.scale.ordinal().range(s.queryTermColorArray);
 
         var options = {
             contentList: {
@@ -297,7 +318,6 @@ var Urank = (function(){
 
             tagCloud: {
                 root: s.tagCloudRoot,
-                colorScale: this.tagColorScale,
                 dropIn: s.tagBoxRoot,
                 onTagInCloudMouseEnter: EVTHANDLER.onTagInCloudMouseEnter,
                 onTagInCloudMouseLeave: EVTHANDLER.onTagInCloudMouseLeave,
@@ -310,7 +330,6 @@ var Urank = (function(){
 
             tagBox: {
                 root: s.tagBoxRoot,
-                colorScale: _this.queryTermColorScale,
                 onChange: EVTHANDLER.onChange,
                 onTagDropped: EVTHANDLER.onTagDropped,
                 onTagDeleted: EVTHANDLER.onTagDeleted,

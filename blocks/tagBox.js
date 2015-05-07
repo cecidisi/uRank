@@ -9,7 +9,7 @@ var TagBox = (function(){
         tagInBoxClass = 'urank-tagbox-tag',
         tagDeleteButtonClass = 'urank-tagbox-tag-delete-button',
         tagWeightsliderClass = 'urank-tagbox-tag-weight-slider',
-        weightSliderRangeClass = '.urank-tagbox-tag-weight-slider-range',
+        weightSliderRangeClass = 'urank-tagbox-tag-weight-slider-range',
         weightSliderHandleClass = 'urank-tagbox-tag-weight-slider-handle';
     //  Id prefix
     var tagIdPrefix = '#urank-tag-';
@@ -27,7 +27,6 @@ var TagBox = (function(){
         _this = this;
         s = $.extend({
             root: '',
-            //colorScale: function(){},
             droppableClass: 'urank-tagcloud-tag',
             onChange: function(selectedKeywords){},
             onTagDropped: function(index, queryTermColor){},
@@ -85,8 +84,11 @@ var TagBox = (function(){
 
 
     var _build = function() {
+
+        _this.selectedKeywords = [];
+
         $root = $(s.root).addClass(containerClasses)
-        .on(tagBoxChangeEvent, function(){
+        .off().on(tagBoxChangeEvent, function(){
             s.onChange.call(this, _this.selectedKeywords)   // Bind onChange event handler for custom event
         })
         .droppable(this.droppableOptions);                   // bind droppable behavior to tag box;
@@ -94,6 +96,8 @@ var TagBox = (function(){
 
 
     var _clear = function() {
+
+        this.selectedKeywords = [];
         $root.empty();
         $('<p></p>').appendTo($root).text(STR_DROP_TAGS_HERE);
         //TAGCLOUD.updateTagColor();
@@ -117,11 +121,10 @@ var TagBox = (function(){
 
             // Add new div to make it a slider
             var weightSlider = $("<div class='" + tagWeightsliderClass + "'></div>").appendTo($tag).slider(this.sliderOptions);
-            weightSlider.find('.ui-slider-range').addClass(weightSliderRangeClass);
+            weightSlider.find('.ui-slider-range').addClass(weightSliderRangeClass).css('background', color);
             weightSlider.find('.ui-slider-handle').addClass(weightSliderHandleClass);
 
             // Retrieve color in weightColorScale for the corresponding label
-           // var color = s.colorScale($tag.attr('stem'));
             var rgbSequence = hexToR(color) + ', ' + hexToG(color) + ', ' + hexToB(color);
 
             // Set tag's style
