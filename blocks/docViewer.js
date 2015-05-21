@@ -11,23 +11,19 @@ var DocViewer = (function(){
     // Id prefix
     var detailItemIdPrefix = '#urank-docviewer-details-';
     // Helper
-    var containerClasses;
 
 
     function DocViewer(arguments) {
         s = $.extend({
             root: '',
-            facetsToShow: ['year'],
-            defaultStyle: true
+            facetsToShow: ['year']
         }, arguments);
-
-        containerClasses = (s.defaultStyle) ? docViewerContainerClass +' '+ defaultDocViewerContainerClass : docViewerContainerClass;
-        $(s.root).addClass(containerClasses);
     }
 
 
-    var _build = function() {
+    var _build = function(opt) {
 
+        var containerClasses = (opt.defaultBlockStyle) ? docViewerContainerClass +' '+ defaultDocViewerContainerClass : docViewerContainerClass;
         $root = $(s.root).empty().addClass(containerClasses);
 
         // Append details section, titles and placeholders for doc details

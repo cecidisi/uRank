@@ -6,17 +6,14 @@
 
 ************************************************************************************************/
 
-
-
+/* default */
 .urank-tagcloud-container {
     overflow-y: auto;
     padding: 8px 2px;
 }
 
 
-
-
-/*  keywords in keyword container  */
+/* default */
 .urank-tagcloud-tag {
     display: inline-block;
     pointer-events: all;
@@ -151,7 +148,7 @@
     display: inline-block;
     text-align: left;
     min-width: 65px;
-    height: 24px;
+    height: 23px;
     margin: 14px 3px 0px 3px;
     padding: .2em;
     -webkit-border-radius: 6px;
@@ -239,42 +236,18 @@
 **********************************************************************************************************************/
 
 
-/* <div> container for the list of recommendations */
 .urank-list-container {
     display: inline-block;
     vertical-align: top;
 }
 
 
-.urank-list-ul {
-    clear:both;
-    width: 100%;
-    margin: 0;
-    margin-left: 1px;
-    padding: 0;
-    list-style: none;
-    display:block;
-    padding-bottom: 1px;
+/***************	<li> background style (the first 3 can be overwritteny)  **************/
 
+/* <li> items' hover style */
+.urank-list-li-default.hovered {
+    background: -webkit-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
 }
-
-
-/* <li> items */
-.urank-list-li {
-    position: relative;
-    height: 26px;
-    vertical-align: top;
-    -webkit-transition: box-shadow 4s ease-in/* linear*/;
-    cursor: pointer;
-}
-
-.urank-list-li .urank-list-li-title {
-    color: #333;
-    cursor: inherit;
-}
-
-
-/***************	<li> background style   **************/
 
 .urank-list-li-lightbackground {
     background: #eee;
@@ -294,41 +267,8 @@
     background: #eee;
 }
 
-/* <li> itmes' hover style */
-.urank-list-li-hover {
-    background: -webkit-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
-}
 
-
-/***************	Watched list item   **************/
-
-.urank-list-li-watched {
-    box-shadow: inset 1px 1px 2px rgba(128, 128, 128, 0.6), inset -1px -1px 2px rgba(128, 128, 128, 0.6);
-    -webkit-transition: box-shadow 0s linear;
-    z-index: 9999;
-}
-
-/***************	Effects for list items when the ranking changes   **************/
-
-.urank-list-li-movingup {
-    /*box-shadow: inset 1px 1px 2px rgba(0, 250, 0, 0.6), inset -1px -1px 2px rgba(0, 250, 0, 0.6);*/
-    box-shadow: inset 3px 0px rgba(0, 250, 0, 0.6);
-    -webkit-transition: box-shadow 0s linear;
-}
-
-.urank-list-li-movingdown {
-    /*box-shadow: inset 1px 1px 2px rgba(250, 10, 10, 0.6), inset -1px -1px 2px rgba(250, 10, 10, 0.6);*/
-    box-shadow: inset 3px 0px rgba(250, 10, 10, 0.6);
-    -webkit-transition: box-shadow 0s linear;
-}
-
-.urank-list-li-notmoving {
-    box-shadow: inset 1px 1px 2px rgba(128, 128, 128, 0.6), inset -1px -1px 2px rgba(128, 128, 128, 0.6);
-    -webkit-transition: box-shadow 0s linear;
-}
-
-/***************	li ranking section	**************/
-
+/***************	ranking indicators section	**************/
 
 .urank-list-li-ranking-container {
     display: inline-block;
@@ -337,7 +277,6 @@
     width: 51px;
     padding-left: 1px;
 }
-
 
 .urank-list-li-ranking-pos {
     display: inline-block;
@@ -357,7 +296,6 @@
     text-shadow: 0em 0.1em #888;
 }
 
-
 .urank-list-li-ranking-posmoved {
     display: inline-block;
     float: left;
@@ -373,7 +311,7 @@
     text-shadow: 0em 0.1em 0 rgba(136, 136, 136, 0.5);
 }
 
-/***************	li title   **************/
+/***************    title section   **************/
 
 .urank-list-li-title-container {
     display: inline-flex;
@@ -386,15 +324,10 @@
     text-align: left;
 }
 
-.urank-list-li-watched .urank-list-li-title-container {
-    text-decoration: underline;
-}
 
-
-/***************	Encloses watch icon and fav icon   **************/
+/***************	Watch icon and fav icon section   **************/
 
 .urank-list-li-buttons-container {
-    /*display: inline-flex;*/
     float: right;
     width: 38px;
     height: 100%;
@@ -405,18 +338,6 @@
     margin-right: 2px;
     cursor: pointer;
     background: url(../media/sprites.png) no-repeat;
-}
-
-.urank-list-li-button-favicon {
-    float: right;
-    margin-top: 6px;
-    padding: 8px;
-}
-
-.urank-list-li-button-watchicon {
-    float: left;
-    margin-top: 7px;
-    padding: 9px;
 }
 
 
@@ -463,6 +384,79 @@
     transform: scale(1.1);
 }
 
+
+/***************	Watched effect   **************/
+
+.urank-list-li.watched {
+    box-shadow: inset 1px 1px 2px rgba(128, 128, 128, 0.6), inset -1px -1px 2px rgba(128, 128, 128, 0.6);
+    -webkit-transition: box-shadow 0s linear;
+    z-index: 9999;
+}
+
+.urank-list-li.watched .urank-list-li-title {
+    text-decoration: underline;
+}
+
+/***************	Moving effects     **************/
+
+.urank-list-li-movingup {
+    /*box-shadow: inset 1px 1px 2px rgba(0, 250, 0, 0.6), inset -1px -1px 2px rgba(0, 250, 0, 0.6);*/
+    box-shadow: inset 3px 0px rgba(0, 250, 0, 0.6);
+    -webkit-transition: box-shadow 0s linear;
+}
+
+.urank-list-li-movingdown {
+    /*box-shadow: inset 1px 1px 2px rgba(250, 10, 10, 0.6), inset -1px -1px 2px rgba(250, 10, 10, 0.6);*/
+    box-shadow: inset 3px 0px rgba(250, 10, 10, 0.6);
+    -webkit-transition: box-shadow 0s linear;
+}
+
+.urank-list-li-notmoving {
+    box-shadow: inset 1px 1px 2px rgba(128, 128, 128, 0.6), inset -1px -1px 2px rgba(128, 128, 128, 0.6);
+    -webkit-transition: box-shadow 0s linear;
+}
+
+
+/*************    DEFAULT STYLE   *************/
+
+.urank-list-ul-default {
+    clear:both;
+    width: 100%;
+    margin: 0;
+    margin-left: 1px;
+    padding: 0;
+    list-style: none;
+    display:block;
+    padding-bottom: 1px;
+}
+
+
+/* <li> items */
+.urank-list-li-default {
+    position: relative;
+    height: 26px;
+    vertical-align: top;
+    -webkit-transition: box-shadow 4s ease-in/* linear*/;
+    cursor: pointer;
+}
+
+
+.urank-list-li-title-default {
+    color: #333;
+    cursor: inherit;
+}
+
+.urank-list-li-button-favicon-default {
+    float: right;
+    margin-top: 6px;
+    padding: 8px;
+}
+
+.urank-list-li-button-watchicon-default {
+    float: left;
+    margin-top: 7px;
+    padding: 9px;
+}
 
 /*****************************************************************************************************************
 

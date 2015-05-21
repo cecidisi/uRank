@@ -269,6 +269,7 @@ header select{
 
 
 #viscanvas {
+    float: right;
     width: 55%;
     min-height: 99%;
 }
@@ -305,5 +306,69 @@ header select{
     font-size: 1.1em;
     color: white;
 }
+
+
+
+/******************************** CUSTOM LIST *******************************************************/
+
+.test-ul {
+    clear:both;
+    width: 100%;
+    margin: 0;
+    margin-left: 1px;
+    padding: 0;
+    list-style: none;
+    display:block;
+    padding-bottom: 1px;
+
+}
+
+.test-li {
+    position: relative;
+    height: 28px;
+    vertical-align: top;
+    -webkit-transition: box-shadow 4s ease-in/* linear*/;
+    cursor: pointer;
+}
+
+.test-li:hover, .test-li.hovered {
+    background: -webkit-linear-gradient(top, rgb(150, 30, 30) 75%, #ccc);
+}
+
+.test-li-light-background {
+    background: #efefef;
+}
+
+.test-li-dark-background {
+    background: #dadada;
+}
+
+
+.test-li-ranking-container {
+    display: inline-block;
+    float: left;
+    height: 100%;
+    width: 51px;
+    padding-left: 1px;
+}
+
+.test-li-title-container {
+    display: inline-flex;
+    float: left;
+    align-items: center;
+    width: calc(100% - 108px);
+    height: 100%;
+    margin-left: 5px;
+    vertical-align: top;
+    text-align: left;
+}
+
+.test-li-title {
+    color: #111;
+    cursor: inherit;
+}
+
+
+
 
 

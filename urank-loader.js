@@ -15,7 +15,7 @@ function UrankLoader(callback, args) {
         Modernizr.load([
             {
                 test: window.jQuery,
-                nope: pathToUrank + 'dependencies/jquery.min.js'
+                nope: pathToUrank + 'dependencies/jquery.js'
             },
             {
                 test: window.jQuery.ui,
@@ -54,7 +54,8 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'blocks/tagBox.js',
                     pathToUrank + 'blocks/tagCloud.js',
                     pathToUrank + 'blocks/visCanvas.js',
-                    pathToUrank + 'vis/ranking.js',
+                    pathToUrank + 'modules/tagcloud/bagOfWords.js',
+                    pathToUrank + 'modules/viscanvas/ranking.js',
                     pathToUrank + 'helper/globals.js',
                     pathToUrank + 'helper/settings.js',
                     pathToUrank + 'helper/utils.js',

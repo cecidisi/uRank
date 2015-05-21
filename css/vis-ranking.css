@@ -4,7 +4,7 @@
 }
 
 .urank-ranking-x.urank-ranking-axis path,
-.urank-ranking-x.urank-ranking-axis line{
+.urank-ranking-x.urank-ranking-axis line {
 	fill: none;
 	stroke : #000;
     stroke-width: 1px;
@@ -22,8 +22,7 @@
     opacity: 0.5;
 }
 
-.urank-ranking-y.urank-ranking-axis .tick
-{
+.urank-ranking-y.urank-ranking-axis .tick {
 	stroke : none;
 	stroke-width : 0;
 }

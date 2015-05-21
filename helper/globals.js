@@ -1,21 +1,25 @@
 // Numeric Constants
-var TAG_CATEGORIES = 5;
+window.TAG_CATEGORIES = 5;
 
 //  String Constants
-var STR_NO_VIS = "No visualization yet!";
-var STR_DROPPED = "Dropped!";
-var STR_DROP_TAGS_HERE = "Drop tags here!";
-var STR_JUST_RANKED = "new";
-var STR_SEARCHING = "Searching...";
-var STR_UNDEFINED = 'undefined';
+window.STR_NO_VIS = "No visualization yet!";
+window.STR_DROPPED = "Dropped!";
+window.STR_DROP_TAGS_HERE = "Drop tags here!";
+window.STR_JUST_RANKED = "new";
+window.STR_SEARCHING = "Searching...";
+window.STR_UNDEFINED = 'undefined';
 
 
-var VIS_MODULES = {
+window.VIS_MODULES = {
     ranking: Ranking
-}
+};
+
+window.TAGCLOUD_MODULES = {
+    default: BagOfWords
+};
 
 
-var RANKING_STATUS = {
+window.RANKING_STATUS = {
     new : 'new',
     update : 'update',
     unchanged : 'unchanged',
@@ -23,7 +27,7 @@ var RANKING_STATUS = {
 };
 
 
-var RANKING_MODE = {
+window.RANKING_MODE = {
     overall_score: 'overallScore',
     max_score: 'maxScore'
 };

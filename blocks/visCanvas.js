@@ -1,47 +1,36 @@
 var VisCanvas = (function(){
 
     //  Settings
-    var s = {}, $root = $('');
+    var _this, s = {}, $root = $('');
     // Classes
     var visCanvasContainerClass = 'urank-viscanvas-container',
         defaultVisCanvasContaienrClass = 'urank-viscanvas-container-default',
         visCanvasMessageClass = 'urank-viscanvas-message';
-    // Helepr
-    var containerClasses;
 
     function VisCanvas(arguments) {
+        _this = this;
         s = $.extend({
             root: '',
-            visModule: VIS_MODULES.ranking,
             onItemClicked: function(id){},
-            onItemHovered: function(id){},
-            onItemUnhovered: function(id){},
-            defaultStyle: true
+            onItemMouseEnter: function(id){},
+            onItemMouseLEave: function(id){}
         }, arguments);
-
-        containerClasses = (s.defaultStyle) ? visCanvasContainerClass +' '+ defaultVisCanvasContaienrClass : VisCanvas;
-        $(s.root).addClass(containerClasses);
     }
 
 
-    var _build = function() {
-        $root = $(s.root).addClass(containerClasses);
+    var _build = function(opt) {
+        var containerClasses = (opt.defaultStyle) ? visCanvasContainerClass +' '+ defaultVisCanvasContaienrClass : visCanvasContainerClass;
+        $root = $(s.root).empty().addClass(containerClasses);
 
-        var visArguments = {
-            root: s.root,
-            onItemClicked: s.onItemClicked,
-            onItemMouseEnter: s.onItemMouseEnter,
-            onItemMouseLeave: s.onItemMouseLeave
-        };
-
-        this.vis = new s.visModule(visArguments);
+        var visModule = VIS_MODULES[opt.module] || VIS_MODULES.ranking;
+        this.vis = new visModule($.extend(s, opt.customOpt));
         this.clear();
     };
 
 
     var _update = function(rankingModel, containerHeight, colorScale) {
         this.vis.update(rankingModel, containerHeight, colorScale);
-        $root.scrollTo('top');
+        $root.scrollTop();
     };
 
     var _resize = function(){

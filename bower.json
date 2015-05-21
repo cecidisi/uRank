@@ -15,7 +15,7 @@
     "blocks/tagBox.js",
     "blocks/tagCloud.js",
     "blocks/visCanvas.js",
-    "vis/ranking.js",
+    "modules/viscanvas/ranking.js",
     "helper/globals.js",
     "helper/settings.js",
     "helper/utils.js",

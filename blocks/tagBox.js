@@ -1,6 +1,6 @@
 var TagBox = (function(){
 
-    var $root = $('');
+    var _this, $root = $('');
     // Settings
     var s = {};
     //  Classes
@@ -17,10 +17,7 @@ var TagBox = (function(){
     var tagPosAttr = 'tag-pos';
     //  Custom Event
     var tagBoxChangeEvent = 'tagBoxChange';
-    // Helper
-    var containerClasses;
 
-    var _this;
 
     function Tagbox(arguments) {
 
@@ -35,7 +32,7 @@ var TagBox = (function(){
             onTagInBoxMouseEnter: function(index){},
             onTagInBoxMouseLeave: function(index){},
             onTagInBoxClick: function(index){},
-            defaultStyle: true
+            defaultBlockStyle: true
         }, arguments);
 
         this.selectedKeywords = [];
@@ -77,15 +74,14 @@ var TagBox = (function(){
             }
         };
 
-        containerClasses = (s.defaultStyle) ? tagboxContainerClass +' '+ defaultTagBoxContainerClass : tagboxContainerClass;
-        $(s.root).addClass(containerClasses);
     }
 
 
 
-    var _build = function() {
+    var _build = function(opt) {
 
         _this.selectedKeywords = [];
+        var containerClasses = (opt.defaultBlockStyle) ? tagboxContainerClass +' '+ defaultTagBoxContainerClass : tagboxContainerClass;
 
         $root = $(s.root).addClass(containerClasses)
         .off().on(tagBoxChangeEvent, function(){

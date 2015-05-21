@@ -9,12 +9,12 @@ function parseDate( dateString ){
     if(dateString instanceof Date)
         return dateString;
 
-	yearFormat = d3.time.format("%Y");
+	var yearFormat = d3.time.format("%Y");
 	var date = yearFormat.parse(dateString);
 
 	if(date != null) return date;
 
-	dateFormat = d3.time.format("%Y-%m");
+	var dateFormat = d3.time.format("%Y-%m");
 	date = dateFormat.parse(dateString);
 
 	if(date != null) return date;
@@ -35,7 +35,7 @@ function parseDate( dateString ){
 
 function toYear(date){
 
-	formatYear = d3.time.format("%Y");
+	var formatYear = d3.time.format("%Y");
 	var year = formatYear(date);
 	//if(year != null)
 		return year;
