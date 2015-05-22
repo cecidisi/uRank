@@ -41,6 +41,9 @@ function UrankLoader(callback, args) {
                 load: [
                     pathToUrank + 'dependencies/hint.min.css',
                     pathToUrank + 'dependencies/theme/jquery-ui.min.css',
+                    pathToUrank + 'dependencies/jquery.mousewheel.min.js',
+                    pathToUrank + 'dependencies/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css',
+                    pathToUrank + 'dependencies/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.js',
                     pathToUrank + 'libs/natural-custom.js',
                     pathToUrank + 'libs/pos/lexer.js',
                     pathToUrank + 'libs/pos/lexicon.js',

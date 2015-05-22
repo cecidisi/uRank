@@ -6,6 +6,8 @@ var BagOfWords = (function(){
     //  Classes
     var tagCloudContainerClass = 'urank-tagcloud-container',
         defaultTagCloudContainerClass = 'urank-tagcloud-container-default',
+        tagContainerOuterClass = 'urank-tagcloud-tag-container-outer',
+        tagContainerClass = 'urank-tagcloud-tag-container',
         tagClass = 'urank-tagcloud-tag',
         selectedClass = 'selected',
         dimmedClass = 'dimmed',
@@ -19,7 +21,8 @@ var BagOfWords = (function(){
     //   Attributes
     var tagPosAttr = 'tag-pos';
     //  Helpers
-    var containerClasses,
+    var $tagContainer, $outerTagContainer,
+        containerClasses,
 
         tagHoverStyle = {
             background: '-webkit-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255))',
@@ -37,9 +40,11 @@ var BagOfWords = (function(){
             stop: function(event, ui){ $(this).show(); }
         },
 
-        documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagCloudContainerClass },
+        //documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagCloudContainerClass },
+        documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagContainerClass },
 
-        keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagCloudContainerClass },
+        //keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagCloudContainerClass },
+        keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagContainerClass },
 
         pieOptions = {
             size: { pieOuterRadius: '100%', canvasHeight: '14', canvasWidth: '14' },
@@ -62,6 +67,28 @@ var BagOfWords = (function(){
                 colors: { segmentStroke: '#65a620' },
                 canvasPadding: { top: 0, right: 0, bottom: 0, left: 0 },
                 gradient: { enabled: true, percentage: 100, color: "#888" },
+            }
+        },
+
+        customScrollOptions = {
+            axis: 'y',
+            theme: 'light',
+            scrollbarPosition: 'inside',
+            autoHideScrollbar: true,
+            mouseWheel: {
+                enable: true,
+                axis: 'y'
+            },
+            keyboard: {
+                enable: true
+            },
+            advanced: {
+                updateOnContentResize: true
+            },
+            callbacks: {
+                onInit: function(){
+                    console.log('scroll init');
+                }
             }
         };
 
@@ -198,9 +225,11 @@ var BagOfWords = (function(){
 
         // Empty tag container and add appropriateclass
         $root = $(s.root).empty().addClass(containerClasses);
+        $outerTagContainer = $('<div></div>').appendTo($root).addClass(tagContainerOuterClass);
+        $tagContainer =$('<div></div>').appendTo($outerTagContainer).addClass(tagContainerClass);
 
         this.keywords.forEach(function(k, i){
-            var $tag = $('<div></div>', { class: tagClass, id: 'urank-tag-' + i, 'tag-pos': i, stem: k.stem, text: k.term }).appendTo($root);
+            var $tag = $('<div></div>', { class: tagClass, id: 'urank-tag-' + i, 'tag-pos': i, stem: k.stem, text: k.term }).appendTo($tagContainer)//.appendTo($root);
             $tag.hide().fadeIn((i+1)*20);
 
             // Append pie chart section for document indicator
@@ -222,7 +251,12 @@ var BagOfWords = (function(){
             $tag.data({ 'originalColor': _this.colorScale(k.colorCategory) });
             setTagProperties($tag);
         });
-        $root.scrollTo('top');
+
+
+        $outerTagContainer.mCustomScrollbar(customScrollOptions);
+/*        $root.find('.mCSB_container').addClass('urank-mCSB_container');
+        $root.find('.mCSB_scrollTools').addClass('urank-mCSB_scrollTools').css('width', '4px !important');
+        console.log($root.find('.mCSB_scrollTools'));*/
     };
 
 
@@ -243,13 +277,12 @@ var BagOfWords = (function(){
         // Change class
         $tag.removeClass().addClass(tagClass);
 
-
         setTagProperties($tag);
 
         // Re-append to tag container, in the corresponding postion
         var tagIndex = parseInt($tag.attr(tagPosAttr));
         var i = tagIndex - 1;
-        var firstTagIndex = $root.find('.'+ tagClass + ':eq(0)').attr(tagPosAttr);
+        var firstTagIndex = $tagContainer.find('.'+ tagClass + ':eq(0)').attr(tagPosAttr);
         // second condition checks if the tag is NOT in Tag Cloud
         while(i >= firstTagIndex && !$(tagIdPrefix + '' + i).hasClass(tagClass))
             --i;
@@ -261,7 +294,7 @@ var BagOfWords = (function(){
         if(i >= firstTagIndex)    // Current tag inserted after another (tag-pos == i)
             $(tagIdPrefix + '' + i).after($tag);
         else                      // Current tag inserted in first position of tag container
-            $root.prepend($tag);
+            $tagContainer.prepend($tag);
 
 
         var currentOffset = { top: $tag.offset().top, left: $tag.offset().left };
@@ -345,7 +378,7 @@ var BagOfWords = (function(){
             }
         });
 
-        $root.on('scroll', onRootScrolled);
+        /*$root*/$outerTagContainer.on('scroll', onRootScrolled);
         _this.proxKeywordsMode = true;
     };
 
@@ -363,7 +396,8 @@ var BagOfWords = (function(){
             $(siblingTag).removeClass(activeClass).addClass(dimmedClass).off().css({background: '', border: '', color: ''});
         });
 
-        $root.on('scroll', onRootScrolled);
+        /*$root*/
+        $tagContainer.on('scroll', onRootScrolled);
         _this.docHintMode = true;
     };
 
@@ -372,7 +406,7 @@ var BagOfWords = (function(){
     var _clearEffects = function() {
 
         if(_this.docHintMode || _this.proxKeywordsMode) {
-            $root.off('scroll', onRootScrolled);
+            /*$root*/$outerTagContainer.off('scroll', onRootScrolled);
 
             $('.'+tagClass).each(function(i, tag){
                 setTagProperties($(tag));
@@ -386,11 +420,13 @@ var BagOfWords = (function(){
 
 
     var _clear = function() {
+       // $outerTagContainer.mCustomScrollbar('destroy');
         $root.empty();
     };
 
 
     var _destroy = function() {
+      //  $outerTagContainer.mCustomScrollbar('destroy');
         $root.empty().removeClass(tagCloudContainerClass);
     };
 

@@ -8,8 +8,21 @@
 
 /* default */
 .urank-tagcloud-container {
-    overflow-y: auto;
+  /*  overflow-y: auto;*/
     padding: 8px 2px;
+}
+
+
+
+.urank-tagcloud-tag-container-outer {
+    height: 100%;
+    /*width: 100%;*/
+}
+
+
+.urank-tagcloud-tag-container {
+    /*width: 100%;*/
+    background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
 }
 
 
@@ -573,7 +586,20 @@ Document Panel (right) - for visualizing highlighted text
 }
 
 
+/**********************************************************************************************************************
+*
+*   Extras
+*
+***********************************************************************************************************************/
 
+/*  Custom scrollbar   */
 
+.mCSB_container {
+    margin-right: 2px !important;
+};
+
+.mCSB_scrollTools {
+    width: 4px !important;
+}
 
 

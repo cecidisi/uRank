@@ -21,6 +21,25 @@ var VisCanvas = (function(){
     var _build = function(opt) {
         var containerClasses = (opt.defaultStyle) ? visCanvasContainerClass +' '+ defaultVisCanvasContaienrClass : visCanvasContainerClass;
         $root = $(s.root).empty().addClass(containerClasses);
+        /*$root.mCustomScrollbar({
+            axis: 'y',
+            theme: 'dark',
+            mouseWheel : {
+                enable: true
+            },
+            keyboard: {
+                enable: true
+            },
+            advanced: {
+                updateOnContentResize: true,
+                updateOnSelectorChange: '.urank-list-container'
+            },
+            callbacks: {
+                onInit: function(){
+                    console.log('scroll init');
+                }
+            }
+        });*/
 
         var visModule = VIS_MODULES[opt.module] || VIS_MODULES.ranking;
         this.vis = new visModule($.extend(s, opt.customOpt));

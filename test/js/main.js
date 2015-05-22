@@ -55,14 +55,14 @@
 
         $('.processing-message').css('visibility', 'visible');
         var datasetId = $("#select-dataset").val();
-        _this.urank.clear();
+      //  _this.urank.clear();
         setTimeout(function(){
             _this.dsm.getDataset(datasetId, function(dataset){
                 //  Test custom list
-                buildCustomList(dataset);
-                _this.urank.loadData(dataset, { customContentList: true, contentListCustomOptions: listCustomOptions, visCanvasOptions: visCanvasOptions });
+ /*               buildCustomList(dataset);
+                _this.urank.loadData(dataset, { customContentList: true, contentListCustomOptions: listCustomOptions, visCanvasOptions: visCanvasOptions });*/
                 // To run with default list comment 2 previous lines and uncomment the following one
-                //_this.urank.loadData(dataset);
+                _this.urank.loadData(dataset);
                 $('.processing-message').css('visibility', 'hidden');
             });
         }, 10);

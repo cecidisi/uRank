@@ -79,6 +79,7 @@ var Urank = (function(){
 
         onLoad: function(data, options) {
 
+            _this.clear();
             var o = $.extend(true, defaultLoadOptions, options || {});
 
             //  Set color scales (need to be reset every time a new dataset is loaded)

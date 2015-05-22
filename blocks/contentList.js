@@ -333,12 +333,34 @@ var ContentList = (function(){
         this.selectedKeywords = [];
         this.status = RANKING_STATUS.no_ranking;
         this.opt = opt;
-        $root = $(s.root);
-
+        $root = $(s.root).addClass(containerClasses);
+/*        $root.mCustomScrollbar({
+            axis: 'y',
+            theme: 'dark',
+            scrollbarPosition: 'outside',
+            autoHideScrollbar: true,
+            mouseWheel : {
+                enable: true,
+                axis: 'y'
+            },
+            keyboard: {
+                enable: true
+            },
+            advanced: {
+                updateOnContentResize: true,
+                updateOnSelectorChange: '.urank-viscanvas-container'
+            },
+            callbacks: {
+                onInit: function(){
+                    console.log('scroll init');
+                }
+            }
+        });
+        */
         if(this.opt.customType)
             return buildCustom();
 
-        $root.empty().addClass(containerClasses);
+        $root.empty();
 
         var $ul = $('<ul></ul>').appendTo($root).addClass(ulClass +' '+ ulClassDefault);
 
@@ -368,6 +390,7 @@ var ContentList = (function(){
         });
         formatTitles();
         updateLiBackground();
+
     };
 
 
