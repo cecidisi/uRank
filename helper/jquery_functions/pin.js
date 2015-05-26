@@ -32,9 +32,6 @@
                     thisHeight = $this.height();
                  //   thisWidth = $this.width();
 
-
-                console.log('thisOffset.top = ' + thisOffset.top);
-                console.log('containerOffset.top = ' + containerOffset.top);
                 if(thisOffset.top < containerOffset.top || (thisOffset.top + thisHeight) > (containerOffset.top + containerHeight)
                    /*|| thisOffset.left < containerOffset.left || (thisOffset.left + thisWidth) > containerOffset.left + containerWidth */)
                     $this.css('visibility', 'hidden');

@@ -62,7 +62,7 @@
  /*               buildCustomList(dataset);
                 _this.urank.loadData(dataset, { customContentList: true, contentListCustomOptions: listCustomOptions, visCanvasOptions: visCanvasOptions });*/
                 // To run with default list comment 2 previous lines and uncomment the following one
-                _this.urank.loadData(dataset, { tagCloudModule: 'landscape' });
+                _this.urank.loadData(dataset/*, { tagCloudModule: 'landscape' }*/);
                 $('.processing-message').css('visibility', 'hidden');
             });
         }, 10);

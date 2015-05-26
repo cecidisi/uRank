@@ -41,10 +41,10 @@ var BagOfWords = (function(){
         },
 
         //documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagCloudContainerClass },
-        documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagContainerClass },
+        documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagContainerOuterClass },
 
         //keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagCloudContainerClass },
-        keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagContainerClass },
+        keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagContainerOuterClass },
 
         pieOptions = {
             size: { pieOuterRadius: '100%', canvasHeight: '14', canvasWidth: '14' },
@@ -296,22 +296,35 @@ var BagOfWords = (function(){
         while(i >= firstTagIndex && !$(tagIdPrefix + '' + i).hasClass(tagClass))
             --i;
 
-        var oldOffset = { top: $tag.offset().top, left: $tag.offset().left};
-        // Remove from tag box
+        //  Save offset in tagBox before detaching
+        var oldOffset = $tag.offset();
         $tag = $tag.detach();
 
+        //Calculate where the tag should be inserted in the tag container
         if(i >= firstTagIndex)    // Current tag inserted after another (tag-pos == i)
             $(tagIdPrefix + '' + i).after($tag);
         else                      // Current tag inserted in first position of tag container
             $tagContainer.prepend($tag);
 
+        //  Save new offset in tag cloud container for animation
+        var newOffset = $tag.offset();
 
-        var currentOffset = { top: $tag.offset().top, left: $tag.offset().left };
-        // Animate tag moving from ta box to tag cloud
-        $tag.css({ position: 'absolute', top: oldOffset.top, left: oldOffset.left, 'z-index': 9999 });
-        $tag.animate({ top: currentOffset.top, left: currentOffset.left }, 1000, 'swing', function(){
-            $(this).css({ position: '', top: '', left: '', 'z-index': '' });
-            $tag.draggable(draggableOptions);
+        // Detach tag from tag cloud, attach temporarily to body and place it in old position (in tagBox)
+        $tag = $tag.detach()
+            .appendTo('body')
+            .css({ position: 'absolute', top: oldOffset.top, left: oldOffset.left, 'z-index': 9999 });
+
+        // Animate tag moving from tag box to tag cloud
+        $tag.velocity({ top: newOffset.top, left: newOffset.left }, 1200, 'swing', function(){
+            //  Detach from body after motion animation is complete and append to tag container again
+            $tag = $tag.detach();
+            if(i >= firstTagIndex)
+                $(tagIdPrefix + '' + i).after($tag);
+            else
+                $tagContainer.prepend($tag);
+
+            $tag.css({ position: '', top: '', left: '', 'z-index': '' })
+                .draggable(draggableOptions);
         });
 
     };
