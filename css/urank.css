@@ -20,14 +20,16 @@
     margin: 5px;
     overflow-y: auto;
     overflow-x: hidden;
+    background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+    box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
 }
 
 
 .urank-tagcloud-tag-container {
     width: calc(100% - 4px);
     padding: 5px 2px;
-    background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
-    box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
+    /*background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+    box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;*/
 }
 
 

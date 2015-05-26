@@ -62,7 +62,9 @@ var DocViewer = (function(){
         $('<p></p>').appendTo($contentSection);
 
         $root.on('mousedown', function(event){ event.stopPropagation(); });
-        $contentSectionOuter.css('overflowY', 'hidden').mCustomScrollbar(customScrollOptions);
+
+        if(opt.customScrollBars)
+            $contentSectionOuter.css('overflowY', 'hidden').mCustomScrollbar(customScrollOptions);
     };
 
 

@@ -42,31 +42,46 @@ var Urank = (function(){
     };
 
     var defaultLoadOptions = {
-        tagCloudModule: 'default',      // default || landscape
-        customContentList: false,
-        contentListCustomOptions: {     //  only used when customContentListType = true
-            selectors: {
-                ul: '',
-                liClass: '',
-                liTitle: '',
-                liRankingContainer: '',  // will be formatted
-                watchicon: '',           // used if misc.addWatchicon = true - will be formatted
-                favicon: ''              // used if misc.addFavicon = true - will be formatted
+        tagCloud : {
+            module: 'default',      // default || landscape
+            defaultBlockStyle: true,
+        },
+        contentList: {
+            custom: false,
+            customOptions: {     //  only used when contentListType.custom = true
+                selectors: {
+                    ul: '',
+                    liClass: '',
+                    liTitle: '',
+                    liRankingContainer: '',  // will be formatted
+                    watchicon: '',           // used if misc.addWatchicon = true - will be formatted
+                    favicon: ''              // used if misc.addFavicon = true - will be formatted
+                },
+                misc: {
+                    liHoverClass: '',
+                    liLightBackgroundClass: '',
+                    liDarkBackgroundClass: ''
+                }
             },
-            misc: {
-                liHoverClass: '',
-                liLightBackgroundClass: '',
-                liDarkBackgroundClass: ''
-            }
         },
-        visCanvasModule: 'ranking',
-        visCanvasOptions: {               // use only if customContentList = true and background in the ranking should match different light and dark background colors
-            lightBackgroundColor: '',
-            darkBackgroundColor: ''
+        visCanvas : {
+            module: 'ranking',
+            customOptions: {               // use only if contentList.custom = true and background in the ranking should match different light and dark background colors
+                lightBackgroundColor: '',
+                darkBackgroundColor: ''
+            },
         },
-        tagColorArray: tagColorRange,
-        queryTermColorArray: queryTermColorRange,
-        defaultBlockStyle: true
+        tagBox: {
+            defaultBlockStyle: true,
+        },
+        docViewer: {
+            defaultBlockStyle: true,
+        },
+        misc: {
+            tagColorArray: tagColorRange,
+            queryTermColorArray: queryTermColorRange,
+            customScrollBars: true
+        }
     };
 
 
@@ -83,8 +98,8 @@ var Urank = (function(){
             var o = $.extend(true, defaultLoadOptions, options || {});
 
             //  Set color scales (need to be reset every time a new dataset is loaded)
-            o.tagColorArray = o.tagColorArray.length >= TAG_CATEGORIES ? o.tagColorArray : tagColorRange;
-            o.queryTermColorArray = o.queryTermColorArray.length >= TAG_CATEGORIES ? o.queryTermColorArray : queryTermColorRange;
+            o.tagColorArray = o.misc.tagColorArray.length >= TAG_CATEGORIES ? o.misc.tagColorArray : tagColorRange;
+            o.queryTermColorArray = o.misc.queryTermColorArray.length >= TAG_CATEGORIES ? o.misc.queryTermColorArray : queryTermColorRange;
             _this.tagColorScale = null;
             _this.tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(o.tagColorArray);
             _this.queryTermColorScale = null;
@@ -120,11 +135,11 @@ var Urank = (function(){
 
             //  Build blocks
             var buildOpt = {
-                contentList: { customType: o.customContentList, customOpt: o.contentListCustomOptions },
-                tagCloud:    { module: o.tagCloudModule, defaultBlockStyle: o.defaultBlockStyle },
-                tagBox:      { defaultBlockStyle: o.defaultBlockStyle },
-                visCanvas:   { module: o.visCanvasModule, customOpt: o.visCanvasOptions },
-                docViewer:   { defaultBlockStyle: o.defaultBlockStyle }
+                contentList: $.extend(o.contentList, { customScrollBars: o.misc.customScrollBars }),
+                tagCloud:    $.extend(o.tagCloud, { customScrollBars: o.misc.customScrollBars }),
+                tagBox:      $.extend(o.tagBox, { customScrollBars: o.misc.customScrollBars }),
+                visCanvas:   $.extend(o.visCanvas, { customScrollBars: o.misc.customScrollBars }),
+                docViewer:   $.extend(o.docViewer, { customScrollBars: o.misc.customScrollBars })
             };
             contentList.build(_this.data, buildOpt.contentList);
             tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, buildOpt.tagCloud);

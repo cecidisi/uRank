@@ -309,24 +309,21 @@ var KeywordExtractor = (function(){
             this.collection.push({ id: id, text: document });
         },
         processCollection: function() {
-            console.log('Started keyword extraction');
             tfidf = new natural.TfIdf();
             var timestamp = $.now();
             this.documentKeywords = [];
             this.documentKeywords = extractDocumentKeywords(this.collection);
             this.collectionKeywords = extractGlobalKeywords(this.collection, this.documentKeywords);
-            console.log('Finished keyword extraction in ' + parseInt($.now() - timestamp).toTime());
+
+            var miliseconds = $.now() - timestamp;
+            var seconds = parseInt(miliseconds / 1000);
+            console.log('Keyword extraction finished in ' + seconds + ' seconds, ' + miliseconds%1000 + ' miliseconds (=' + miliseconds + ' ms)');
         },
         listDocumentKeywords: function(index) {
             return this.documentKeywords[index];
         },
         getCollectionKeywords: function() {
             return this.collectionKeywords;
-        },
-        getGlobalKeywordsForSubset: function(documentIndices, minDocFrequency) {
-            var collectionSubset = this.collection.filter(function(d, i){ return documentIndices.indexOf(i) > -1 });
-            var documentKeywordsSubset = this.documentKeywords.filter(function(dk, i){ return documentIndices.indexOf(i) > -1 });
-            return extractGlobalKeywords(collectionSubset, documentKeywordsSubset, minDocFrequency);
         }
     };
 

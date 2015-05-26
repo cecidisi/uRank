@@ -76,6 +76,7 @@ var BagOfWords = (function(){
             scrollbarPosition: 'outside',
             autoHideScrollbar: true,
             scrollEasing: 'linear',
+            scrollInertia: 0,
             mouseWheel: {
                 enable: true,
                 axis: 'y'
@@ -229,7 +230,7 @@ var BagOfWords = (function(){
     /**
     * * @param {array of objects} keywords Description
     */
-    var _build = function(keywords, data, colorScale){
+    var _build = function(keywords, data, colorScale, opt){
         this.keywords = extendKeywordsWithColorCategory(keywords);
         this.data = data;
         this.colorScale = colorScale;
@@ -263,9 +264,9 @@ var BagOfWords = (function(){
             setTagProperties($tag);
         });
 
-
-        $outerTagContainer.mCustomScrollbar(customScrollOptions);
-        $tagContainer = $('.'+tagContainerClass);
+        if(opt.customScrollBars)
+            $outerTagContainer.mCustomScrollbar(customScrollOptions);
+        //$tagContainer = $('.'+tagContainerClass);
     };
 
 

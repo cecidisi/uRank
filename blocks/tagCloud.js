@@ -86,7 +86,7 @@ var TagCloud = (function(){
         var tagcloudModule = TAGCLOUD_MODULES[opt.module] || TAGCLOUD_MODULES.default;
         this.tagcloud = new tagcloudModule(s);
         this.tagcloud.clear();
-        this.tagcloud.build(keywords, data, colorScale);
+        this.tagcloud.build(keywords, data, colorScale, opt);
     };
 
 

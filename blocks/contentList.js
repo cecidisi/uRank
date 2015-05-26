@@ -42,6 +42,7 @@ var ContentList = (function(){
     // Helper
     var containerClasses;
 
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Constructor
 
@@ -333,35 +334,10 @@ var ContentList = (function(){
         this.selectedKeywords = [];
         this.status = RANKING_STATUS.no_ranking;
         this.opt = opt;
-        $root = $(s.root).addClass(containerClasses);
-/*        $root.mCustomScrollbar({
-            axis: 'y',
-            theme: 'dark',
-            scrollbarPosition: 'outside',
-            autoHideScrollbar: true,
-            mouseWheel : {
-                enable: true,
-                axis: 'y'
-            },
-            keyboard: {
-                enable: true
-            },
-            advanced: {
-                updateOnContentResize: true,
-                updateOnSelectorChange: '.urank-viscanvas-container'
-            },
-            callbacks: {
-                onInit: function(){
-                    console.log('scroll init');
-                }
-            }
-        });
-        */
-        if(this.opt.customType)
+        if(this.opt.custom)
             return buildCustom();
 
-        $root.empty();
-
+        $root = $(s.root).empty();
         var $ul = $('<ul></ul>').appendTo($root).addClass(ulClass +' '+ ulClassDefault);
 
         this.data.forEach(function(d, i){
