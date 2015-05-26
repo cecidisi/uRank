@@ -6,9 +6,9 @@ html {
 
 body{
     overflow: hidden;
-    width: calc(100% - 1em);
-    height: calc(100% - 1em);
-    margin: .5em;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    margin: 4px;
     background: white;
     font-size: 1em;
     font-family: Lucida, Lucida Grande, Verdana,Arial,sans-serif;
@@ -167,8 +167,8 @@ header select{
 
 #tagcloud {
     float: left;
-    width: 17%;
-    height: calc(100% - 1em);
+    width: 18%;
+    height: 100%;
 }
 
 
@@ -257,15 +257,15 @@ header select{
 .vis-panel {
     display: inline-block;
     width: 100%;
-   /* height: 90%;*/
-  /*  overflow-y: auto;
-    overflow-x: hidden;*/
+    height: 90%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 #contentlist {
     float: left;
     width: 45%;
-    overflow-y: auto;
+   /* overflow-y: auto;*/
 }
 
 
@@ -273,7 +273,7 @@ header select{
     float: right;
     width: 55%;
     min-height: 99%;
-    overflow-y: auto
+    /*overflow-y: auto*/
 }
 
 
@@ -285,8 +285,7 @@ header select{
     flex-direction: column;
     float: right;
     width: 21%;
-    height: calc(100% - 1em);
-    padding: .5em;
+    height: 100%;
 }
 
 

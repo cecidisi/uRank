@@ -73,8 +73,9 @@ var BagOfWords = (function(){
         customScrollOptions = {
             axis: 'y',
             theme: 'light',
-            scrollbarPosition: 'inside',
+            scrollbarPosition: 'outside',
             autoHideScrollbar: true,
+            scrollEasing: 'linear',
             mouseWheel: {
                 enable: true,
                 axis: 'y'
@@ -86,8 +87,17 @@ var BagOfWords = (function(){
                 updateOnContentResize: true
             },
             callbacks: {
-                onInit: function(){
-                    console.log('scroll init');
+                whileScrolling: function() {
+                    //event.stopPropagation();
+                    var $tag = $('.'+selectedClass);
+                    if(_this.proxKeywordsMode) {
+                        $tag.find('.'+documentHintClass).css('visibility', 'hidden');
+                        $tag.find('.'+keywordHintClass).css('visibility', 'visible').pin(keywordHintPintOptions);
+                    }
+                    else if(_this.docHintMode) {
+                        $tag.find('.'+documentHintClass).css('visibility', 'visible').pin(documentHintPinOptions);
+                        $tag.find('.'+keywordHintClass).css('visibility', 'hidden');
+                    }
                 }
             }
         };
@@ -96,6 +106,7 @@ var BagOfWords = (function(){
     /// Tag Cloud root and container event handlers
     var onRootScrolled = function(event) {
         event.stopPropagation();
+        console.log('scrolling...');
         var $tag = $('.'+selectedClass);
         if(_this.proxKeywordsMode) {
             $tag.find('.'+documentHintClass).css('visibility', 'hidden');
@@ -218,10 +229,10 @@ var BagOfWords = (function(){
     /**
     * * @param {array of objects} keywords Description
     */
-    var _build = function(keywords, colorScale, collectionSize){
+    var _build = function(keywords, data, colorScale){
         this.keywords = extendKeywordsWithColorCategory(keywords);
+        this.data = data;
         this.colorScale = colorScale;
-        this.collectionSize = collectionSize;
 
         // Empty tag container and add appropriateclass
         $root = $(s.root).empty().addClass(containerClasses);
@@ -234,12 +245,12 @@ var BagOfWords = (function(){
 
             // Append pie chart section for document indicator
             var termUpperCase = k.term.toUpperCase(),
-                percentage = Math.floor(k.inDocument.length/collectionSize * 100),
+                percentage = Math.floor(k.inDocument.length/_this.data.length * 100),
                 tooltipMsg = k.inDocument.length + " (" + percentage + "%) documents contain " + termUpperCase + ". Click to highlight documents";
 
             var $docHint = $('<div></div>', { class: documentHintClass+' hint--right hint--info hint--rounded', id: 'urank-tag-pie-' + i, 'data-hint': tooltipMsg }).appendTo($tag);
             pieOptions.data.content[0].value = k.inDocument.length;
-            pieOptions.data.content[1].value = collectionSize - k.inDocument.length;
+            pieOptions.data.content[1].value = _this.data.length - k.inDocument.length || 0.1;
             var tagPie = new d3pie(tagPiePrefix+''+i, pieOptions);
 
             // Append red circle section for keywords in proximity indicator
@@ -254,15 +265,13 @@ var BagOfWords = (function(){
 
 
         $outerTagContainer.mCustomScrollbar(customScrollOptions);
-/*        $root.find('.mCSB_container').addClass('urank-mCSB_container');
-        $root.find('.mCSB_scrollTools').addClass('urank-mCSB_scrollTools').css('width', '4px !important');
-        console.log($root.find('.mCSB_scrollTools'));*/
+        $tagContainer = $('.'+tagContainerClass);
     };
 
 
 
     var _reset = function() {
-        this.build(this.keywords, this.colorScale, this.collectionSize);
+        this.build(this.keywords, this.data, this.colorScale);
     };
 
 
@@ -299,7 +308,7 @@ var BagOfWords = (function(){
 
         var currentOffset = { top: $tag.offset().top, left: $tag.offset().left };
         // Animate tag moving from ta box to tag cloud
-        $tag.css({ position: 'absolute', top: oldOffset.top, left: oldOffset.left, 'z-index': 999 });
+        $tag.css({ position: 'absolute', top: oldOffset.top, left: oldOffset.left, 'z-index': 9999 });
         $tag.animate({ top: currentOffset.top, left: currentOffset.left }, 1000, 'swing', function(){
             $(this).css({ position: '', top: '', left: '', 'z-index': '' });
             $tag.draggable(draggableOptions);

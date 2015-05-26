@@ -27,12 +27,16 @@
                 var $container = $(options.container),
                     containerOffset = $container.offset(),
                     containerHeight = $container.height(),
-                    containerWidth = $container.width(),
+               //     containerWidth = $container.width(),
                     thisOffset = $this.fullOffset(),
-                    thisHeight = $this.height(),
-                    thisWidth = $this.width();
+                    thisHeight = $this.height();
+                 //   thisWidth = $this.width();
 
-                if(thisOffset.top < containerOffset.top || (thisOffset.top + thisHeight) > (containerOffset.top + containerHeight) || thisOffset.left < containerOffset.left || (thisOffset.left + thisWidth) > containerOffset.left + containerWidth )
+
+                console.log('thisOffset.top = ' + thisOffset.top);
+                console.log('containerOffset.top = ' + containerOffset.top);
+                if(thisOffset.top < containerOffset.top || (thisOffset.top + thisHeight) > (containerOffset.top + containerHeight)
+                   /*|| thisOffset.left < containerOffset.left || (thisOffset.left + thisWidth) > containerOffset.left + containerWidth */)
                     $this.css('visibility', 'hidden');
 
             }

@@ -138,9 +138,10 @@ var KeywordExtractor = (function(){
 
     /////////////////////////////////////////////////////////////////////////////
 
-    var extractGlobalKeywords = function(collection, documentKeywords) {
+    var extractGlobalKeywords = function(collection, documentKeywords, minDocFrequency) {
 
-        var keywordDictionary = getKeywordDictionary(collection, documentKeywords);
+        minDocFrequency = minDocFrequency ? minDocFrequency : s.minDocFrequency;
+        var keywordDictionary = getKeywordDictionary(collection, documentKeywords, minDocFrequency);
 
         // get keyword variations
         allTokens.forEach(function(token){
@@ -189,7 +190,7 @@ var KeywordExtractor = (function(){
 
 
 
-    var getKeywordDictionary = function(_collection, _documentKeywords) {
+    var getKeywordDictionary = function(_collection, _documentKeywords, _minDocFrequency) {
 
         var keywordDictionary = {};
         _documentKeywords.forEach(function(docKeywords, i){
@@ -220,7 +221,7 @@ var KeywordExtractor = (function(){
 
 
         _.keys(keywordDictionary).forEach(function(keyword){
-            if(keywordDictionary[keyword].repeated < s.minDocFrequency)
+            if(keywordDictionary[keyword].repeated < _minDocFrequency)
                 delete keywordDictionary[keyword];
         });
         return keywordDictionary;
@@ -321,6 +322,11 @@ var KeywordExtractor = (function(){
         },
         getCollectionKeywords: function() {
             return this.collectionKeywords;
+        },
+        getGlobalKeywordsForSubset: function(documentIndices, minDocFrequency) {
+            var collectionSubset = this.collection.filter(function(d, i){ return documentIndices.indexOf(i) > -1 });
+            var documentKeywordsSubset = this.documentKeywords.filter(function(dk, i){ return documentIndices.indexOf(i) > -1 });
+            return extractGlobalKeywords(collectionSubset, documentKeywordsSubset, minDocFrequency);
         }
     };
 

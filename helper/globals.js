@@ -15,7 +15,8 @@ window.VIS_MODULES = {
 };
 
 window.TAGCLOUD_MODULES = {
-    default: BagOfWords
+    default: BagOfWords,
+    landscape: LandscapeTagCloud
 };
 
 

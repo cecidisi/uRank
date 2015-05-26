@@ -42,7 +42,7 @@ var Urank = (function(){
     };
 
     var defaultLoadOptions = {
-        tagCloudModule: 'default',
+        tagCloudModule: 'default',      // default || landscape
         customContentList: false,
         contentListCustomOptions: {     //  only used when customContentListType = true
             selectors: {
@@ -127,7 +127,7 @@ var Urank = (function(){
                 docViewer:   { defaultBlockStyle: o.defaultBlockStyle }
             };
             contentList.build(_this.data, buildOpt.contentList);
-            tagCloud.build(_this.keywords, _this.tagColorScale, _this.data.length, buildOpt.tagCloud);
+            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, buildOpt.tagCloud);
             tagBox.build(buildOpt.tagBox);
             visCanvas.build(buildOpt.visCanvas);
             docViewer.build(buildOpt.docViewer);
