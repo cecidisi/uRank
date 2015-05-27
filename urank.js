@@ -142,7 +142,7 @@ var Urank = (function(){
                 docViewer:   $.extend(o.docViewer, { customScrollBars: o.misc.customScrollBars })
             };
             contentList.build(_this.data, buildOpt.contentList);
-            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, buildOpt.tagCloud);
+            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, buildOpt.tagCloud, keywordExtractor);
             tagBox.build(buildOpt.tagBox);
             visCanvas.build(buildOpt.visCanvas);
             docViewer.build(buildOpt.docViewer);
@@ -170,7 +170,7 @@ var Urank = (function(){
             var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode).getRanking();
             var status = _this.rankingModel.getStatus();
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
-            visCanvas.update(_this.rankingModel, $(s.contentListRoot).height(), _this.queryTermColorScale);
+            visCanvas.update(_this.rankingModel, contentList.getHeight(), _this.queryTermColorScale);
             docViewer.clear();
             tagCloud.clearEffects();
 
@@ -298,6 +298,14 @@ var Urank = (function(){
 
         },
 
+        onParallelBlockScrolled: function(sender, offset) {
+            /*if(sender === contentList)
+                visCanvas.scrollTo(offset);
+            else if(sender == visCanvas)
+                contentList.scrollTo(offset);
+            */
+        },
+
         onResize: function(event) {
             visCanvas.resize();
         },
@@ -360,7 +368,8 @@ var Urank = (function(){
                 onItemMouseEnter: EVTHANDLER.onItemMouseEnter,
                 onItemMouseLeave: EVTHANDLER.onItemMouseLeave,
                 onFaviconClicked: EVTHANDLER.onFaviconClicked,
-                onWatchiconClicked: EVTHANDLER.onWatchiconClicked
+                onWatchiconClicked: EVTHANDLER.onWatchiconClicked,
+                onScroll: EVTHANDLER.onParallelBlockScrolled
             },
 
             tagCloud: {
@@ -388,7 +397,8 @@ var Urank = (function(){
                 root: s.visCanvasRoot,
                 onItemClicked: EVTHANDLER.onItemClicked,
                 onItemMouseEnter: EVTHANDLER.onItemMouseEnter,
-                onItemMouseLeave: EVTHANDLER.onItemMouseLeave
+                onItemMouseLeave: EVTHANDLER.onItemMouseLeave,
+                onScroll: EVTHANDLER.onParallelBlockScrolled
             },
 
             docViewer: {

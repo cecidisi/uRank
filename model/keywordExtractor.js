@@ -324,6 +324,11 @@ var KeywordExtractor = (function(){
         },
         getCollectionKeywords: function() {
             return this.collectionKeywords;
+        },
+        getGlobalKeywordsForSubset: function(documentIndices, minDocFrequency) {
+            var collectionSubset = this.collection.filter(function(d, i){ return documentIndices.indexOf(i) > -1 });
+            var documentKeywordsSubset = this.documentKeywords.filter(function(dk, i){ return documentIndices.indexOf(i) > -1 });
+            return extractGlobalKeywords(collectionSubset, documentKeywordsSubset, minDocFrequency);
         }
     };
 

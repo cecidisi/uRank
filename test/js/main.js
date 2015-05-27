@@ -55,7 +55,6 @@
 
         $('.processing-message').css('visibility', 'visible');
         var datasetId = $("#select-dataset").val();
-      //  _this.urank.clear();
         setTimeout(function(){
             _this.dsm.getDataset(datasetId, function(dataset){
                 //  Test custom list

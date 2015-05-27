@@ -1,11 +1,12 @@
 var ContentList = (function(){
 
-    var _this, $root = $('');
+    var _this;
     // Settings
     var s = {};
     // Classes
-    var contentListContainerClass = 'urank-list-container',
-        defaultContentListContainerClass = 'urank-list-container-default',
+    var contentListClass = 'urank-list',
+        defaultContentListClass = 'urank-list-default',
+        listContainerClass = 'urank-list-container',
         ulClass = 'urank-list-ul',
         liClass = 'urank-list-li',
         liLightBackgroundClass = 'urank-list-li-lightbackground',
@@ -40,7 +41,7 @@ var ContentList = (function(){
 
     var urankIdAttr = 'urank-id';
     // Helper
-    var containerClasses;
+    var $root = $(''), $listContainer, rootClasses;
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,8 +64,8 @@ var ContentList = (function(){
         this.multipleHighlightMode = false;
         this.actionLog = {};    // fields: doc_id, doc_title, timestamp
 
-        containerClasses = (s.defaultStyle) ? contentListContainerClass +' '+ defaultContentListContainerClass : contentListContainerClass;
-        $(s.root).addClass(containerClasses);
+        rootClasses = (s.defaultStyle) ? contentListClass +' '+ defaultContentListClass : contentListClass;
+        $(s.root).addClass(rootClasses);
     }
 
 
@@ -74,19 +75,19 @@ var ContentList = (function(){
     var bindEventHandlers = function($li, id) {
 
         var onLiClick = function(event){
-            event.stopPropagation(); s.onItemClicked.call(this, id/* $li.attr(urankIdAttr)*/);
+            event.stopPropagation(); s.onItemClicked.call(this, id);
         };
         var onLiMouseEnter = function(event){
-            event.stopPropagation(); s.onItemMouseEnter.call(this, id/* $li.attr(urankIdAttr)*/);
+            event.stopPropagation(); s.onItemMouseEnter.call(this, id);
         };
         var onLiMouseLeave = function(event){
-            event.stopPropagation(); s.onItemMouseLeave.call(this, id/*$li.attr(urankIdAttr)*/);
+            event.stopPropagation(); s.onItemMouseLeave.call(this, id);
         };
         var onWatchiconClick = function(event){
-            event.stopPropagation(); s.onWatchiconClicked.call(this, id/* event.data*/);
+            event.stopPropagation(); s.onWatchiconClicked.call(this, id);
         };
         var onFaviconClick = function(event){
-            event.stopPropagation(); s.onFaviconClicked.call(this, id/*event.data*/);
+            event.stopPropagation(); s.onFaviconClicked.call(this, id);
         };
 
         $li.off({
@@ -182,7 +183,7 @@ var ContentList = (function(){
         easing = easing || 'swing';
 
         var acumHeight = 0;
-        var listTop = $root.position().top;
+        var listTop = $listContainer.position().top;
 
         _this.data.forEach(function(d, i){
 
@@ -219,7 +220,7 @@ var ContentList = (function(){
         easing = easing || 'swing';
 
         var acumHeight = 0;
-        var listTop = $root.position().top;
+        var listTop = $listContainer.position().top;
 
         _this.data.forEach(function(d, i){
             if(d.rankingPos > 0) {
@@ -258,7 +259,8 @@ var ContentList = (function(){
 
     var sort = function(){
 
-        $root.parent().scrollTo('top');
+        //$root.parent().scrollTo('top');
+        $listContainer.scrollTop();
         var liHtml = new Array();
 
         _this.data.forEach(function(d, i){
@@ -337,13 +339,20 @@ var ContentList = (function(){
         if(this.opt.custom)
             return buildCustom();
 
-        $root = $(s.root).empty();
-        var $ul = $('<ul></ul>').appendTo($root).addClass(ulClass +' '+ ulClassDefault);
+        $root = $(s.root).empty().addClass(rootClasses);
+        $listContainer = $('<div></div>').appendTo($root)
+            .addClass(listContainerClass)
+            .scroll(function(event){
+                event.stopPropagation();
+                s.onScroll.call(this, _this, $(this).scrollTop());
+            });
+
+        var $ul = $('<ul></ul>').appendTo($listContainer).addClass(ulClass +' '+ ulClassDefault);
 
         this.data.forEach(function(d, i){
             // li element
-            var $li = $('<li></li>'/*, { id: 'urank-list-li-' + d.id }*/).appendTo($ul).addClass(liClass +' '+ liClassDefault);
-            $li.attr(urankIdAttr, d.id);
+            var $li = $('<li></li>', { 'urank-id': d.id }).appendTo($ul).addClass(liClass +' '+ liClassDefault);
+            //$li.attr(urankIdAttr, d.id);
             // ranking container
             var $rankingDiv = $("<div></div>").appendTo($li).addClass(liRankingContainerClass).css('visibility', 'hidden');
             $("<div></div>").appendTo($rankingDiv).addClass(rankingPosClass);
@@ -366,7 +375,6 @@ var ContentList = (function(){
         });
         formatTitles();
         updateLiBackground();
-
     };
 
 
@@ -512,8 +520,19 @@ var ContentList = (function(){
 
 
     var _destroy = function() {
-        $root.empty().removeClass(contentListContainerClass);
+        $root.empty().removeClass(rootClasses);
     };
+
+
+    var _scrollTo = function(scroll) {
+        console.log('content list scroll to = ' + scroll);
+        $listContainer.scrollTo(scroll);
+        console.log('scrolled to = ' + $listContainer.scrollTop());
+    };
+
+    var _getHeight = function() {
+        return $listContainer.find('.'+ulClass).height();
+    }
 
     // Prototype
     ContentList.prototype = {
@@ -529,7 +548,9 @@ var ContentList = (function(){
         toggleFavicon: _toggleFavicon,
         toggleWatchListItem: _toggleWatchListItem,
         clearEffects: _clearEffects,
-        destroy: _destroy
+        destroy: _destroy,
+        scrollTo: _scrollTo,
+        getHeight: _getHeight
     };
 
     return ContentList;

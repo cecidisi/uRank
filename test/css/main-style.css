@@ -124,9 +124,17 @@ select {
     body { font-size: .75em; }
 }
 
+@media (min-width: 1400px) {
+    body { font-size: .8em; }
+}
+
+
+@media (min-width: 1600px) {
+    body { font-size: .8em; }
+}
 
 @media (min-width: 1800px) {
-    body { font-size: .8em; }
+    body { font-size: .85em; }
 }
 
 
@@ -163,7 +171,7 @@ header select{
 	vertical-align: top;
 }
 
-
+/*  LEFT    */
 
 #tagcloud {
     float: left;
@@ -172,21 +180,13 @@ header select{
 }
 
 
+/*  CENTER-LEFT */
 
-.central-panel {
+.central-left-panel {
     display: inline-block;
-    width: 61%;
+    float:  left;
+    width: 30%;
     height: 100%;
-}
-
-
-.control-panel {
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: stretch;
-    width: 100%;
-    height: 9%;
-    min-height: 4.5em;
 }
 
 
@@ -196,10 +196,12 @@ header select{
 */
 
 .ranking-controls {
-	display: inline-flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: 45%;
+    /*width: 45%;*/
+    width: 100%;
+    height: 5em;
     background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
     box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;
 }
@@ -242,13 +244,52 @@ header select{
 }
 
 
+
+#contentlist {
+    float: left;
+    width: 100%;
+    height: calc(100% - 5em);
+}
+
+
+
+/*  CENTER-RIGHT */
+
+.central-right-panel {
+    display: inline-block;
+    float:  left;
+    width: 31%;
+    height: 100%;
+}
+
 /*
 *   Tagbox (upper mid-right header)
 */
 #tagbox {
     float: right;
-    width: 55%;
+    width: 100%;
+    height: 5em;
 }
+
+
+#viscanvas {
+    float: right;
+    width: 100%;
+    height: calc(100% - 5em);
+}
+/*.control-panel {
+    display: inline-flex;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
+    height: 4em;
+    min-height: 4.5em;
+}*/
+
+
+
+
+
 
 
 
@@ -257,24 +298,15 @@ header select{
 .vis-panel {
     display: inline-block;
     width: 100%;
-    height: 89%;
-    overflow-y: auto;
+    height: calc(100% - 4em);
+    overflow-y: hidden;
     overflow-x: hidden;
 }
 
-#contentlist {
-    float: left;
-    width: 45%;
-   /* overflow-y: auto;*/
-}
 
 
-#viscanvas {
-    float: right;
-    width: 55%;
-    min-height: 99%;
-    /*overflow-y: auto*/
-}
+
+
 
 
 

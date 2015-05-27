@@ -28,6 +28,7 @@
 .urank-tagcloud-tag-container {
     width: calc(100% - 4px);
     padding: 5px 2px;
+    text-align: center;
     /*background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
     box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;*/
 }
@@ -143,25 +144,31 @@
 
 ************************************************************************************************/
 
+.urank-tagbox {
+    overflow: hidden;
+}
+
+.urank-tagbox-default {
+    background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
+    box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;
+}
 
 .urank-tagbox-container {
     overflow-x: hidden;
     overflow-y: auto;
-    display: inline-flex;
-    flex-wrap: wrap;
     align-items: center;
-    padding: 0em .3em;
+    width: calc(100% - 6px);
+    height: 100%;
+    margin: 0px 3px;
     list-style-type: none;
     text-align: left;
 }
 
 .urank-tagbox-container p {
-    width: 100%;
-    margin-top: 0.2em;
-    margin-bottom: 0.2em;
     font-size: 1em;
     text-align: center;
-    color: #777;
+    color: #888;
+    line-height: 3em;
 }
 
 .urank-tagbox-tag {
@@ -257,11 +264,23 @@
 **********************************************************************************************************************/
 
 
-.urank-list-container {
+.urank-list {
     display: inline-block;
     vertical-align: top;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
+.urank-list-default {}
+
+.urank-list-container {
+    height: calc(100% - 30px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-right: -100px;
+    padding-right: 84px;
+    padding-bottom: 30px;
+}
 
 /***************	<li> background style (the first 3 can be overwritteny)  **************/
 
@@ -489,11 +508,15 @@ Canvas section (right-center) - displays ranking vis
 /*
 <div> wrapping urank stacked bars and future visualizations
 */
-.urank-viscanvas-container {
-    display: inline-block;
+.urank-viscanvas {
     text-align: center;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
+.urank-viscanvas-container {
+
+}
 
 /*
 <div> appended to canvas when a message should be displayed. E.g. when a new search is triggered or no data are received.

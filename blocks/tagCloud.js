@@ -77,7 +77,7 @@ var TagCloud = (function(){
     /**
     * * @param {array of objects} keywords Description
     */
-    var _build = function(keywords, data, colorScale, opt){
+    var _build = function(keywords, data, colorScale, opt, keywordExtractor){
 
         // Empty tag container and add appropriateclass
         var containerClasses = (opt.defaultBlockStyle) ? tagCloudContainerClass +' '+ defaultTagCloudContainerClass : tagCloudContainerClass;
@@ -86,7 +86,7 @@ var TagCloud = (function(){
         var tagcloudModule = TAGCLOUD_MODULES[opt.module] || TAGCLOUD_MODULES.default;
         this.tagcloud = new tagcloudModule(s);
         this.tagcloud.clear();
-        this.tagcloud.build(keywords, data, colorScale, opt);
+        this.tagcloud.build(keywords, data, colorScale, opt, keywordExtractor);
     };
 
 

@@ -119,7 +119,7 @@ var Ranking = (function(){
             // Define input variables
             data = RANKING.Settings.getInitData(rankingModel);
             // Define canvas dimensions
-            margin = { top: 0, bottom: 20, left: 2, right: 2 };
+            margin = { top: 0, bottom: 20, left: 0, right: 1 };
             width = $root.width() - margin.left - margin.right;
             height = containerHeight;
 

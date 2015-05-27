@@ -73,7 +73,7 @@ var BagOfWords = (function(){
         customScrollOptions = {
             axis: 'y',
             theme: 'light',
-            scrollbarPosition: 'outside',
+            scrollbarPosition: 'inside',
             autoHideScrollbar: true,
             scrollEasing: 'linear',
             scrollInertia: 0,
@@ -234,11 +234,12 @@ var BagOfWords = (function(){
         this.keywords = extendKeywordsWithColorCategory(keywords);
         this.data = data;
         this.colorScale = colorScale;
+        this.opt = opt;
 
         // Empty tag container and add appropriateclass
         $root = $(s.root).empty().addClass(containerClasses);
         $outerTagContainer = $('<div></div>').appendTo($root).addClass(tagContainerOuterClass);
-        $tagContainer =$('<div></div>').appendTo($outerTagContainer).addClass(tagContainerClass);
+        $tagContainer = $('<div></div>').appendTo($outerTagContainer).addClass(tagContainerClass);
 
         this.keywords.forEach(function(k, i){
             var $tag = $('<div></div>', { class: tagClass, id: 'urank-tag-' + i, 'tag-pos': i, stem: k.stem, text: k.term }).appendTo($tagContainer)//.appendTo($root);
@@ -264,7 +265,7 @@ var BagOfWords = (function(){
             setTagProperties($tag);
         });
 
-        if(opt.customScrollBars)
+        if(this.opt.customScrollBars)
             $outerTagContainer.mCustomScrollbar(customScrollOptions);
         //$tagContainer = $('.'+tagContainerClass);
     };
@@ -272,7 +273,7 @@ var BagOfWords = (function(){
 
 
     var _reset = function() {
-        this.build(this.keywords, this.data, this.colorScale);
+        this.build(this.keywords, this.data, this.colorScale, this.opt);
     };
 
 

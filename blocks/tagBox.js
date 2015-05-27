@@ -1,11 +1,12 @@
 var TagBox = (function(){
 
-    var _this, $root = $('');
+    var _this;
     // Settings
     var s = {};
     //  Classes
-    var tagboxContainerClass = 'urank-tagbox-container',
-        defaultTagBoxContainerClass = 'urank-tagbox-container-default',
+    var tagboxClass = 'urank-tagbox',
+        tagboxDefaultClass = 'urank-tagbox-default',
+        tagboxContainerClass = 'urank-tagbox-container',
         tagInBoxClass = 'urank-tagbox-tag',
         tagDeleteButtonClass = 'urank-tagbox-tag-delete-button',
         tagWeightsliderClass = 'urank-tagbox-tag-weight-slider',
@@ -17,6 +18,8 @@ var TagBox = (function(){
     var tagPosAttr = 'tag-pos';
     //  Custom Event
     var tagBoxChangeEvent = 'tagBoxChange';
+    //  Helpers
+    var $root, $tagContainer;
 
 
     function Tagbox(arguments) {
@@ -45,7 +48,7 @@ var TagBox = (function(){
                     $(ui.draggable).draggable("destroy");
                 }, 0);
                 s.onTagDropped.call(this, $(ui.draggable).attr(tagPosAttr));
-                $root.trigger(tagBoxChangeEvent);
+                $tagContainer.trigger(tagBoxChangeEvent);
             }
         };
 
@@ -70,24 +73,28 @@ var TagBox = (function(){
                     indexToChange = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
 
                 _this.selectedKeywords[indexToChange].weight = ui.value;
-                $root.trigger(tagBoxChangeEvent);
+                $tagContainer.trigger(tagBoxChangeEvent);
             }
         };
-
+        $root = $(s.root);
     }
 
 
 
     var _build = function(opt) {
 
-        _this.selectedKeywords = [];
-        var containerClasses = (opt.defaultBlockStyle) ? tagboxContainerClass +' '+ defaultTagBoxContainerClass : tagboxContainerClass;
+        this.selectedKeywords = [];
+        var tagboxClasses = (opt.defaultBlockStyle) ? tagboxClass +' '+ tagboxDefaultClass : tagboxClass;
 
-        $root = $(s.root).addClass(containerClasses)
-        .off().on(tagBoxChangeEvent, function(){
-            s.onChange.call(this, _this.selectedKeywords)   // Bind onChange event handler for custom event
-        })
-        .droppable(this.droppableOptions);                   // bind droppable behavior to tag box;
+        $root = $(s.root).addClass(tagboxClasses);
+        $tagContainer = $('<div></div>').appendTo($root).addClass(tagboxContainerClass)
+            .off().on(tagBoxChangeEvent, function(){
+                s.onChange.call(this, _this.selectedKeywords)   // Bind onChange event handler for custom event
+                if(_this.selectedKeywords.length == 0)
+                    $tagContainer.append('<p>' + STR_DROP_TAGS_HERE + '</p>');
+            })
+            .droppable(this.droppableOptions)                       // bind droppable behavior to tag box;
+            .append('<p>' + STR_DROP_TAGS_HERE + '</p>');
     };
 
 
@@ -95,19 +102,18 @@ var TagBox = (function(){
 
         this.selectedKeywords = [];
         $root.empty();
-        $('<p></p>').appendTo($root).text(STR_DROP_TAGS_HERE);
         //TAGCLOUD.updateTagColor();
     };
 
 
     var _dropTag = function(index, color){
         var $tag = $(tagIdPrefix + '' + index);
-        $root.find('p').remove();
+        $tagContainer.find('p').remove();
 
         if ($tag.hasClass(s.droppableClass)) {
 
             // Append dragged tag to tag box
-            $root.append($tag);
+            $tagContainer.append($tag);
 
             // Change tag's class
             $tag.removeClass().addClass(tagInBoxClass);
@@ -150,12 +156,13 @@ var TagBox = (function(){
 
         var indexToDelete = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
         _this.selectedKeywords.splice(indexToDelete, 1);
-        $root.trigger(tagBoxChangeEvent);
+        $tagContainer.trigger(tagBoxChangeEvent);
     };
 
 
     var _destroy = function() {
-        $root.empty().removeClass(tagboxContainerClass).droppable('destroy');
+        $tagContainer.droppable('destroy');
+        $root.empty().removeClass(tagboxContainerClass);
     };
 
     // Prototype
