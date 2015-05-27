@@ -274,12 +274,11 @@
 .urank-list-default {}
 
 .urank-list-container {
-    height: calc(100% - 30px);
+    height: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
     margin-right: -100px;
     padding-right: 84px;
-    padding-bottom: 30px;
 }
 
 /***************	<li> background style (the first 3 can be overwritteny)  **************/
@@ -467,7 +466,7 @@
     padding: 0;
     list-style: none;
     display:block;
-    padding-bottom: 1px;
+    padding-bottom: 49px;
 }
 
 

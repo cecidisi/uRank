@@ -1,17 +1,17 @@
 
 var LandscapeController = (function(){
  	this.landscapeVisData = {}
+ 	this.landscapeValuesData = {}
  	this.stateCurrent = new LandscapeState();
  	//this.exxcessVis = "";
  	// this.keywordExtractor = "";
  	this.dataProcessor = "";
  	this.receivedData = {}
  	this.landscapeTagCloudBuilder = "";
- 	//var test = {}
  	var me = this;
 
 
-	function LandscapeController(/*vis*/data) {
+	function LandscapeController(data, keywordExtractor, keywords) {
 		//-----------------------------------------------------------------------
 		 d3line = d3.svg.line().x(function(d) {
 			return d[0] * landscapeConfig.getWidth();
@@ -23,7 +23,7 @@ var LandscapeController = (function(){
 	//	 this.exxcessVis = vis;
 		 this.landscapeVisData = {};
 		 // this.keywordExtractor = "";
-		 this.dataProcessor = "";
+		 this.dataProcessor = new DataPreProcessor(data, keywordExtractor, keywords);
 		 this.receivedData = data;
 		 this.landscapeTagCloudBuilder = "";
 		 me = this;
@@ -34,19 +34,28 @@ var LandscapeController = (function(){
 	//-----------------------------------------------------------------------
 	LandscapeController.prototype.drawLandscape = function(data, landscapTagCloudBuilderCallBack) {
 		var timestamp = $.now();
-		if(data == "") {
-			data = this.receivedData;
+		if(this.dataProcessor == "") {
+			this.dataProcessor = new DataPreProcessor(data);
 		}
-		this.dataProcessor = new DataPreProcessor(data);
-		this.dataProcessor.createInputForLandscape();
-		var landscapeInputString = this.dataProcessor.getLandscapeInputString();
-		var paramsConfig = this.dataProcessor.getLandscapParamsConfig();
-		//var test = JSON.parse(landscapeInputString);
-		this.landscapeVisData = thematicLandscape.createLandscape(landscapeInputString, paramsConfig);
-		this.landscapeVisData = this.dataProcessor.getProcessedLandscapeVisdata(this.landscapeVisData);
+		if(this.isReceivedDataPreviouseOne(data)) {
+
+			this.landscapeValuesData = prevExtractedDataObj.landscapeValuesData;
+			this.landscapeVisData = this.dataProcessor.getProcessedLandscapeVisdata(this.landscapeValuesData);
+
+		}
+		else {
+			this.dataProcessor.createInputForLandscape();
+			var landscapeInputString = this.dataProcessor.getLandscapeInputString();
+			var paramsConfig = this.dataProcessor.getLandscapParamsConfig();
+			//var test = JSON.parse(landscapeInputString);
+			this.landscapeValuesData = thematicLandscape.createLandscape(landscapeInputString, paramsConfig);
+			this.landscapeVisData = this.dataProcessor.getProcessedLandscapeVisdata(this.landscapeValuesData);
+		}
 		this.landscapeTagCloudBuilder = landscapTagCloudBuilderCallBack;
+		prevExtractedDataObj.landscapeValuesData = this.landscapeValuesData;
+		prevExtractedDataObj.prevReceivedData = data;
 		me = this;
-		prepareLandscape("");
+		prepareLandscape();
 		drawLandScape("");
 		var debugOutput = "landscape elapsed time " +  (parseInt($.now() - timestamp).toTime()) + ", samplesize "+ data.length;
 		console.log(debugOutput);
@@ -82,9 +91,6 @@ var LandscapeController = (function(){
 
 
 	LandscapeController.prototype.isReceivedDataPreviouseOne = function(receivedData) {
-		if(receivedData=="") {
-			receivedData = me.receivedData;
-		}
 		var isReceivedDataPrevOne = 0;
 		if(typeof prevExtractedDataObj !== 'undefined') {
 			if ( "prevReceivedData" in prevExtractedDataObj) {
@@ -104,6 +110,9 @@ var LandscapeController = (function(){
 					}
 				}
 			}
+		}
+		if (typeof prevExtractedDataObj === 'undefined') {
+			prevExtractedDataObj = {}
 		}
 		return (isReceivedDataPrevOne == 1);
 
@@ -241,20 +250,16 @@ var LandscapeController = (function(){
 				});
 				var datasetList = me.dataProcessor.getDatasetByIds(documentIds);
 				var tagCloundData =  me.dataProcessor.getTagCloudData(documentIds);
-				/*if(me.exxcessVis != "") {
-					test.selectItems( documentIds, true );
-					me.exxcessVis.selectItems( documentIds, true );
-				}
-				// FilterHandler.setCurrentFilterCategories('category', dataToHighlightArray, "language", ["de", "en"])
-				// console.log("tagCloundData", tagCloundData);
-				me.exxcessVis.selectItems( documentIds, true );*/
 
 				if(landscapeConfig.getLandscapeType() == "urankLandscape") {
-					if( me.landscapeTagCloudBuilder != "" ) {
+					if( me.landscapeTagCloudBuilder != "" &&  me.landscapeTagCloudBuilder !== 'undefined') {
 						 me.landscapeTagCloudBuilder.call(this, tagCloundData);
 					}
 				}
 				me.stateCurrent.drawTagsCloud(tagCloundData);
+				if(landscapeConfig.getLandscapeType() != "urankLandscape") {
+					FilterHandler.setCurrentFilterCategories('category', datasetList, "tagCloaud", ["tags"]);
+				}
 
 			}
 

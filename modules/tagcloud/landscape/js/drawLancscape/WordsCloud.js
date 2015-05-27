@@ -144,9 +144,13 @@ function WordsCloud() {
 		      }).text(function(d) {
 		    	  return d.text;
 		      }).on("click", function(d, i) {
-		    	  	var term = $( this ).html();
-					// startNewsearchByTerm(term);
-		      }).on("mouseover",function(d, i) {
+		    	  	var tag = $( this ).html();
+					if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+						var docIndices = landscapeController.dataProcessor.getIndicesOfDocsBasedOnTag(stem);
+						var datasetList = landscapeController.dataProcessor.getDatasetByIds(documentIds);
+						FilterHandler.setCurrentFilterCategories('category', datasetList, "tag", [tag]);
+					}
+			}).on("mouseover",function(d, i) {
 		      		var color = d3.select(this).style("fill")
 					d3.select(this).attr("color", color);
 					d3.select(this).style("cursor", "pointer")
@@ -159,7 +163,8 @@ function WordsCloud() {
 					var docIndices = landscapeController.dataProcessor.getIndicesOfDocsBasedOnTag(stem);
 					if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
 						landscapeController.stateCurrent.heighlightDocumentsByIds(docIndices);
-						landscapeController.exxcessVis.selectItems(docIndices);
+						var datasetList = landscapeController.dataProcessor.getDatasetByIds(docIndices);
+						FilterHandler.setCurrentFilterCategories('category', datasetList, "tag", [text]);
 					}
 					else if (landscapeConfig.getLandscapeType() == "urankLandscape") {
 						var i = parseInt(d3.select(this).attr("tagCounter"));
@@ -181,8 +186,12 @@ function WordsCloud() {
 		      		var color = d3.select(this).attr("color")
 					d3.select(this).style("fill", color);
 					d3.select(this).style("font-weight", null)
+					if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+						landscapeController.stateCurrent.heighlightDocumentsByIds([]);
 
-		});
+					}
+
+			});
 	}
 
 

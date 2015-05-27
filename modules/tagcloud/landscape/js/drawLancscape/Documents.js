@@ -48,49 +48,21 @@ function Documents(documents, outsideDocuments) {
 
 	}
 
-//	// draws all the documents of the landscape/state
-//	// -----------------------------------------------------------------------
-//	Documents.prototype.drawDocuments = function(documents, docPoints) {
-//
-//		if(Object.keys(documents).length > 0)  {
-//				$.each(documents, function(docId, docData) {
-//					var x = docData['x'] * width;
-//					var y = docData['y'] * height;
-//					docPoints.append("circle")//
-//					.attr("class", "point")//
-//					.attr("id", docData['title'])
-//					.attr("cx", x)
-//					.attr("cy", y)
-//					.attr("r", 2)//
-////					.attr("transform", "translate(" + currentTranslate + ")" + " scale(" + currentZoom + ")")//
-//					.style("fill", "red")
-//				})
-//			}
-//		    docFunctions();
-//	}
-//
-//
+
 	// draws all the documents of the landscape/state
 	// -----------------------------------------------------------------------
 	Documents.prototype.drawDocuments = function(documents, docPoints) {
 		var idsMap = {};
 		var i = 0;
 		if(Object.keys(documents).length > 0)  {
-				$.each(documents, function(docId, docData) {
-					documentId = "doc_" + i;
-					idsMap[docId] = documentId;
+				$.each(documents, function(documentId, docData) {
 					var x = docData['x'] * landscapeConfig.getWidth();
 					var y = docData['y'] * landscapeConfig.getHeight();
-					var res = docId.split("|");
-					var linkUrl =  "www.google.at";
-					idsMap[docId] = documentId;
 					var x = docData['x'] * landscapeConfig.getWidth();
 					var y = docData['y'] * landscapeConfig.getHeight();
-					docPoints.append("svg:a")
-					  .attr("xlink:href", linkUrl).attr("target", "_blank").append("circle")//
+					docPoints.append("circle")//
 					.attr("class", "landscapeDocPoint")//
 					.attr("id", documentId)
-					.attr("url", docId)
 					.attr("cx", x)
 					.attr("cy", y)
 					.attr("r", 4)//
@@ -116,33 +88,6 @@ function Documents(documents, outsideDocuments) {
 			this.documentIdsMap = idsMap;
 	}
 
-//
-//	// draws all the documents of the landscape/state
-//	// -----------------------------------------------------------------------
-//	Documents.prototype.drawDocuments = function(documents, docPoints) {
-//
-//		if(Object.keys(documents).length > 0)  {
-//				$.each(documents, function(docId, docData) {
-//					var id = docData['title'].replace (/-/g, "");
-//					id = id.replace (/.pdf/g, "");
-//
-//
-//					console.log("prototype.drawDocuments", id);
-//					var x = docData['x'] * width;
-//					var y = docData['y'] * height;
-//					docPoints.append("circle")//
-//					.attr("class", "point")//
-//					.attr("id", id)
-//					.attr("cx", x)
-//					.attr("cy", y)
-//					.attr("r", 2)//
-////					.attr("transform", "translate(" + currentTranslate + ")" + " scale(" + currentZoom + ")")//
-//					.style("fill", "red")
-//				})
-//			}
-//		    docFunctions();
-//	}
-//
 
 	// draw all documents of the landscape/state
 	// -----------------------------------------------------------------------
@@ -156,32 +101,28 @@ function Documents(documents, outsideDocuments) {
 	}
 
 
-	// // -----------------------------------------------------------------------
-	// Documents.prototype.heighlightDocumentsByIds= function(documentIds) {
-		// var idsMap = this.documentIdsMap;
-		// $.each(documentIds, function(index, id) {
-			// if(id in idsMap) {
-				// docId = idsMap[id];
-				// var doc = svgcanvas.select("#"+docId).style("fill", "#FFBE3B");
-			// }
-//
-		// })
-//
-	// }
-
-
 
 	// -----------------------------------------------------------------------
 	Documents.prototype.heighlightDocumentsByIds= function(documentIds) {
-		var idsMap = this.documentIdsMap;
-		for(key in idsMap) {
-			var docId = idsMap[key];
-			svgcanvas.select("#"+docId).style("opacity", 0.2);
+        var docsLength = Object.keys(this.documents).length;
+        var opacity = 0.2;
+        if(documentIds == "" || documentIds.length == 0) {
+            opacity = 1;
+
+        }
+
+		for(var i=0; i < docsLength ; i++) {
+			var docId = "doc_" + i;
+            svgcanvas.select("#"+docId).attr("r", 4).style("opacity", opacity);
 		}
+        if(documentIds == "") {
+            return;
+        }
 		for(var i=0; i < documentIds.length; i++) {
-			var id = "doc_"+i;
-			var docId = idsMap[id];
-			svgcanvas.select("#"+docId).attr("r", 6).style("opacity", 1); ;
+            if(i <  docsLength) {
+                var docId = "doc_" + documentIds[i];
+                svgcanvas.select("#" + docId).attr("r", 6).style("opacity", 1);
+            }
 		}
 	}
 
@@ -195,22 +136,6 @@ function Documents(documents, outsideDocuments) {
 		}
 	}
 
-
-
-	// // -----------------------------------------------------------------------
-	// Documents.prototype.deHeighlightDocuments= function() {
-		// var idsMap = this.documentIdsMap;
-		// $.each(documents, function(id, docData) {
-			// if(id in idsMap) {
-				// docId = idsMap[id];
-				// svgcanvas.select("#"+docId).style("fill", "red");
-			// }
-//
-		// })
-	// }
-//
-
-	//
 	// -----------------------------------------------------------------------
 	Documents.prototype.getListOfVanishedDocs = function(docsListToCheck) {
 		var vanishedDocs = [];
@@ -239,12 +164,6 @@ function Documents(documents, outsideDocuments) {
 	// draws documents of isolines which are within brush ( user has selected isolines)
 	// -----------------------------------------------------------------------
 	Documents.prototype.drawDocumentsWithinSelectedIsolines = function(landscapeState) {
-		// var checked = document.getElementById("selectIsolineDocs").checked;
-		// if (!checked) {
-			// // clearTable();
-			// svgcanvas.select("#docPoints").data([]).exit().remove();
-			// return;
-		// }
 		selectedDocuments = [];
 		svgcanvas.select("#docPoints").data([]).exit().remove();
 
@@ -284,7 +203,7 @@ function Documents(documents, outsideDocuments) {
 	// removes drawn documents of an isoline which has been deselected by user
 	// -----------------------------------------------------------------------
 	Documents.prototype.removeDocumentsWithinSelectedIsolineById= function(isolineId) {
-		// console.log("Documents.removeDocumentsWithinSelectedIsolineById");
+
 		svgcanvas.select("#isoline_" + isolineId).data([]).exit().remove()
 		docsTable.clear();
 		this.drawDocumentsWithinSelectedIsolines();
@@ -337,13 +256,13 @@ function Documents(documents, outsideDocuments) {
 
 	// -----------------------------------------------------------------------
 	Documents.prototype.fillDocsColorFacetBased= function(facetBasedDocuments, color) {
+
 		for(facetName in facetBasedDocuments ) {
 			for( facetAttribute in facetBasedDocuments[facetName]) {
-				var docsIndices = facetBasedDocuments[facetName][facetAttribute];
+				var docsIndices = facetBasedDocuments[facetName][facetAttribute].indices;
 				for(var i = 0; i < docsIndices.length; i++) {
 					var index = docsIndices[i];
 					var docId= "#doc_"+index;
-					var tess = color(facetAttribute);
 					svgcanvas.select(docId).style("fill", color(facetAttribute));
 				    svgcanvas.select(docId).attr("color", color(facetAttribute));
 				}
@@ -351,31 +270,4 @@ function Documents(documents, outsideDocuments) {
 		}
 	}
 
-
-
-	// // -----------------------------------------------------------------------
-	// Documents.prototype.getMappedDocsOfAnIsoline= function(oldIsolineId, newIsolineId) {
-		// var mappings = stateNew.mappings['mappings'];
-		// $.each(mappings, function(level, levelData) {
-			// if(Object.keys(levelData[notMappedOld]).length > 0 )  {
-				// $.each(levelData[notMappedOld], function(pathId, pathData) {
-					// var xPos = pathData["centroidPoint"]["x"] ;
-					// var yPos = pathData["centroidPoint"]["y"] ;
-					// var centroidPoint = d3line([ [xPos, yPos] ]);
-//
-					// // Beginn with transformed removing
-					// // -----------------------------------------------------------------------------
-					// d3.select('#'+pathId)
-						// .style("stroke", "red")
-					// d3.select('#'+pathId)
-				  		// .transition()
-						// .duration(transformTimeSingle)
-						// .attrTween("d", me.pathTween(centroidPoint, 5))
-						// .each("end", function() { d3.select('#'+pathId).remove() } );
-					// // -----------------------------------------------------------------------------
-				// })
-			// }
-		// })
-	// }
-//
 }

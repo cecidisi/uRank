@@ -2,7 +2,6 @@
 var KeywordExtractor = (function(){
 
     var s = {},
-        allTokens = [],
         stemmer = natural.PorterStemmer, //natural.LancasterStemmer;
         tokenizer = new natural.WordTokenizer,
         nounInflector = new natural.NounInflector(),
@@ -55,11 +54,9 @@ var KeywordExtractor = (function(){
         // Find out which adjectives are potentially important and worth keeping
         var keyAdjectives = getKeyAdjectives(collection);
 
-        allTokens = [];
         // Create each item's document to be processed by tf*idf
         collection.forEach(function(d) {
             d.tokens = getFilteredTokens(d.taggedWords, keyAdjectives);                                       // d.tokens contains raw nouns and important adjectives
-            $.merge(allTokens, d.tokens);
             tfidf.addDocument(d.tokens.map(function(term){ return term.stem(); }).join(' '));                 // argument = string of stemmed terms in document array
         });
 
@@ -144,11 +141,13 @@ var KeywordExtractor = (function(){
         var keywordDictionary = getKeywordDictionary(collection, documentKeywords, minDocFrequency);
 
         // get keyword variations
-        allTokens.forEach(function(token){
-            var stem = token.stem();
-            if(keywordDictionary[stem] && stopWords.indexOf(token.toLowerCase()) == -1)
-                keywordDictionary[stem].variations[token] =
-                    keywordDictionary[stem].variations[token] ? keywordDictionary[stem].variations[token] + 1 : 1;
+        collection.forEach(function(d){
+            d.tokens.forEach(function(token){
+                var stem = token.stem();
+                if(keywordDictionary[stem] && stopWords.indexOf(token.toLowerCase()) == -1)
+                    keywordDictionary[stem].variations[token] =
+                        keywordDictionary[stem].variations[token] ? keywordDictionary[stem].variations[token] + 1 : 1;
+            });
         });
 
         // compute keywords in proximity
@@ -181,6 +180,11 @@ var KeywordExtractor = (function(){
             });
 
         collectionKeywords.forEach(function(k, i){
+            if(_.keys(k.variations).length == 0) {
+                console.log(k);
+                var ii = _.findIndex(collection, function(d){ return d.id == k.inDocument[0]; });
+                console.log(collection[ii]);
+            }
             k.term = getRepresentativeTerm(k);
         });
 
@@ -194,12 +198,6 @@ var KeywordExtractor = (function(){
 
         var keywordDictionary = {};
         _documentKeywords.forEach(function(docKeywords, i){
-
-//            var sum = 0;
-//            _.keys(docKeywords).forEach(function(term){
-//                sum += docKeywords[term];
-//            });
-//            var mean = sum / _.keys(docKeywords).length;
 
             _.keys(docKeywords).forEach(function(stemmedTerm){
                 if(!keywordDictionary[stemmedTerm]) {
@@ -333,7 +331,6 @@ var KeywordExtractor = (function(){
     };
 
     return KeywordExtractor;
-
 })();
 
 

@@ -67,9 +67,26 @@ String.prototype.isAllUpperCase = function() {
 };
 
 String.prototype.clean = function(){
-    var text = this,
+
+    function decodeHTMLEntities (str) {
+        var element = document.createElement('div');
+        if(str && typeof str === 'string') {
+            // strip script/html tags
+            str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+            str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+            element.innerHTML = str;
+            str = element.textContent;
+            element.textContent = '';
+        }
+        if(str.contains('LEGO'))
+            console.log(str);
+        return str;
+    }
+
+    var text = unescape(this.toString()),
         textArray = [],
         splitText = text.split(' ');
+
     for(var i = 0; i < splitText.length; ++i) {
         if(splitText[i].match(/\w+-$/)){
             textArray.push(splitText[i].replace('-', '') + splitText[i+1]);

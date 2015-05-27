@@ -43,6 +43,10 @@ var ContentList = (function(){
     // Helper
     var $root = $(''), $listContainer, rootClasses;
 
+    var onScroll = function(event){
+        event.stopPropagation();
+        s.onScroll.call(this, _this, $(this).scrollTop());
+    };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Constructor
@@ -173,13 +177,48 @@ var ContentList = (function(){
     var stopAnimation = function(){
         $('.'+liClass).stop(true, true);
         removeMovingStyle();
-        if(_this.animationTimeout) clearTimeout(_this.animationTimeout);
+        // clear timeout and execute callback immediately
+        /*console.log(_this.animationTimeout);
+        console.log(_this.timeoutCallback);*/
+        if(_this.animationTimeout){
+            clearTimeout(_this.animationTimeout);
+         //   if(_this.timeoutCallback) _this.timeoutCallback();
+        }
+        _this.timeoutCallback = null;
     };
 
 
+
+    var sort = function(){
+
+        //$root.parent().scrollTo('top');
+        $listContainer.scrollTop();
+        var liHtml = new Array();
+
+        _this.data.forEach(function(d, i){
+            //var $current = $(liItem +''+ d.id);
+            var $current = $('.'+liClass+'['+urankIdAttr+'='+d.id+']');
+            $current.css('top', '');
+            var outer = $current.outerHTML();
+            liHtml.push(outer);
+            $current.remove();
+        });
+
+        var oldHtml = "";
+        _this.data.forEach(function(d, i){
+            $('.'+ulClass).html(oldHtml + '' + liHtml[i]);
+            oldHtml = $('.'+ulClass).html();
+        });
+        // Re-binds on click event to list item. Removing and re-appending DOM elements destroys the bindings to event handlers
+        $('.'+liClass).each(function(i, li){
+            bindEventHandlers($(li), _this.data[i].id);
+        });
+
+    };
+
     var animateAccordionEffect = function(initialDuration, timeLapse, easing) {
-        initialDuration = initialDuration || 500;
-        timeLapse = timeLapse || 50;
+        initialDuration = initialDuration || 100;
+        timeLapse = timeLapse || 20;
         easing = easing || 'swing';
 
         var acumHeight = 0;
@@ -205,9 +244,6 @@ var ContentList = (function(){
                     $(this).animate({top: newPos}, 0);
                 })
                 .dequeue();
-            }
-            else {
-                $item.css('top', newPos);
             }
             acumHeight += $item.height();
         });
@@ -256,33 +292,6 @@ var ContentList = (function(){
     };
 
 
-
-    var sort = function(){
-
-        //$root.parent().scrollTo('top');
-        $listContainer.scrollTop();
-        var liHtml = new Array();
-
-        _this.data.forEach(function(d, i){
-            //var $current = $(liItem +''+ d.id);
-            var $current = $('.'+liClass+'['+urankIdAttr+'='+d.id+']');
-            $current.css('top', 0);
-            var outer = $current.outerHTML();
-            liHtml.push(outer);
-            $current.remove();
-        });
-
-        var oldHtml = "";
-        _this.data.forEach(function(d, i){
-            $('.'+ulClass).html(oldHtml + '' + liHtml[i]);
-            oldHtml = $('.'+ulClass).html();
-        });
-        // Re-binds on click event to list item. Removing and re-appending DOM elements destroys the bindings to event handlers
-        $('.'+liClass).each(function(i, li){
-            bindEventHandlers($(li), _this.data[i].id);
-        });
-
-    };
 
 
 
@@ -342,10 +351,7 @@ var ContentList = (function(){
         $root = $(s.root).empty().addClass(rootClasses);
         $listContainer = $('<div></div>').appendTo($root)
             .addClass(listContainerClass)
-            .scroll(function(event){
-                event.stopPropagation();
-                s.onScroll.call(this, _this, $(this).scrollTop());
-            });
+            .on('scroll', onScroll);
 
         var $ul = $('<ul></ul>').appendTo($listContainer).addClass(ulClass +' '+ ulClassDefault);
 
@@ -390,7 +396,7 @@ var ContentList = (function(){
         this.selectedKeywords = selectedKeywords.map(function(k){ return k.stem });
         this.status = status;
 
-        var accordionInitialDuration = 500,
+        var accordionInitialDuration = 100,
             accordionTimeLapse = 50,
             accordionEasing = 'swing',
             resortingDuration = 1500,
@@ -408,18 +414,25 @@ var ContentList = (function(){
 
         var updateNew = function(){
             updateLiBackground();
+            sort();
             animateAccordionEffect(accordionInitialDuration, accordionTimeLapse, accordionEasing);
-            return setTimeout(function(){
-                sort();
-            }, accordionInitialDuration + (accordionTimeLapse * data.length));
+            _this.timeoutCallback = function(){
+                console.log('new');
+               // sort();
+                _this.animationTimeout = null;
+            };
+            return setTimeout(_this.timeoutCallback, accordionInitialDuration + (accordionTimeLapse * data.length));
         };
 
         var updateUpdated = function(){
             updateLiBackground();
             animateResortEffect(resortingDuration, resortingEasing);
-            return setTimeout(function() {
+            _this.timeoutCallback = function(){
+                console.log('update');
                 sort();
-            }, resortingDuration);
+                _this.animationTimeout = null;
+            };
+            return setTimeout(sort, resortingDuration);
         };
 
         var updateUnchanged = function(){
@@ -525,13 +538,19 @@ var ContentList = (function(){
 
 
     var _scrollTo = function(scroll) {
-        console.log('content list scroll to = ' + scroll);
-        $listContainer.scrollTo(scroll);
-        console.log('scrolled to = ' + $listContainer.scrollTop());
+        //console.log('content list scroll to = ' + scroll);
+        $listContainer.off('scroll', onScroll)
+            .scrollTop(scroll)
+            .on('scroll', onScroll);
+        //console.log('scrolled to = ' + $listContainer.scrollTop());
     };
 
-    var _getHeight = function() {
+    var _getListHeight = function() {
         return $listContainer.find('.'+ulClass).height();
+    };
+
+    var _getContainerHeight = function() {
+        return $listContainer.height();
     }
 
     // Prototype
@@ -550,7 +569,8 @@ var ContentList = (function(){
         clearEffects: _clearEffects,
         destroy: _destroy,
         scrollTo: _scrollTo,
-        getHeight: _getHeight
+        getListHeight: _getListHeight,
+        getContainerHeight: _getContainerHeight
     };
 
     return ContentList;

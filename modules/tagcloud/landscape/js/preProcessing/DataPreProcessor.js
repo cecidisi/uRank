@@ -3,22 +3,26 @@ var DataPreProcessor = (function(){
 	var dataObjectTextKey = "description";
 	var dataset = new Object();
 	var landscapeInputData = "";
-	var keywordExtractor = {};
+	var keywords; "";
+	var keywordExtractor = "";
 	var me = this;
 
 	// constructor
-	function DataPreProcessor(data) {
+	function DataPreProcessor(data, keywordExtractor, keywords) {
 		this.dataObjectTextKey = "description";
 		this.dataset = data;
 		this.landscapeInputData = "";
-		this.keywordExtractor = {}
+		this.keywordExtractor = keywordExtractor;
+		this.keywords = keywords,
         dataset = data;
         me = this;
 	}
 
 	// -----------------------------------------------------------------------
 	DataPreProcessor.prototype.createInputForLandscape = function() {
-		extractWeightedKeywords();
+		if(this.keywordExtractor == "") {
+			extractWeightedKeywords();
+		}
 		var cosineSimilarity = new CosineSimilarity();
 		var cosineSimBetweenAllDocuments = cosineSimilarity.getCosineSimilarties(this.dataset);
 		createLandscapeInputString(cosineSimBetweenAllDocuments);
@@ -50,7 +54,6 @@ var DataPreProcessor = (function(){
 			}
 		}
 
-
 		var tagSet = getTagsForGivenDocuments(documentsIds);
 		var tagCloud = []
 		var tagsNum = 15;
@@ -72,11 +75,28 @@ var DataPreProcessor = (function(){
 				counter++;
 			}
 			var tagObj = {}
+
+
 			tagObj.text = term;
 			tagObj.stem = stem;
 			tagObj.keywords = tagSet[x];
 			tagObj.size= weight/counter;
-			tagCloud.push(tagObj);
+			if (landscapeConfig.getLandscapeType() == "urankLandscape") {
+				for(var index = 0; index < this.keywords.length; index++){
+					var keywordStem = this.keywords[index].stem;
+					if( keywordStem != stem) {
+						continue;
+					}
+					else {
+						tagObj.index = index;
+						tagCloud.push(tagObj);
+					}
+		      	}
+			}
+			else {
+				tagCloud.push(tagObj);
+			}
+
 		}
 		return tagCloud;
 	};
@@ -121,6 +141,21 @@ var DataPreProcessor = (function(){
         });
         return docIndices;
 	}
+
+	DataPreProcessor.prototype.getDatasetByIds = function (documentsIds){
+
+		var documentDataset = [];
+		var dataLength = dataset.length;
+		for (var j = 0; j < documentsIds.length; j++) {
+			var id = documentsIds[j];
+			if (dataLength > id) {
+				documentDataset.push(dataset[id]);
+			}
+		}
+		return documentDataset;
+	};
+
+
 
 
 
@@ -195,6 +230,24 @@ var DataPreProcessor = (function(){
 				numOfLabels = tempDataset.length  - 1;
 			}
 			var labelSet = tempDataset.slice(0,numOfLabels);
+			var labelSetNew = [];
+			if (landscapeConfig.getLandscapeType() == "urankLandscape") {
+				var test = me.keywords;
+				for(var index = 0; index < me.keywords.length; index++){
+					var keywordStem = me.keywords[index].stem;
+					for(var z=0; z < labelSet.length; z++) {
+						var stem = labelSet[z].stem;
+						if( keywordStem == stem) {
+							labelSet[z].index = index;
+							labelSetNew.push(labelSet[z]);
+
+						}
+					}
+		      	}
+		      	var labelSet = labelSetNew;
+			}
+
+
 			var labelsText = [];
 			var keywords = [];
 			for(var x =0; x < labelSet.length; x++ ) {
@@ -236,7 +289,7 @@ var DataPreProcessor = (function(){
 				documentKeywords.push(dataset[id].keywords);
 			}
 		}
-        return me.keywordExtractor.getTagKeywords(documentKeywords, documentsIds);
+        return me.keywordExtractor.getGlobalKeywordsForSubset(documentsIds, 1);
 	};
 
 
@@ -287,7 +340,7 @@ var DataPreProcessor = (function(){
 
 					}
 				}
-
+				var keywordsArrayObj = []
 				var keywords = {}
 				keywords.inDocument = [];
 				keywords.keywordsInProximity = [];
@@ -307,9 +360,22 @@ var DataPreProcessor = (function(){
 					}
 				}
 
+
+				if (landscapeConfig.getLandscapeType() == "urankLandscape") {
+					for(var index = 0; index < me.keywords.length; index++){
+						var keywordterm = me.keywords[index].term;
+						if( keywordterm == labelText) {
+							keywords = me.keywords[index];
+							keywords.index = index;
+							keywordsArrayObj.push(keywords);
+							break;
+						}
+
+			      	}
+				}
 				var newLabelObj = new Object();
 				newLabelObj.labels = [labelText];
-				newLabelObj.keywords = keywords;
+				newLabelObj.keywords = keywordsArrayObj;
 				newLabelObj.coordinates = [xPos, yPos];
 				newLabelObj.depth = 0;
 				newLabelObj.docs = [];
@@ -321,6 +387,8 @@ var DataPreProcessor = (function(){
 			}
 
 		});
+
+
 		return labels;
 	}
 

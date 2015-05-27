@@ -101,7 +101,7 @@ var TagBox = (function(){
     var _clear = function() {
 
         this.selectedKeywords = [];
-        $root.empty();
+        $root.find('.'+tagboxContainerClass).empty().append('<p>' + STR_DROP_TAGS_HERE + '</p>');
         //TAGCLOUD.updateTagColor();
     };
 

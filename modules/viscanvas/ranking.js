@@ -112,7 +112,9 @@ var Ranking = (function(){
         *	Draw ranking at first instance
         *
         * ***************************************************************************************************************/
-        drawNew: function(rankingModel, containerHeight, colorScale){
+        drawNew: function(rankingModel, colorScale, listHeight, containerHeight){
+
+            $root.height(containerHeight);
 
             _this.clear();
             _this.isRankingDrawn = true;
@@ -121,7 +123,7 @@ var Ranking = (function(){
             // Define canvas dimensions
             margin = { top: 0, bottom: 20, left: 0, right: 1 };
             width = $root.width() - margin.left - margin.right;
-            height = containerHeight;
+            height = listHeight;
 
             // Define scales
 		    x = d3.scale.linear()
@@ -183,12 +185,13 @@ var Ranking = (function(){
         *	Redraw updated ranking and animate with transitions to depict changes
         *
         * ***************************************************************************************************************/
-        redrawUpdated: function(rankingModel, containerHeight, colorScale){
+        redrawUpdated: function(rankingModel, colorScale, listHeight, containerHeight){
 
+            $root.height(containerHeight);
             // Define input variables
             data = RANKING.Settings.getInitData(rankingModel);
 
-            RANKING.Render.updateCanvasDimensions(containerHeight);
+            RANKING.Render.updateCanvasDimensions(listHeight);
             // Redefine x & y scales' domain
             x.domain([0, 1]).copy();
 
@@ -313,12 +316,12 @@ var Ranking = (function(){
         *	Adjust height of svg and other elements when the ranking changes
         *
         * ***************************************************************************************************************/
-        updateCanvasDimensions: function(containerHeight){
+        updateCanvasDimensions: function(listHeight){
 
-            height = containerHeight;
+            height = listHeight;
             y.rangeBands(height, .01);
 
-            d3.select(svg.node().parentNode)
+            d3.select(svg.node().parentNode)    // var svg = svg > g
                 .attr('height', height + margin.top + margin.bottom + 30);
 
             svg.attr("height", height + 30)
@@ -334,6 +337,10 @@ var Ranking = (function(){
         *
         * ***************************************************************************************************************/
         resizeCanvas: function(containerHeight){
+
+            //  Resize container if containerHeight is specified
+            if(containerHeight)
+                $root.height(containerHeight);
 
             //  Recalculate width
             width = $root.width() - margin.left - margin.right;
@@ -363,19 +370,21 @@ var Ranking = (function(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Prototype methods
 
-    var _update = function(rankingModel, containerHeight, colorScale){
+    var _update = function(rankingModel, colorScale, listHeight, containerHeight){
         var updateFunc = {};
         updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
         updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.unchanged] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.no_ranking] = _this.clear;
-        updateFunc[rankingModel.getStatus()].call(this, rankingModel, containerHeight, colorScale);
+        updateFunc[rankingModel.getStatus()].call(this, rankingModel, colorScale, listHeight, containerHeight);
+        return this;
     };
 
 
     var _clear = function(){
         this.isRankingDrawn = false;
         $root.empty();
+        return this;
     };
 
 
@@ -384,21 +393,23 @@ var Ranking = (function(){
             id = _.isArray(id) ? id : [id];
             svg.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
         }
+        return this;
     };
 
 
     var _deSelectAllItems = function(){
         if(this.isRankingDrawn)
             svg.selectAll('.'+stackedbarClass).style('opacity', 1);
+        return this;
     };
 
 
     var _hoverItem = function(id) {
-        if(this.isRankingDrawn) {
+        if(this.isRankingDrawn)
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0)')
                 .style('filter', 'url(#drop-shadow)');
-        }
+        return this;
     };
 
 
@@ -407,23 +418,26 @@ var Ranking = (function(){
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')
                 .style('filter', '');
+        return this;
     };
 
 
     var _highlightItems = function(idsArray) {
         this.selectItem(idsArray);
+        return this;
     };
 
 
     var _clearEffects = function() {
         this.deselectAllItems();
+        return this;
     };
 
 
     //  Redraw without animating when the container's size changes
     var _resize = function(containerHeight){
-        if(this.isRankingDrawn)
-            RANKING.Render.resizeCanvas(containerHeight);
+        if(this.isRankingDrawn) RANKING.Render.resizeCanvas(containerHeight);
+        return this;
     };
 
 

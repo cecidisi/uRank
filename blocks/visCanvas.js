@@ -32,6 +32,11 @@ var VisCanvas = (function(){
         }
     };
 
+    var onScroll = function(event) {
+        event.stopPropagation();
+        s.onScroll.call(this, _this, $(this).scrollTop());
+    };
+
 
     function VisCanvas(arguments) {
         _this = this;
@@ -57,20 +62,14 @@ var VisCanvas = (function(){
         /*if(opt.customScrollBars)
             $root.mCustomScrollbar(customScrollOptions);*/
 
-
-        $root.scroll(function(event){
-           // console.log(event);
-            event.stopPropagation();
-            s.onScroll.call(this, _this, $(this).scrollTop());
-        })
-
+        $root.on('scroll', onScroll);
         return this;
     };
 
 
-    var _update = function(rankingModel, containerHeight, colorScale) {
-        $root.scrollTop();
-        this.vis.update(rankingModel, containerHeight, colorScale);
+    var _update = function(rankingModel, colorScale, listHeight, containerHeight) {
+        $root.scrollTo('top');
+        this.vis.update(rankingModel, colorScale, listHeight, containerHeight);
         return this;
     };
 
@@ -122,7 +121,9 @@ var VisCanvas = (function(){
     };
 
     var _scrollTo = function(offset) {
-        $root.scrollTop(offset);
+        $root.off('scroll', onScroll)
+            .scrollTop(offset)
+            .on('scroll', onScroll);
     };
 
 

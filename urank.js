@@ -111,7 +111,10 @@ var Urank = (function(){
 
             //  Clean documents and add them to the keyword extractor
             _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
+
+            var indexCounter = 0;
             _this.data.forEach(function(d){
+                d.index = indexCounter++;
                 d.title = d.title.clean();
                 d.description = d.description.clean();
                 var document = (d.description) ? d.title +'. '+ d.description : d.title;
@@ -170,7 +173,7 @@ var Urank = (function(){
             var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode).getRanking();
             var status = _this.rankingModel.getStatus();
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
-            visCanvas.update(_this.rankingModel, contentList.getHeight(), _this.queryTermColorScale);
+            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), contentList.getContainerHeight());
             docViewer.clear();
             tagCloud.clearEffects();
 
@@ -225,6 +228,8 @@ var Urank = (function(){
             var idsArray = _this.keywords[index].inDocument;
             contentList.highlightListItems(idsArray);
             visCanvas.highlightItems(idsArray);
+            visCanvas.resize(contentList.getListHeight());
+
             s.onDocumentHintClick.call(this, index);
         },
 
@@ -295,15 +300,13 @@ var Urank = (function(){
                 visCanvas.clearEffects();
                 docViewer.clear();
             }
-
         },
 
         onParallelBlockScrolled: function(sender, offset) {
-            /*if(sender === contentList)
+            if(sender === contentList)
                 visCanvas.scrollTo(offset);
             else if(sender == visCanvas)
                 contentList.scrollTo(offset);
-            */
         },
 
         onResize: function(event) {

@@ -130,6 +130,7 @@ function LandscapeLabels() {
 
 			var labelsText = label["labels"]
 			var labelWeight = label["weight"];
+			var keywordsObj = label.keywords;
 			if(labelsText ==null || labelsText == "" || labelsText.length < 1) {
 				return true;
 			}
@@ -228,6 +229,19 @@ function LandscapeLabels() {
 
 
 			$.each(labelsText, function(index, text) {
+				var stem = text;
+				var labelIndex = totalLabelCounter;
+				if(landscapeConfig.getLandscapeType() == "urankLandscape") {
+					for(var j=0; j < keywordsObj.length; j++) {
+						if(keywordsObj[j].term == text) {
+							stem = keywordsObj[j].stem;
+							labelIndex = keywordsObj[j].index;
+						}
+					}
+				}
+
+
+
 				var padding = (textBoxWidth+15-text.length)/2;
 				var dummyText2 = landscapeLabels.append("svg:text")
 					.attr("dx", labelPosX - 2)
@@ -241,7 +255,7 @@ function LandscapeLabels() {
 				var padding = (textBoxWidth+15-dummyTextWidth)/2;
 					svgcanvas.selectAll("#dummyLandscapeLabel2").remove();
 					landscapeLabels.append("svg:text")
-					.attr("id", "landscapeLabel_" + totalLabelCounter)
+					.attr("id", "landscapeLabel_" + labelIndex)
 					.attr("dx", textBoxPosX  +  padding)
 					.attr("dy", (textBoxPosY + (labelCounter * textBoxHeight))+15)//
 					.attr("depth", labelDepth)
@@ -250,7 +264,7 @@ function LandscapeLabels() {
 					.style("fill", labelColor)
 					.style("font-weight", fontWeight)
 					.text(text)
-					.attr("labelCounter", totalLabelCounter)
+					.attr("labelCounter", labelIndex)
 						.attr("isLabelInTagBox", 0)
 					.attr("labelID", labelindex).attr("text", text)
 					.on("mouseover",function(d, i) {
@@ -260,7 +274,6 @@ function LandscapeLabels() {
 						d3.select(this).style("font-size", (fontSize+labelWeight))
 						d3.select(this).style("fill", "#FFBE3B")
 						d3.select(this).style("font-weight", "bold")
-						var test = landscapeConfig.getLandscapeType();
 						if(landscapeConfig.getLandscapeType() == "urankLandscape") {
 							var i = parseInt(d3.select(this).attr("labelCounter"));
 							var label = d3.select(this).attr("text");
