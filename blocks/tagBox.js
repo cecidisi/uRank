@@ -91,7 +91,7 @@ var TagBox = (function(){
     var _build = function(opt) {
 
         this.selectedKeywords = [];
-        var tagboxClasses = (opt.defaultBlockStyle) ? tagboxClass +' '+ tagboxDefaultClass : tagboxClass;
+        var tagboxClasses = (opt.misc.defaultBlockStyle) ? tagboxClass +' '+ tagboxDefaultClass : tagboxClass;
 
         $root = $(s.root).addClass(tagboxClasses);
         $tagContainer = $('<div></div>').appendTo($root).addClass(tagboxContainerClass)

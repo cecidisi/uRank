@@ -59,7 +59,7 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'blocks/tagBox.js',
                     pathToUrank + 'blocks/tagCloud.js',
                     pathToUrank + 'blocks/visCanvas.js',
-                    pathToUrank + 'modules/tagcloud/bagOfWords.js',
+                    pathToUrank + 'modules/tagcloud/tagCloudDefault.js',
                     pathToUrank + 'modules/tagcloud/landscape/js/createLandscape/installLocationMainWindow.js',
                     pathToUrank + 'modules/tagcloud/landscape/js/createLandscape/stockwatcher.nocache.js',
                     pathToUrank + 'modules/tagcloud/landscape/css/landscape.css',

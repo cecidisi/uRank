@@ -1,11 +1,10 @@
-var BagOfWords = (function(){
+var TagCloudDefault = (function(){
 
-    var _this, $root = $('');
+    var _this;
     // Settings
     var s = {};
     //  Classes
-    var tagCloudContainerClass = 'urank-tagcloud-container',
-        defaultTagCloudContainerClass = 'urank-tagcloud-container-default',
+    var tagcloudDefaultClass = 'urank-tagcloud-default',
         tagContainerOuterClass = 'urank-tagcloud-tag-container-outer',
         tagContainerClass = 'urank-tagcloud-tag-container',
         tagClass = 'urank-tagcloud-tag',
@@ -21,8 +20,7 @@ var BagOfWords = (function(){
     //   Attributes
     var tagPosAttr = 'tag-pos';
     //  Helpers
-    var $tagContainer, $outerTagContainer,
-        containerClasses,
+    var $root = $(''), $tagContainer = $(''),
 
         tagHoverStyle = {
             background: '-webkit-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255))',
@@ -40,10 +38,8 @@ var BagOfWords = (function(){
             stop: function(event, ui){ $(this).show(); }
         },
 
-        //documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagCloudContainerClass },
         documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagContainerOuterClass },
 
-        //keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagCloudContainerClass },
         keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagContainerOuterClass },
 
         pieOptions = {
@@ -73,7 +69,7 @@ var BagOfWords = (function(){
         customScrollOptions = {
             axis: 'y',
             theme: 'light',
-            scrollbarPosition: 'inside',
+            scrollbarPosition: 'outside',
             autoHideScrollbar: true,
             scrollEasing: 'linear',
             scrollInertia: 0,
@@ -107,7 +103,6 @@ var BagOfWords = (function(){
     /// Tag Cloud root and container event handlers
     var onRootScrolled = function(event) {
         event.stopPropagation();
-        console.log('scrolling...');
         var $tag = $('.'+selectedClass);
         if(_this.proxKeywordsMode) {
             $tag.find('.'+documentHintClass).css('visibility', 'hidden');
@@ -121,7 +116,7 @@ var BagOfWords = (function(){
 
 
     //  Constructor
-    function BagOfWords(arguments) {
+    function TagCloudDefault(arguments) {
         _this = this;
         s = $.extend({
             root: '',
@@ -132,15 +127,11 @@ var BagOfWords = (function(){
             onKeywordHintMouseEnter : function(index){},
             onKeywordHintMouseLeave : function(index){},
             onKeywordHintClick : function(index){},
-            defaultStyle: true
         }, arguments);
 
         this.keywords = [];
         this.proxKeywordsMode = false;
         this.docHintMode = false;
-
-        containerClasses = (s.defaultStyle) ? tagCloudContainerClass +' '+ defaultTagCloudContainerClass : tagCloudContainerClass;
-        $(s.root).addClass(containerClasses);
     }
 
 
@@ -236,9 +227,13 @@ var BagOfWords = (function(){
         this.colorScale = colorScale;
         this.opt = opt;
 
-        // Empty tag container and add appropriateclass
-        $root = $(s.root).empty().addClass(containerClasses);
-        $outerTagContainer = $('<div></div>').appendTo($root).addClass(tagContainerOuterClass);
+        // Empty tag container and add appropriate class/es
+        $root = $(s.root).empty().addClass(tagcloudDefaultClass);
+
+        var $outerTagContainer = $('<div></div>').appendTo($root)
+            .addClass(tagContainerOuterClass)
+            .on('scroll', onRootScrolled);
+
         $tagContainer = $('<div></div>').appendTo($outerTagContainer).addClass(tagContainerClass);
 
         this.keywords.forEach(function(k, i){
@@ -402,7 +397,7 @@ var BagOfWords = (function(){
             }
         });
 
-        /*$root*/$outerTagContainer.on('scroll', onRootScrolled);
+        //$outerTagContainer.on('scroll', onRootScrolled);
         _this.proxKeywordsMode = true;
     };
 
@@ -414,14 +409,12 @@ var BagOfWords = (function(){
         $tag.addClass(selectedClass);
         $tag.find('.'+documentHintClass).css('visibility', 'visible');
         $tag.find('.'+keywordHintClass).css('visibility', 'hidden');
-            //.off('mouseleave')
 
         $tag.siblings().each(function(i, siblingTag){
             $(siblingTag).removeClass(activeClass).addClass(dimmedClass).off().css({background: '', border: '', color: ''});
         });
 
-        /*$root*/
-        $tagContainer.on('scroll', onRootScrolled);
+       // $tagContainer.on('scroll', onRootScrolled);
         _this.docHintMode = true;
     };
 
@@ -430,8 +423,7 @@ var BagOfWords = (function(){
     var _clearEffects = function() {
 
         if(_this.docHintMode || _this.proxKeywordsMode) {
-            /*$root*/$outerTagContainer.off('scroll', onRootScrolled);
-
+            //$outerTagContainer.off('scroll', onRootScrolled);
             $('.'+tagClass).each(function(i, tag){
                 setTagProperties($(tag));
             });
@@ -451,11 +443,11 @@ var BagOfWords = (function(){
 
     var _destroy = function() {
       //  $outerTagContainer.mCustomScrollbar('destroy');
-        $root.empty().removeClass(tagCloudContainerClass);
+        $root.empty().removeClass(tagcloudDefaultClass);
     };
 
 
-    BagOfWords.prototype = {
+    TagCloudDefault.prototype = {
         build: _build,
         reset: _reset,
         restoreTag: _restoreTag,
@@ -471,6 +463,6 @@ var BagOfWords = (function(){
         destroy: _destroy
     };
 
-    return BagOfWords;
+    return TagCloudDefault;
 })();
 

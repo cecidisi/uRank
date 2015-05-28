@@ -249,6 +249,8 @@ header select{
     float: left;
     width: 100%;
     height: calc(100% - 5em);
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 
@@ -352,13 +354,11 @@ header select{
     padding: 0;
     list-style: none;
     display:block;
-    padding-bottom: 1px;
-
 }
 
 .test-li {
     position: relative;
-    height: 28px;
+    height: 35px;
     vertical-align: top;
     -webkit-transition: box-shadow 4s ease-in/* linear*/;
     cursor: pointer;
@@ -401,7 +401,25 @@ header select{
     cursor: inherit;
 }
 
+.test-buttons-container {
+    float: right;
+    width: 38px;
+    height: 100%;
+    vertical-align: top;
+}
 
+.test-favicon {
+    float: right;
+    margin-top: 6px;
+    padding: 8px;
+}
+
+
+.test-watchicon {
+    float: left;
+    margin-top: 7px;
+    padding: 9px;
+}
 
 
 

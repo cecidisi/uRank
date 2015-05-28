@@ -2,11 +2,11 @@ var Ranking = (function(){
 
     var RANKING = {};
     var s, _this;
-    var $root;
     var width, height, margin;
     var x, y, color, xAxis, yAxis;
     var svg;
     var data;
+    var $root = $('');
 
     //  Classes
     var svgClass = 'urank-ranking-svg',
@@ -35,7 +35,6 @@ var Ranking = (function(){
         }, arguments);
 
         this.isRankingDrawn = false;
-        $root = $(s.root);
     }
 
     RANKING.Settings = {
@@ -112,9 +111,7 @@ var Ranking = (function(){
         *	Draw ranking at first instance
         *
         * ***************************************************************************************************************/
-        drawNew: function(rankingModel, colorScale, listHeight, containerHeight){
-
-            $root.height(containerHeight);
+        drawNew: function(rankingModel, colorScale, listHeight){
 
             _this.clear();
             _this.isRankingDrawn = true;
@@ -185,9 +182,8 @@ var Ranking = (function(){
         *	Redraw updated ranking and animate with transitions to depict changes
         *
         * ***************************************************************************************************************/
-        redrawUpdated: function(rankingModel, colorScale, listHeight, containerHeight){
+        redrawUpdated: function(rankingModel, colorScale, listHeight){
 
-            $root.height(containerHeight);
             // Define input variables
             data = RANKING.Settings.getInitData(rankingModel);
 
@@ -340,7 +336,7 @@ var Ranking = (function(){
 
             //  Resize container if containerHeight is specified
             if(containerHeight)
-                $root.height(containerHeight);
+                $root.css('height', containerHeight);
 
             //  Recalculate width
             width = $root.width() - margin.left - margin.right;
@@ -370,13 +366,18 @@ var Ranking = (function(){
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Prototype methods
 
-    var _update = function(rankingModel, colorScale, listHeight, containerHeight){
+    var _build = function(containerHeight) {
+        $root = $(s.root)
+    }
+
+
+    var _update = function(rankingModel, colorScale, listHeight){
         var updateFunc = {};
         updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
         updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.unchanged] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.no_ranking] = _this.clear;
-        updateFunc[rankingModel.getStatus()].call(this, rankingModel, colorScale, listHeight, containerHeight);
+        updateFunc[rankingModel.getStatus()].call(this, rankingModel, colorScale, listHeight);
         return this;
     };
 
@@ -384,6 +385,12 @@ var Ranking = (function(){
     var _clear = function(){
         this.isRankingDrawn = false;
         $root.empty();
+        return this;
+    };
+
+
+    var _reset = function() {
+        this.clear();
         return this;
     };
 
@@ -440,19 +447,26 @@ var Ranking = (function(){
         return this;
     };
 
+    var _getHeight = function() {
+        return $('.'+svgClass).height();
+    };
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     Ranking.prototype = {
+        build: _build,
         update: _update,
         clear: _clear,
+        reset: _reset,
         selectItem: _selectItem,
         deselectAllItems : _deSelectAllItems,
         hoverItem: _hoverItem,
         unhoverItem: _unhoverItem,
         highlightItems: _highlightItems,
         clearEffects: _clearEffects,
-        resize: _resize
+        resize: _resize,
+        getHeight: _getHeight
     };
 
     return Ranking;

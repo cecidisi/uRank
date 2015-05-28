@@ -5,9 +5,11 @@ var ContentList = (function(){
     var s = {};
     // Classes
     var contentListClass = 'urank-list',
-        defaultContentListClass = 'urank-list-default',
+        hiddenScrollbarClass = 'urank-hidden-scrollbar',
+        hiddenScrollbarInnerClass = 'urank-hidden-scrollbar-inner',
         listContainerClass = 'urank-list-container',
         ulClass = 'urank-list-ul',
+        ulPaddingBottomclass = 'urank-list-ul-padding-bottom',
         liClass = 'urank-list-li',
         liLightBackgroundClass = 'urank-list-li-lightbackground',
         liDarkBackgroundClass = 'urank-list-li-darkbackground',
@@ -22,26 +24,26 @@ var ContentList = (function(){
         liTitleClass = 'urank-list-li-title',
         liButtonsContainerClass = 'urank-list-li-buttons-container',
         faviconClass = 'urank-list-li-button-favicon',
+        faviconDefaultClass = 'urank-list-li-button-favicon-default',
         faviconOffClass = 'urank-list-li-button-favicon-off',
         faviconOnClass = 'urank-list-li-button-favicon-on',
         watchiconClass = 'urank-list-li-button-watchicon',
         watchiconOffClass = 'urank-list-li-button-watchicon-off',
         watchiconOnClass = 'urank-list-li-button-watchicon-on',
+        watchiconDefaultClass = 'urank-list-li-button-watchicon-default',
         liHoveredClass = 'hovered',
         liWatchedClass = 'watched',
         // default-style classes
         ulClassDefault = ulClass + '-default',
         liClassDefault = liClass + '-default',
-        liTitleClassDefault = liTitleClass + '-default',
-        watchiconClassDefault = watchiconClass + '-default',
-        faviconClassDefault = faviconClass + '-default';
+        liTitleClassDefault = liTitleClass + '-default';
 
     // Ids
     var liItem = '#urank-list-li-';
 
     var urankIdAttr = 'urank-id';
     // Helper
-    var $root = $(''), $listContainer, rootClasses;
+    var $root = $(''), $scrollable = $(''), $ul = $('');
 
     var onScroll = function(event){
         event.stopPropagation();
@@ -67,9 +69,6 @@ var ContentList = (function(){
         this.selectedKeywords = [];
         this.multipleHighlightMode = false;
         this.actionLog = {};    // fields: doc_id, doc_title, timestamp
-
-        rootClasses = (s.defaultStyle) ? contentListClass +' '+ defaultContentListClass : contentListClass;
-        $(s.root).addClass(rootClasses);
     }
 
 
@@ -79,7 +78,10 @@ var ContentList = (function(){
     var bindEventHandlers = function($li, id) {
 
         var onLiClick = function(event){
-            event.stopPropagation(); s.onItemClicked.call(this, id);
+            event.stopPropagation();
+            hideUnrankedListItems();
+            if(!$(this).hasClass(liUnrankedClass))
+                s.onItemClicked.call(this, id);
         };
         var onLiMouseEnter = function(event){
             event.stopPropagation(); s.onItemMouseEnter.call(this, id);
@@ -88,10 +90,10 @@ var ContentList = (function(){
             event.stopPropagation(); s.onItemMouseLeave.call(this, id);
         };
         var onWatchiconClick = function(event){
-            event.stopPropagation(); s.onWatchiconClicked.call(this, id);
+            event.stopPropagation(); s.onWatchiconClicked.call(this, event.data);
         };
         var onFaviconClick = function(event){
-            event.stopPropagation(); s.onFaviconClicked.call(this, id);
+            event.stopPropagation(); s.onFaviconClicked.call(this, event.data);
         };
 
         $li.off({
@@ -104,10 +106,10 @@ var ContentList = (function(){
             mouseenter: onLiMouseEnter,
             mouseleave: onLiMouseLeave
         })
-        .off('click', '.'+liButtonsContainerClass + ' .' + watchiconClass, $li.attr(urankIdAttr), onWatchiconClick)
-        .off('click', '.'+liButtonsContainerClass + ' .' + faviconClass, $li.attr(urankIdAttr), onFaviconClick)
-        .on('click', '.'+liButtonsContainerClass + ' .' + watchiconClass, $li.attr(urankIdAttr), onWatchiconClick)
-        .on('click', '.'+liButtonsContainerClass + ' .' + faviconClass, $li.attr(urankIdAttr), onFaviconClick);
+        .off('click', '.'+watchiconClass, $li.attr(urankIdAttr), onWatchiconClick)
+        .off('click', '.'+faviconClass, $li.attr(urankIdAttr), onFaviconClick)
+        .on('click', '.'+watchiconClass, $li.attr(urankIdAttr), onWatchiconClick)
+        .on('click', '.'+faviconClass, $li.attr(urankIdAttr), onFaviconClick);
     };
 
 
@@ -115,7 +117,6 @@ var ContentList = (function(){
         _this.data.forEach(function(d, i){
             var formattedTitle = (d.title.length > 60) ? (d.title.substring(0, 56) + '...') : d.title + '';
             formattedTitle = (_this.selectedKeywords.length == 0) ? formattedTitle : getStyledText(formattedTitle, _this.selectedKeywords, colorScale);
-            //$(liItem +''+ d.id).find('.'+liTitleClass).html(formattedTitle);
             $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').find('.'+liTitleClass).html(formattedTitle);
         });
     }
@@ -126,7 +127,6 @@ var ContentList = (function(){
 
         _this.data.forEach(function(d, i) {
             var backgroundClass = (i % 2 == 0) ? liLightBackgroundClass : liDarkBackgroundClass;
-            //$(liItem +''+ d.id).addClass(backgroundClass);
             $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').addClass(backgroundClass);
         });
     };
@@ -160,11 +160,15 @@ var ContentList = (function(){
 
 
     var hideUnrankedListItems = function() {
-        _this.data.forEach(function(d){
-            var display = d.rankingPos > 0 ? '' : 'none';
-            //$(liItem + '' + d.id).css('display', display);
-            $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').css('display', display);
-        });
+
+        if(_this.status !== RANKING_STATUS.no_ranking) {
+            _this.data.forEach(function(d){
+                var display = d.rankingPos > 0 ? '' : 'none';
+                //$(liItem + '' + d.id).css('display', display);
+                $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').css('display', display);
+            });
+            $ul.addClass(ulPaddingBottomclass);
+        }
         _this.multipleHighlightMode = false;
     };
 
@@ -185,9 +189,6 @@ var ContentList = (function(){
     var sort = function(){
 
         var start = $.now();
-
-        $root.parent().scrollTo('top');
-        //$listContainer.scrollTop();
         var liHtml = [];
 
         _this.data.forEach(function(d, i){
@@ -197,7 +198,7 @@ var ContentList = (function(){
             $current.remove();
         });
 
-        var $ul = $listContainer.find('.'+ulClass).empty();
+        $ul.empty();
         liHtml.forEach(function(li){
             $ul.append(li);
         });
@@ -234,7 +235,7 @@ var ContentList = (function(){
         var easing = 'swing';
 
         var acumHeight = 0;
-        var listTop = $listContainer.position().top;
+        var listTop = $ul.position().top;
 
         _this.data.forEach(function(d, i){
             if(d.rankingPos > 0) {
@@ -276,18 +277,36 @@ var ContentList = (function(){
     var buildCustomList = function() {
 
         var c = {
-            ul: _this.opt.customOpt.selectors.ul,
-            liClass: _this.opt.customOpt.selectors.liClass,
-            liTitle: _this.opt.customOpt.selectors.liTitle,
-            liRankingContainer: _this.opt.customOpt.selectors.liRankingContainer,
-            watchicon: _this.opt.customOpt.selectors.watchicon,
-            favicon: _this.opt.customOpt.selectors.favicon,
-            liHoverClass: _this.opt.customOpt.misc.liHoverClass,
-            liLightBackgroundClass: _this.opt.customOpt.misc.liLightBackgroundClass,
-            liDarkBackgroundClass: _this.opt.customOpt.misc.liDarkBackgroundClass
+            root: _this.opt.customOptions.selectors.root,
+            ul: _this.opt.customOptions.selectors.ul,
+            liClass: _this.opt.customOptions.selectors.liClass,
+            liTitle: _this.opt.customOptions.selectors.liTitle,
+            liRankingContainer: _this.opt.customOptions.selectors.liRankingContainer,
+            watchicon: _this.opt.customOptions.selectors.watchicon,
+            favicon: _this.opt.customOptions.selectors.favicon,
+            liHoverClass: _this.opt.customOptions.classes.liHoverClass,
+            liLightBackgroundClass: _this.opt.customOptions.classes.liLightBackgroundClass,
+            liDarkBackgroundClass: _this.opt.customOptions.classes.liDarkBackgroundClass,
+            hideScrollbar: _this.opt.customOptions.misc.hideScrollbar
         };
 
-        $(c.ul).addClass(ulClass);
+        $ul = $(c.ul).addClass(ulClass);
+        $root = $(c.root);
+
+        if(c.hideScrollbar) {
+            var $ulCopy = $ul.clone(true);
+            $root.empty().addClass(hiddenScrollbarClass);
+            $scrollable = $('<div></div>').appendTo($root)
+                .addClass(hiddenScrollbarInnerClass)
+                .on('scroll', onScroll)
+                .append($ulCopy);
+            $ul = $('.'+ulClass);
+        }
+        else {
+            $scrollable = $root;
+        }
+
+
         $(c.liClass).each(function(i, li){
             var $li = $(li),
                 id = _this.data[i].id;
@@ -295,7 +314,7 @@ var ContentList = (function(){
             $li.addClass(liClass).attr(urankIdAttr, id);
             $li.find(c.liTitle).addClass(liTitleClass);
 
-            var $rankingDiv = $li.find(c.liRankingContainer).addClass(liRankingContainerClass).css('visibility', 'hidden');
+            var $rankingDiv = $li.find(c.liRankingContainer).empty().addClass(liRankingContainerClass).css('visibility', 'hidden');
             $("<div></div>").appendTo($rankingDiv).addClass(rankingPosClass);
             $("<div></div>").appendTo($rankingDiv).addClass(rankingPosMovedClass);
 
@@ -305,22 +324,23 @@ var ContentList = (function(){
             bindEventHandlers($li, id);
         });
 
-       // liHoveredClass = c.liHoverClass == '' ? liHoveredClass : c.liHoverClass;
+        liHoveredClass = c.liHoverClass == '' ? liHoveredClass : c.liHoverClass;
         liLightBackgroundClass = c.liLightBackgroundClass == '' ? liLightBackgroundClass : c.liLightBackgroundClass;
         liDarkBackgroundClass = c.liDarkBackgroundClass == '' ? liDarkBackgroundClass : c.liDarkBackgroundClass;
 
     };
 
 
-    var buildDefaultList = function(data) {
+    var buildDefaultList = function() {
 
-        $listContainer = $('<div></div>').appendTo($root)
-            .addClass(listContainerClass)
+        $root.empty().addClass(hiddenScrollbarClass);
+        $scrollable = $('<div></div>').appendTo($root)
+            .addClass(hiddenScrollbarInnerClass)
             .on('scroll', onScroll);
 
-        var $ul = $('<ul></ul>').appendTo($listContainer).addClass(ulClass +' '+ ulClassDefault);
+        $ul = $('<ul></ul>').appendTo($scrollable).addClass(ulClass +' '+ ulClassDefault);
 
-        data.forEach(function(d, i){
+        _this.data.forEach(function(d, i){
             // li element
             var $li = $('<li></li>', { 'urank-id': d.id }).appendTo($ul).addClass(liClass +' '+ liClassDefault);
             // ranking section
@@ -332,8 +352,8 @@ var ContentList = (function(){
             $('<h3></h3>', { id: 'urank-list-li-title-' + i, class: liTitleClass +' '+ liTitleClassDefault, html: d.title, title: d.title + '\n' + d.description }).appendTo($titleDiv);
             // buttons section
             var $buttonsDiv = $("<div></div>").appendTo($li).addClass(liButtonsContainerClass);
-            $("<span>").appendTo($buttonsDiv).addClass(watchiconClass+' '+watchiconClassDefault+' '+watchiconOffClass);
-            $("<span>").appendTo($buttonsDiv).addClass(faviconClass+' '+faviconClassDefault+' '+faviconOffClass);
+            $("<span>").appendTo($buttonsDiv).addClass(watchiconClass+' '+watchiconDefaultClass+' '+watchiconOffClass);
+            $("<span>").appendTo($buttonsDiv).addClass(faviconClass+' '+faviconDefaultClass+' '+faviconOffClass);
             // Subtle animation
             $li.animate({'top': 5}, {
                 'complete': function(){
@@ -343,24 +363,24 @@ var ContentList = (function(){
                 }
             });
         });
-    }
+    };
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Prototype methods
 
     var _build = function(data, opt) {
-
+        this.originalData = data.slice();
         this.data = data.slice();
         this.selectedKeywords = [];
         this.status = RANKING_STATUS.no_ranking;
         this.opt = opt;
-        $root = $(s.root).empty().addClass(rootClasses);
+        $root = $(s.root).addClass(contentListClass);
 
         if(this.opt.custom)
             buildCustomList();
         else
-            buildDefaultList(this.data);
+            buildDefaultList();
 
         formatTitles();
         updateLiBackground();
@@ -379,18 +399,18 @@ var ContentList = (function(){
         this.selectedKeywords = selectedKeywords.map(function(k){ return k.stem });
         this.status = status;
 
-        var resortingDuration = 1500,
-            resortingEasing = 'swing',
+        var resortDelay = 1500,
             unchangedDuration = 1000,
             unchangedEasing = 'linear',
-            removeDelay = 3000,
-            timeout;
+            removeDelay = 3000;
 
         stopAnimation();
         this.deselectAllListItems();
         formatTitles(colorScale);
         showRankingPositions();
         hideUnrankedListItems();
+
+        $ul.addClass(ulPaddingBottomclass);
 
         var updateNew = function(){
             updateLiBackground();
@@ -401,12 +421,7 @@ var ContentList = (function(){
         var updateUpdated = function(){
             updateLiBackground();
             animateResortEffect();
-            _this.timeoutCallback = function(){
-                console.log('update');
-                sort();
-                _this.animationTimeout = null;
-            };
-            return setTimeout(sort, resortingDuration);
+            return setTimeout(sort, resortDelay);
         };
 
         var updateUnchanged = function(){
@@ -422,15 +437,21 @@ var ContentList = (function(){
         //  (list is resorted according to last ranking state)
         this.animationTimeout = updateFunc[this.status].call(this);
 
-        setTimeout(function() {
-            removeMovingStyle();
-        }, removeDelay);
+        setTimeout(removeMovingStyle, removeDelay);
     };
 
 
 
     var _reset = function() {
-        this.build(this.data, this.opt);
+        //this.build(this.data, this.opt);
+        this.data = this.originalData.slice();
+        this.selectedKeywords = [];
+        updateLiBackground();
+        sort();
+        formatTitles();
+        $('.'+liClass).show().find('.'+liRankingContainerClass).css('visibility', 'hidden');
+
+        $ul.removeClass(ulPaddingBottomclass);
     };
 
 
@@ -471,6 +492,7 @@ var ContentList = (function(){
                 $li.removeClass(liDarkBackgroundClass).removeClass(liLightBackgroundClass).addClass(liUnrankedClass);
             $li.css({ display: '', opacity: ''});
         });
+        $ul.removeClass(ulPaddingBottomclass);
         _this.multipleHighlightMode = true;
     };
 
@@ -507,25 +529,37 @@ var ContentList = (function(){
 
 
     var _destroy = function() {
-        $root.empty().removeClass(rootClasses);
+        if(!this.opt || !this.opt.custom) return;
+
+        if(!this.opt.custom)
+            $root.empty().removeClass(contentListClass+' '+hiddenScrollbarClass);
+        else {
+            if($root.hasClass(hiddenScrollbarClass)) {
+                var $ulCopy = $ul.clone(true);
+                $root.empty().removeClass(hiddenScrollbarClass).append($ulCopy);
+            }
+            $root.removeClass(contentListClass);
+            $('.'+ulClass).removeClass(ulClass);
+            $('.'+liClass).removeAttr(urankIdAttr)
+                .removeClass(liClass+' '+liLightBackgroundClass+' '+liDarkBackgroundClass+' '+liUnrankedClass+' '+liMovingUpClass+' '+liMovingDownClass+' '+liNotMovingClass);
+            $('.'+liRankingContainerClass).empty().removeClass(liRankingContainerClass);
+            $('.'+liTitleClass).removeClass(liTitleClass);
+            $('.'+watchiconClass).removeClass(watchiconClass+' '+watchiconOffClass+' '+watchiconOnClass);
+            $('.'+faviconClass).removeClass(faviconClass+' '+faviconOffClass+' '+faviconOnClass);
+        }
     };
 
 
     var _scrollTo = function(scroll) {
-        //console.log('content list scroll to = ' + scroll);
-        $listContainer.off('scroll', onScroll)
+        $scrollable.off('scroll', onScroll)
             .scrollTop(scroll)
             .on('scroll', onScroll);
-        //console.log('scrolled to = ' + $listContainer.scrollTop());
     };
 
     var _getListHeight = function() {
-        return $listContainer.find('.'+ulClass).height();
+        return $ul.height();
     };
 
-    var _getContainerHeight = function() {
-        return $listContainer.height();
-    }
 
     // Prototype
     ContentList.prototype = {
@@ -543,8 +577,7 @@ var ContentList = (function(){
         clearEffects: _clearEffects,
         destroy: _destroy,
         scrollTo: _scrollTo,
-        getListHeight: _getListHeight,
-        getContainerHeight: _getContainerHeight
+        getListHeight: _getListHeight
     };
 
     return ContentList;

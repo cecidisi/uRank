@@ -5,32 +5,12 @@ var VisCanvas = (function(){
     // Classes
     var viscanvasClass = 'urank-viscanvas',
         viscanvasContainerClass = 'urank-viscanvas-container',
-        visCanvasMessageClass = 'urank-viscanvas-message';
+        visCanvasMessageClass = 'urank-viscanvas-message',
+        hiddenScrollbarClass = 'urank-hidden-scrollbar',
+        hiddenScrollbarInnerClass = 'urank-hidden-scrollbar-inner';
     // Helper
-    var $root, $visContainer;
+    var $root = $(''), $scrollable = $(''), $visContainer = $('');
 
-    var customScrollOptions = {
-        axis: 'y',
-        theme: 'light',
-        autoHideScrollbar: true,
-        scrollEasing: 'linear',
-        mouseWheel: {
-            enable: true,
-            axis: 'y'
-        },
-        keyboard: {
-            enable: true
-        },
-        advanced: {
-            updateOnContentResize: true
-        },
-        callbacks: {
-            whileScrolling: function() {
-                var scroll = this.mcs.top;
-                s.onScroll.call(this, _this, scroll);
-            }
-        }
-    };
 
     var onScroll = function(event) {
         event.stopPropagation();
@@ -47,40 +27,54 @@ var VisCanvas = (function(){
             onItemMouseLeave: function(id){},
             onScroll: function(scroll){}
         }, arguments);
-        $root = $(s.root);
     }
 
 
-    var _build = function(opt) {
+    var _build = function(height, opt) {
+        this.height = height;
         $root = $(s.root).empty().addClass(viscanvasClass);
-        $visContainer = $('<div></div>').appendTo($root).addClass(viscanvasContainerClass);
+
+        //  Set scrolling
+        if(opt.misc.hideScrollbar) {
+            $root.addClass(hiddenScrollbarClass);
+            $scrollable = $('<div></div>').appendTo($root).addClass(hiddenScrollbarInnerClass);
+        }
+        else {
+            $scrollable = $root;
+        }
+        $scrollable.on('scroll', onScroll);
+        $visContainer = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerClass).height(this.height);
 
         var visModule = VIS_MODULES[opt.module] || VIS_MODULES.ranking;
-        this.clear();
         this.vis = new visModule($.extend({}, s, { root: '.'+viscanvasContainerClass }, opt.customOpt));
+        this.vis.build();
 
-        /*if(opt.customScrollBars)
-            $root.mCustomScrollbar(customScrollOptions);*/
-
-        $root.on('scroll', onScroll);
         return this;
     };
 
 
-    var _update = function(rankingModel, colorScale, listHeight, containerHeight) {
-        $root.scrollTo('top');
-        this.vis.update(rankingModel, colorScale, listHeight, containerHeight);
+    var _update = function(rankingModel, colorScale, listHeight) {
+        $scrollable.scrollTo('top');
+        this.vis.update(rankingModel, colorScale, listHeight);
+        $visContainer.height(this.vis.getHeight());
+
         return this;
     };
 
-    var _resize = function(){
-        if(this.vis) this.vis.resize();
+    var _resize = function(listHeight){
+        if(this.vis) this.vis.resize(listHeight);
         return this;
     };
 
     var _clear = function(){
         if(this.vis) this.vis.clear();
     //    $root.append("<p class='" + visCanvasMessageClass + "'>" + STR_NO_VIS + "</p>");
+        return this;
+    };
+
+    var _reset = function() {
+        if(this.vis) this.vis.reset();
+        $visContainer.height(this.height);
         return this;
     };
 
@@ -111,17 +105,18 @@ var VisCanvas = (function(){
 
     var _clearEffects = function() {
         if(this.vis) if(this.vis) this.vis.clearEffects();
+        $visContainer.css('height', '');
         return this;
     };
 
     var _destroy = function() {
         if(this.vis) this.vis.clear();
-        $root.removeClass(viscanvasClass);
+        $root.removeClass(viscanvasClass+' '+hiddenScrollbarClass);
         return this;
     };
 
     var _scrollTo = function(offset) {
-        $root.off('scroll', onScroll)
+        $scrollable.off('scroll', onScroll)
             .scrollTop(offset)
             .on('scroll', onScroll);
     };
@@ -131,6 +126,7 @@ var VisCanvas = (function(){
         build: _build,
         update: _update,
         clear: _clear,
+        reset: _reset,
         resize: _resize,
         selectItem: _selectItem,
         deselectAllItems: _deselectAllItems,

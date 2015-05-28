@@ -1,6 +1,6 @@
 var DocViewer = (function(){
 
-    var $root = $('');
+    var _this;
     // Settings
     var s = {};
     // Classes
@@ -11,6 +11,10 @@ var DocViewer = (function(){
         contentSectionClass = 'urank-docviewer-content-section';
     // Id prefix
     var detailItemIdPrefix = '#urank-docviewer-details-';
+    // Selectors
+    var $root = $(''),
+        $detailsSection = $(''),
+        $contentSection = $('');
     // Helper
     var customScrollOptions = {
         axis: 'y',
@@ -32,25 +36,26 @@ var DocViewer = (function(){
 
     function DocViewer(arguments) {
         s = $.extend({
-            root: '',
-            facetsToShow: ['year']
+            root: ''
         }, arguments);
     }
 
 
     var _build = function(opt) {
 
-        var containerClasses = (opt.defaultBlockStyle) ? docViewerContainerClass +' '+ defaultDocViewerContainerClass : docViewerContainerClass;
+        this.opt = opt.misc;
+
+        var containerClasses = (this.opt.defaultBlockStyle) ? docViewerContainerClass +' '+ defaultDocViewerContainerClass : docViewerContainerClass;
         $root = $(s.root).empty().addClass(containerClasses);
 
         // Append details section, titles and placeholders for doc details
-        var $detailsSection = $("<div class='" + detailsSectionClass + "'></div>").appendTo($root);
+        $detailsSection = $("<div class='" + detailsSectionClass + "'></div>").appendTo($root);
 
         var $titleContainer = $('<div></div>').appendTo($detailsSection);
         $("<label>Title:</label>").appendTo($titleContainer);
         $("<h3 id='urank-docviewer-details-title'></h3>").appendTo($titleContainer);
 
-        s.facetsToShow.forEach(function(facetName){
+        this.opt.facetsToShow.forEach(function(facetName){
             var $facetContainer = $('<div></div>').appendTo($detailsSection);
             $("<label>" + facetName.capitalizeFirstLetter() + ":</label>").appendTo($facetContainer);
             $("<span id='urank-docviewer-details-" + facetName + "'></span>").appendTo($facetContainer);
@@ -58,12 +63,12 @@ var DocViewer = (function(){
 
         // Append content section for snippet placeholder
         var $contentSectionOuter = $('<div></div>').appendTo($root).addClass(contentSectionOuterClass);
-        var $contentSection = $('<div></div>').appendTo($contentSectionOuter).addClass(contentSectionClass);
+        $contentSection = $('<div></div>').appendTo($contentSectionOuter).addClass(contentSectionClass);
         $('<p></p>').appendTo($contentSection);
 
         $root.on('mousedown', function(event){ event.stopPropagation(); });
 
-        if(opt.customScrollBars)
+        if(this.opt.customScrollBars)
             $contentSectionOuter.css('overflowY', 'hidden').mCustomScrollbar(customScrollOptions);
     };
 
@@ -80,31 +85,30 @@ var DocViewer = (function(){
         $(detailItemIdPrefix + 'title').html(getStyledText(document.title, keywords, colorScale));
 
         var getFacet = function(facetName, facetValue){
-            console.log(parseDate(facetValue));
             return facetName == 'year' ? parseDate(facetValue) : facetValue;
         };
 
-        s.facetsToShow.forEach(function(facet){
+        var facets = (this.opt && this.opt.facetsToShow) ? this.opt.facetsToShow : [];
+        facets.forEach(function(facet){
             //console.log(getFacet(facet, document.facets[facet]));
             //$(detailItemIdPrefix + '' + facet).html(getFacet(facet, document.facets[facet]));
             $(detailItemIdPrefix + '' + facet).html(document.facets[facet]);
         });
-        //console.log(getStyledText(document.description, keywords, colorScale));
-        $('.' + contentSectionClass + ' p').html(getStyledText(document.description, keywords, colorScale));
-        $('.' + contentSectionClass + ' p').hide();
-        $('.' + contentSectionClass + ' p').fadeIn('slow');
-        $('.' + contentSectionClass).scrollTo('top');
+
+        var $p = $('<p></p>').appendTo($contentSection).html(getStyledText(document.description, keywords, colorScale));
+        $p.hide().fadeIn('slow').scrollTo('top');
     };
 
 
     var _clear = function(){
         // Clear details section
         $(detailItemIdPrefix + 'title').empty();
-        s.facetsToShow.forEach(function(facet){
+        var facets = (this.opt && this.opt.facetsToShow) ? this.opt.facetsToShow : [];
+        facets.forEach(function(facet){
             $(detailItemIdPrefix + '' + facet).empty();
         });
         // Clear content section
-        $('.' + contentSectionClass + ' p').hide();
+        $contentSection.empty();
     };
 
 

@@ -44,23 +44,30 @@ var Urank = (function(){
     var defaultLoadOptions = {
         tagCloud : {
             module: 'default',      // default || landscape
-            defaultBlockStyle: true,
+            misc: {
+                defaultBlockStyle: true,
+                customScrollBars: true
+            }
         },
         contentList: {
             custom: false,
             customOptions: {     //  only used when contentListType.custom = true
                 selectors: {
+                    root: '',
                     ul: '',
                     liClass: '',
                     liTitle: '',
                     liRankingContainer: '',  // will be formatted
-                    watchicon: '',           // used if misc.addWatchicon = true - will be formatted
-                    favicon: ''              // used if misc.addFavicon = true - will be formatted
+                    watchicon: '',           // adds watchicon in placeholder
+                    favicon: ''              // adds favicon in placeholder
                 },
-                misc: {
+                classes: {
                     liHoverClass: '',
                     liLightBackgroundClass: '',
                     liDarkBackgroundClass: ''
+                },
+                misc: {
+                    hideScrollbar: false
                 }
             },
         },
@@ -70,17 +77,25 @@ var Urank = (function(){
                 lightBackgroundColor: '',
                 darkBackgroundColor: ''
             },
+            misc: {
+                hideScrollbar: true
+            }
         },
         tagBox: {
-            defaultBlockStyle: true,
+            misc: {
+                defaultBlockStyle: true
+            }
         },
         docViewer: {
-            defaultBlockStyle: true,
+            misc: {
+                defaultBlockStyle: true,
+                customScrollBars: true,
+                facetsToShow: []
+            }
         },
         misc: {
             tagColorArray: tagColorRange,
             queryTermColorArray: queryTermColorRange,
-            customScrollBars: true
         }
     };
 
@@ -137,18 +152,18 @@ var Urank = (function(){
             _this.selectedId = STR_UNDEFINED;
 
             //  Build blocks
-            var buildOpt = {
-                contentList: $.extend(o.contentList, { customScrollBars: o.misc.customScrollBars }),
-                tagCloud:    $.extend(o.tagCloud, { customScrollBars: o.misc.customScrollBars }),
+/*            var buildOpt = {
+                contentList: o.contentList,
+                tagCloud:    o.tagCloud, { customScrollBars: o.misc.customScrollBars }),
                 tagBox:      $.extend(o.tagBox, { customScrollBars: o.misc.customScrollBars }),
                 visCanvas:   $.extend(o.visCanvas, { customScrollBars: o.misc.customScrollBars }),
                 docViewer:   $.extend(o.docViewer, { customScrollBars: o.misc.customScrollBars })
-            };
-            contentList.build(_this.data, buildOpt.contentList);
-            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, buildOpt.tagCloud, _this.keywordsDict);
-            tagBox.build(buildOpt.tagBox);
-            visCanvas.build(buildOpt.visCanvas);
-            docViewer.build(buildOpt.docViewer);
+            };*/
+            contentList.build(_this.data, o.contentList);
+            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, o.tagCloud, _this.keywordsDict);
+            tagBox.build(o.tagBox);
+            visCanvas.build(contentList.getListHeight(), o.visCanvas);
+            docViewer.build(o.docViewer);
 
             //  Bind event handlers to resize window and undo effects on random click
             $(window).off('resize', EVTHANDLER.onResize).resize(EVTHANDLER.onResize);
@@ -173,7 +188,7 @@ var Urank = (function(){
             var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode).getRanking();
             var status = _this.rankingModel.getStatus();
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
-            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), contentList.getContainerHeight());
+            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight());
             docViewer.clear();
             tagCloud.clearEffects();
 
@@ -227,8 +242,7 @@ var Urank = (function(){
             tagCloud.documentHintClicked(index);
             var idsArray = _this.keywords[index].inDocument;
             contentList.highlightListItems(idsArray);
-            visCanvas.highlightItems(idsArray);
-            visCanvas.resize(contentList.getListHeight());
+            visCanvas.highlightItems(idsArray).resize(contentList.getListHeight());
 
             s.onDocumentHintClick.call(this, index);
         },
@@ -297,7 +311,7 @@ var Urank = (function(){
         onRootClick: function(event) {
             if(event.which == 1) {
                 contentList.clearEffects();
-                visCanvas.clearEffects();
+                visCanvas.clearEffects().resize(contentList.getListHeight());
                 docViewer.clear();
             }
         },
@@ -326,11 +340,12 @@ var Urank = (function(){
             s.onRankByMaximumScore.call(this);
         },
 
-        onReset: function() {
+        onReset: function(event) {
+            if(event) event.stopPropagation();
             contentList.reset();
             tagCloud.reset();
             tagBox.clear();
-            visCanvas.clear();
+            visCanvas.reset();
             docViewer.clear();
             _this.rankingModel.reset();
             _this.selectedId = STR_UNDEFINED;
@@ -339,6 +354,7 @@ var Urank = (function(){
         },
 
         onDestroy: function() {
+            console.log('destroy');
             tagCloud.destroy();
             tagBox.destroy();
             contentList.destroy();
@@ -350,8 +366,8 @@ var Urank = (function(){
             tagCloud.clear();
             tagBox.clear();
             docViewer.clear();
-            contentList.destroy();
-            visCanvas.destroy();
+/*            contentList.destroy();
+            visCanvas.destroy();*/
         }
     };
 

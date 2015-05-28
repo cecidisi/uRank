@@ -7,11 +7,18 @@
 ************************************************************************************************/
 
 /* default */
-.urank-tagcloud-container {
+.urank-tagcloud {
   /*  overflow-y: auto;*/
   /*  padding: 8px 2px;*/
 }
 
+.urank-tagcloud-default {
+    /*background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+    border: 6px solid rgba(170, 170, 170, 1);
+    box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;*/
+    background: -webkit-linear-gradient(top, rgba(175, 175, 175, 1), rgba(170, 170, 170, 1));
+    box-shadow: inset .1em .1em .5em #aaa, inset -.1em -.1em .5em #aaa;
+}
 
 
 .urank-tagcloud-tag-container-outer {
@@ -264,26 +271,8 @@
 **********************************************************************************************************************/
 
 
-.urank-list {
-    display: inline-block;
-    vertical-align: top;
-    overflow-x: hidden;
-    overflow-y: hidden;
-}
-
-.urank-list-default {}
-
-.urank-list-container {
-    height: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    margin-right: -100px;
-    padding-right: 84px;
-}
-
-
-.urank-list-ul {
-    padding-bottom: 49px;
+.urank-list-ul-padding-bottom {
+    padding-bottom: 50px;
 }
 
 .urank-list-ul-default {
@@ -293,8 +282,7 @@
     margin-left: 1px;
     padding: 0;
     list-style: none;
-    display:block;
-    padding-bottom: 49px;
+    display: block;
 }
 
 
@@ -638,17 +626,15 @@ Document Panel (right) - for visualizing highlighted text
 *
 ***********************************************************************************************************************/
 
-/*  Custom scrollbar   */
-
-.mCSB_container {
-    margin-right: 2px !important;
-};
-
-.mCSB_scrollTools {
-    width: 4px !important;
+.urank-hidden-scrollbar {
+    overflow: hidden !important;
 }
 
-/*#mCSB_1_scrollbar_vertical .mCSB_dragger{
-    width: 4px;
-}*/
 
+.urank-hidden-scrollbar-inner {
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-right: -100px;
+    padding-right: 84px;
+}
