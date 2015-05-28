@@ -116,7 +116,7 @@ var ContentList = (function(){
             var formattedTitle = (d.title.length > 60) ? (d.title.substring(0, 56) + '...') : d.title + '';
             formattedTitle = (_this.selectedKeywords.length == 0) ? formattedTitle : getStyledText(formattedTitle, _this.selectedKeywords, colorScale);
             //$(liItem +''+ d.id).find('.'+liTitleClass).html(formattedTitle);
-            $('.'+liClass+'['+urankIdAttr+'='+d.id+']').find('.'+liTitleClass).html(formattedTitle);
+            $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').find('.'+liTitleClass).html(formattedTitle);
         });
     }
 
@@ -127,7 +127,7 @@ var ContentList = (function(){
         _this.data.forEach(function(d, i) {
             var backgroundClass = (i % 2 == 0) ? liLightBackgroundClass : liDarkBackgroundClass;
             //$(liItem +''+ d.id).addClass(backgroundClass);
-            $('.'+liClass+'['+urankIdAttr+'='+d.id+']').addClass(backgroundClass);
+            $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').addClass(backgroundClass);
         });
     };
 
@@ -150,7 +150,7 @@ var ContentList = (function(){
         _this.data.forEach(function(d, i){
             if(d.overallScore > 0){
                 //var rankingDiv = $(liItem + '' + d.id).find('.'+liRankingContainerClass);
-                var rankingDiv = $('.'+liClass+'['+urankIdAttr+'='+d.id+']').find('.'+liRankingContainerClass);
+                var rankingDiv = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').find('.'+liRankingContainerClass);
                 rankingDiv.css('visibility', 'visible');
                 rankingDiv.find('.'+rankingPosClass).text(d.rankingPos);
                 rankingDiv.find('.'+rankingPosMovedClass).css('color', color(d)).text(posMoved(d));
@@ -163,7 +163,7 @@ var ContentList = (function(){
         _this.data.forEach(function(d){
             var display = d.rankingPos > 0 ? '' : 'none';
             //$(liItem + '' + d.id).css('display', display);
-            $('.'+liClass+'['+urankIdAttr+'='+d.id+']').css('display', display);
+            $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').css('display', display);
         });
         _this.multipleHighlightMode = false;
     };
@@ -191,7 +191,7 @@ var ContentList = (function(){
         var liHtml = [];
 
         _this.data.forEach(function(d, i){
-            var $current = $('.'+liClass+'['+urankIdAttr+'='+d.id+']').css('top', '');
+            var $current = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').css('top', '');
             var $clon = $current.clone(true);
             liHtml.push($clon);
             $current.remove();
@@ -210,7 +210,7 @@ var ContentList = (function(){
 
         _this.data.forEach(function(d, i){
 
-            var $item = $('.'+liClass+'['+urankIdAttr+'='+d.id+']');
+            var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
             if(d.rankingPos > 0) {
                 var shift = (i+1) * 5;
                 var duration = timeLapse * (i+1);
@@ -239,7 +239,7 @@ var ContentList = (function(){
         _this.data.forEach(function(d, i){
             if(d.rankingPos > 0) {
                 //var $item = $(liItem +''+ d.id);
-                var $item = $('.'+liClass+'['+urankIdAttr+'='+d.id+']');
+                var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
                 var itemTop = $item.position().top;
                 var shift = listTop +  acumHeight - itemTop;
                 var movingClass = (d.positionsChanged > 0) ? liMovingUpClass : ((d.positionsChanged < 0) ? liMovingDownClass : '');
@@ -259,7 +259,7 @@ var ContentList = (function(){
 
         _this.data.forEach(function(d, i) {
             //var $item = $(liItem +''+ d.id);
-            var $item = $('.'+liClass+'['+urankIdAttr+'='+d.id+']');
+            var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
             var startDelay = (i+1) * 30;
 
             setTimeout(function() {
@@ -439,7 +439,7 @@ var ContentList = (function(){
         stopAnimation();
         $('.'+liClass).css("opacity", "0.3");
         //$(liItem + '' + id).css("opacity", "1");
-        $('.'+liClass+'['+urankIdAttr+'='+id+']').css("opacity", "1");
+        $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').css("opacity", "1");
     };
 
 
@@ -451,13 +451,13 @@ var ContentList = (function(){
     // receives actual index
     var _hover = function(id) {
         //$(liItem +''+ id).addClass(liHoveredClass);
-        $('.'+liClass+'['+urankIdAttr+'='+id+']').addClass(liHoveredClass);
+        $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').addClass(liHoveredClass);
     };
 
 
     var _unhover = function(id) {
         //$(liItem +''+ id).removeClass(liHoveredClass);
-        $('.'+liClass+'['+urankIdAttr+'='+id+']').removeClass(liHoveredClass);
+        $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').removeClass(liHoveredClass);
     };
 
 
@@ -466,7 +466,7 @@ var ContentList = (function(){
         $('.'+liClass).css('opacity', .2);
         idArray.forEach(function(id){
             //var $li = $(liItem+''+id);
-            var $li = $('.'+liClass+'['+urankIdAttr+'='+id+']');
+            var $li = $('.'+liClass+'['+urankIdAttr+'="'+id+'"]');
             if(!$li.is(':visible'))
                 $li.removeClass(liDarkBackgroundClass).removeClass(liLightBackgroundClass).addClass(liUnrankedClass);
             $li.css({ display: '', opacity: ''});
@@ -483,7 +483,7 @@ var ContentList = (function(){
 
     var _toggleFavicon = function(id){
         //var favIcon = $(liItem + '' + id).find(' .' + faviconClass);
-        var favIcon = $('.'+liClass+'['+urankIdAttr+'='+id+']').find(' .' + faviconClass);
+        var favIcon = $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').find(' .' + faviconClass);
         var classToAdd = favIcon.hasClass(faviconOffClass) ? faviconOnClass : faviconOffClass;
         var classToRemove = classToAdd === faviconOnClass ? faviconOffClass : faviconOnClass;
         favIcon.switchClass(classToRemove, classToAdd);
@@ -491,7 +491,7 @@ var ContentList = (function(){
 
 
     var _toggleWatchListItem = function(id){
-        var $li = $('.'+liClass+'['+urankIdAttr+'='+id+']');
+        var $li = $('.'+liClass+'['+urankIdAttr+'="'+id+'"]');
         var watchIcon = $li.find(' .' + watchiconClass);
         var classToAdd = watchIcon.hasClass(watchiconOffClass) ? watchiconOnClass : watchiconOffClass;
         var classToRemove = classToAdd === watchiconOnClass ? watchiconOffClass : watchiconOnClass;

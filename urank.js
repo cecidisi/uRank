@@ -112,9 +112,8 @@ var Urank = (function(){
             //  Clean documents and add them to the keyword extractor
             _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
 
-            var indexCounter = 0;
-            _this.data.forEach(function(d){
-                d.index = indexCounter++;
+            _this.data.forEach(function(d, i){
+                d.index = i;
                 d.title = d.title.clean();
                 d.description = d.description.clean();
                 var document = (d.description) ? d.title +'. '+ d.description : d.title;
@@ -131,7 +130,7 @@ var Urank = (function(){
 
             //  Assign collection keywords and set other necessary variables
             _this.keywords = keywordExtractor.getCollectionKeywords();
-            _this.keywordsDict = keywordExtractor.getCollectionKeywordsDict();
+            _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
             _this.rankingMode = RANKING_MODE.overall_score;
             _this.rankingModel.clear().setData(_this.data);
             _this.selectedKeywords = [];

@@ -26,16 +26,16 @@ var KeywordExtractor = (function(){
         this.collectionKeywords = [];
         this.collectionKeywordsDict = {};
 
-        stemmer = natural.PorterStemmer, //natural.LancasterStemmer;
+        stemmer = natural.PorterStemmer; //natural.LancasterStemmer;
         stemmer.attach();
-        tokenizer = new natural.WordTokenizer,
-        nounInflector = new natural.NounInflector(),
+        tokenizer = new natural.WordTokenizer;
+        nounInflector = new natural.NounInflector();
         nounInflector.attach();
         //tfidf = new natural.TfIdf(),
-        stopWords = natural.stopwords,
-        pos = new Pos(),
-        lexer = new pos.Lexer(),
-        tagger = new pos.Tagger(),
+        stopWords = natural.stopwords;
+        pos = new Pos();
+        lexer = new pos.Lexer();
+        tagger = new pos.Tagger();
     }
 
 
@@ -171,15 +171,14 @@ var KeywordExtractor = (function(){
                 return 0;
             });
 
-            if(_.keys(keywordDict[keyword].variations).length == 0)
-                keywordDict[keyword].term = getRepresentativeTerm(keywordDict[keyword]);
-            else
-                console.log(keyword + ' does not have any variation');
+            // get human-readable term for each stem key in the dictionary
+            keywordDict[keyword].term = getRepresentativeTerm(keywordDict[keyword]);
 
+            // store each key-value in an array
             collectionKeywords.push(keywordDict[keyword]);
         });
 
-
+        // sort keywords in array by document frequency
         collectionKeywords = collectionKeywords
             //.filter(function(ck){ return ck.repeated >= minRepetitions })
             .sort(function(k1, k2){
@@ -197,9 +196,13 @@ var KeywordExtractor = (function(){
             k.term = getRepresentativeTerm(k);
         });*/
 
+/*        console.log('dictionary');
+        console.log(keywordDict);
+        console.log('array');
+        console.log(collectionKeywords);*/
+
         return { array: collectionKeywords, dict: keywordDict };
     };
-
 
 
 
@@ -260,6 +263,9 @@ var KeywordExtractor = (function(){
     var getRepresentativeTerm = function(k){
 
         var keys = _.keys(k.variations);
+
+        if(keys.length == 0)
+            return 'ERROR';
 
         // Only one variations
         if(keys.length == 1)
@@ -328,7 +334,7 @@ var KeywordExtractor = (function(){
         getCollectionKeywords: function() {
             return this.collectionKeywords;
         },
-        getColelctionKeywordsDictionary: function() {
+        getCollectionKeywordsDictionary: function() {
             return this.collectionKeywordsDict;
         },
         clear: function() {
@@ -337,11 +343,6 @@ var KeywordExtractor = (function(){
             this.documentKeywords = [];
             this.collectionKeywords = [];
             this.collectionKeywordsDict = {};
-        },
-        getKeywordsForSubset: function(documentIndices, minDocFrequency) {
-            var collectionSubset = this.collection.filter(function(d, i){ return documentIndices.indexOf(i) > -1 });
-            var documentKeywordsSubset = this.documentKeywords.filter(function(dk, i){ return documentIndices.indexOf(i) > -1 });
-            return extractCollectionKeywords(collectionSubset, documentKeywordsSubset, minDocFrequency);
         }
     };
 
