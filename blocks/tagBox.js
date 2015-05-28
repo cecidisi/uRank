@@ -21,6 +21,13 @@ var TagBox = (function(){
     //  Helpers
     var $root, $tagContainer;
 
+    var onTagboxChanged = function(){
+        setTimeout(function(){
+            s.onChange.call(this, _this.selectedKeywords)   // Bind onChange event handler for custom event
+            if(_this.selectedKeywords.length == 0)
+                $tagContainer.append('<p>' + STR_DROP_TAGS_HERE + '</p>');
+        }, 1);
+    };
 
     function Tagbox(arguments) {
 
@@ -88,11 +95,8 @@ var TagBox = (function(){
 
         $root = $(s.root).addClass(tagboxClasses);
         $tagContainer = $('<div></div>').appendTo($root).addClass(tagboxContainerClass)
-            .off().on(tagBoxChangeEvent, function(){
-                s.onChange.call(this, _this.selectedKeywords)   // Bind onChange event handler for custom event
-                if(_this.selectedKeywords.length == 0)
-                    $tagContainer.append('<p>' + STR_DROP_TAGS_HERE + '</p>');
-            })
+            .off(tagBoxChangeEvent, onTagboxChanged)
+            .on(tagBoxChangeEvent, onTagboxChanged)
             .droppable(this.droppableOptions)                       // bind droppable behavior to tag box;
             .append('<p>' + STR_DROP_TAGS_HERE + '</p>');
     };

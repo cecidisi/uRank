@@ -131,6 +131,7 @@ var Urank = (function(){
 
             //  Assign collection keywords and set other necessary variables
             _this.keywords = keywordExtractor.getCollectionKeywords();
+            _this.keywordsDict = keywordExtractor.getCollectionKeywordsDict();
             _this.rankingMode = RANKING_MODE.overall_score;
             _this.rankingModel.clear().setData(_this.data);
             _this.selectedKeywords = [];
@@ -145,7 +146,7 @@ var Urank = (function(){
                 docViewer:   $.extend(o.docViewer, { customScrollBars: o.misc.customScrollBars })
             };
             contentList.build(_this.data, buildOpt.contentList);
-            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, buildOpt.tagCloud, keywordExtractor);
+            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, buildOpt.tagCloud, _this.keywordsDict);
             tagBox.build(buildOpt.tagBox);
             visCanvas.build(buildOpt.visCanvas);
             docViewer.build(buildOpt.docViewer);
@@ -409,6 +410,9 @@ var Urank = (function(){
             }
         };
 
+        this.data = [];
+        this.keywords = [];
+        this.keywordsDict = {};
         this.rankingModel = new RankingModel();
 
         contentList = new ContentList(options.contentList);

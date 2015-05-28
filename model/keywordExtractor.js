@@ -1,15 +1,9 @@
 
 var KeywordExtractor = (function(){
 
-    var s = {},
-        stemmer = natural.PorterStemmer, //natural.LancasterStemmer;
-        tokenizer = new natural.WordTokenizer,
-        nounInflector = new natural.NounInflector(),
-        tfidf = new natural.TfIdf(),
-        stopWords = natural.stopwords,
-        pos = new Pos(),
-        lexer = new pos.Lexer(),
-        tagger = new pos.Tagger(),
+    var _this,
+        s = {},
+        stemmer, tokenizer, nounInflector, tfidf, stopWords, pos, lexer, tagger,
         POS = {
             NN: 'NN',           // singular noun
             NNS: 'NNS',         // plural noun
@@ -26,13 +20,22 @@ var KeywordExtractor = (function(){
             minRepetitionsProxKeywords: 4
         }, arguments);
 
+        _this = this;
         this.collection = [];
         this.documentKeywords = [];
         this.collectionKeywords = [];
+        this.collectionKeywordsDict = {};
 
+        stemmer = natural.PorterStemmer, //natural.LancasterStemmer;
         stemmer.attach();
+        tokenizer = new natural.WordTokenizer,
+        nounInflector = new natural.NounInflector(),
         nounInflector.attach();
-
+        //tfidf = new natural.TfIdf(),
+        stopWords = natural.stopwords,
+        pos = new Pos(),
+        lexer = new pos.Lexer(),
+        tagger = new pos.Tagger(),
     }
 
 
@@ -135,41 +138,47 @@ var KeywordExtractor = (function(){
 
     /////////////////////////////////////////////////////////////////////////////
 
-    var extractGlobalKeywords = function(collection, documentKeywords, minDocFrequency) {
+    var extractCollectionKeywords = function(collection, documentKeywords, minDocFrequency) {
 
         minDocFrequency = minDocFrequency ? minDocFrequency : s.minDocFrequency;
-        var keywordDictionary = getKeywordDictionary(collection, documentKeywords, minDocFrequency);
+        var keywordDict = getKeywordDictionary(collection, documentKeywords, minDocFrequency);
 
-        // get keyword variations
+        // get keyword variations (actual terms that match the same stem)
         collection.forEach(function(d){
             d.tokens.forEach(function(token){
                 var stem = token.stem();
-                if(keywordDictionary[stem] && stopWords.indexOf(token.toLowerCase()) == -1)
-                    keywordDictionary[stem].variations[token] =
-                        keywordDictionary[stem].variations[token] ? keywordDictionary[stem].variations[token] + 1 : 1;
+                if(keywordDict[stem] && stopWords.indexOf(token.toLowerCase()) == -1)
+                    keywordDict[stem].variations[token] =
+                        keywordDict[stem].variations[token] ? keywordDict[stem].variations[token] + 1 : 1;
             });
         });
 
         // compute keywords in proximity
-        keywordDictionary = computeKeywordsInProximity(collection, keywordDictionary);
+        keywordDict = computeKeywordsInProximity(collection, keywordDict);
         var collectionKeywords = [];
 
-        // object to array
-        _.keys(keywordDictionary).forEach(function(keyword){
+        _.keys(keywordDict).forEach(function(keyword){
+            // Put keywords in proximity in sorted array
             var proxKeywords = [];
-            _.keys(keywordDictionary[keyword].keywordsInProximity).forEach(function(proxKeyword){
-                var proxKeywordsRepetitions = keywordDictionary[keyword].keywordsInProximity[proxKeyword];
+            _.keys(keywordDict[keyword].keywordsInProximity).forEach(function(proxKeyword){
+                var proxKeywordsRepetitions = keywordDict[keyword].keywordsInProximity[proxKeyword];
                 if(proxKeywordsRepetitions >= s.minRepetitionsProxKeywords)
                     proxKeywords.push({ stem: proxKeyword, repeated: proxKeywordsRepetitions });
             });
-            keywordDictionary[keyword].keywordsInProximity = proxKeywords.sort(function(proxK1, proxK2){
+            keywordDict[keyword].keywordsInProximity = proxKeywords.sort(function(proxK1, proxK2){
                 if(proxK1.repeated < proxK2.repeated) return 1;
                 if(proxK1.repeated > proxK2.repeated) return -1;
                 return 0;
             });
 
-            collectionKeywords.push(keywordDictionary[keyword]);
+            if(_.keys(keywordDict[keyword].variations).length == 0)
+                keywordDict[keyword].term = getRepresentativeTerm(keywordDict[keyword]);
+            else
+                console.log(keyword + ' does not have any variation');
+
+            collectionKeywords.push(keywordDict[keyword]);
         });
+
 
         collectionKeywords = collectionKeywords
             //.filter(function(ck){ return ck.repeated >= minRepetitions })
@@ -179,16 +188,16 @@ var KeywordExtractor = (function(){
                 return 0;
             });
 
-        collectionKeywords.forEach(function(k, i){
+/*        collectionKeywords.forEach(function(k, i){
             if(_.keys(k.variations).length == 0) {
                 console.log(k);
                 var ii = _.findIndex(collection, function(d){ return d.id == k.inDocument[0]; });
                 console.log(collection[ii]);
             }
             k.term = getRepresentativeTerm(k);
-        });
+        });*/
 
-        return collectionKeywords;
+        return { array: collectionKeywords, dict: keywordDict };
     };
 
 
@@ -196,12 +205,12 @@ var KeywordExtractor = (function(){
 
     var getKeywordDictionary = function(_collection, _documentKeywords, _minDocFrequency) {
 
-        var keywordDictionary = {};
+        var keywordDict = {};
         _documentKeywords.forEach(function(docKeywords, i){
 
             _.keys(docKeywords).forEach(function(stemmedTerm){
-                if(!keywordDictionary[stemmedTerm]) {
-                    keywordDictionary[stemmedTerm] = {
+                if(!keywordDict[stemmedTerm]) {
+                    keywordDict[stemmedTerm] = {
                         stem: stemmedTerm,
                         term: '',
                         repeated: 1,
@@ -211,45 +220,40 @@ var KeywordExtractor = (function(){
                     };
                 }
                 else {
-                    keywordDictionary[stemmedTerm].repeated++;
-                    keywordDictionary[stemmedTerm].inDocument.push(_collection[i].id);
+                    keywordDict[stemmedTerm].repeated++;
+                    keywordDict[stemmedTerm].inDocument.push(_collection[i].id);
                 }
             });
         });
 
-
-        _.keys(keywordDictionary).forEach(function(keyword){
-            if(keywordDictionary[keyword].repeated < _minDocFrequency)
-                delete keywordDictionary[keyword];
+        _.keys(keywordDict).forEach(function(keyword){
+            if(keywordDict[keyword].repeated < _minDocFrequency)
+                delete keywordDict[keyword];
         });
-        return keywordDictionary;
+        return keywordDict;
     };
 
 
-    var computeKeywordsInProximity = function(_collection, _keywordDictionary) {
+    var computeKeywordsInProximity = function(_collection, _keywordDict) {
         _collection.forEach(function(d){
-            tokenizer.tokenize(d.text).forEach(function(word, i, text){
+            d.tokens.forEach(function(token, i, tokens){
 
-                var current = word.stem();
-                if(_keywordDictionary[current]) {   // current word is keyword
+                var current = token.stem();
+                if(_keywordDict[current]) {   // current word is keyword
 
                     for(var j=i-s.maxKeywordDistance; j <= i+s.maxKeywordDistance; j++){
-                        var prox = text[j] ? text[j].stem() : STR_UNDEFINED;
+                        var prox = tokens[j] ? tokens[j].stem() : STR_UNDEFINED;
 
-                        if(_keywordDictionary[prox] && current != prox) {
-                            var proxStem = prox.stem();
-                            _keywordDictionary[current].keywordsInProximity[proxStem] =
-                                _keywordDictionary[current].keywordsInProximity[proxStem] ?
-                                _keywordDictionary[current].keywordsInProximity[proxStem] + 1 : 1;
+                        if(_keywordDict[prox] && current != prox) {
+                            //var proxStem = prox.stem();
+                            _keywordDict[current].keywordsInProximity[prox] = _keywordDict[current].keywordsInProximity[prox] ? _keywordDict[current].keywordsInProximity[prox] + 1 : 1;
                         }
                     }
                 }
-
-
             });
         });
 
-        return _keywordDictionary;
+        return _keywordDict;
     };
 
 
@@ -309,9 +313,10 @@ var KeywordExtractor = (function(){
         processCollection: function() {
             tfidf = new natural.TfIdf();
             var timestamp = $.now();
-            this.documentKeywords = [];
             this.documentKeywords = extractDocumentKeywords(this.collection);
-            this.collectionKeywords = extractGlobalKeywords(this.collection, this.documentKeywords);
+            var collectionKeywords = extractCollectionKeywords(this.collection, this.documentKeywords);
+            this.collectionKeywords = collectionKeywords.array;
+            this.collectionKeywordsDict = collectionKeywords.dict;
 
             var miliseconds = $.now() - timestamp;
             var seconds = parseInt(miliseconds / 1000);
@@ -323,10 +328,20 @@ var KeywordExtractor = (function(){
         getCollectionKeywords: function() {
             return this.collectionKeywords;
         },
-        getGlobalKeywordsForSubset: function(documentIndices, minDocFrequency) {
+        getColelctionKeywordsDictionary: function() {
+            return this.collectionKeywordsDict;
+        },
+        clear: function() {
+            tfidf = null;
+            this.collection = [];
+            this.documentKeywords = [];
+            this.collectionKeywords = [];
+            this.collectionKeywordsDict = {};
+        },
+        getKeywordsForSubset: function(documentIndices, minDocFrequency) {
             var collectionSubset = this.collection.filter(function(d, i){ return documentIndices.indexOf(i) > -1 });
             var documentKeywordsSubset = this.documentKeywords.filter(function(dk, i){ return documentIndices.indexOf(i) > -1 });
-            return extractGlobalKeywords(collectionSubset, documentKeywordsSubset, minDocFrequency);
+            return extractCollectionKeywords(collectionSubset, documentKeywordsSubset, minDocFrequency);
         }
     };
 

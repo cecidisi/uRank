@@ -177,83 +177,61 @@ var ContentList = (function(){
     var stopAnimation = function(){
         $('.'+liClass).stop(true, true);
         removeMovingStyle();
-        // clear timeout and execute callback immediately
-        /*console.log(_this.animationTimeout);
-        console.log(_this.timeoutCallback);*/
-        if(_this.animationTimeout){
-            clearTimeout(_this.animationTimeout);
-         //   if(_this.timeoutCallback) _this.timeoutCallback();
-        }
-        _this.timeoutCallback = null;
+        if(_this.animationTimeout) clearTimeout(_this.animationTimeout);
     };
 
 
 
     var sort = function(){
 
-        //$root.parent().scrollTo('top');
-        $listContainer.scrollTop();
-        var liHtml = new Array();
+        var start = $.now();
+
+        $root.parent().scrollTo('top');
+        //$listContainer.scrollTop();
+        var liHtml = [];
 
         _this.data.forEach(function(d, i){
-            //var $current = $(liItem +''+ d.id);
-            var $current = $('.'+liClass+'['+urankIdAttr+'='+d.id+']');
-            $current.css('top', '');
-            var outer = $current.outerHTML();
-            liHtml.push(outer);
+            var $current = $('.'+liClass+'['+urankIdAttr+'='+d.id+']').css('top', '');
+            var $clon = $current.clone(true);
+            liHtml.push($clon);
             $current.remove();
         });
 
-        var oldHtml = "";
-        _this.data.forEach(function(d, i){
-            $('.'+ulClass).html(oldHtml + '' + liHtml[i]);
-            oldHtml = $('.'+ulClass).html();
+        var $ul = $listContainer.find('.'+ulClass).empty();
+        liHtml.forEach(function(li){
+            $ul.append(li);
         });
-        // Re-binds on click event to list item. Removing and re-appending DOM elements destroys the bindings to event handlers
-        $('.'+liClass).each(function(i, li){
-            bindEventHandlers($(li), _this.data[i].id);
-        });
-
     };
 
-    var animateAccordionEffect = function(initialDuration, timeLapse, easing) {
-        initialDuration = initialDuration || 100;
-        timeLapse = timeLapse || 20;
-        easing = easing || 'swing';
 
-        var acumHeight = 0;
-        var listTop = $listContainer.position().top;
+    var animateAccordionEffect = function() {
+        var timeLapse = 50;
+        var easing = 'swing';
 
         _this.data.forEach(function(d, i){
 
-            //var $item = $(liItem +''+ d.id);
             var $item = $('.'+liClass+'['+urankIdAttr+'='+d.id+']');
-            var itemTop = $item.position().top;
-            var newPos = listTop + acumHeight - itemTop;
-
             if(d.rankingPos > 0) {
                 var shift = (i+1) * 5;
-                var shiftedPos = newPos + shift;
-                var duration = initialDuration + timeLapse * i;
+                var duration = timeLapse * (i+1);
 
-                $item.animate({top: shiftedPos}, 0, easing)
+                $item.animate({ top: shift }, 0, easing)
                 .queue(function(){
-                    $(this).animate({top: newPos}, duration, easing);
+                    $(this).animate({ top: 0 }, duration, easing)
                 })
                 .queue(function(){
-                    $(this).animate({top: newPos}, 0);
+                    $(this).css('top', '');
                 })
                 .dequeue();
             }
-            acumHeight += $item.height();
         });
     };
 
 
 
-    var animateResortEffect = function(duration, easing) {
-        duration = duration || 1500;
-        easing = easing || 'swing';
+    var animateResortEffect = function() {
+        var duration = 1500;
+        var easing = 'swing';
 
         var acumHeight = 0;
         var listTop = $listContainer.position().top;
@@ -269,15 +247,15 @@ var ContentList = (function(){
                 $item.addClass(movingClass);
                 $item.animate({"top": '+=' + shift+'px'}, duration, easing);
 
-                acumHeight += $item.height();
+                acumHeight += $item.fullHeight();
             }
         });
     };
 
 
-    var animateUnchangedEffect = function (duration, easing) {
-        duration = duration || 1000;
-        easing = easing || 'linear';
+    var animateUnchangedEffect = function () {
+        var duration = 1000;
+        var easing = 'linear';
 
         _this.data.forEach(function(d, i) {
             //var $item = $(liItem +''+ d.id);
@@ -295,7 +273,7 @@ var ContentList = (function(){
 
 
 
-    var buildCustom = function() {
+    var buildCustomList = function() {
 
         var c = {
             ul: _this.opt.customOpt.selectors.ul,
@@ -331,9 +309,41 @@ var ContentList = (function(){
         liLightBackgroundClass = c.liLightBackgroundClass == '' ? liLightBackgroundClass : c.liLightBackgroundClass;
         liDarkBackgroundClass = c.liDarkBackgroundClass == '' ? liDarkBackgroundClass : c.liDarkBackgroundClass;
 
-        formatTitles();
-        updateLiBackground();
     };
+
+
+    var buildDefaultList = function(data) {
+
+        $listContainer = $('<div></div>').appendTo($root)
+            .addClass(listContainerClass)
+            .on('scroll', onScroll);
+
+        var $ul = $('<ul></ul>').appendTo($listContainer).addClass(ulClass +' '+ ulClassDefault);
+
+        data.forEach(function(d, i){
+            // li element
+            var $li = $('<li></li>', { 'urank-id': d.id }).appendTo($ul).addClass(liClass +' '+ liClassDefault);
+            // ranking section
+            var $rankingDiv = $("<div></div>").appendTo($li).addClass(liRankingContainerClass).css('visibility', 'hidden');
+            $("<div></div>").appendTo($rankingDiv).addClass(rankingPosClass);
+            $("<div></div>").appendTo($rankingDiv).addClass(rankingPosMovedClass);
+            // title section
+            var $titleDiv = $("<div></div>").appendTo($li).addClass(liTitleContainerClass);
+            $('<h3></h3>', { id: 'urank-list-li-title-' + i, class: liTitleClass +' '+ liTitleClassDefault, html: d.title, title: d.title + '\n' + d.description }).appendTo($titleDiv);
+            // buttons section
+            var $buttonsDiv = $("<div></div>").appendTo($li).addClass(liButtonsContainerClass);
+            $("<span>").appendTo($buttonsDiv).addClass(watchiconClass+' '+watchiconClassDefault+' '+watchiconOffClass);
+            $("<span>").appendTo($buttonsDiv).addClass(faviconClass+' '+faviconClassDefault+' '+faviconOffClass);
+            // Subtle animation
+            $li.animate({'top': 5}, {
+                'complete': function(){
+                    $(this).animate({'top': ''}, (i+1)*100, 'swing', function(){
+                        bindEventHandlers($li, d.id);
+                    });
+                }
+            });
+        });
+    }
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -345,40 +355,13 @@ var ContentList = (function(){
         this.selectedKeywords = [];
         this.status = RANKING_STATUS.no_ranking;
         this.opt = opt;
-        if(this.opt.custom)
-            return buildCustom();
-
         $root = $(s.root).empty().addClass(rootClasses);
-        $listContainer = $('<div></div>').appendTo($root)
-            .addClass(listContainerClass)
-            .on('scroll', onScroll);
 
-        var $ul = $('<ul></ul>').appendTo($listContainer).addClass(ulClass +' '+ ulClassDefault);
+        if(this.opt.custom)
+            buildCustomList();
+        else
+            buildDefaultList(this.data);
 
-        this.data.forEach(function(d, i){
-            // li element
-            var $li = $('<li></li>', { 'urank-id': d.id }).appendTo($ul).addClass(liClass +' '+ liClassDefault);
-            //$li.attr(urankIdAttr, d.id);
-            // ranking container
-            var $rankingDiv = $("<div></div>").appendTo($li).addClass(liRankingContainerClass).css('visibility', 'hidden');
-            $("<div></div>").appendTo($rankingDiv).addClass(rankingPosClass);
-            $("<div></div>").appendTo($rankingDiv).addClass(rankingPosMovedClass);
-            // title container
-            var $titleDiv = $("<div></div>").appendTo($li).addClass(liTitleContainerClass);
-            $('<h3></h3>', { id: 'urank-list-li-title-' + i, class: liTitleClass +' '+ liTitleClassDefault, html: d.title, title: d.title + '\n' + d.description }).appendTo($titleDiv);
-            // buttons container
-            var $buttonsDiv = $("<div></div>").appendTo($li).addClass(liButtonsContainerClass);
-            $("<span>").appendTo($buttonsDiv).addClass(watchiconClass+' '+watchiconClassDefault+' '+watchiconOffClass);
-            $("<span>").appendTo($buttonsDiv).addClass(faviconClass+' '+faviconClassDefault+' '+faviconOffClass);
-            // Subtle animation
-            $li.animate({'top': 5}, {
-                'complete': function(){
-                    $(this).animate({"top": 0}, (i+1)*100, 'swing', function(){
-                        bindEventHandlers($li, d.id);
-                    });
-                }
-            });
-        });
         formatTitles();
         updateLiBackground();
     };
@@ -396,10 +379,7 @@ var ContentList = (function(){
         this.selectedKeywords = selectedKeywords.map(function(k){ return k.stem });
         this.status = status;
 
-        var accordionInitialDuration = 100,
-            accordionTimeLapse = 50,
-            accordionEasing = 'swing',
-            resortingDuration = 1500,
+        var resortingDuration = 1500,
             resortingEasing = 'swing',
             unchangedDuration = 1000,
             unchangedEasing = 'linear',
@@ -415,18 +395,12 @@ var ContentList = (function(){
         var updateNew = function(){
             updateLiBackground();
             sort();
-            animateAccordionEffect(accordionInitialDuration, accordionTimeLapse, accordionEasing);
-            _this.timeoutCallback = function(){
-                console.log('new');
-               // sort();
-                _this.animationTimeout = null;
-            };
-            return setTimeout(_this.timeoutCallback, accordionInitialDuration + (accordionTimeLapse * data.length));
+            animateAccordionEffect();
         };
 
         var updateUpdated = function(){
             updateLiBackground();
-            animateResortEffect(resortingDuration, resortingEasing);
+            animateResortEffect();
             _this.timeoutCallback = function(){
                 console.log('update');
                 sort();
