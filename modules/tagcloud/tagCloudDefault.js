@@ -95,7 +95,20 @@ var TagCloudDefault = (function(){
                         $tag.find('.'+documentHintClass).css('visibility', 'visible').pin(documentHintPinOptions);
                         $tag.find('.'+keywordHintClass).css('visibility', 'hidden');
                     }
-                }
+                    /*else {
+                        $('.'+documentHintClass).trigger('mouseleave').pin(documentHintPinOptions).css('visibility', 'hidden');
+                          $('.'+keywordHintClass).trigger('mouseleave').pin(keywordHintPintOptions).css('visibility', 'hidden');
+
+                        $('.'+documentHintClass).parent().removeClass(activeClass);
+                        $('.'+keywordHintClass).parent().removeClass(activeClass);
+                    }*/
+                }/*,
+                onScroll: function() {
+                    if(!_this.proxKeywordsMode && !_this.docHintMode) {
+                        $('.'+documentHintClass).pin(documentHintPinOptions).trigger('mouseleave').parent().addClass(activeClass).trigger('mouseleave');
+                        $('.'+keywordHintClass).pin(keywordHintPintOptions).trigger('mouseleave').parent().addClass(activeClass).trigger('mouseleave');
+                    }
+                }*/
             }
         };
 
@@ -111,6 +124,11 @@ var TagCloudDefault = (function(){
         else if(_this.docHintMode) {
             $tag.find('.'+documentHintClass).css('visibility', 'visible').pin(documentHintPinOptions);
             $tag.find('.'+keywordHintClass).css('visibility', 'hidden');
+        }
+        else {
+            console.log('entra');
+      /*      $tag.find('.'+documentHintClass).css('visibility', 'hidden');
+            $tag.find('.'+keywordHintClass).css('visibility', 'hidden');*/
         }
     };
 
@@ -260,9 +278,9 @@ var TagCloudDefault = (function(){
             setTagProperties($tag);
         });
 
-        if(this.opt.customScrollBars)
+        if(this.opt.customScrollBars) {
             $outerTagContainer.mCustomScrollbar(customScrollOptions);
-        //$tagContainer = $('.'+tagContainerClass);
+        }
     };
 
 
@@ -330,8 +348,8 @@ var TagCloudDefault = (function(){
     var _hoverTag = function(index) {
         var $tag = $(tagIdPrefix + '' + index);
         $tag.css(tagHoverStyle);
-        $tag.find('.'+documentHintClass).pin(documentHintPinOptions);
-        $tag.find('.'+keywordHintClass).pin(keywordHintPintOptions);
+        $tag.find('.'+documentHintClass).pin(documentHintPinOptions).css('visibility', '');
+        $tag.find('.'+keywordHintClass).pin(keywordHintPintOptions).css('visibility', '');
     };
 
 
