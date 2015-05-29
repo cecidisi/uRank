@@ -95,6 +95,7 @@ var DocViewer = (function(){
             $(detailItemIdPrefix + '' + facet).html(document.facets[facet]);
         });
 
+        $contentSection.empty();
         var $p = $('<p></p>').appendTo($contentSection).html(getStyledText(document.description, keywords, colorScale));
         $p.hide().fadeIn('slow').scrollTo('top');
     };
