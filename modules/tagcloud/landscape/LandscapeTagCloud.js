@@ -51,7 +51,7 @@ var LandscapeTagCloud = (function(){
 		            var color = tagCloudColorScale(stem);
 		            var index= id.split("urank-tag-")[1];
 		            var rgbSequence = hexToR(color) + ', ' + hexToG(color) + ', ' + hexToB(color);
-		            landscapeController.stateCurrent.addUrankTagStyling(index, color);
+		            docIndices.stateCurrent.addUrankTagStyling(index, color);
            		}
             }
         },

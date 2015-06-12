@@ -39,9 +39,9 @@ var LandscapeController = (function(){
 		}
 		if(this.isReceivedDataPreviouseOne(data)) {
 
-			this.landscapeValuesData = prevExtractedDataObj.landscapeValuesData;
+			this.landscapeValuesData = prevExtractedDataObj.landscapeValuesData; 
 			this.landscapeVisData = this.dataProcessor.getProcessedLandscapeVisdata(this.landscapeValuesData);
-
+		
 		}
 		else {
 			this.dataProcessor.createInputForLandscape();
@@ -49,10 +49,10 @@ var LandscapeController = (function(){
 			var paramsConfig = this.dataProcessor.getLandscapParamsConfig();
 			//var test = JSON.parse(landscapeInputString);
 			this.landscapeValuesData = thematicLandscape.createLandscape(landscapeInputString, paramsConfig);
-			this.landscapeVisData = this.dataProcessor.getProcessedLandscapeVisdata(this.landscapeValuesData);
+			this.landscapeVisData = this.dataProcessor.getProcessedLandscapeVisdata(this.landscapeValuesData);		
 		}
 		this.landscapeTagCloudBuilder = landscapTagCloudBuilderCallBack;
-		prevExtractedDataObj.landscapeValuesData = this.landscapeValuesData;
+		prevExtractedDataObj.landscapeValuesData = this.landscapeValuesData; 
 		prevExtractedDataObj.prevReceivedData = data;
 		me = this;
 		prepareLandscape();
@@ -160,6 +160,7 @@ var LandscapeController = (function(){
 			.attr("width", widthLandscapeCloud)//
 			.attr("height", heightLandscapeCloud)//
 			.attr("overflow", "hidden")
+			.style("background-color", "#f1f1f1")
 			.style("float","left");
 		tagCloudCanvas = tagCloudSvg.append("g").attr("id", "landscapeTagsCloud");
 		//--------------------------------------------------
@@ -226,10 +227,11 @@ var LandscapeController = (function(){
 		landscapeBrush = d3.svg.brush()
 		.x(d3.scale.linear().range([0, landscapeConfig.getWidth()]))
 		.y(d3.scale.linear().range([0, landscapeConfig.getHeight()]))
-		.extent(brushExtent).on("brushstart", function() {
+		.extent(brushExtent).on("brushstart", function() {	
 			$('.'+tagClass).hide();
-			stateCurrent.clearTagCloud();
-		}).on("brushend", function() {
+			//stateCurrent.clearTagCloud(); 
+		}).on("brushend", function() { 
+		
 			var minBrushX = 0;
 			var maxBrushX = 0;
 			$('.'+tagClass).hide();
@@ -242,30 +244,34 @@ var LandscapeController = (function(){
 				}
 			});
 			if(maxBrushX > minBrushX) {
-				var documentIds = [];
+				var documentIds = []; 
 				var getCurrentlySelectetDocs = stateCurrent.getDocumentsWithinBrush();
 				$.each(getCurrentlySelectetDocs, function(docId, data) {
-					var id = parseInt( docId.split("_")[1]);
+					var id = parseInt( docId.split("_")[1]); 
 					documentIds.push(id);
 				});
-				var datasetList = me.dataProcessor.getDatasetByIds(documentIds);
+				var datasetList = me.dataProcessor.getDatasetByIds(documentIds); 
 				var tagCloundData =  me.dataProcessor.getTagCloudData(documentIds);
-
-				if(landscapeConfig.getLandscapeType() == "urankLandscape") {
+				
+				if(landscapeConfig.getLandscapeType() == "urankLandscape") {	
 					if( me.landscapeTagCloudBuilder != "" &&  me.landscapeTagCloudBuilder !== 'undefined') {
-						 me.landscapeTagCloudBuilder.call(this, tagCloundData);
+						 me.landscapeTagCloudBuilder.call(this, tagCloundData); 
 					}
 				}
 				me.stateCurrent.drawTagsCloud(tagCloundData);
 				if(landscapeConfig.getLandscapeType() != "urankLandscape") {
-					FilterHandler.setCurrentFilterCategories('category', datasetList, "tagCloaud", ["tags"]);
+					FilterHandler.clearList();
+					for(var i=0; i < datasetList.length; i++ ) {
+						FilterHandler.singleItemSelected(datasetList[i], true); 
+					}
 				}
 
+	
 			}
-
-
+			
+	
 		});
-	};
+	}; 
 
 
 

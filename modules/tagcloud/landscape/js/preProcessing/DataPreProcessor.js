@@ -3,7 +3,7 @@ var DataPreProcessor = (function(){
 	var dataObjectTextKey = "description";
 	var dataset = new Object();
 	var landscapeInputData = "";
-	var keywords; "";
+	var keywords; ""; 
 	var keywordExtractor = "";
 	var me = this;
 
@@ -12,7 +12,7 @@ var DataPreProcessor = (function(){
 		this.dataObjectTextKey = "description";
 		this.dataset = data;
 		this.landscapeInputData = "";
-		this.keywordExtractor = keywordExtractor;
+		this.keywordExtractor = keywordExtractor; 
 		this.keywords = keywords,
         dataset = data;
         me = this;
@@ -21,7 +21,7 @@ var DataPreProcessor = (function(){
 	// -----------------------------------------------------------------------
 	DataPreProcessor.prototype.createInputForLandscape = function() {
 		if(this.keywordExtractor == "") {
-			extractWeightedKeywords();
+			extractWeightedKeywords(); 
 		}
 		var cosineSimilarity = new CosineSimilarity();
 		var cosineSimBetweenAllDocuments = cosineSimilarity.getCosineSimilarties(this.dataset);
@@ -53,7 +53,7 @@ var DataPreProcessor = (function(){
 				documentKeywords.push(dataset[id].keywords);
 			}
 		}
-
+		
 		var tagSet = getTagsForGivenDocuments(documentsIds);
 		var tagCloud = []
 		var tagsNum = 15;
@@ -83,12 +83,12 @@ var DataPreProcessor = (function(){
 			tagObj.size= weight/counter;
 			if (landscapeConfig.getLandscapeType() == "urankLandscape") {
 				for(var index = 0; index < this.keywords.length; index++){
-					var keywordStem = this.keywords[index].stem;
+					var keywordStem = this.keywords[index].stem; 
 					if( keywordStem != stem) {
-						continue;
+						continue; 
 					}
 					else {
-						tagObj.index = index;
+						tagObj.index = index; 
 						tagCloud.push(tagObj);
 					}
 		      	}
@@ -96,7 +96,7 @@ var DataPreProcessor = (function(){
 			else {
 				tagCloud.push(tagObj);
 			}
-
+			
 		}
 		return tagCloud;
 	};
@@ -108,7 +108,7 @@ var DataPreProcessor = (function(){
 
 	// -----------------------------------------------------------------------
 	DataPreProcessor.prototype.getLandscapParamsConfig = function() {
-
+		
 		var fdPParameterSet = new Object();
 		fdPParameterSet["TEXT_SIMILARITY_STANDARD_SEPARATION"] = "TEXT_SIMILARITY_STANDARD_SEPARATION";
 		fdPParameterSet["TEXT_SIMILARITY_STRONG_SEPARATION"] = "TEXT_SIMILARITY_STRONG_SEPARATION";
@@ -120,28 +120,35 @@ var DataPreProcessor = (function(){
 		fdPParameterSet["ANGULAR_LD_SPACE"] = "ANGULAR_LD_SPACE";
 		fdPParameterSet["CUSTOM"] = "CUSTOM";
 		fdPParameterSet["TEXT_SIMILARITY_STANDARD_SEPARATION_USE_GIVEN_COORDS"] = "TEXT_SIMILARITY_STANDARD_SEPARATION_USE_GIVEN_COORDS";
+		currentParameter = fdPParameterSet["TEXT_SIMILARITY_STRONG_SEPARATION"]; 
+		if(landscapeConfig.getLandscapeType() != "urankLandscape") {	
+			var currentParameter = fdPParameterSet[$( "#landscapeAlgSelection option:selected" ).text()]; 
+		}
 		return JSON.stringify({
 			"peaks" : {
 				"peakRadius" : 0.2,
 				"minDistBeetwPeaks" : 0.4
 			},
 			"FDP" : {
-				"parameterSet": fdPParameterSet["TEXT_SIMILARITY_FAKE_CLUSTERS"]
+				"parameterSet":currentParameter
 			}
 		});
 	};
 
-	DataPreProcessor.prototype.getIndicesOfDocsBasedOnTag = function(tag) {
+	DataPreProcessor.prototype.getObjectsBasedOnTag = function(tag) {
 		var docIndices = [];
-		dataset.forEach(function(d){
-			var index = d.index;
+		var docData = []
+		dataset.forEach(function(d,index){
+			
 			if(Object.keys(d.keywords).indexOf(tag) != -1) {
 				docIndices.push(index);
+				docData.push(d);
 			}
         });
-        return docIndices;
+        
+        return {"indices": docIndices, "dataList":docData } ;
 	}
-
+	
 	DataPreProcessor.prototype.getDatasetByIds = function (documentsIds){
 
 		var documentDataset = [];
@@ -230,24 +237,24 @@ var DataPreProcessor = (function(){
 				numOfLabels = tempDataset.length  - 1;
 			}
 			var labelSet = tempDataset.slice(0,numOfLabels);
-			var labelSetNew = [];
+			var labelSetNew = []; 
 			if (landscapeConfig.getLandscapeType() == "urankLandscape") {
 				var test = me.keywords;
 				for(var index = 0; index < me.keywords.length; index++){
-					var keywordStem = me.keywords[index].stem;
+					var keywordStem = me.keywords[index].stem; 
 					for(var z=0; z < labelSet.length; z++) {
-						var stem = labelSet[z].stem;
+						var stem = labelSet[z].stem; 
 						if( keywordStem == stem) {
-							labelSet[z].index = index;
+							labelSet[z].index = index; 
 							labelSetNew.push(labelSet[z]);
-
+						
 						}
 					}
 		      	}
-		      	var labelSet = labelSetNew;
+		      	var labelSet = labelSetNew; 
 			}
-
-
+	
+			
 			var labelsText = [];
 			var keywords = [];
 			for(var x =0; x < labelSet.length; x++ ) {
@@ -278,20 +285,48 @@ var DataPreProcessor = (function(){
 
 	// -----------------------------------------------------------------------
 	var getTagsForGivenDocuments = function (documentsIds){
-
+        
 		var documentKeywords = [];
-		var dataLength = dataset.length;
+		var dataLength = dataset.length;	
+        var datasetNew = []; 
 		for (var j = 0; j < documentsIds.length; j++) {
-			var id = documentsIds[j];
-			if (dataLength > id) {
-				var d = dataset[id];
-				var test =   (d.description) ? d.title +'. '+ d.description : d.title;
-				documentKeywords.push(dataset[id].keywords);
+			var index = documentsIds[j];
+			if (dataLength > index) {
+				datasetNew.push(dataset[index]);
+			
 			}
 		}
-        return me.keywordExtractor.getGlobalKeywordsForSubset(documentsIds, 1);
-	};
+		var newPos = new Pos(); 
+		var arguments = {
+	        minRepetitions : (parseInt(dataset.length * 0.05) > 1) ? parseInt(dataset.length * 0.05) : 2, 
+	        minDocFrequency: 2
+        };
+        
+        var keywordExtractorNew = new KeywordExtractor(arguments);
+        var indexCounter = 0;
 
+		datasetNew.forEach(function(d) {
+			d.id = d.id.replace(/([^A-Za-z0-9[\]{}_.:-])\s?/g, '_');
+			d.index = indexCounter++;
+			d.isSelected = false;
+			d.title = d.title.clean();
+			if (d.description == null || d.description == 'undefined') {
+				d.description = "";
+			}
+			d.description = d.description.clean();
+			d.title = d.title.clean();
+			var document = (d.description) ? d.title + '. ' + d.description : d.title;
+			keywordExtractorNew.addDocument(document.removeUnnecessaryChars(), d.id);
+
+		});
+
+
+        keywordExtractorNew.processCollection();
+        datasetNew.keywords = keywordExtractorNew.getCollectionKeywords();
+        return  datasetNew.keywords;    
+             
+	};
+	
 
 	// -----------------------------------------------------------------------
 	var getProcessedVisdataDocuments = function(documents){
@@ -359,16 +394,16 @@ var DataPreProcessor = (function(){
 						break;
 					}
 				}
-
-
+				
+			
 				if (landscapeConfig.getLandscapeType() == "urankLandscape") {
 					for(var index = 0; index < me.keywords.length; index++){
-						var keywordterm = me.keywords[index].term;
+						var keywordterm = me.keywords[index].term; 
 						if( keywordterm == labelText) {
-							keywords = me.keywords[index];
-							keywords.index = index;
-							keywordsArrayObj.push(keywords);
-							break;
+							keywords = me.keywords[index]; 
+							keywords.index = index; 
+							keywordsArrayObj.push(keywords); 
+							break; 
 						}
 
 			      	}
@@ -388,7 +423,7 @@ var DataPreProcessor = (function(){
 
 		});
 
-
+		
 		return labels;
 	}
 
@@ -417,11 +452,6 @@ var DataPreProcessor = (function(){
 		return peaksWithMinBeetweenLength;
 
 	}
-
-
-
-
-
 
     return DataPreProcessor;
 })();

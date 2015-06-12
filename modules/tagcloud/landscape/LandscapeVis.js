@@ -3,12 +3,12 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 	var LANDSCAPE = {};
 	LANDSCAPE.Settings = new Settings('landscape');
 	var EEXCESS = EEXCESSobj || {};
-	var domRoot = root;
+	var domRoot = root; 
 	var Vis = visTemplate;
 	var data;
-	var previousData = [];
-	var prevLandscapeVisData = {};
-
+	var previousData = []; 
+	var prevLandscapeVisData = {}; 
+  	var receivedData_, mappingCombination_, iWidth_, iHeight_; 
     var x, y, xAxisChannel, yAxisChannel, colorChannel, data, keywords, selectedId = "undefined", flagLines = false;
 
   var options = {
@@ -38,7 +38,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 		return legendDomain;
 	};
 
-
+	
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,6 +58,77 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
     /*  Additional methods, if necessary*/
 
 	LANDSCAPE.Internal = {
+		
+		buildLandscapeAlgrSelectBox : function() {
+			var landscapeAlgrSelBox = '<div id="landscapeAlgrSelBox">'
+			var selectionBox = '<select id="landscapeAlgSelection">' + 
+								'<option class="ui-selected" value="TEXT_SIMILARITY_FAKE_CLUSTERS"  selected="selected">TEXT_SIMILARITY_FAKE_CLUSTERS</option>' +
+								'<option class="ui-selected" value="TEXT_SIMILARITY_STANDARD_SEPARATION">TEXT_SIMILARITY_STANDARD_SEPARATION</option>' +
+								 '<option class="ui-selected" value="TEXT_SIMILARITY_STRONG_SEPARATION">TEXT_SIMILARITY_STRONG_SEPARATION</option>' +
+								'<option class="ui-selected" value="CROSS_MEDIA_SIMILARITY">TEXT_SIMILARITY_WEAK_SEPARATION</option>' +						
+								 '<option class="ui-selected" value="ANGULAR_LD_SPACE">ANGULAR_LD_SPACE</option>' +		
+								 '<option class="ui-selected" value="TEXT_SIMILARITY_STANDARD_SEPARATION_USE_GIVEN_COORDS">TEXT_SIMILARITY_STANDARD_SEPARATION_USE_GIVEN_COORDS</option>' +
+								 '</select>'; 
+			
+			landscapeAlgrSelBox = landscapeAlgrSelBox + selectionBox + "</div>";																											
+		 	$(domRoot).append(landscapeAlgrSelBox); 
+			$("#landscapeAlgSelection").change(function(){
+				prevExtractedDataObj = {}
+			    LANDSCAPE.Render.draw(receivedData_, mappingCombination_, iWidth_, iHeight_);
+			});
+
+		}, 
+		removeSpecialCharacters : function(string) {
+			var dict = {
+		    '&lt;' : '', '&gt;' : '', '&#039;' : '', '&amp;' : '',
+		    '&quot;' : '', 'À' : 'A', 'Á' : 'A', 'Â' : 'A', 'Ã' : 'A', 'Ä' : 'Ae',
+		    '&Auml;' : 'A', 'Å' : 'A', 'Ā' : 'A', 'Ą' : 'A', 'Ă' : 'A', 'Æ' : 'Ae',
+		    'Ç' : 'C', 'Ć' : 'C', 'Č' : 'C', 'Ĉ' : 'C', 'Ċ' : 'C', 'Ď' : 'D', 'Đ' : 'D',
+		    'Ð' : 'D', 'È' : 'E', 'É' : 'E', 'Ê' : 'E', 'Ë' : 'E', 'Ē' : 'E',
+		    'Ę' : 'E', 'Ě' : 'E', 'Ĕ' : 'E', 'Ė' : 'E', 'Ĝ' : 'G', 'Ğ' : 'G',
+		    'Ġ' : 'G', 'Ģ' : 'G', 'Ĥ' : 'H', 'Ħ' : 'H', 'Ì' : 'I', 'Í' : 'I',
+		    'Î' : 'I', 'Ï' : 'I', 'Ī' : 'I', 'Ĩ' : 'I', 'Ĭ' : 'I', 'Į' : 'I',
+		    'İ' : 'I', 'Ĳ' : 'IJ', 'Ĵ' : 'J', 'Ķ' : 'K', 'Ł' : 'K', 'Ľ' : 'K',
+		    'Ĺ' : 'K', 'Ļ' : 'K', 'Ŀ' : 'K', 'Ñ' : 'N', 'Ń' : 'N', 'Ň' : 'N',
+		    'Ņ' : 'N', 'Ŋ' : 'N', 'Ò' : 'O', 'Ó' : 'O', 'Ô' : 'O', 'Õ' : 'O',
+		    'Ö' : 'Oe', '&Ouml;' : 'Oe', 'Ø' : 'O', 'Ō' : 'O', 'Ő' : 'O', 'Ŏ' : 'O',
+		    'Œ' : 'OE', 'Ŕ' : 'R', 'Ř' : 'R', 'Ŗ' : 'R', 'Ś' : 'S', 'Š' : 'S',
+		    'Ş' : 'S', 'Ŝ' : 'S', 'Ș' : 'S', 'Ť' : 'T', 'Ţ' : 'T', 'Ŧ' : 'T',
+		    'Ț' : 'T', 'Ù' : 'U', 'Ú' : 'U', 'Û' : 'U', 'Ü' : 'Ue', 'Ū' : 'U',
+		    '&Uuml;' : 'Ue', 'Ů' : 'U', 'Ű' : 'U', 'Ŭ' : 'U', 'Ũ' : 'U', 'Ų' : 'U',
+		    'Ŵ' : 'W', 'Ý' : 'Y', 'Ŷ' : 'Y', 'Ÿ' : 'Y', 'Ź' : 'Z', 'Ž' : 'Z',
+		    'Ż' : 'Z', 'Þ' : 'T', 'à' : 'a', 'á' : 'a', 'â' : 'a', 'ã' : 'a',
+		    'ä' : 'ae', '&auml;' : 'ae', 'å' : 'a', 'ā' : 'a', 'ą' : 'a', 'ă' : 'a',
+		    'æ' : 'ae', 'ç' : 'c', 'ć' : 'c', 'č' : 'c', 'ĉ' : 'c', 'ċ' : 'c',
+		    'ď' : 'd', 'đ' : 'd', 'ð' : 'd', 'è' : 'e', 'é' : 'e', 'ê' : 'e',
+		    'ë' : 'e', 'ē' : 'e', 'ę' : 'e', 'ě' : 'e', 'ĕ' : 'e', 'ė' : 'e',
+		    'ƒ' : 'f', 'ĝ' : 'g', 'ğ' : 'g', 'ġ' : 'g', 'ģ' : 'g', 'ĥ' : 'h',
+		    'ħ' : 'h', 'ì' : 'i', 'í' : 'i', 'î' : 'i', 'ï' : 'i', 'ī' : 'i',
+		    'ĩ' : 'i', 'ĭ' : 'i', 'į' : 'i', 'ı' : 'i', 'ĳ' : 'ij', 'ĵ' : 'j',
+		    'ķ' : 'k', 'ĸ' : 'k', 'ł' : 'l', 'ľ' : 'l', 'ĺ' : 'l', 'ļ' : 'l',
+		    'ŀ' : 'l', 'ñ' : 'n', 'ń' : 'n', 'ň' : 'n', 'ņ' : 'n', 'ŉ' : 'n',
+		    'ŋ' : 'n', 'ò' : 'o', 'ó' : 'o', 'ô' : 'o', 'õ' : 'o', 'ö' : 'oe',
+		    '&ouml;' : 'oe', 'ø' : 'o', 'ō' : 'o', 'ő' : 'o', 'ŏ' : 'o', 'œ' : 'oe',
+		    'ŕ' : 'r', 'ř' : 'r', 'ŗ' : 'r', 'š' : 's', 'ù' : 'u', 'ú' : 'u',
+		    'û' : 'u', 'ü' : 'ue', 'ū' : 'u', '&uuml;' : 'ue', 'ů' : 'u', 'ű' : 'u',
+		    'ŭ' : 'u', 'ũ' : 'u', 'ų' : 'u', 'ŵ' : 'w', 'ý' : 'y', 'ÿ' : 'y',
+		    'ŷ' : 'y', 'ž' : 'z', 'ż' : 'z', 'ź' : 'z', 'þ' : 't', 'ß' : 'ss',
+		    'ſ' : 'ss', 'ый' : 'iy', 'А' : 'A', 'Б' : 'B', 'В' : 'V', 'Г' : 'G',
+		    'Д' : 'D', 'Е' : 'E', 'Ё' : 'YO', 'Ж' : 'ZH', 'З' : 'Z', 'И' : 'I',
+		    'Й' : 'Y', 'К' : 'K', 'Л' : 'L', 'М' : 'M', 'Н' : 'N', 'О' : 'O',
+		    'П' : 'P', 'Р' : 'R', 'С' : 'S', 'Т' : 'T', 'У' : 'U', 'Ф' : 'F',
+		    'Х' : 'H', 'Ц' : 'C', 'Ч' : 'CH', 'Ш' : 'SH', 'Щ' : 'SCH', 'Ъ' : '',
+		    'Ы' : 'Y', 'Ь' : '', 'Э' : 'E', 'Ю' : 'YU', 'Я' : 'YA', 'а' : 'a',
+		    'б' : 'b', 'в' : 'v', 'г' : 'g', 'д' : 'd', 'е' : 'e', 'ё' : 'yo',
+		    'ж' : 'zh', 'з' : 'z', 'и' : 'i', 'й' : 'y', 'к' : 'k', 'л' : 'l',
+		    'м' : 'm', 'н' : 'n', 'о' : 'o', 'п' : 'p', 'р' : 'r', 'с' : 's',
+		    'т' : 't', 'у' : 'u', 'ф' : 'f', 'х' : 'h', 'ц' : 'c', 'ч' : 'ch',
+		    'ш' : 'sh', 'щ' : 'sch', 'ъ' : '', 'ы' : 'y', 'ь' : '', 'э' : 'e',
+		    'ю' : 'yu', 'я' : 'ya'
+			}
+
+	    	return string.replace(/[^\w ]/g, function(char) { return dict[char] || char; });
+		}
 
     };
 
@@ -79,34 +150,38 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 	*
 	* ***************************************************************************************************************/
 	LANDSCAPE.Render.draw = function( receivedData, mappingCombination, iWidth, iHeight ){
-		//receivedData = landscapeDemoData.data;
-
-		var color = d3.scale.category10();
+		//receivedData = landscapeDemoData.data; 
+					$("#div-landscape-wrap-legends").remove(); 
+		receivedData_ = JSON.parse(JSON.stringify(receivedData));
+		mappingCombination_ = mappingCombination;  
+		iWidth_ = iWidth;
+		iHeight_ = iHeight; 
+		var color = d3.scale.category10();		
 		LANDSCAPE.Ext.colorScale = color;
-
-        $("#eexcess_landscape_box").remove();
+		
+        $("#eexcess_landscape_box").remove(); 
         LANDSCAPE.Dimensions = LANDSCAPE.Settings.getDimensions(domRoot, iWidth, iHeight);
-        var landscapeWidth = LANDSCAPE.Dimensions.landscape.width;
-        var landscapeHeight = LANDSCAPE.Dimensions.landscape.height;
-        var tagCloundWidth = LANDSCAPE.Dimensions.tagCloud.width;
-        var tagCloundHeight = LANDSCAPE.Dimensions.tagCloud.height;
-        var width = LANDSCAPE.Dimensions.width;
-        var height = LANDSCAPE.Dimensions.height;
-
+        var landscapeWidth = LANDSCAPE.Dimensions.landscape.width-30; 
+        var landscapeHeight = LANDSCAPE.Dimensions.landscape.height; 
+        var tagCloundWidth = LANDSCAPE.Dimensions.tagCloud.width; 
+        var tagCloundHeight = LANDSCAPE.Dimensions.tagCloud.height; 
+        var width = LANDSCAPE.Dimensions.width; 
+        var height = LANDSCAPE.Dimensions.height; 
+        
 
         LANDSCAPE.Input = LANDSCAPE.Settings.getInitData(receivedData, mappingCombination);
 		colorChannel = LANDSCAPE.Input.colorChannel;
 		data 		 = LANDSCAPE.Input.data;
 		keywords	 = LANDSCAPE.Input.keywords;
-		selectedId = "undefined";
+		selectedId = "undefined"; 
 		flagLines = false;
-		facetBasedDocuments = {};
+		facetBasedDocuments = {}; 
 		for(var i=0; i < mappingCombination.length; i++) {
-			facetBasedDocuments[mappingCombination[i].facet] = {};
+			facetBasedDocuments[mappingCombination[i].facet] = {};  			
 		}
-
-		for(var index=0; index < receivedData.length; index++) {
-
+		
+		for(var index=0; index < receivedData.length; index++) {			
+			
 			for (var facetName in facetBasedDocuments) {
 			    if (receivedData[index].facets.hasOwnProperty(facetName)) {
 			       var facetAttribute = receivedData[index].facets[facetName];
@@ -124,7 +199,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 					}
 			    }
 			}
-
+			
 		}
 		var facetAttributes = []
 		for (var facetName in facetBasedDocuments) {
@@ -133,61 +208,61 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 
 		color = d3.scale.category10().domain(facetAttributes);
 		LANDSCAPE.Ext.colorScale = color;
-
+			
 
 		legendDomain = getLegendDomain(color.domain());
 
-
+  		if( !$('#landscapeAlgrSelBox').length ) {
+		  LANDSCAPE.Internal.buildLandscapeAlgrSelectBox();
+  		}
         var closeDiv = '</div>'
-        var landscapeBoxDiv = '<div id="eexcess_landscape_box">';
-        var landscapeHeader = '<div id="eexcess_landscape_vis_header">';
-        var landscapeMainVis = '<div id="eexcess_landscape_vis_main" style="width: '+ landscapeWidth+ 'px; height:'+landscapeHeight+'px; margin: auto" >';
-        var landscapeLabelsDragableDiv = "<div id ='dragableLandscapeLabels'>";
-        var landscapeTagCloudVis = '<div id="eexcess_landscape_tag_cloud" style="width: '+ tagCloundWidth+ 'px; height:'+tagCloundHeight+'px; margin: auto" >';
+        var landscapeBoxDiv = '<div id="eexcess_landscape_box">'; 
+        var landscapeHeader = '<div id="eexcess_landscape_vis_header">'; 
+        var landscapeMainVis = '<div id="eexcess_landscape_vis_main" style="width: '+ landscapeWidth+ 'px; height:'+landscapeHeight+'px; margin-left: 20px; margin-top:30px;  float:left;" >';
+        var landscapeLabelsDragableDiv = "<div id ='dragableLandscapeLabels'>"; 
+        var landscapeTagCloudVis = '<div id="eexcess_landscape_tag_cloud" style="width: '+ tagCloundWidth+ 'px; height:'+tagCloundHeight+'px;  margin-left: 20px; margin-top:30px;  float:left;" >';
       	var loadingLandscape = "<div id=\"loadingLandscape\" style=\"margin-top: "+ (height/2)+"px;\"></br><img src=\"uRank/modules/tagcloud/landscape/images/ajax-loader.gif\"/></div>";
-        var landscapeDiv = loadingLandscape + landscapeBoxDiv + landscapeLabelsDragableDiv +  closeDiv + landscapeHeader + closeDiv +  landscapeMainVis + closeDiv + landscapeTagCloudVis + closeDiv + closeDiv;
-
-		var legendWrapper = d3.select(domRoot).append("div").attr("id", "div-landscape-wrap-legends").style("width", width);
-		$(domRoot).append(landscapeDiv);
-
-
+        var landscapeDiv = loadingLandscape + landscapeBoxDiv + landscapeLabelsDragableDiv +  closeDiv + landscapeHeader + closeDiv +  landscapeMainVis + closeDiv + landscapeTagCloudVis + closeDiv + closeDiv; 
+		
+		var legendWrapper = d3.select(domRoot).append("div").attr("id", "div-landscape-wrap-legends").style("width", width); 
+		$(domRoot).append(landscapeDiv); 
+		
+	
 		 //  Initialize keyword extractor
-         var keywordExtractorOptions = { minRepetitions: (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5 };
+         var keywordExtractorOptions = { 
+         	minRepetitions: (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5,
+         	 
+         };
          var keywordExtractor = new KeywordExtractor(keywordExtractorOptions);
-
-         //  Clean documents and add them to the keyword extractor
-           var data = typeof data == 'string' ? JSON.parse(receivedData) : data.slice();
-            var indexCounter = 0;
-           data.forEach(function(d){
+               var indexCounter = 0;
+                data.forEach(function(d){           		
                 d.title = d.title.clean();
 				d.id = d.id.replace(/([^A-Za-z0-9[\]{}_.:-])\s?/g, '_');
 				if (d.description == null || d.description == 'undefined') {
 					d.description = "";
 				}
 				d.description = d.description.clean();
+				d.title = d.title.clean();
 				d.index = indexCounter++;
-                var document = (d.description) ? d.title +'. '+ d.description : d.title;
+				var document = (d.description) ? d.title +'. '+ d.description : d.title;
+				document =  LANDSCAPE.Internal.removeSpecialCharacters(document); 
                 keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id);
             });
-
-            //  Extract collection and document keywords
             keywordExtractor.processCollection();
-
-            //  Assign document keywords
             data.forEach(function(d, i){
                 d.keywords = keywordExtractor.listDocumentKeywords(i);
             });
-
+		
 		landscapeController = new LandscapeController(data, keywordExtractor);
         landscapeConfig = new LandscapeConfig();
-
+	  
 		setTimeout(function() {
 			landscapeConfig = new LandscapeConfig();
 			landscapeConfig.setLandscapeType("standaloneLandscape");
 			landscapeController.drawLandscape(data);
 			$("#loadingLandscape").remove();
 
-			landscapeController.stateCurrent.fillDocsColorFacetBased(facetBasedDocuments, color);
+			landscapeController.stateCurrent.fillDocsColorFacetBased(facetBasedDocuments, color); 		
 			legend = legendWrapper.selectAll(".legend")
 			 .data(legendDomain)
 			 .enter()
@@ -207,19 +282,19 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 			 .style("text-anchor", "end")
 			 .text(function(d) { return d.item; });
 			$("#loadingLandscape").remove();
-		}, 100);
+		}, 100); 
 	};
-
-
+	
+	
 	/**
 	 *	Legend events' handlers
 	 * */
 	LANDSCAPE.Evt.legendClicked = function( legendDatum, legendIndex ){
 		LANDSCAPE.Render.HighlightFilteredFacet( legendDatum.item, legendIndex, legendDatum.selected );
-
+		
 	};
-
-
+	
+	
 	LANDSCAPE.Evt.legendMouseOvered = function(d){
 		d3.select(this).select("div")
 			.style("border", "0.1em yellow solid")
@@ -229,8 +304,8 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 		d3.select(this).select("text")
 			.style("font-size", "0.9em");
 	};
-
-
+	
+	
 	LANDSCAPE.Evt.legendMouseOuted = function(d){
 		d3.select(this).select("div")
 			.style("border", function(){ if(d.selected) return "0.1em lime solid"; return "none"; })
@@ -239,18 +314,19 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 
 		d3.select(this).select("text")
 			.style("font-size", "0.85em");
-
+		
 	};
+	
 
-
-
-
+	
+	
 
 	LANDSCAPE.Render.deleteCurrentSelect = function(){
+		
 	};
-
+	
  	var currentOneLayer = null;
-
+	
 
 	/******************************************************************************************************************
 	*
@@ -258,6 +334,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 	*
 	* ***************************************************************************************************************/
 	LANDSCAPE.Render.reset = function(  ){
+		landscapeController.stateCurrent.heighlightDocumentsByIds([]);
 	};
 
 
@@ -269,6 +346,15 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 	*
 	* ***************************************************************************************************************/
 	LANDSCAPE.Render.highlightItems = function(indexArray){
+			landscapeController.stateCurrent.heighlightDocumentsByIds(indexArray);
+		var datasetList = landscapeController.dataProcessor.getDatasetByIds(indexArray); 
+		var tagCloundData =  landscapeController.dataProcessor.getTagCloudData(indexArray);
+		/*if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+			FilterHandler.clearList();
+			for(var i=0; i < datasetList.length; i++ ) {
+				FilterHandler.singleItemSelected(datasetList[i], true); 
+			}
+		} */
     };
 
 	LANDSCAPE.Render.HighlightFilteredFacet = function( facetValue, facetIndex, isSelected ){

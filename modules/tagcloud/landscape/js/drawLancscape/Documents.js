@@ -53,7 +53,7 @@ function Documents(documents, outsideDocuments) {
 	// -----------------------------------------------------------------------
 	Documents.prototype.drawDocuments = function(documents, docPoints) {
 		var idsMap = {};
-		var i = 0;
+		var index = 0;
 		if(Object.keys(documents).length > 0)  {
 				$.each(documents, function(documentId, docData) {
 					var x = docData['x'] * landscapeConfig.getWidth();
@@ -66,6 +66,7 @@ function Documents(documents, outsideDocuments) {
 					.attr("cx", x)
 					.attr("cy", y)
 					.attr("r", 4)//
+					.attr("index", docData.metadata.index)
 					.attr("color", "red")//
 					.style("fill", "red")
 					.on("mouseover", function(d, i) {
@@ -77,12 +78,16 @@ function Documents(documents, outsideDocuments) {
 						var color = d3.select(this).attr("color")//
 						d3.select(this).attr("r", 4);
 						d3.select(this).style("fill", color);
-					}).on("click", function(d, i) {
+					}).on("click", function(d) {
+						var i = d3.select(this).attr("index"); 
+						landscapeController.stateCurrent.heighlightDocumentsByIds([i]);
+						var datasetList = landscapeController.dataProcessor.getDatasetByIds([i]); 
+						FilterHandler.singleItemSelected(datasetList[0], false); 
 					}).append("title").text(function(d, i) {
-
-						return docData['title'];
-					});
-					i++;
+						return docData.metadata.title;
+					})
+					
+					index++;
 				})
 			}
 			this.documentIdsMap = idsMap;
