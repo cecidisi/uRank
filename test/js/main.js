@@ -72,19 +72,19 @@
         var datasetId = $("#select-dataset").val();
         setTimeout(function(){
             _this.dsm.getDataset(datasetId, function(dataset){
-                //  Test custom list
-                buildCustomList(dataset);
-                _this.urank.loadData(dataset, testOptions1);
-
-                //  Test landscape tagcloud
                 /*
-                _this.urank.loadData(dataset, {tagCloud: { module: 'landscape' }});
-                */
-
-                //  Default call
+                 *Test custom list
+                 */
+//                buildCustomList(dataset);
+//                _this.urank.loadData(dataset, testOptions1);
                 /*
+                 *    Test landscape tagcloud
+                 */
+//                _this.urank.loadData(dataset, {tagCloud: { module: 'landscape' }});
+                /*
+                 *    Default call
+                 */
                 _this.urank.loadData(dataset);
-                */
 
                 $('.processing-message').css('visibility', 'hidden');
             });
