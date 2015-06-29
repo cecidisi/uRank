@@ -1,6 +1,6 @@
 {
   "name": "urank",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": [
     "libs/natural-custom.js",
     "libs/pos/lexer.js",

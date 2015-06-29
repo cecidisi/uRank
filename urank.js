@@ -354,7 +354,6 @@ var Urank = (function(){
         },
 
         onDestroy: function() {
-            console.log('destroy');
             tagCloud.destroy();
             tagBox.destroy();
             contentList.destroy();

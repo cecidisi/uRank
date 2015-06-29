@@ -91,8 +91,9 @@ var TagBox = (function(){
     var _build = function(opt) {
 
         this.selectedKeywords = [];
-        var tagboxClasses = (opt.misc.defaultBlockStyle) ? tagboxClass +' '+ tagboxDefaultClass : tagboxClass;
+        this.destroy();
 
+        var tagboxClasses = (opt.misc.defaultBlockStyle) ? tagboxClass +' '+ tagboxDefaultClass : tagboxClass;
         $root = $(s.root).addClass(tagboxClasses);
         $tagContainer = $('<div></div>').appendTo($root).addClass(tagboxContainerClass)
             .off(tagBoxChangeEvent, onTagboxChanged)
@@ -165,8 +166,10 @@ var TagBox = (function(){
 
 
     var _destroy = function() {
-        $tagContainer.droppable('destroy');
-        $root.empty().removeClass(tagboxContainerClass);
+        if($(s.root).hasClass(tagboxClass)) {
+            $tagContainer.droppable('destroy');
+            $root.empty().removeClass(tagboxContainerClass);
+        }
     };
 
     // Prototype
