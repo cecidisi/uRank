@@ -260,6 +260,7 @@ function LandscapeLabels() {
 					.attr("dy", (textBoxPosY + (labelCounter * textBoxHeight))+15)//
 					.attr("depth", labelDepth)
 					.attr("color", labelColor)
+					.attr("stem", stem)
 					.style("font-size", (fontSize+labelWeight))
 					.style("fill", labelColor)
 					.style("font-weight", fontWeight)
@@ -274,7 +275,12 @@ function LandscapeLabels() {
 						d3.select(this).style("font-size", (fontSize+labelWeight))
 						d3.select(this).style("fill", "#FFBE3B")
 						d3.select(this).style("font-weight", "bold")
-						if(landscapeConfig.getLandscapeType() == "urankLandscape") {
+						var stem = d3.select(this).attr("stem"); 
+						var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 
+						if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+							landscapeController.stateCurrent.heighlightDocumentsByIds(tagDataset.indices);
+						}		
+						else if(landscapeConfig.getLandscapeType() == "urankLandscape") {
 							var i = parseInt(d3.select(this).attr("labelCounter"));
 							var label = d3.select(this).attr("text");
 							var tagIdPrefix = "urank-tag-";
@@ -292,8 +298,17 @@ function LandscapeLabels() {
 						var color = d3.select(this).attr("color")
 						d3.select(this).style("fill", color);
 						d3.select(this).style("font-weight", null)
+						if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+							landscapeController.stateCurrent.heighlightDocumentsByIds([]);
+						}
 
 					}).on("click", function(d, i) {
+						var tag = $( this ).html();
+						var stem = d3.select(this).attr("stem"); 
+						if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+							var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 				
+							FilterHandler.setCurrentFilterCategories('category', tagDataset.dataList, "tag", [tag]);
+						}
 
 					})
 					labelCounter++;
