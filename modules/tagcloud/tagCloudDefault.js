@@ -330,7 +330,7 @@ var TagCloudDefault = (function(){
             .css({ position: 'absolute', top: oldOffset.top, left: oldOffset.left, 'z-index': 9999 });
 
         // Animate tag moving from tag box to tag cloud
-        $tag.velocity({ top: newOffset.top, left: newOffset.left }, 1200, 'swing', function(){
+        $tag.animate({ top: newOffset.top, left: newOffset.left }, 1200, 'swing', function(){
             //  Detach from body after motion animation is complete and append to tag container again
             $tag = $tag.detach();
             if(i >= firstTagIndex)
