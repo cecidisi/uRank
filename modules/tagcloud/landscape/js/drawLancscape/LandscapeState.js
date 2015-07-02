@@ -342,15 +342,19 @@ function LandscapeState() {
 	* ***************************************************************************************************************/
 	// -----------------------------------------------------------------------
 	LandscapeState.prototype.zoom = function() {
-		if(d3.event.sourceEvent.shiftKey) {
+
+		
+			
+		/*if(d3.event.sourceEvent.shiftKey) {
 			return
-		}
+		}*/
+		/*
 		if(d3.event  == null || d3.event.scale <= 1) {
 			var translate = [0,0];
 			var scale = 1;
 			me.resetZoom(translate, scale);
 			return;
-		}
+		} */
 		this.translate = d3.event.translate;
 		this.scale = d3.event.scale;
 		svgcanvas.selectAll("g").each(function(d, i) {
@@ -378,16 +382,16 @@ function LandscapeState() {
 		this.scale = scale;
 		svgcanvas.selectAll("g").each(function(d, i) {
 			if (d3.select(this).attr('class') == "brush") {
-				d3.select(this).attr("transform", "translate(" + translate + ")" + " scale(" + scale + ")");
+				d3.select(this).attr("transform", "translate(" +  d3.event.translate + ")" + " scale(" + scale + ")");
 			}
 			if (d3.select(this).attr('class') == "landscapeLabels") {
-				d3.select(this).attr("transform", "translate(" + translate  + ")" + " scale(" + scale+ ")");
+				d3.select(this).attr("transform", "translate(" +  d3.event.translate  + ")" + " scale(" + scale+ ")");
 			}
 		})
 		//zoom/pan all paths
-		svgcanvas.selectAll("path").attr("transform", "translate(" + translate + ")" + " scale(" + scale+ ")");
+		svgcanvas.selectAll("path").attr("transform", "translate(" +  d3.event.translate + ")" + " scale(" + scale+ ")");
 		svgcanvas.selectAll("circle").each(function(d, i) {
-			d3.select(this).attr("transform", "translate(" +translate + ")" + " scale(" +scale+ ")");
+			d3.select(this).attr("transform", "translate(" +d3.event.translate + ")" + " scale(" +scale+ ")");
 		})
 	}
 

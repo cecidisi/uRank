@@ -8,6 +8,8 @@ var LandscapeController = (function(){
  	this.dataProcessor = "";
  	this.receivedData = {}
  	this.landscapeTagCloudBuilder = "";
+ 	var prevLandscapeScale = -1; 
+ 	var landscapeInitialScaleCounter= 0; 
  	var me = this;
 
 
@@ -136,7 +138,7 @@ var LandscapeController = (function(){
 		landscapeConfig.setWidth(widthLandscape);
 		landscapeConfig.setHeight(heightLandscape);
 
-
+		
 
 		landscapeZoom = d3.behavior.zoom()
 	    .translate([0, 0])
@@ -152,10 +154,10 @@ var LandscapeController = (function(){
 			.style("background-color", "#f1f1f1")
 			.style("float","left")
 			.call(landscapeZoom);
-		svgcanvas = landscapeCanvas.append("g").attr("id", "kdApp_landscape");
+		svgcanvas = landscapeCanvas.append("g").attr("id", "kdApp_landscape").attr("scale", 0);
 
 
-
+	if(landscapeConfig.getLandscapeType() == "urankLandscape") {
 		tagCloudSvg = landscapeTagCloudDiv.append("svg")
 			.attr("width", widthLandscapeCloud)//
 			.attr("height", heightLandscapeCloud)//
@@ -163,6 +165,7 @@ var LandscapeController = (function(){
 			.style("background-color", "#f1f1f1")
 			.style("float","left");
 		tagCloudCanvas = tagCloudSvg.append("g").attr("id", "landscapeTagsCloud");
+	}
 		//--------------------------------------------------
 		// initialize Filter for 3D-Shapes effect
 		//---------------------------------------
@@ -174,7 +177,7 @@ var LandscapeController = (function(){
 		strTreeJSTSOld = new STRTreeJSTS();
 		strTreeJSTSCurrent = strTreeJSTSOld;
 		strTreeJSTSOldOld = strTreeJSTSOld;
-		 $("#loadingLandscape").remove();
+		$("#loadingLandscape").remove();
 
 
 
@@ -191,7 +194,7 @@ var LandscapeController = (function(){
 
 		initLandscapeBrush(brushExtent);
 
-		svgcanvas.append("g")//
+		landscapeBrushElem = svgcanvas.append("g")//
 		.attr("class", "landscapeBrush")//
 		.attr("id", "landscapeBrush")
 		.call(landscapeBrush);
@@ -212,13 +215,45 @@ var LandscapeController = (function(){
 			}
 			me.stateCurrent.resetZoom(translate, scale);
 		}
+		d3.select(window)
+		  .on('keydown', function() {
+		  	if(d3.event.keyCode == 17) {
+			landscapeOldMousedown = landscapeBrushElem.on('mousedown.brush');
+			landscapeOldMouseUp = landscapeBrushElem.on('touchstart.brush');
+			landscapeBrushElem.on("mousedown.brush", null).on("touchstart.brush",null);
+				
+		  	}
+		})
+		.on('keyup', function() {		
+			 if(d3.event.keyCode == 17) {
+				landscapeBrushElem.on("mousedown.brush", landscapeOldMousedown).on("touchstart.brush",landscapeOldMousedown);
 
+		  	}
+		});
 
 	};
 
 	//------------------------------------------------------------------------
 	var zoomLandscape =  function() {
-		stateCurrent.zoom();
+		var landscapeScale = 	d3.select("#kdApp_landscape").attr("scale"); 
+		var scale = landscapeZoom.scale(); 
+
+		if(scale == 1 && prevLandscapeScale == 1 && landscapeInitialScaleCounter > 0) {
+			landscapeZoom.translate([0,0])
+		}
+		if(scale == 1) {
+			prevLandscapeScale = -1; 
+			landscapeInitialScaleCounter = landscapeInitialScaleCounter > 7 ? 8: landscapeInitialScaleCounter+1; 
+		}
+		else {
+			landscapeInitialScaleCounter = 0; 
+			prevLandscapeScale = scale; 
+		}
+
+	
+	
+		d3.select("#kdApp_landscape").attr("transform", "translate(" +  landscapeZoom.translate() + ")" + " scale(" + landscapeZoom.scale() + ")");
+	
 	};
 
 	//------------------------------------------------------------------------
@@ -228,10 +263,28 @@ var LandscapeController = (function(){
 		.x(d3.scale.linear().range([0, landscapeConfig.getWidth()]))
 		.y(d3.scale.linear().range([0, landscapeConfig.getHeight()]))
 		.extent(brushExtent).on("brushstart", function() {	
+			if(d3.event.sourceEvent.ctrlKey) {
+				return; 
+			}
 			$('.'+tagClass).hide();
-			//stateCurrent.clearTagCloud(); 
-		}).on("brushend", function() { 
-		
+			stateCurrent.clearTagCloud(); 
+			isLandscapeZoomAble = false; 
+			landscapeTranslate =   JSON.parse(JSON.stringify(landscapeZoom.translate()));  
+			landscapeScale =   JSON.parse(JSON.stringify(landscapeZoom.scale())); 	
+			landscapeZoom.on("zoom",null);
+
+			
+		})
+		.on("brush", function() { 
+			if(d3.event.sourceEvent.ctrlKey) {
+				return; 
+			}
+		})
+		.on("brushend", function() { 
+			if(d3.event.sourceEvent.ctrlKey) {
+				return; 
+			}
+			//landscapeZoom.on("zoom",null);
 			var minBrushX = 0;
 			var maxBrushX = 0;
 			$('.'+tagClass).hide();
@@ -252,29 +305,37 @@ var LandscapeController = (function(){
 				});
 				var datasetList = me.dataProcessor.getDatasetByIds(documentIds); 
 				var tagCloundData =  me.dataProcessor.getTagCloudData(documentIds);
+				var keywordsData =  me.dataProcessor.getTagCloudKeywordsAndData(documentIds);
 				
 				if(landscapeConfig.getLandscapeType() == "urankLandscape") {	
 					if( me.landscapeTagCloudBuilder != "" &&  me.landscapeTagCloudBuilder !== 'undefined') {
 						 me.landscapeTagCloudBuilder.call(this, tagCloundData); 
 					}
+					var wordsCloudLandscape = new WordsCloudLandscape();
+					wordsCloudLandscape.draw(tagCloundData);
 				}
-				me.stateCurrent.drawTagsCloud(tagCloundData);
+				else {
+					me.stateCurrent.drawTagsCloud(keywordsData);
+				}
+				// 
+				
+		
 				if(landscapeConfig.getLandscapeType() != "urankLandscape") {
 					FilterHandler.clearList();
 					for(var i=0; i < datasetList.length; i++ ) {
 						FilterHandler.singleItemSelected(datasetList[i], true); 
 					}
 				}
-
+				landscapeZoom.on("zoom",zoomLandscape);
+				landscapeZoom.translate(landscapeTranslate)
+				landscapeZoom.scale(landscapeScale)		
+				//me.stateCurrent.resetZoom(translate, scale);
 	
 			}
 			
 	
 		});
 	}; 
-
-
-
     return LandscapeController;
 
 })();

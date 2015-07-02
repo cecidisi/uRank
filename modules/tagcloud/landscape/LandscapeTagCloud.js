@@ -51,8 +51,10 @@ var LandscapeTagCloud = (function(){
 		            var color = tagCloudColorScale(stem);
 		            var index= id.split("urank-tag-")[1];
 		            var rgbSequence = hexToR(color) + ', ' + hexToG(color) + ', ' + hexToB(color);
-		            docIndices.stateCurrent.addUrankTagStyling(index, color);
-           		}
+		           landscapeController.stateCurrent.addUrankTagStyling(index, color);
+		            //var wordsCloudLandscape = new WordsCloudLandscape();
+		            //wordsCloudLandscape.addUrankTagStyling(index, color);
+           		} 
             }
         },
 
@@ -411,6 +413,8 @@ var LandscapeTagCloud = (function(){
       $('.'+tagClass).hide();
    	   $tag.show();
    	    landscapeController.stateCurrent.removeUrankTagStyling(index);
+   	      //    var wordsCloudLandscape = new WordsCloudLandscape();
+   	    //wordsCloudLandscape.removeUrankTagStyling(index);
 
     };
 
