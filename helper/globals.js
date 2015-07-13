@@ -16,7 +16,7 @@ window.VIS_MODULES = {
 
 window.TAGCLOUD_MODULES = {
     default: TagCloudDefault
-    //,landscape: LandscapeTagCloud
+    ,landscape: LandscapeTagCloud
 };
 
 
