@@ -298,10 +298,10 @@ var LandscapeTagCloud = (function(){
         landscapeConfig = new LandscapeConfig();
 
         $root = $(s.root);
-	 var landscapeHeight = 400;
-	  var tagCloundHeight = 400;
-        // var landscapeHeight = $("#eexcess_canvas").height() / 2 - 10;
-    	// var tagCloundHeight = $("#eexcess_canvas").height() / 2 - 10;
+	 	var landscapeHeight = 400;
+	  	var tagCloundHeight = 400;
+        var landscapeHeight = $("#eexcess_canvas").height() / 2 - 10;
+    	var tagCloundHeight = $("#eexcess_canvas").height() / 2 - 10;
 
 
     	var closeDiv = '</div>'
@@ -309,8 +309,8 @@ var LandscapeTagCloud = (function(){
 		var landscapeContainerDiv = '<div id="eexcess_landscape_container">';
 		var landscapeHeader = '<div id="eexcess_landscape_vis_header">';
 		var landscapeLabelsDragableDiv = "<div id ='dragableLandscapeLabels'>";
-		var landscapeMainVis = '<div id="eexcess_landscape_vis_main" style="width: ' + 220 + 'px; height:' + landscapeHeight + 'px; margin: auto" >';
-		var landscapeTagCloudVis = '<div id="eexcess_landscape_tag_cloud" style="width: ' + 220 + 'px; height:' + tagCloundHeight + 'px; margin: auto" >';
+		var landscapeMainVis = '<div id="eexcess_landscape_vis_main" style="width: ' + 210 + 'px; height:' + landscapeHeight + 'px; margin: auto" >';
+		var landscapeTagCloudVis = '<div id="eexcess_landscape_tag_cloud" style="width: ' + 210 + 'px; height:' + tagCloundHeight + 'px; margin: auto" >';
 		var loadingLandscape = "<div id=\"loadingLandscape\" class=\"eexcess_landscape_box_shadow\" style=\"height: " + (landscapeHeight + tagCloundHeight) + "px ;\"></br><img src=\"uRank/modules/tagcloud/landscape/images/ajax-loader.gif\" /></div>";
 		var landscapeDiv = loadingLandscape + landscapeBoxDiv + landscapeLabelsDragableDiv + closeDiv + landscapeContainerDiv + landscapeHeader + closeDiv + landscapeMainVis + closeDiv + landscapeTagCloudVis + closeDiv + closeDiv + closeDiv;
 		$('#eexcess_keywords_container').empty().append(landscapeDiv);

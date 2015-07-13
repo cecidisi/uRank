@@ -29,13 +29,17 @@ fill-opacity: .5;
 }
 
 #eexcess_landscape_tag_cloud {
-
-
+overflow-y: auto;
+padding: 5px;
+background: white;
+// border: 1px solid #e4e4e4;
+display: inline-block;
+float: left;
 }
 
 #div-landscape-wrap-legends {
 	display: inline-block;
-	margin-top: .5em;
+	margin-top: 25px;
 	float: right;
 	width: 8em;
 	margin-right: 10px;

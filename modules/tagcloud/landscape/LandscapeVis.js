@@ -164,7 +164,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
         var landscapeWidth = LANDSCAPE.Dimensions.landscape.width-30; 
         var landscapeHeight = LANDSCAPE.Dimensions.landscape.height; 
         var tagCloundWidth = LANDSCAPE.Dimensions.tagCloud.width; 
-        var tagCloundHeight = LANDSCAPE.Dimensions.tagCloud.height; 
+        var tagCloundHeight = LANDSCAPE.Dimensions.tagCloud.height-5; 
         var width = LANDSCAPE.Dimensions.width; 
         var height = LANDSCAPE.Dimensions.height; 
         
@@ -220,7 +220,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
         var landscapeHeader = '<div id="eexcess_landscape_vis_header">'; 
         var landscapeMainVis = '<div id="eexcess_landscape_vis_main" style="width: '+ landscapeWidth+ 'px; height:'+landscapeHeight+'px; margin-left: 20px; margin-top:30px;  float:left;" >';
         var landscapeLabelsDragableDiv = "<div id ='dragableLandscapeLabels'>"; 
-        var landscapeTagCloudVis = '<div id="eexcess_landscape_tag_cloud" style="width: '+ tagCloundWidth+ 'px; height:'+tagCloundHeight+'px;  margin-left: 20px; margin-top:30px;  float:left;" >';
+        var landscapeTagCloudVis = '<div id="eexcess_landscape_tag_cloud" style="width: '+ tagCloundWidth+ 'px; max-height:'+tagCloundHeight+'px;  margin-left: 5px; margin-top:30px;  float:left;" >';
       	var loadingLandscape = "<div id=\"loadingLandscape\" style=\"margin-top: "+ (height/2)+"px;\"></br><img src=\"uRank/modules/tagcloud/landscape/images/ajax-loader.gif\"/></div>";
         var landscapeDiv = loadingLandscape + landscapeBoxDiv + landscapeLabelsDragableDiv +  closeDiv + landscapeHeader + closeDiv +  landscapeMainVis + closeDiv + landscapeTagCloudVis + closeDiv + closeDiv; 
 		
