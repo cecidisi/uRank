@@ -220,7 +220,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
         var landscapeHeader = '<div id="eexcess_landscape_vis_header">'; 
         var landscapeMainVis = '<div id="eexcess_landscape_vis_main" style="width: '+ landscapeWidth+ 'px; height:'+landscapeHeight+'px; margin-left: 20px; margin-top:30px;  float:left;" >';
         var landscapeLabelsDragableDiv = "<div id ='dragableLandscapeLabels'>"; 
-        var landscapeTagCloudVis = '<div id="eexcess_landscape_tag_cloud" style="width: '+ tagCloundWidth+ 'px; max-height:'+tagCloundHeight+'px;  margin-left: 5px; margin-top:30px;  float:left;" >';
+        var landscapeTagCloudVis = '<div class ="landscape" id="eexcess_landscape_tag_cloud" style="width: '+ tagCloundWidth+ 'px; max-height:'+tagCloundHeight+'px;  margin-left: 5px; margin-top:30px;  float:left; background:white" >';
       	var loadingLandscape = "<div id=\"loadingLandscape\" style=\"margin-top: "+ (height/2)+"px;\"></br><img src=\"uRank/modules/tagcloud/landscape/images/ajax-loader.gif\"/></div>";
         var landscapeDiv = loadingLandscape + landscapeBoxDiv + landscapeLabelsDragableDiv +  closeDiv + landscapeHeader + closeDiv +  landscapeMainVis + closeDiv + landscapeTagCloudVis + closeDiv + closeDiv; 
 		

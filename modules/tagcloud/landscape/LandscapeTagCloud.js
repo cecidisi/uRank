@@ -9,8 +9,7 @@ var LandscapeTagCloud = (function(){
     var tagCloudColorScale = d3.scale.ordinal().range(tagCloudColorRange);
 
     //  Classes
-    var tagCloudContainerClass = 'urank-tagcloud-container',
-        defaultTagCloudContainerClass = 'urank-tagcloud-container-default',
+    var tagcloudDefaultClass = 'urank-tagcloud-default',
         tagContainerOuterClass = 'urank-tagcloud-tag-container-outer',
         tagContainerClass = 'urank-tagcloud-tag-container',
         tagClass = 'urank-tagcloud-tag',
@@ -26,11 +25,30 @@ var LandscapeTagCloud = (function(){
     //   Attributes
     var tagPosAttr = 'tag-pos';
     //  Helpers
+   	var backgroudGradient = "top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255)";
     var $tagContainer, $outerTagContainer,
         containerClasses,
 
         tagHoverStyle = {
-            background: '-webkit-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255))',
+            background: function() {
+	            	    	var hoverBackground = '-webkit-linear-gradient('+backgroudGradient+')'; 					    	
+						    if (navigator.userAgent.search("MSIE") >= 0) {
+								return '-ms-linear-gradient('+backgroudGradient+')';  
+							}
+							else if (navigator.userAgent.search("Chrome") >= 0) {
+								return '-webkit-linear-gradient('+backgroudGradient+')';  
+							}
+							else if (navigator.userAgent.search("Firefox") >= 0) {
+								return '-moz-linear-gradient('+backgroudGradient+')'; 
+							}
+							else if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
+								return '-webkit-linear-gradient('+backgroudGradient+')'; 
+							}
+							else if (navigator.userAgent.search("Opera") >= 0) {
+								return '-o-linear-gradient('+backgroudGradient+')'; 
+							}
+							return hoverBackground;
+						},
             border: 'solid 1px rgb(0, 102, 255)',
             color: '#eee',
             'text-shadow': ''
@@ -58,10 +76,10 @@ var LandscapeTagCloud = (function(){
             }
         },
 
-        //documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagCloudContainerClass },
+        //documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagContainerClass },
         documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagContainerClass },
 
-        //keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagCloudContainerClass },
+        //keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagContainerClass },
         keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagContainerClass },
 
         pieOptions = {
@@ -156,7 +174,7 @@ var LandscapeTagCloud = (function(){
         this.proxKeywordsMode = false;
         this.docHintMode = false;
 
-        $(s.root).addClass(tagCloudContainerClass);
+        $(s.root).addClass(tagContainerClass);
     }
 
 
@@ -300,30 +318,46 @@ var LandscapeTagCloud = (function(){
         $root = $(s.root);
 	 	var landscapeHeight = 400;
 	  	var tagCloundHeight = 400;
-        var landscapeHeight = $("#eexcess_canvas").height() / 2 - 10;
-    	var tagCloundHeight = $("#eexcess_canvas").height() / 2 - 10;
-
-
-    	var closeDiv = '</div>'
-		var landscapeBoxDiv = '<div id="eexcess_landscape_box_urank" class="eexcess_landscape_box_shadow">';
+        var landscapeHeight = $("#eexcess_canvas").height() / 2 - 18;
+    	var tagCloundHeight = $("#eexcess_canvas").height() / 2 - 18;
+		
+		
+		
+		$root = $('#eexcess_keywords_container').empty().addClass(tagcloudDefaultClass);
+        var $outerTagContainer = $('<div></div>').appendTo($root)
+            .addClass(tagContainerOuterClass)
+            .on('scroll', onRootScrolled);
+        $landcapeTagContainer = $('<div></div>').appendTo($outerTagContainer).addClass(tagContainerClass);
+        
+        
+        var loadingLandscape = "<div id=\"loadingLandscape\" class=\"eexcess_landscape_loading\" style=\"height: " + (landscapeHeight + tagCloundHeight) + "px ;\"></br><img src=\"uRank/modules/tagcloud/landscape/images/ajax-loader.gif\" /></div>";
+        $landcapeTagContainer.append(loadingLandscape); 
+//         
+         var closeDiv = '</div>'
+		// var landscapeBoxDiv = '<div id="eexcess_landscape_box_urank" class="eexcess_landscape_box_shadow">';
 		var landscapeContainerDiv = '<div id="eexcess_landscape_container">';
 		var landscapeHeader = '<div id="eexcess_landscape_vis_header">';
 		var landscapeLabelsDragableDiv = "<div id ='dragableLandscapeLabels'>";
-		var landscapeMainVis = '<div id="eexcess_landscape_vis_main" style="width: ' + 210 + 'px; height:' + landscapeHeight + 'px; margin: auto" >';
-		var landscapeTagCloudVis = '<div id="eexcess_landscape_tag_cloud" style="width: ' + 210 + 'px; height:' + tagCloundHeight + 'px; margin: auto" >';
-		var loadingLandscape = "<div id=\"loadingLandscape\" class=\"eexcess_landscape_box_shadow\" style=\"height: " + (landscapeHeight + tagCloundHeight) + "px ;\"></br><img src=\"uRank/modules/tagcloud/landscape/images/ajax-loader.gif\" /></div>";
-		var landscapeDiv = loadingLandscape + landscapeBoxDiv + landscapeLabelsDragableDiv + closeDiv + landscapeContainerDiv + landscapeHeader + closeDiv + landscapeMainVis + closeDiv + landscapeTagCloudVis + closeDiv + closeDiv + closeDiv;
-		$('#eexcess_keywords_container').empty().append(landscapeDiv);
-		$("#eexcess_landscape_box_urank").removeClass("eexcess_landscape_box_shadow");
+
+		var landscapeMainVis = '<div id="eexcess_landscape_vis_main" style="width: ' + 190 + 'px; height:' + landscapeHeight + 'px; margin: auto; visibility:hidden" >';
+		var landscapeTagCloudVis = '<div id="eexcess_landscape_tag_cloud" style="width: ' + 190 + 'px; height:' + tagCloundHeight + 'px; margin: auto; visibility:hidden" >';
+		
+		var landscapeDiv = landscapeLabelsDragableDiv + closeDiv + landscapeContainerDiv + landscapeHeader + closeDiv + landscapeMainVis + closeDiv + landscapeTagCloudVis + closeDiv + closeDiv;
+		 $landcapeTagContainer.append(landscapeDiv); 
+// 		
+// 	
 		setTimeout(function() {
 			landscapeConfig = new LandscapeConfig();
 			landscapeConfig.setLandscapeType("urankLandscape");
 			landscapeController.drawLandscape(_this.data, buildLandscapeTagCloud);
 			$("#loadingLandscape").remove();
+			$("#eexcess_landscape_vis_main").css("visibility", 'visible');
+			$("#eexcess_landscape_tag_cloud").css("visibility", 'visible');
 			$("#eexcess_landscape_box_urank").addClass("eexcess_landscape_box_shadow");
 			$("#eexcess_main_panel").mousemove(function(e) {
 				landscapeConfig.setCurrentMousePos([e.pageX, e.pageY]);
 			});
+			
 
 
 			var labels = landscapeController.getLabels();
@@ -538,7 +572,7 @@ var LandscapeTagCloud = (function(){
 
     var _destroy = function() {
       //  $outerTagContainer.mCustomScrollbar('destroy');
-        $root.empty().removeClass(tagCloudContainerClass);
+        $root.empty().removeClass(tagContainerClass);
     };
 
 

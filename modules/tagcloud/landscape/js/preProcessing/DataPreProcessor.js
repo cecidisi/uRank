@@ -314,9 +314,12 @@ var DataPreProcessor = (function(){
 			}
 		}
 		var newPos = new Pos(); 
+		//var  minRepetitions : (parseInt(dataset.length * 0.05) > 1) ? parseInt(dataset.length * 0.05) : 2, 
 		var arguments = {
-	        minRepetitions : (parseInt(dataset.length * 0.05) > 1) ? parseInt(dataset.length * 0.05) : 2, 
-	        minDocFrequency: 2
+         	minDocFrequency: 2,
+            minRepetitionsInDocument: 1,
+            maxKeywordDistance: 2,
+            minRepetitionsProxKeywords: 2
         };
         
         var keywordExtractorNew = new KeywordExtractor(arguments);

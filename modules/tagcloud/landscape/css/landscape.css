@@ -11,14 +11,8 @@ fill-opacity: .5;
 
 
 }
-.eexcess_landscape_box_shadow{
-	box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
-	width:220px;
-    padding:5px;
+.eexcess_landscape_loading{
     background: white;
-
-    display:inline-block;
-	/*position:absolute;*/
 }
 
 #eexcess_landscape_box {
@@ -30,11 +24,9 @@ fill-opacity: .5;
 
 #eexcess_landscape_tag_cloud {
 overflow-y: auto;
-padding: 5px;
-background: white;
-// border: 1px solid #e4e4e4;
-display: inline-block;
-float: left;
+padding: 1px;
+
+
 }
 
 #div-landscape-wrap-legends {
@@ -47,6 +39,17 @@ float: left;
 
 #landscapeDocPoints .heighlight {
 
+}
+
+#eexcess_landscape_tag_cloud {
+	overflow-y: auto;
+	width: 218px;
+	padding: 5px;
+	/*background: white; */
+	/* border: 1px solid #e4e4e4; */
+	display: inline-block;
+	float: left;
+		
 }
 
 #landscapeDocPoints .deheighlight {
