@@ -155,6 +155,21 @@ function getGradientString(color, shadeDiff) {
     var original = 'rgb('+r+','+g+','+b+')';
     var lighter = 'rgb('+(r+shadeDiff)+','+(g+shadeDiff)+','+(b+shadeDiff)+')';
 
+    if (navigator.userAgent.search("MSIE") >= 0) {
+		return '-ms-linear-gradient(top, ' + original + ', ' + lighter + ', ' + original + ')';
+	}
+	else if (navigator.userAgent.search("Chrome") >= 0) {
+		return '-webkit-linear-gradient(top, ' + original + ', ' + lighter + ', ' + original + ')';
+	}
+	else if (navigator.userAgent.search("Firefox") >= 0) {
+		return '-moz-linear-gradient(top, ' + original + ', ' + lighter + ', ' + original + ')';
+	}
+	else if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
+		return '-webkit-linear-gradient(top, ' + original + ', ' + lighter + ', ' + original + ')';
+	}
+	else if (navigator.userAgent.search("Opera") >= 0) {
+		return '-o-linear-gradient(top, ' + original + ', ' + lighter + ', ' + original + ')';
+	}
     return '-webkit-linear-gradient(top, ' + original + ', ' + lighter + ', ' + original + ')';
 }
 
