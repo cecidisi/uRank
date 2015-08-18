@@ -296,6 +296,7 @@ var Ranking = (function(){
 
 
 
+            // svg social elements
             svgSocial.selectAll('.'+stackedbarClass).data([]).exit();
             svgSocial.selectAll('.'+stackedbarClass).remove();
             svgSocial.selectAll('.'+stackedbarClass).data(data).enter();
@@ -357,6 +358,39 @@ var Ranking = (function(){
             // create filter with id #drop-shadow
             // height=130% so that the shadow is not clipped
             var filter = defs.append("filter")
+            .attr("id", "drop-shadow")
+            .attr("height", "130%");
+
+            // SourceAlpha refers to opacity of graphic that this filter will be applied to
+            // convolve that with a Gaussian with standard deviation 3 and store result
+            // in blur
+            filter.append("feGaussianBlur")
+                .attr("in", "SourceAlpha")
+                .attr("stdDeviation", 2)
+                .attr("result", "blur");
+
+            // translate output of Gaussian blur to the right and downwards with 2px
+            // store result in offsetBlur
+            filter.append("feOffset")
+                .attr("in", "blur")
+                .attr("dx", 0)
+                .attr("dy", 2)
+                .attr("result", "offsetBlur");
+
+            // overlay original SourceGraphic over translated blurred opacity by using
+            // feMerge filter. Order of specifying inputs is important!
+            var feMerge = filter.append("feMerge");
+            feMerge.append("feMergeNode").attr("in", "offsetBlur")
+            feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+
+            // svg social elements
+            // filters go in defs element
+            defs = svgSocial.append("defs");
+
+            // create filter with id #drop-shadow
+            // height=130% so that the shadow is not clipped
+            filter = defs.append("filter")
             .attr("id", "drop-shadow")
             .attr("height", "130%");
 
@@ -477,32 +511,43 @@ var Ranking = (function(){
         if(this.isRankingDrawn) {
             id = _.isArray(id) ? id : [id];
             svg.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
+            svgSocial.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
         }
         return this;
     };
 
 
     var _deSelectAllItems = function(){
-        if(this.isRankingDrawn)
+        if(this.isRankingDrawn) {
             svg.selectAll('.'+stackedbarClass).style('opacity', 1);
+            svgSocial.selectAll('.'+stackedbarClass).style('opacity', 1);
+        }
         return this;
     };
 
 
     var _hoverItem = function(id) {
-        if(this.isRankingDrawn)
+        if(this.isRankingDrawn) {
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0)')
                 .style('filter', 'url(#drop-shadow)');
+            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
+                .attr('transform', 'translate(0, 0)')
+                .style('filter', 'url(#drop-shadow)');
+        }
         return this;
     };
 
 
     var _unhoverItem = function(id) {
-        if(this.isRankingDrawn)
+        if(this.isRankingDrawn) {
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')
                 .style('filter', '');
+            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
+                .attr('transform', 'translate(0, 0.2)')
+                .style('filter', '');
+        }
         return this;
     };
 
