@@ -48,7 +48,7 @@ var VisCanvas = (function(){
         $visContainer2 = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerSocialClass).height(this.height);
 
         var visModule = VIS_MODULES[opt.module] || VIS_MODULES.ranking;
-        this.vis = new visModule($.extend({}, s, { root: '.'+viscanvasContainerClass }, opt.customOpt));
+        this.vis = new visModule($.extend({}, s, { root: '.'+viscanvasContainerClass, rootSocial: '.'+viscanvasContainerSocialClass }, opt.customOpt));
         this.vis.build();
 
         return this;

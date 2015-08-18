@@ -27,6 +27,7 @@ var Ranking = (function(){
         _this = this;
         s = $.extend({
             root: '.urank-viscanvas-container',
+            rootSocial: '.urank-viscanvas-container-social',
             onItemClicked: function(document){},
             onItemMouseEnter: function(document){},
             onItemMouseLeave: function(document){},
@@ -171,6 +172,34 @@ var Ranking = (function(){
                 .call(yAxis)
                 .selectAll("text");
 
+
+            // svg social elements
+            svgSocial = d3.select(s.rootSocial).append("svg")
+                .attr("class", svgClass)
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom + 30)
+                .append("g")
+                    .attr("width", width)
+                    .attr("height", height + 30)
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            svgSocial.append("g")
+                .attr("class", xClass + ' ' + axisClass)
+                .attr("transform", "translate(0," + (height) + ")")
+                .call(xAxis)
+                .append("text")
+                    .attr("class", xAxisLabelClass)
+                    .attr("x", width)
+                    .attr("y", -6)
+                    .style("text-anchor", "end")
+                    .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
+
+            svgSocial.append("g")
+                .attr("class", yClass +' '+axisClass)
+                .call(yAxis)
+                .selectAll("text");
+
+
             //// Create drop shadow to use as filter when a bar is hovered or selected
             RANKING.Render.createShadow();
             //// Add stacked bars
@@ -226,6 +255,53 @@ var Ranking = (function(){
 
             setTimeout(function(){
                 var stackedBars = svg.selectAll('.'+stackedbarClass)
+                .data(data).enter()
+                .append("g")
+                .attr("class", stackedbarClass)
+                .attr("id", function(d, i){ return "urank-ranking-stackedbar-" + d.id; })
+                .attr( "transform", function(d, i) { return "translate(0, " + y(i) + ")"; } )
+                .on('click', RANKING.Evt.itemClicked)
+                .on('mouseover', RANKING.Evt.itemMouseEntered)
+                .on('mouseout', RANKING.Evt.itemMouseLeft);
+
+                stackedBars.append('rect')
+                    .attr('class', function(d, i){ if(i%2) return darkBackgroundClass; return lightBackgroundClass; })
+                    .attr('x', 0)
+                    .attr('width', width)
+                    .attr('height', y.rangeBand())
+                    .style('fill', function(d, i){
+                        if(s.lightBackgroundColor != '' && s.darkBackgroundColor != '') {
+                            if(i%2) return s.darkBackgroundColor;
+                            return s.lightBackgroundColor;
+                        }
+                        return  '';
+                    });
+
+                stackedBars.selectAll('.'+barClass)
+                    .data(function(d) { return d.weightedKeywords; })
+                    .enter()
+                    .append("rect")
+                    .attr("class", barClass)
+                    .attr("height", y.rangeBand())
+                    .attr("x", function(d) { return x(d.x0); })
+                    .attr("width", 0)
+                    .style("fill", function(d) { return color(d.stem); });
+
+                var bars = stackedBars.selectAll('.'+barClass);
+
+                var t0 = bars.transition()
+                .duration(500)
+                .attr({ "width": function(d) { return x(d.x1) - x(d.x0); } });
+            }, 800);
+
+
+
+            svgSocial.selectAll('.'+stackedbarClass).data([]).exit();
+            svgSocial.selectAll('.'+stackedbarClass).remove();
+            svgSocial.selectAll('.'+stackedbarClass).data(data).enter();
+
+            setTimeout(function(){
+                var stackedBars = svgSocial.selectAll('.'+stackedbarClass)
                 .data(data).enter()
                 .append("g")
                 .attr("class", stackedbarClass)
