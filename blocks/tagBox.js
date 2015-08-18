@@ -185,21 +185,3 @@ var TagBox = (function(){
 })();
 
 
-
-/*    var _updateTagColorScale = function(){
-
-        // Clear color scale domain
-        weightColorScale.domain([]);
-
-        for(var i = 0; i < selectedTags.length; i++){
-            // Reasign keyword to color scale domain
-            var stem = d3.select(selectedTags[i][0]).data()[0].stem;
-            var aux = weightColorScale(stem);
-            var rgbSequence = hexToR(aux) + "," + hexToG(aux) + "," + hexToB(aux);
-            var value = $(selectedTags[i][0]).find(".div-slider").slider("value");
-
-            d3.select(selectedTags[i][0])
-            .style("background", "rgba("+ rgbSequence + ", " + value + ")")
-            .style("border", "solid 0.2em " + aux);
-        }
-    };*/
