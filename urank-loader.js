@@ -94,7 +94,8 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'css/urank.css',
                     pathToUrank + 'css/urank-blocks-default.css',
                     pathToUrank + 'css/vis-ranking.css',
-                    pathToUrank + 'urank.js'
+                    pathToUrank + 'urank.js',
+                    pathToUrank + 'recommender/rs.js'   /////
                 ],
                 complete: function(){
                     console.log('urank loaded');

@@ -1,6 +1,9 @@
 
 var Urank = (function(){
 
+    /////
+    var recommender;
+
     var _this, s = {},
         contentList, tagCloud, tagBox, visCanvas, docViewer;
     // Color scales
@@ -187,8 +190,13 @@ var Urank = (function(){
 
             var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode).getRanking();
             var status = _this.rankingModel.getStatus();
+
+            /*****/
+            var recData = recommender.getRecommendations({ keywords: _this.selectedKeywords });
+            /*****/
+
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
-            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight());
+            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), recData);
             docViewer.clear();
             tagCloud.clearEffects();
 
@@ -434,6 +442,9 @@ var Urank = (function(){
         tagBox = new TagBox(options.tagBox);
         visCanvas = new VisCanvas(options.visCanvas);
         docViewer = new DocViewer(options.docViewer);
+
+        recommender = new RS();
+        console.log(recommender);
     }
 
 

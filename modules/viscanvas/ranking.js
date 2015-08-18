@@ -111,7 +111,7 @@ var Ranking = (function(){
         *	Draw ranking at first instance
         *
         * ***************************************************************************************************************/
-        drawNew: function(rankingModel, colorScale, listHeight){
+        drawNew: function(rankingModel, colorScale, listHeight, recData){
 
             _this.clear();
             _this.isRankingDrawn = true;
@@ -182,7 +182,7 @@ var Ranking = (function(){
         *	Redraw updated ranking and animate with transitions to depict changes
         *
         * ***************************************************************************************************************/
-        redrawUpdated: function(rankingModel, colorScale, listHeight){
+        redrawUpdated: function(rankingModel, colorScale, listHeight, recData){
 
             // Define input variables
             data = RANKING.Settings.getInitData(rankingModel);
@@ -371,13 +371,15 @@ var Ranking = (function(){
     }
 
 
-    var _update = function(rankingModel, colorScale, listHeight){
+    var _update = function(rankingModel, colorScale, listHeight, recData){
+
+        console.log(recData);
         var updateFunc = {};
         updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
         updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.unchanged] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.no_ranking] = _this.clear;
-        updateFunc[rankingModel.getStatus()].call(this, rankingModel, colorScale, listHeight);
+        updateFunc[rankingModel.getStatus()].call(this, rankingModel, colorScale, listHeight, recData);
         return this;
     };
 

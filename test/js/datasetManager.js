@@ -39,7 +39,8 @@ function datasetManager(){
                 callback.call(this, data);
             })
             .fail(function(jqXHR, textStatus, errorThrown) { console.log('getJSON request failed! ' + textStatus + ' --- ' + errorThrown.message);
-                                                           console.log(jqXHR); });
+                                                           console.log(jqXHR);
+            });
         }
         else {
             console.log("Invalid dataset id (value=" + datasetId + ')');

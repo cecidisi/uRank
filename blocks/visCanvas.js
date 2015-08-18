@@ -53,9 +53,9 @@ var VisCanvas = (function(){
     };
 
 
-    var _update = function(rankingModel, colorScale, listHeight) {
+    var _update = function(rankingModel, colorScale, listHeight, recData) {
         $scrollable.scrollTo('top');
-        this.vis.update(rankingModel, colorScale, listHeight);
+        this.vis.update(rankingModel, colorScale, listHeight, recData);
         $visContainer.height(this.vis.getHeight());
 
         return this;
