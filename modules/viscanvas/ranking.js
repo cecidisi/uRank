@@ -372,7 +372,7 @@ var Ranking = (function(){
 
 
     var _update = function(rankingModel, colorScale, listHeight, recData){
-
+        console.log("test");
         console.log(recData);
         var updateFunc = {};
         updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
