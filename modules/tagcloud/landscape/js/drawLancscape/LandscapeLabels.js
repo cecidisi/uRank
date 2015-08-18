@@ -101,7 +101,19 @@ function LandscapeLabels() {
 				var t = d3.select(this);
 				return {x: t.attr("x") + d3.transform(t.attr("transform")).translate[0],
 						y: t.attr("y") + d3.transform(t.attr("transform")).translate[1]};
-	        }).on("drag", function(d,i) {
+	        })
+	       	.on("dragstart", function(d,i) {
+	       		landscapeTranslate = JSON.parse(JSON.stringify(landscapeZoom.translate()));  
+				landscapeScale =  JSON.parse(JSON.stringify(landscapeZoom.scale())); 	
+				landscapeZoom.on("zoom",null);
+	       	})
+	       	.on("dragend", function(d,i) {
+	       		landscapeZoom.on("zoom", function() {console.log("tesssss"); landscapeController.stateCurrent.zoom()});
+				landscapeZoom.translate(landscapeTranslate)
+				landscapeZoom.scale(landscapeScale)		
+	       	})
+	        .on("drag", function(d,i) {
+
 	            var id = d3.select(this).attr("id");
 	            var rectId = id + "_rect";
 	            var lineId = id + "_line";
@@ -123,6 +135,7 @@ function LandscapeLabels() {
 	            landscapeLabelsDragingLines.select("#"+lineId)
 				    .attr("x2", xMiddle)
 				    .attr("y2", yMiddle);
+
 	   	});
 
 		var totalLabelCounter = 0;
@@ -210,10 +223,13 @@ function LandscapeLabels() {
 					d3.select(this).style("opacity", 0.5);
 					d3.select(this).style("stroke-opacity", 0.5);
 					d3.select(this).style("cursor", "pointer");
+	
+					
 				})
 				.on("mouseout", function(d, i) {
 					d3.select(this).style("opacity", 0.3)
 					d3.select(this).style("stroke-opacity", 0.3)
+
 				})
 			var lineId = labelindex+"_line";
 			landscapeLabelsDragingLines.append("line")

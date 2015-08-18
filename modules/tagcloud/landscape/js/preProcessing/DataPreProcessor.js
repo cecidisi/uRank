@@ -41,6 +41,23 @@ var DataPreProcessor = (function(){
 	DataPreProcessor.prototype.getDataset = function() {
 		return dataset;
 	};
+	
+	// -----------------------------------------------------------------------
+	DataPreProcessor.prototype.getTagCloudKeywordsAndData = function (documentsIds){
+
+		var dataObjs = [];
+		var dataLength = dataset.length;
+		for (var j = 0; j < documentsIds.length; j++) {
+			var id = documentsIds[j];
+			if (dataLength > id) {
+				dataObjs.push(dataset[id]);
+			}
+		}
+		
+		var tagKeywords = getTagsForGivenDocuments(documentsIds);
+	
+		return {"keywords":tagKeywords, "data": dataObjs };
+	};
 
 	// -----------------------------------------------------------------------
 	DataPreProcessor.prototype.getTagCloudData = function (documentsIds){
@@ -297,9 +314,12 @@ var DataPreProcessor = (function(){
 			}
 		}
 		var newPos = new Pos(); 
+		//var  minRepetitions : (parseInt(dataset.length * 0.05) > 1) ? parseInt(dataset.length * 0.05) : 2, 
 		var arguments = {
-	        minRepetitions : (parseInt(dataset.length * 0.05) > 1) ? parseInt(dataset.length * 0.05) : 2, 
-	        minDocFrequency: 2
+         	minDocFrequency: 2,
+            minRepetitionsInDocument: 1,
+            maxKeywordDistance: 2,
+            minRepetitionsProxKeywords: 2
         };
         
         var keywordExtractorNew = new KeywordExtractor(arguments);
@@ -323,6 +343,13 @@ var DataPreProcessor = (function(){
 
         keywordExtractorNew.processCollection();
         datasetNew.keywords = keywordExtractorNew.getCollectionKeywords();
+        if(datasetNew.keywords != null && datasetNew.keywords.length > 0) {
+        	for(var i=0; i < datasetNew.keywords.length; i++) {
+        		if(datasetNew.keywords[i].term == "ERROR") {
+        			datasetNew.keywords.splice(i,1); 
+        		}
+        	}
+        }
         return  datasetNew.keywords;    
              
 	};

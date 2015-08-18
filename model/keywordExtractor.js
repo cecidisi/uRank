@@ -14,7 +14,7 @@ var KeywordExtractor = (function(){
     //  CONSTRUCTOR
     function KeywordExtractor(arguments) {
         s = $.extend({
-            minDocFrequency: 5,
+            minDocFrequency: 2,
             minRepetitionsInDocument: 1,
             maxKeywordDistance: 5,
             minRepetitionsProxKeywords: 4

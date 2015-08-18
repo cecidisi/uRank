@@ -17,6 +17,10 @@
     border: 6px solid rgba(170, 170, 170, 1);
     box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;*/
     background: -webkit-linear-gradient(top, rgba(175, 175, 175, 1), rgba(170, 170, 170, 1));
+    background: -o-linear-gradient(top, rgba(175, 175, 175, 1), rgba(170, 170, 170, 1));
+	background: -moz-linear-gradient(top, rgba(175, 175, 175, 1), rgba(170, 170, 170, 1));
+	background: -ms-linear-gradient(top, rgba(175, 175, 175, 1), rgba(170, 170, 170, 1));
+	/*background: linear-gradient(to top, rgba(175, 175, 175, 1), rgba(170, 170, 170, 1));*/    
     box-shadow: inset .1em .1em .5em #aaa, inset -.1em -.1em .5em #aaa;
 }
 
@@ -28,6 +32,10 @@
     overflow-y: auto;
     overflow-x: hidden;
     background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+    background: -o-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+	background: -moz-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+	background: -ms-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+	/*background: linear-gradient(to top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));*/    
     box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
 }
 
@@ -63,6 +71,10 @@
 .urank-tagcloud-tag:hover, .urank-tagcloud-tag.selected {
 
     background: -webkit-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
+    background: -o-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
+	background: -moz-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
+	background: -ms-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
+	/*background: linear-gradient(to top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));*/
     border: solid 1px rgb(0, 102, 255);
     color: #eee;
     text-shadow: none;
@@ -157,6 +169,10 @@
 
 .urank-tagbox-default {
     background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
+    background: -o-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
+	background: -moz-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
+	background: -ms-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
+	/*background: linear-gradient(to top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));*/    
     box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;
 }
 
@@ -301,6 +317,10 @@
 /* <li> items' hover style */
 .urank-list-li-default.hovered {
     background: -webkit-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
+    background: -o-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
+	background: -moz-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
+	background: -ms-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
+	/*background: linear-gradient(to top, rgb(230, 230, 230) 75%, #ccc);*/    
 }
 
 .urank-list-li-lightbackground {
@@ -328,7 +348,7 @@
     display: inline-block;
     float: left;
     height: 100%;
-    width: 51px;
+	min-width: 51px;
     padding-left: 1px;
 }
 
@@ -340,6 +360,10 @@
     margin: 4px 2px;
     /*background: -webkit-linear-gradient(top, rgba(255, 175, 0, 0.8) 75%, rgba(235, 155, 0, 0.8));*/
     background: -webkit-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
+	background: -o-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
+	background: -moz-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
+	background: -ms-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
+	/*background: linear-gradient(to top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));*/    
     -webkit-border-radius: 1em;
     box-shadow: 0.05em 0.15em 0.3em #888;
     line-height: 1.8em;
@@ -596,6 +620,10 @@ Document Panel (right) - for visualizing highlighted text
     height: calc(100% - 8em - 10px);
     margin: 5px;
     background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+   	background: -o-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+	background: -moz-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+	background: -ms-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+	/*background: linear-gradient(to top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));*/     
     box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
     overflow-y: auto;
     overflow-x: hidden;

@@ -20,10 +20,30 @@ var TagCloudDefault = (function(){
     //   Attributes
     var tagPosAttr = 'tag-pos';
     //  Helpers
+    var backgroudGradient = "top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255)";
     var $root = $(''), $tagContainer = $(''),
 
         tagHoverStyle = {
-            background: '-webkit-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255))',
+            background: function() {
+	            	    	var hoverBackground = '-webkit-linear-gradient('+backgroudGradient+')'; 
+					    	
+						    if (navigator.userAgent.search("MSIE") >= 0) {
+								return '-ms-linear-gradient('+backgroudGradient+')';  
+							}
+							else if (navigator.userAgent.search("Chrome") >= 0) {
+								return '-webkit-linear-gradient('+backgroudGradient+')';  
+							}
+							else if (navigator.userAgent.search("Firefox") >= 0) {
+								return '-moz-linear-gradient('+backgroudGradient+')'; 
+							}
+							else if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
+								return '-webkit-linear-gradient('+backgroudGradient+')'; 
+							}
+							else if (navigator.userAgent.search("Opera") >= 0) {
+								return '-o-linear-gradient('+backgroudGradient+')'; 
+							}
+							return hoverBackground;
+						},
             border: 'solid 1px rgb(0, 102, 255)',
             color: '#eee',
             'text-shadow': ''
@@ -330,7 +350,7 @@ var TagCloudDefault = (function(){
             .css({ position: 'absolute', top: oldOffset.top, left: oldOffset.left, 'z-index': 9999 });
 
         // Animate tag moving from tag box to tag cloud
-        $tag.velocity({ top: newOffset.top, left: newOffset.left }, 1200, 'swing', function(){
+        $tag.animate({ top: newOffset.top, left: newOffset.left }, 1200, 'swing', function(){
             //  Detach from body after motion animation is complete and append to tag container again
             $tag = $tag.detach();
             if(i >= firstTagIndex)

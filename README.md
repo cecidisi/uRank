@@ -19,14 +19,11 @@ uRank consists of 5 components:
 
 Include the following files in the header:
  * jquery (version 1.10.2 or higher)
- * modernizr (urank/dependencies/modernizr.js)
- * urank entry point (urank/urank.js)
+ * urank entry point (urank/urank-loader.js)
  
-Example (assume urank folder is inside the folder scripts/):
+E.g.
 ```
-<script type="text/javascript" src="libs/jquery-1.10.2.js" charset="utf-8"></script>
-<script type="text/javascript" src="scripts/urank/dependencies/modernizr.js" charset="utf-8"></script>
-<script type="text/javascript" src="scripts/urank/urank.js" charset="utf-8"></script>
+<script type="text/javascript" src="../urank-loader.js"></script>
 ```
 
 Create the DOM elements that will serve as containers for the 5 aforementioned blocks.
