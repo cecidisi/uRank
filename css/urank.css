@@ -532,7 +532,13 @@ Canvas section (right-center) - displays ranking vis
 }
 
 .urank-viscanvas-container {
+ width: 50%;
+ float: left;
+}
 
+.urank-viscanvas-container-social {
+ width: 50%;
+ float: left;
 }
 
 /*

@@ -260,7 +260,8 @@ header select{
 .central-right-panel {
     display: inline-block;
     float:  left;
-    width: 31%;
+    width: 52%;
+    //width: 31%;
     height: 100%;
 }
 
@@ -275,10 +276,12 @@ header select{
 
 
 #viscanvas {
-    float: right;
+    float: left;
     width: 100%;
     height: calc(100% - 5em);
 }
+
+
 /*.control-panel {
     display: inline-flex;
     justify-content: space-between;
