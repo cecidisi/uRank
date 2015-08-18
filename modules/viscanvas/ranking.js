@@ -52,9 +52,8 @@ var Ranking = (function(){
                     a[i] = d;
                     var x0 = 0;
                     var maxWeightedScoreFound = false;
-
                     a[i].weightedKeywords.forEach(function(wk){
-
+                        wk['id'] = d.id;
                         if(attr === RANKING_MODE.overall_score){
                             wk['x0'] = x0;
                             wk['x1'] = x0 + wk['weightedScore'];
@@ -203,7 +202,7 @@ var Ranking = (function(){
             //// Create drop shadow to use as filter when a bar is hovered or selected
             RANKING.Render.createShadow();
             //// Add stacked bars
-            RANKING.Render.drawStackedBars();
+            RANKING.Render.drawStackedBars(recData);
         },
 
         /******************************************************************************************************************
@@ -237,7 +236,7 @@ var Ranking = (function(){
             transition.select('.'+yClass+'.'+axisClass).call(yAxis)
                 .selectAll("g").delay(delay);
 
-            RANKING.Render.drawStackedBars();
+            RANKING.Render.drawStackedBars(recData);
         },
 
 
@@ -247,8 +246,7 @@ var Ranking = (function(){
         *	Draw stacked bars either on draw or update methods. Animate with width transition
         *
         * ***************************************************************************************************************/
-        drawStackedBars: function(){
-
+        drawStackedBars: function(recData){
             svg.selectAll('.'+stackedbarClass).data([]).exit();
             svg.selectAll('.'+stackedbarClass).remove();
             svg.selectAll('.'+stackedbarClass).data(data).enter();
@@ -333,13 +331,18 @@ var Ranking = (function(){
                     .attr("height", y.rangeBand())
                     .attr("x", function(d) { return x(d.x0); })
                     .attr("width", 0)
-                    .style("fill", function(d) { return color(d.stem); });
+                    .style("fill", "black")
+                    .style("opacity", 0.3);
 
                 var bars = stackedBars.selectAll('.'+barClass);
 
                 var t0 = bars.transition()
                 .duration(500)
-                .attr({ "width": function(d) { return x(d.x1) - x(d.x0); } });
+                .attr("width", function(d) {
+                    for(var i = 0; i < recData.length; i++)
+                        if(recData[i].doc === d.id)
+                            return x(recData[i].score);
+                    return 0; });
             }, 800);
 
         },
@@ -467,6 +470,24 @@ var Ranking = (function(){
             svg.selectAll('.'+barClass)
                 .attr("x", function(d) { return x(d.x0); })
                 .attr("width", function(d) { return x(d.x1) - x(d.x0); });
+
+            // svg social elements
+            d3.select(svgSocial.node().parentNode).attr('width',width + margin.left + margin.right);
+            svg.attr("width", width);
+
+            // update x-axis
+            svgSocial.select('.'+xClass + '.'+axisClass).call(xAxis.orient('bottom'));
+
+            // Update bars
+            svgSocial.selectAll('.'+stackedbarClass).attr('width', width);
+            svgSocial.selectAll('rect.'+backgroundClass).attr('width', width);
+            svgSocial.selectAll('.'+barClass)
+                .attr("x", function(d) { return x(d.x0); })
+                .attr("width", function(d) {
+                                    for(var i = 0; i < recData.length; i++)
+                                        if(recData[i].doc === d.id)
+                                            return x(recData[i].score);
+                                    return 0; });
         }
 
     };
@@ -478,11 +499,11 @@ var Ranking = (function(){
 
     var _build = function(containerHeight) {
         $root = $(s.root)
+        $rootSocial = $(s.rootSocial)
     }
 
 
     var _update = function(rankingModel, colorScale, listHeight, recData){
-        console.log("test");
         console.log(recData);
         var updateFunc = {};
         updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
@@ -497,6 +518,7 @@ var Ranking = (function(){
     var _clear = function(){
         this.isRankingDrawn = false;
         $root.empty();
+        $rootSocial.empty();
         return this;
     };
 
