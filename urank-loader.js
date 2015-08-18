@@ -8,7 +8,6 @@ function UrankLoader(callback, args) {
         i++;
 
     var pathToUrank = scripts[i].src.replace('urank-loader.js', '');
-    console.log(pathToUrank);
 
     var loadAll = function() {
 

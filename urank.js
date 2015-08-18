@@ -444,7 +444,6 @@ var Urank = (function(){
         docViewer = new DocViewer(options.docViewer);
 
         recommender = new RS();
-        console.log(recommender);
     }
 
 
