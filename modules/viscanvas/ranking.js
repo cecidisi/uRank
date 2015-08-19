@@ -46,15 +46,13 @@ var Ranking = (function(){
             var attr = rankingModel.getMode();
             var a = [];
             var i = 0;
-            var u = 0;
+
             rankingData.forEach(function(d, i){
                 if(d.overallScore > 0) {
                     a[i] = d;
                     var x0 = 0;
                     var maxWeightedScoreFound = false;
-                    u++;
                     a[i].weightedKeywords.forEach(function(wk){
-                        //console.log(u, "d.id" , d.id)
                         wk['id'] = d.id;
                         if(attr === RANKING_MODE.overall_score){
                             wk['x0'] = x0;
@@ -238,18 +236,17 @@ var Ranking = (function(){
             transition.select('.'+yClass+'.'+axisClass).call(yAxis)
                 .selectAll("g").delay(delay);
 
-
             svgSocial.select('.'+xClass+'.'+axisClass+' .'+xAxisLabelClass)
-                .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
+                         .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
 
-            transition = svgSocial.transition().duration(750),
-                delay = function(d, i) { return i * 50; };
+            var transition = svgSocial.transition().duration(750),
+             delay = function(d, i) { return i * 50; };
 
             transition.select('.'+xClass+'.'+axisClass).call(xAxis)
-                .selectAll("g").delay(delay);
+             .selectAll("g").delay(delay);
 
             transition.select('.'+yClass+'.'+axisClass).call(yAxis)
-                .selectAll("g").delay(delay);
+             .selectAll("g").delay(delay);
 
             RANKING.Render.drawStackedBars(recData);
         },
@@ -265,10 +262,6 @@ var Ranking = (function(){
             svg.selectAll('.'+stackedbarClass).data([]).exit();
             svg.selectAll('.'+stackedbarClass).remove();
             svg.selectAll('.'+stackedbarClass).data(data).enter();
-
-            svgSocial.selectAll('.'+stackedbarClass).data([]).exit();
-            svgSocial.selectAll('.'+stackedbarClass).remove();
-            svgSocial.selectAll('.'+stackedbarClass).data(data).enter();
 
             setTimeout(function(){
                 var stackedBars = svg.selectAll('.'+stackedbarClass)
@@ -309,9 +302,17 @@ var Ranking = (function(){
                 var t0 = bars.transition()
                 .duration(500)
                 .attr({ "width": function(d) { return x(d.x1) - x(d.x0); } });
+            }, 800);
 
-                // svg social elements
-                stackedBars = svgSocial.selectAll('.'+stackedbarClass)
+
+
+            // svg social elements
+            svgSocial.selectAll('.'+stackedbarClass).data([]).exit();
+            svgSocial.selectAll('.'+stackedbarClass).remove();
+            svgSocial.selectAll('.'+stackedbarClass).data(data).enter();
+
+            setTimeout(function(){
+                var stackedBars = svgSocial.selectAll('.'+stackedbarClass)
                 .data(data).enter()
                 .append("g")
                 .attr("class", stackedbarClass)
@@ -335,8 +336,7 @@ var Ranking = (function(){
                     });
 
                 stackedBars.selectAll('.'+barClass)
-                    //.data(function(d) { return d.weightedKeywords; })
-                    .data(data[0].weightedKeywords)
+                    .data(function(d) { return d.weightedKeywords; })
                     .enter()
                     .append("rect")
                     .attr("class", barClass)
@@ -346,8 +346,9 @@ var Ranking = (function(){
                     .style("fill", "black")
                     .style("opacity", 0.3);
 
-                bars = stackedBars.selectAll('.'+barClass);
-                t0 = bars.transition()
+                var bars = stackedBars.selectAll('.'+barClass);
+
+                var t0 = bars.transition()
                 .duration(500)
                 .attr("width", function(d) {
                     for(var i = 0; i < recData.length; i++)
@@ -355,6 +356,7 @@ var Ranking = (function(){
                             return x(recData[i].score);
                     return 0; });
             }, 800);
+
         },
 
 
@@ -436,6 +438,7 @@ var Ranking = (function(){
         *
         * ***************************************************************************************************************/
         updateCanvasDimensions: function(listHeight){
+
             height = listHeight;
             y.rangeBands(height, .01);
 
@@ -447,6 +450,7 @@ var Ranking = (function(){
 
             // update axes
             svg.select('.'+xClass+'.'+axisClass).attr("transform", "translate(0," + (height) + ")").call(xAxis.orient('bottom'));
+
 
             // svg social elements
             d3.select(svgSocial.node().parentNode)    // var svg = svg > g
@@ -467,10 +471,8 @@ var Ranking = (function(){
         resizeCanvas: function(containerHeight){
 
             //  Resize container if containerHeight is specified
-            if(containerHeight) {
+            if(containerHeight)
                 $root.css('height', containerHeight);
-                $rootSocial.css('height', containerHeight);
-            }
 
             //  Recalculate width
             width = $root.width() - margin.left - margin.right;
@@ -502,12 +504,18 @@ var Ranking = (function(){
             // Update bars
             svgSocial.selectAll('.'+stackedbarClass).attr('width', width);
             svgSocial.selectAll('rect.'+backgroundClass).attr('width', width);
-
             svgSocial.selectAll('.'+barClass)
-                .attr("x", 0);
+                .attr("x", function(d) { return x(d.x0); })
+                .attr("width", function(d) {
+                                    for(var i = 0; i < recData.length; i++)
+                                        if(recData[i].doc === d.id)
+                                            return x(recData[i].score);
+                                    return 0; });
         }
 
     };
+
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Prototype methods
@@ -519,11 +527,7 @@ var Ranking = (function(){
 
 
     var _update = function(rankingModel, colorScale, listHeight, recData){
-        /*for(var i = 0; i < recData.length; i++)
-            console.log(i, "recData", recData[i].doc);*/
-        if(recData.length == 0)
-            alert("No recData retrieved.")
-            
+        console.log(recData);
         var updateFunc = {};
         updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
         updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
