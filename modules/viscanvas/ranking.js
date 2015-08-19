@@ -39,7 +39,7 @@ var Ranking = (function(){
     }
 
     RANKING.Settings = {
-
+        recData: [],
         getInitData: function(rankingModel){
 
             var rankingData = rankingModel.getRanking();
@@ -111,7 +111,7 @@ var Ranking = (function(){
         *	Draw ranking at first instance
         *
         * ***************************************************************************************************************/
-        drawNew: function(rankingModel, colorScale, listHeight, recData){
+        drawNew: function(rankingModel, colorScale, listHeight){
 
             _this.clear();
             _this.isRankingDrawn = true;
@@ -202,7 +202,7 @@ var Ranking = (function(){
             //// Create drop shadow to use as filter when a bar is hovered or selected
             RANKING.Render.createShadow();
             //// Add stacked bars
-            RANKING.Render.drawStackedBars(recData);
+            RANKING.Render.drawStackedBars();
         },
 
         /******************************************************************************************************************
@@ -210,7 +210,7 @@ var Ranking = (function(){
         *	Redraw updated ranking and animate with transitions to depict changes
         *
         * ***************************************************************************************************************/
-        redrawUpdated: function(rankingModel, colorScale, listHeight, recData){
+        redrawUpdated: function(rankingModel, colorScale, listHeight){
 
             // Define input variables
             data = RANKING.Settings.getInitData(rankingModel);
@@ -248,7 +248,7 @@ var Ranking = (function(){
             transition.select('.'+yClass+'.'+axisClass).call(yAxis)
              .selectAll("g").delay(delay);
 
-            RANKING.Render.drawStackedBars(recData);
+            RANKING.Render.drawStackedBars();
         },
 
 
@@ -258,7 +258,7 @@ var Ranking = (function(){
         *	Draw stacked bars either on draw or update methods. Animate with width transition
         *
         * ***************************************************************************************************************/
-        drawStackedBars: function(recData){
+        drawStackedBars: function(){
             svg.selectAll('.'+stackedbarClass).data([]).exit();
             svg.selectAll('.'+stackedbarClass).remove();
             svg.selectAll('.'+stackedbarClass).data(data).enter();
@@ -336,7 +336,8 @@ var Ranking = (function(){
                     });
 
                 stackedBars.selectAll('.'+barClass)
-                    .data(function(d) { return d.weightedKeywords; })
+                    // return an array with a single entry thereby just one rectangle will be drawn (not for every keyword a rectangle)
+                    .data(function(d) { var x = []; x.push(d.weightedKeywords[0]); return x; })
                     .enter()
                     .append("rect")
                     .attr("class", barClass)
@@ -351,9 +352,9 @@ var Ranking = (function(){
                 var t0 = bars.transition()
                 .duration(500)
                 .attr("width", function(d) {
-                    for(var i = 0; i < recData.length; i++)
-                        if(recData[i].doc === d.id)
-                            return x(recData[i].score);
+                    for(var i = 0; i < RANKING.Settings.recData.length; i++)
+                        if(RANKING.Settings.recData[i].doc === d.id)
+                            return x(RANKING.Settings.recData[i].score);
                     return 0; });
             }, 800);
 
@@ -507,15 +508,13 @@ var Ranking = (function(){
             svgSocial.selectAll('.'+barClass)
                 .attr("x", function(d) { return x(d.x0); })
                 .attr("width", function(d) {
-                                    for(var i = 0; i < recData.length; i++)
-                                        if(recData[i].doc === d.id)
-                                            return x(recData[i].score);
-                                    return 0; });
+                        for(var i = 0; i < RANKING.Settings.recData.length; i++)
+                            if(RANKING.Settings.recData[i].doc === d.id)
+                                return x(RANKING.Settings.recData[i].score);
+                        return 0; });
         }
 
     };
-
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Prototype methods
@@ -527,7 +526,12 @@ var Ranking = (function(){
 
 
     var _update = function(rankingModel, colorScale, listHeight, recData){
-        console.log(recData);
+        RANKING.Settings.recData = recData;
+        //console.log(recData);
+
+        if(recData.length == 0)
+            alert("Oops, no recData retrieved.")
+
         var updateFunc = {};
         updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
         updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
