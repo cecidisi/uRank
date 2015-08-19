@@ -171,7 +171,6 @@ var Ranking = (function(){
                 .call(yAxis)
                 .selectAll("text");
 
-
             // svg social elements
             svgSocial = d3.select(s.rootSocial).append("svg")
                 .attr("class", svgClass)
@@ -516,6 +515,8 @@ var Ranking = (function(){
 
     };
 
+
+
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Prototype methods
 
@@ -527,10 +528,10 @@ var Ranking = (function(){
 
     var _update = function(rankingModel, colorScale, listHeight, recData){
         RANKING.Settings.recData = recData;
-        //console.log(recData);
+        /*console.log(recData);
 
         if(recData.length == 0)
-            alert("Oops, no recData retrieved.")
+            alert("Oops, no recData retrieved.")*/
 
         var updateFunc = {};
         updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
