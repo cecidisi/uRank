@@ -442,7 +442,14 @@ var Urank = (function(){
         tagBox = new TagBox(options.tagBox);
         visCanvas = new VisCanvas(options.visCanvas);
         docViewer = new DocViewer(options.docViewer);
-
+        var mySlider = new dhtmlXSlider({
+            				parent:	"beta-slider",
+            				step:	0.05,
+            				min:	0,
+            				max:	1,
+            				value:	0.5,
+            				linkTo:	"beta-input"
+            			});
         recommender = new RS();
     }
 

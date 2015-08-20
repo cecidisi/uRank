@@ -270,16 +270,26 @@ header select{
 */
 #tagbox {
     float: right;
-    width: 100%;
+    width: 85%;
     height: 5em;
 }
 
+#beta-slider-outta {
+    float: right;
+    width: 15%;
+    height: 5em;
+}
+
+#beta-slider, #beta-input {
+    margin-top: 10px;
+}
 
 #viscanvas {
     float: left;
     width: 100%;
     height: calc(100% - 5em);
 }
+
 
 
 /*.control-panel {

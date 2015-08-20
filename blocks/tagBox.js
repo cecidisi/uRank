@@ -143,7 +143,7 @@ var TagBox = (function(){
                 mouseenter: s.onTagInBoxMouseEnter($tag.attr(tagPosAttr)),
                 mouseleave: s.onTagInBoxMouseLeave($tag.attr(tagPosAttr)),
                 click: s.onTagInBoxClick($tag.attr(tagPosAttr))
-            }).on('click', '.'+tagDeleteButtonClass, $tag.attr(tagPosAttr), function(event){     //  Event handler for delete button
+            }).on('click', '.'+tagDeleteButtonClass, $tag.attr(tagPosAttr), function(event){  //  Event handler for delete button
                 event.stopPropagation(); s.onTagDeleted.call(this, event.data);
             });
 
