@@ -334,26 +334,56 @@ var Ranking = (function(){
                         return  '';
                     });
 
-                stackedBars.selectAll('.'+barClass)
+                if(RANKING.Settings.recData.length == 0)
+                    return;
+
+                stackedBars.selectAll('.'+barClass + "tag")
                     // return an array with a single entry thereby just one rectangle will be drawn (not for every keyword a rectangle)
                     .data(function(d) { var x = []; x.push(d.weightedKeywords[0]); return x; })
                     .enter()
                     .append("rect")
-                    .attr("class", barClass)
+                    .attr("class", barClass + "tag")
+                    .attr("height", y.rangeBand())
+                    .attr("x", 0)
+                    .attr("width", 0)
+                    .style("fill", "black")
+                    .style("opacity", 0.45);
+
+                stackedBars.selectAll('.'+barClass + "user")
+                    // return an array with a single entry thereby just one rectangle will be drawn (not for every keyword a rectangle)
+                    .data(function(d) { var x = []; x.push(d.weightedKeywords[0]); return x; })
+                    .enter()
+                    .append("rect")
+                    .attr("class", barClass + "user")
                     .attr("height", y.rangeBand())
                     .attr("x", 0)
                     .attr("width", 0)
                     .style("fill", "black")
                     .style("opacity", 0.3);
 
-                var bars = stackedBars.selectAll('.'+barClass);
-
-                var t0 = bars.transition()
+                var bars = stackedBars.selectAll('.'+barClass + "tag");
+                var beta = RANKING.Settings.recData[0].misc.beta;
+                bars.transition()
                 .duration(500)
                 .attr("width", function(d) {
                     for(var i = 0; i < RANKING.Settings.recData.length; i++)
                         if(RANKING.Settings.recData[i].doc === d.id)
-                            return x(RANKING.Settings.recData[i].score);
+                            return x(RANKING.Settings.recData[i].misc.tagBasedScore * beta);
+                    return 0; });
+
+                bars = stackedBars.selectAll('.'+barClass + "user");
+
+                bars.transition()
+                .duration(500)
+                .attr("x", function(d) {
+                    for(var i = 0; i < RANKING.Settings.recData.length; i++)
+                        if(RANKING.Settings.recData[i].doc === d.id)
+                            return x(RANKING.Settings.recData[i].misc.tagBasedScore * beta);
+                    })
+                .attr("width", function(d) {
+                    for(var i = 0; i < RANKING.Settings.recData.length; i++)
+                        if(RANKING.Settings.recData[i].doc === d.id)
+                            return x(RANKING.Settings.recData[i].misc.userBasedScore * (1 - beta));
                     return 0; });
             }, 800);
 
@@ -502,14 +532,25 @@ var Ranking = (function(){
             svgSocial.select('.'+xClass + '.'+axisClass).call(xAxis.orient('bottom'));
 
             // Update bars
+            var beta = RANKING.Settings.recData[0].misc.beta;
             svgSocial.selectAll('.'+stackedbarClass).attr('width', width);
             svgSocial.selectAll('rect.'+backgroundClass).attr('width', width);
-            svgSocial.selectAll('.'+barClass)
+            svgSocial.selectAll('.'+barClass + "tag")
                 .attr("x", function(d) { return x(d.x0); })
                 .attr("width", function(d) {
                         for(var i = 0; i < RANKING.Settings.recData.length; i++)
                             if(RANKING.Settings.recData[i].doc === d.id)
-                                return x(RANKING.Settings.recData[i].score);
+                                return x(RANKING.Settings.recData[i].misc.tagBasedScore * beta);
+                        return 0; });
+            svgSocial.selectAll('.'+barClass + "user")
+                .attr("x", function(d) {
+                        for(var i = 0; i < RANKING.Settings.recData.length; i++)
+                            if(RANKING.Settings.recData[i].doc === d.id)
+                                return x(d.x0 + RANKING.Settings.recData[i].misc.tagBasedScore * beta); })
+                .attr("width", function(d) {
+                        for(var i = 0; i < RANKING.Settings.recData.length; i++)
+                            if(RANKING.Settings.recData[i].doc === d.id)
+                                return x(RANKING.Settings.recData[i].misc.userBasedScore * (1 - beta));
                         return 0; });
         }
 
@@ -528,9 +569,9 @@ var Ranking = (function(){
 
     var _update = function(rankingModel, colorScale, listHeight, recData){
         RANKING.Settings.recData = recData;
-        /*console.log(recData);
+        console.log(recData);
 
-        if(recData.length == 0)
+        /*if(recData.length == 0)
             alert("Oops, no recData retrieved.")*/
 
         var updateFunc = {};
@@ -581,7 +622,10 @@ var Ranking = (function(){
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0)')
                 .style('filter', 'url(#drop-shadow)');
-            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
+            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass + "tag")
+                .attr('transform', 'translate(0, 0)')
+                .style('filter', 'url(#drop-shadow)');
+            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass + "user")
                 .attr('transform', 'translate(0, 0)')
                 .style('filter', 'url(#drop-shadow)');
         }
@@ -594,7 +638,10 @@ var Ranking = (function(){
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')
                 .style('filter', '');
-            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
+            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass + "tag")
+                .attr('transform', 'translate(0, 0.2)')
+                .style('filter', '');
+            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass + "user")
                 .attr('transform', 'translate(0, 0.2)')
                 .style('filter', '');
         }

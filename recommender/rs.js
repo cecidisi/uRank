@@ -163,7 +163,7 @@ window.RS = (function(){
 
                     var tagBasedScore = 0,
                         userBasedScore = 0,
-                        tags = {}, users = 0;
+                        tags = {}, users = 0, beta = p.options.beta;
 
                     //  Compute tag-based score
                     if(p.options.beta > 0) {
@@ -198,7 +198,8 @@ window.RS = (function(){
                                 tagBasedScore: Math.roundTo(tagBasedScore, 3),
                                 userBasedScore: Math.roundTo(userBasedScore, 3),
                                 tags: tags,
-                                users: users
+                                users: users,
+                                beta: beta
                             }
                         });
                 }

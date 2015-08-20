@@ -6,6 +6,7 @@ var VisCanvas = (function(){
     var viscanvasClass = 'urank-viscanvas',
         viscanvasContainerClass = 'urank-viscanvas-container',
         viscanvasContainerSocialClass = 'urank-viscanvas-container-social'
+        viscanvasContainerSeparationClass = 'urank-viscanvas-container-separation'
         visCanvasMessageClass = 'urank-viscanvas-message',
         hiddenScrollbarClass = 'urank-hidden-scrollbar',
         hiddenScrollbarInnerClass = 'urank-hidden-scrollbar-inner';
@@ -45,6 +46,7 @@ var VisCanvas = (function(){
         }
         $scrollable.on('scroll', onScroll);
         $visContainer = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerClass).height(this.height);
+        $visContainerSeparation = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerSeparationClass).height(10);
         $visContainer2 = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerSocialClass).height(this.height);
 
         var visModule = VIS_MODULES[opt.module] || VIS_MODULES.ranking;

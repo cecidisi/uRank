@@ -532,14 +532,22 @@ Canvas section (right-center) - displays ranking vis
 }
 
 .urank-viscanvas-container {
- width: 50%;
+ width: 49%;
  float: left;
+}
+.urank-viscanvas-container-separation {
+ width: 2%;
+ float: left;
+ background-color: white;
+ //opacity: 0.1;
 }
 
 .urank-viscanvas-container-social {
- width: 50%;
+ width: 49%;
  float: left;
 }
+
+
 
 /*
 <div> appended to canvas when a message should be displayed. E.g. when a new search is triggered or no data are received.
