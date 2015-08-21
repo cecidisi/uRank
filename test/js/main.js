@@ -114,6 +114,8 @@
         $('#select-dataset').trigger('change');
         $('#btn-destroy').click(function(){ urank.destroy(); })
 
+        $('#beta-input').bind('input', function() {
+             setTimeout(function() { urank.betaChanged(); }, 1000); });
     };
 
     //  Calling Urank

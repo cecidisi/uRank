@@ -183,7 +183,29 @@ var Urank = (function(){
             s.onLoad.call(this, _this.keywords);
         },
 
+        onBetaChanged: function() {
+            var beta = $('#beta-input').val();
+
+            if(isNaN(beta))
+                return;
+
+            var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode).getRanking();
+            var status = _this.rankingModel.getStatus();
+
+            /*****/
+            var recData = recommender.getRecommendations({ keywords: _this.selectedKeywords, beta: beta });
+            /*****/
+
+            contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
+            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), recData);
+            docViewer.clear();
+            tagCloud.clearEffects();
+
+            s.onChange.call(this, rankingData, _this.selectedKeywords, status);
+        },
+
         onChange: function(selectedKeywords) {
+            var beta = $('#beta-input').val();
 
             _this.selectedKeywords = selectedKeywords;
             _this.selectedId = STR_UNDEFINED;
@@ -192,7 +214,7 @@ var Urank = (function(){
             var status = _this.rankingModel.getStatus();
 
             /*****/
-            var recData = recommender.getRecommendations({ keywords: _this.selectedKeywords });
+            var recData = recommender.getRecommendations({ keywords: _this.selectedKeywords, beta: $('#beta-input').val() });
             /*****/
 
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
@@ -335,6 +357,11 @@ var Urank = (function(){
             visCanvas.resize();
         },
 
+        onBetaChange: function() {
+            alert("hier");
+            EVTHANDLER.onBetaChange(beta);
+        },
+
         // Event handlers to return
         onRankByOverallScore: function() {
             _this.rankingMode = RANKING_MODE.overall_score;
@@ -444,7 +471,7 @@ var Urank = (function(){
         docViewer = new DocViewer(options.docViewer);
         var mySlider = new dhtmlXSlider({
             				parent:	"beta-slider",
-            				step:	0.05,
+            				step:	0.001,
             				min:	0,
             				max:	1,
             				value:	0.5,
@@ -493,7 +520,8 @@ var Urank = (function(){
         rankByMaximumScore: EVTHANDLER.onRankByMaximumScore,
         clear: EVTHANDLER.onClear,
         destroy: EVTHANDLER.onDestroy,
-        getCurrentState: MISC.getCurrentState
+        getCurrentState: MISC.getCurrentState,
+        betaChanged: EVTHANDLER.onBetaChanged
     };
 
     return Urank;

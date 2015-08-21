@@ -117,12 +117,11 @@ window.RS = (function(){
         },
 
         getRecommendations: function(args) {
-
             var p = $.extend(true, {
                 user: 'new',
                 keywords: [],
                 options: {
-                    beta: 0.5,
+                    beta: args.beta,
                     neighborhoodSize: 20,
                     and: false,
                     recSize: 0
