@@ -569,7 +569,7 @@ var Ranking = (function(){
 
     var _update = function(rankingModel, colorScale, listHeight, recData){
         RANKING.Settings.recData = recData;
-        console.log(recData);
+        //console.log(recData);
 
         /*if(recData.length == 0)
             alert("Oops, no recData retrieved.")*/

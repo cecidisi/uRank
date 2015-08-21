@@ -532,18 +532,18 @@ Canvas section (right-center) - displays ranking vis
 }
 
 .urank-viscanvas-container {
- width: 49%;
+ width: 49.5%;
  float: left;
 }
 .urank-viscanvas-container-separation {
- width: 2%;
+ width: 1%;
  float: left;
  background-color: white;
  //opacity: 0.1;
 }
 
 .urank-viscanvas-container-social {
- width: 49%;
+ width: 49.5%;
  float: left;
 }
 
