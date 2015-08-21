@@ -114,8 +114,23 @@
         $('#select-dataset').trigger('change');
         $('#btn-destroy').click(function(){ urank.destroy(); })
 
-        $('#beta-input').bind('input', function() {
-             setTimeout(function() { urank.betaChanged(); }, 1000); });
+        var beta = $('#beta-input').val();
+
+        setInterval(function() {
+            if(beta != $('#beta-input').val()) {
+                if($('#beta-input').val() > 1) {
+                    beta = 1;
+                    $('#beta-input').val(1);
+                }
+                else if($('#beta-input').val() < 0) {
+                    beta = 0;
+                    $('#beta-input').val(0);
+                }
+                else
+                    beta = $('#beta-input').val();
+                urank.betaChanged();
+            }
+        }, 1000);
     };
 
     //  Calling Urank
