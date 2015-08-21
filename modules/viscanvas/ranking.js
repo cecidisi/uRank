@@ -500,6 +500,9 @@ var Ranking = (function(){
         * ***************************************************************************************************************/
         resizeCanvas: function(containerHeight){
 
+            if(RANKING.Settings.recData.length == 0)
+                return;
+
             //  Resize container if containerHeight is specified
             if(containerHeight)
                 $root.css('height', containerHeight);
