@@ -6,12 +6,13 @@ var VisCanvas = (function(){
     var viscanvasClass = 'urank-viscanvas',
         viscanvasContainerClass = 'urank-viscanvas-container',
         viscanvasContainerSocialClass = 'urank-viscanvas-container-social'
+        viscanvasContainerTagged = 'urank-viscanvas-container-tagged'
         viscanvasContainerSeparationClass = 'urank-viscanvas-container-separation'
         visCanvasMessageClass = 'urank-viscanvas-message',
         hiddenScrollbarClass = 'urank-hidden-scrollbar',
         hiddenScrollbarInnerClass = 'urank-hidden-scrollbar-inner';
     // Helper
-    var $root = $(''), $scrollable = $(''), $visContainer = $(''), $visContainer2 = $('');
+    var $root = $(''), $scrollable = $(''), $visContainer = $(''), $visContainerSocial = $('');
 
 
     var onScroll = function(event) {
@@ -47,7 +48,8 @@ var VisCanvas = (function(){
         $scrollable.on('scroll', onScroll);
         $visContainer = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerClass).height(this.height);
         $visContainerSeparation = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerSeparationClass).height(10);
-        $visContainer2 = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerSocialClass).height(this.height);
+        $visContainerSocial = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerSocialClass).height(this.height);
+        $visContainerTagged = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerTagged).height(this.height);
 
         var visModule = VIS_MODULES[opt.module] || VIS_MODULES.ranking;
         this.vis = new visModule($.extend({}, s, { root: '.'+viscanvasContainerClass, rootSocial: '.'+viscanvasContainerSocialClass }, opt.customOpt));
@@ -61,8 +63,8 @@ var VisCanvas = (function(){
         $scrollable.scrollTo('top');
         this.vis.update(rankingModel, colorScale, listHeight, recData);
         $visContainer.height(this.vis.getHeight());
-        $visContainer2.height(this.vis.getHeight());
-
+        $visContainerSocial.height(this.vis.getHeight());
+        $visContainerTagged.height(this.vis.getHeight());
         return this;
     };
 
@@ -80,7 +82,8 @@ var VisCanvas = (function(){
     var _reset = function() {
         if(this.vis) this.vis.reset();
         $visContainer.height(this.height);
-        $visContainer2.height(this.height);
+        $visContainerSocial.height(this.height);
+        $visContainerTagged.height(this.height);
         return this;
     };
 
@@ -112,7 +115,8 @@ var VisCanvas = (function(){
     var _clearEffects = function() {
         if(this.vis) if(this.vis) this.vis.clearEffects();
         $visContainer.css('height', '');
-        $visContainer2.css('height', '');
+        $visContainerSocial.css('height', '');
+        $visContainerTagged.css('height', '');
         return this;
     };
 

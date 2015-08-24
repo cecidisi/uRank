@@ -28,6 +28,7 @@ var Ranking = (function(){
         s = $.extend({
             root: '.urank-viscanvas-container',
             rootSocial: '.urank-viscanvas-container-social',
+            rootTagged: '.urank-viscanvas-container-tagged',
             onItemClicked: function(document){},
             onItemMouseEnter: function(document){},
             onItemMouseLeave: function(document){},
@@ -197,6 +198,32 @@ var Ranking = (function(){
                 .call(yAxis)
                 .selectAll("text");
 
+            // svg tagged elements
+            svgTagged = d3.select(s.rootTagged).append("svg")
+                .attr("class", svgClass)
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom + 30)
+                .append("g")
+                    .attr("width", width)
+                    .attr("height", height + 30)
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            svgTagged.append("g")
+                .attr("class", xClass + ' ' + axisClass)
+                .attr("transform", "translate(0," + (height) + ")")
+                .call(xAxis)
+                .append("text")
+                    .attr("class", xAxisLabelClass)
+                    .attr("x", width)
+                    .attr("y", -6)
+                    .style("text-anchor", "end")
+                    .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
+
+            svgTagged.append("g")
+                .attr("class", yClass +' '+axisClass)
+                .call(yAxis)
+                .selectAll("text");
+
 
             //// Create drop shadow to use as filter when a bar is hovered or selected
             RANKING.Render.createShadow();
@@ -262,6 +289,16 @@ var Ranking = (function(){
             svg.selectAll('.'+stackedbarClass).remove();
             svg.selectAll('.'+stackedbarClass).data(data).enter();
 
+            // svg social elements
+            svgSocial.selectAll('.'+stackedbarClass).data([]).exit();
+            svgSocial.selectAll('.'+stackedbarClass).remove();
+            svgSocial.selectAll('.'+stackedbarClass).data(data).enter();
+
+            // svg tagged elements
+            svgTagged.selectAll('.'+stackedbarClass).data([]).exit();
+            svgTagged.selectAll('.'+stackedbarClass).remove();
+            svgTagged.selectAll('.'+stackedbarClass).data(data).enter();
+
             setTimeout(function(){
                 var stackedBars = svg.selectAll('.'+stackedbarClass)
                 .data(data).enter()
@@ -301,17 +338,10 @@ var Ranking = (function(){
                 var t0 = bars.transition()
                 .duration(500)
                 .attr({ "width": function(d) { return x(d.x1) - x(d.x0); } });
-            }, 800);
 
 
-
-            // svg social elements
-            svgSocial.selectAll('.'+stackedbarClass).data([]).exit();
-            svgSocial.selectAll('.'+stackedbarClass).remove();
-            svgSocial.selectAll('.'+stackedbarClass).data(data).enter();
-
-            setTimeout(function(){
-                var stackedBars = svgSocial.selectAll('.'+stackedbarClass)
+                // svg social elements
+                stackedBars = svgSocial.selectAll('.'+stackedbarClass)
                 .data(data).enter()
                 .append("g")
                 .attr("class", stackedbarClass)
@@ -337,56 +367,53 @@ var Ranking = (function(){
                 if(RANKING.Settings.recData.length == 0)
                     return;
 
-                stackedBars.selectAll('.'+barClass + "tag")
+                stackedBars.selectAll('.'+barClass)
                     // return an array with a single entry thereby just one rectangle will be drawn (not for every keyword a rectangle)
                     .data(function(d) { var x = []; x.push(d.weightedKeywords[0]); return x; })
                     .enter()
                     .append("rect")
-                    .attr("class", barClass + "tag")
+                    .attr("class", barClass)
                     .attr("height", y.rangeBand())
                     .attr("x", 0)
                     .attr("width", 0)
                     .style("fill", "black")
                     .style("opacity", 0.45);
 
-                stackedBars.selectAll('.'+barClass + "user")
-                    // return an array with a single entry thereby just one rectangle will be drawn (not for every keyword a rectangle)
-                    .data(function(d) { var x = []; x.push(d.weightedKeywords[0]); return x; })
-                    .enter()
-                    .append("rect")
-                    .attr("class", barClass + "user")
-                    .attr("height", y.rangeBand())
-                    .attr("x", 0)
-                    .attr("width", 0)
-                    .style("fill", "black")
-                    .style("opacity", 0.3);
 
-                var bars = stackedBars.selectAll('.'+barClass + "tag");
+                bars = stackedBars.selectAll('.'+barClass);
                 var beta = RANKING.Settings.recData[0].misc.beta;
                 bars.transition()
                 .duration(500)
                 .attr("width", function(d) {
                     for(var i = 0; i < RANKING.Settings.recData.length; i++)
                         if(RANKING.Settings.recData[i].doc === d.id)
-                            return x(RANKING.Settings.recData[i].misc.tagBasedScore * beta);
+                            return x(RANKING.Settings.recData[i].score);
                     return 0; });
 
-                bars = stackedBars.selectAll('.'+barClass + "user");
+                // svg tagged elements
+                var stackedBars = svgTagged.selectAll('.'+stackedbarClass)
+                .data(data).enter()
+                .append("g")
+                .attr("class", stackedbarClass)
+                .attr("id", function(d, i){ return "urank-ranking-stackedbar-" + d.id; })
+                .attr( "transform", function(d, i) { return "translate(0, " + y(i) + ")"; } )
+                .on('click', RANKING.Evt.itemClicked)
+                .on('mouseover', RANKING.Evt.itemMouseEntered)
+                .on('mouseout', RANKING.Evt.itemMouseLeft);
 
-                bars.transition()
-                .duration(500)
-                .attr("x", function(d) {
-                    for(var i = 0; i < RANKING.Settings.recData.length; i++)
-                        if(RANKING.Settings.recData[i].doc === d.id)
-                            return x(RANKING.Settings.recData[i].misc.tagBasedScore * beta);
-                    })
-                .attr("width", function(d) {
-                    for(var i = 0; i < RANKING.Settings.recData.length; i++)
-                        if(RANKING.Settings.recData[i].doc === d.id)
-                            return x(RANKING.Settings.recData[i].misc.userBasedScore * (1 - beta));
-                    return 0; });
+                stackedBars.append('rect')
+                    .attr('class', function(d, i){ if(i%2) return darkBackgroundClass; return lightBackgroundClass; })
+                    .attr('x', 0)
+                    .attr('width', width)
+                    .attr('height', y.rangeBand())
+                    .style('fill', function(d, i){
+                        if(s.lightBackgroundColor != '' && s.darkBackgroundColor != '') {
+                            if(i%2) return s.darkBackgroundColor;
+                            return s.lightBackgroundColor;
+                        }
+                        return  '';
+                    });
             }, 800);
-
         },
 
 
@@ -457,7 +484,40 @@ var Ranking = (function(){
 
             // overlay original SourceGraphic over translated blurred opacity by using
             // feMerge filter. Order of specifying inputs is important!
-            var feMerge = filter.append("feMerge");
+            feMerge = filter.append("feMerge");
+            feMerge.append("feMergeNode").attr("in", "offsetBlur")
+            feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+
+            // svg tagged elements
+            // filters go in defs element
+            defs = svgTagged.append("defs");
+
+            // create filter with id #drop-shadow
+            // height=130% so that the shadow is not clipped
+            filter = defs.append("filter")
+            .attr("id", "drop-shadow")
+            .attr("height", "130%");
+
+            // SourceAlpha refers to opacity of graphic that this filter will be applied to
+            // convolve that with a Gaussian with standard deviation 3 and store result
+            // in blur
+            filter.append("feGaussianBlur")
+                .attr("in", "SourceAlpha")
+                .attr("stdDeviation", 2)
+                .attr("result", "blur");
+
+            // translate output of Gaussian blur to the right and downwards with 2px
+            // store result in offsetBlur
+            filter.append("feOffset")
+                .attr("in", "blur")
+                .attr("dx", 0)
+                .attr("dy", 2)
+                .attr("result", "offsetBlur");
+
+            // overlay original SourceGraphic over translated blurred opacity by using
+            // feMerge filter. Order of specifying inputs is important!
+            feMerge = filter.append("feMerge");
             feMerge.append("feMergeNode").attr("in", "offsetBlur")
             feMerge.append("feMergeNode").attr("in", "SourceGraphic");
         },
@@ -491,6 +551,17 @@ var Ranking = (function(){
 
             // update axes
             svgSocial.select('.'+xClass+'.'+axisClass).attr("transform", "translate(0," + (height) + ")").call(xAxis.orient('bottom'));
+
+
+            // svg tagged elements
+            d3.select(svgTagged.node().parentNode)    // var svg = svg > g
+                .attr('height', height + margin.top + margin.bottom + 30);
+
+            svgTagged.attr("height", height + 30)
+                .attr("transform", "translate(" + (margin.left) + ", 0)");
+
+            // update axes
+            svgTagged.select('.'+xClass+'.'+axisClass).attr("transform", "translate(0," + (height) + ")").call(xAxis.orient('bottom'));
         },
 
         /*****************************************************************************************************************
@@ -538,28 +609,16 @@ var Ranking = (function(){
             var beta = RANKING.Settings.recData[0].misc.beta;
             svgSocial.selectAll('.'+stackedbarClass).attr('width', width);
             svgSocial.selectAll('rect.'+backgroundClass).attr('width', width);
-            svgSocial.selectAll('.'+barClass + "tag")
+            svgSocial.selectAll('.'+barClass)
                 .attr("x", function(d) { return x(d.x0); })
                 .attr("width", function(d) {
                         for(var i = 0; i < RANKING.Settings.recData.length; i++)
                             if(RANKING.Settings.recData[i].doc === d.id)
-                                return x(RANKING.Settings.recData[i].misc.tagBasedScore * beta);
-                        return 0; });
-            svgSocial.selectAll('.'+barClass + "user")
-                .attr("x", function(d) {
-                        for(var i = 0; i < RANKING.Settings.recData.length; i++)
-                            if(RANKING.Settings.recData[i].doc === d.id)
-                                return x(d.x0 + RANKING.Settings.recData[i].misc.tagBasedScore * beta); })
-                .attr("width", function(d) {
-                        for(var i = 0; i < RANKING.Settings.recData.length; i++)
-                            if(RANKING.Settings.recData[i].doc === d.id)
-                                return x(RANKING.Settings.recData[i].misc.userBasedScore * (1 - beta));
+                                return x(RANKING.Settings.recData[i].score);
                         return 0; });
         }
 
     };
-
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Prototype methods
@@ -567,12 +626,14 @@ var Ranking = (function(){
     var _build = function(containerHeight) {
         $root = $(s.root)
         $rootSocial = $(s.rootSocial)
+        $rootTagged = $(s.rootTagged)
     }
 
 
     var _update = function(rankingModel, colorScale, listHeight, recData){
+
         RANKING.Settings.recData = recData;
-        //console.log(recData);
+        console.log(recData);
 
         /*if(recData.length == 0)
             alert("Oops, no recData retrieved.")*/
@@ -591,6 +652,7 @@ var Ranking = (function(){
         this.isRankingDrawn = false;
         $root.empty();
         $rootSocial.empty();
+        $rootTagged.empty();
         return this;
     };
 
@@ -606,6 +668,7 @@ var Ranking = (function(){
             id = _.isArray(id) ? id : [id];
             svg.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
             svgSocial.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
+            svgTagged.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
         }
         return this;
     };
@@ -615,6 +678,7 @@ var Ranking = (function(){
         if(this.isRankingDrawn) {
             svg.selectAll('.'+stackedbarClass).style('opacity', 1);
             svgSocial.selectAll('.'+stackedbarClass).style('opacity', 1);
+            svgTagged.selectAll('.'+stackedbarClass).style('opacity', 1);
         }
         return this;
     };
@@ -625,12 +689,12 @@ var Ranking = (function(){
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0)')
                 .style('filter', 'url(#drop-shadow)');
-            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass + "tag")
+            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0)')
                 .style('filter', 'url(#drop-shadow)');
-            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass + "user")
-                .attr('transform', 'translate(0, 0)')
-                .style('filter', 'url(#drop-shadow)');
+            svgTagged.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
+                            .attr('transform', 'translate(0, 0)')
+                            .style('filter', 'url(#drop-shadow)');
         }
         return this;
     };
@@ -641,12 +705,12 @@ var Ranking = (function(){
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')
                 .style('filter', '');
-            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass + "tag")
+            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')
                 .style('filter', '');
-            svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass + "user")
-                .attr('transform', 'translate(0, 0.2)')
-                .style('filter', '');
+            svgTagged.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
+                            .attr('transform', 'translate(0, 0.2)')
+                            .style('filter', '');
         }
         return this;
     };
