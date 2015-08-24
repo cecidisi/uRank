@@ -171,7 +171,7 @@ window.RS = (function(){
                                 var normalizedFreq = _this.itemTagMatrix[doc][k.term] / _this.maxTagAcrossDocs[k.term];           // normalized item-tag frequency
                                 var scalingFactor = 1 / (Math.pow(Math.E, (1 / _this.itemTagMatrix[doc][k.term])));   // raises final score of items bookmarked many times
                                 var tagScore = Math.roundTo((normalizedFreq * k.weight * scalingFactor / p.keywords.length), 3);
-                                tags[k.term] = { tagged: _this.itemTagMatrix[doc][k.term], score: tagScore };
+                                tags[k.term] = { tagged: _this.itemTagMatrix[doc][k.term], score: tagScore, stem: k.stem };
                                 tagBasedScore += tagScore;
                             }
                         });
@@ -237,6 +237,5 @@ window.RS = (function(){
         }
 
     };
-
     return RS;
 })();

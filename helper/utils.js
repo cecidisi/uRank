@@ -213,7 +213,6 @@ function getStyledText (text, stemmedKeywords, colorScale){
 
 
 function getStyledWord (word, stemmedKeywords, colorScale){
-
     var trickyWords = ['it', 'is', 'us', 'ar'],
         word = word.replace(/our$/, 'or'),
         wordStem = word.stem();
@@ -226,8 +225,6 @@ function getStyledWord (word, stemmedKeywords, colorScale){
     }
     return word;
 }
-
-
 
 
 

@@ -208,23 +208,6 @@ var Ranking = (function(){
                     .attr("height", height + 30)
                     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            svgTagged.append("g")
-                .attr("class", xClass + ' ' + axisClass)
-                .attr("transform", "translate(0," + (height) + ")")
-                .call(xAxis)
-                .append("text")
-                    .attr("class", xAxisLabelClass)
-                    .attr("x", width)
-                    .attr("y", -6)
-                    .style("text-anchor", "end")
-                    .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
-
-            svgTagged.append("g")
-                .attr("class", yClass +' '+axisClass)
-                .call(yAxis)
-                .selectAll("text");
-
-
             //// Create drop shadow to use as filter when a bar is hovered or selected
             RANKING.Render.createShadow();
             //// Add stacked bars
@@ -413,26 +396,48 @@ var Ranking = (function(){
                         return  '';
                     });
 
-
-                // todo: add tagged-rects here
                 stackedBars.selectAll('.'+barClass)
-                    .data(function(d) { return d.weightedKeywords; })
+                    .data(function(d) {
+                        for(var j = 0; j < RANKING.Settings.recData.length; j++) {
+                            if(RANKING.Settings.recData[j].doc === d.id) {
+                                var users = [];
+                                users.push(RANKING.Settings.recData[j].misc.users);
+                                return users;
+                            }
+                        }
+                        return 0;
+                    })
+                    .enter()
+                    .append("text")
+                    .attr("x", function(d, i) { return 75; })
+                    .attr("y", 15)
+                    .text(function(d) { return d;});
+
+
+                // TODO there is an error with drawing the rectangles (just one will be drawn for each doc)
+                var highestTagValue = 0;
+                stackedBars.selectAll('.'+barClass)
+                    .data(function(d) {
+                        for(var j = 0; j < RANKING.Settings.recData.length; j++) {
+                            if(RANKING.Settings.recData[j].doc === d.id) {
+                                var taggedData = [];
+                                for(var tag in RANKING.Settings.recData[j].misc.tags)
+                                    if(RANKING.Settings.recData[j].misc.tags[tag].tagged > highestTagValue)
+                                        highestTagValue = RANKING.Settings.recData[j].misc.tags[tag].tagged;
+                                    if(RANKING.Settings.recData[j].misc.tags[tag].tagged !== undefined)
+                                        taggedData.push({"tag": tag, "number": RANKING.Settings.recData[j].misc.tags[tag].tagged,
+                                        "stem": RANKING.Settings.recData[j].misc.tags[tag].stem});
+                                return taggedData;
+                            }
+                        }
+                        return 0;
+                    })
                     .enter()
                     .append("rect")
                     .attr("class", barClass)
-                    .attr("height", function(d, i) {
-                        for(var j = 0; j < RANKING.Settings.recData.length; j++) {
-                            if(RANKING.Settings.recData[j].doc === d.id) {
-                                console.log(RANKING.Settings.recData[j]);
-                                for(var entry in RANKING.Settings.recData[j].misc.tags) {
-                                    console.log(entry);
-                                }
-                                return y.rangeBand() - 5;
-                             }
-                        }
-                        return 0;})
+                    .attr("height", function(d, i) { return (y.rangeBand() - 5) * d.number / highestTagValue; })
                     .attr("x", function(d, i) { return 15 * i + 3; })
-                    .attr("y", 5)
+                    .attr("y", y.rangeBand() - 10/*function(d, i) { return y.rangeBand() -  (y.rangeBand() - 5) * d.number / highestTagValue; }*/)
                     .attr("width", 10)
                     .style("fill", function(d) { return color(d.stem); });
             }, 800);
