@@ -379,7 +379,6 @@ var Ranking = (function(){
                     .style("fill", "black")
                     .style("opacity", 0.45);
 
-
                 bars = stackedBars.selectAll('.'+barClass);
                 var beta = RANKING.Settings.recData[0].misc.beta;
                 bars.transition()
@@ -391,7 +390,7 @@ var Ranking = (function(){
                     return 0; });
 
                 // svg tagged elements
-                var stackedBars = svgTagged.selectAll('.'+stackedbarClass)
+                stackedBars = svgTagged.selectAll('.'+stackedbarClass)
                 .data(data).enter()
                 .append("g")
                 .attr("class", stackedbarClass)
@@ -413,6 +412,18 @@ var Ranking = (function(){
                         }
                         return  '';
                     });
+
+
+                // todo: add tagged-rects here
+                stackedBars.selectAll('.'+barClass)
+                    .data(function(d) { return d.weightedKeywords; })
+                    .enter()
+                    .append("rect")
+                    .attr("class", barClass)
+                    .attr("height", y.rangeBand() - 10)
+                    .attr("x", function(d, i) { return 15 * i + 3; })
+                    .attr("width", 10)
+                    .style("fill", function(d) { return color(d.stem); });
             }, 800);
         },
 
