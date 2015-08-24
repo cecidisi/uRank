@@ -420,8 +420,19 @@ var Ranking = (function(){
                     .enter()
                     .append("rect")
                     .attr("class", barClass)
-                    .attr("height", y.rangeBand() - 10)
+                    .attr("height", function(d, i) {
+                        for(var j = 0; j < RANKING.Settings.recData.length; j++) {
+                            if(RANKING.Settings.recData[j].doc === d.id) {
+                                console.log(RANKING.Settings.recData[j]);
+                                for(var entry in RANKING.Settings.recData[j].misc.tags) {
+                                    console.log(entry);
+                                }
+                                return y.rangeBand() - 5;
+                             }
+                        }
+                        return 0;})
                     .attr("x", function(d, i) { return 15 * i + 3; })
+                    .attr("y", 5)
                     .attr("width", 10)
                     .style("fill", function(d) { return color(d.stem); });
             }, 800);
