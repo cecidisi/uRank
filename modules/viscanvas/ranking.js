@@ -409,12 +409,11 @@ var Ranking = (function(){
                     })
                     .enter()
                     .append("text")
-                    .attr("x", function(d, i) { return 75; })
+                    .attr("x", 75)
                     .attr("y", 15)
                     .text(function(d) { return d;});
 
 
-                // TODO there is an error with drawing the rectangles (just one will be drawn for each doc)
                 var highestTagValue = 0;
                 stackedBars.selectAll('.'+barClass)
                     .data(function(d) {
@@ -428,7 +427,7 @@ var Ranking = (function(){
                                     if(RANKING.Settings.recData[j].misc.tags[tag].tagged > highestTagValue)
                                         highestTagValue = RANKING.Settings.recData[j].misc.tags[tag].tagged;
                                 }
-                                console.log("taggedData: ", taggedData);
+                                //console.log("taggedData: ", taggedData);
                                 return taggedData;
                             }
                         }
@@ -438,7 +437,12 @@ var Ranking = (function(){
                     .append("rect")
                     .attr("class", barClass)
                     .attr("height", function(d, i) { return (y.rangeBand() * 0.8) * d.number / highestTagValue; })
-                    .attr("x", function(d, i) {return 15 * i + 3; })
+                    .attr("x", function(d, i) {
+                        for(var j = 0; j < data[0].weightedKeywords.length; j++) {
+                            if(d.tag === data[0].weightedKeywords[j].term)
+                                return 15 * j + 3
+                        }
+                    })
                     .attr("y", function(d, i) { return y.rangeBand() -  (y.rangeBand() * 0.8) * d.number / highestTagValue; })
                     .attr("width", 10)
                     .style("fill", function(d) { return color(d.stem); });

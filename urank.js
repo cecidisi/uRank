@@ -213,11 +213,9 @@ var Urank = (function(){
             var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode).getRanking();
             var status = _this.rankingModel.getStatus();
 
-            console.log("selectedKeywords", _this.selectedKeywords);
 
             /*****/
             var recData = recommender.getRecommendations({ keywords: _this.selectedKeywords, beta: $('#beta-input').val() });
-            console.log("recData", recData)
             /*****/
 
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
