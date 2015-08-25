@@ -422,11 +422,12 @@ var Ranking = (function(){
                             if(RANKING.Settings.recData[j].doc === d.id) {
                                 var taggedData = [];
                                 for(var tag in RANKING.Settings.recData[j].misc.tags)
-                                    if(RANKING.Settings.recData[j].misc.tags[tag].tagged > highestTagValue)
-                                        highestTagValue = RANKING.Settings.recData[j].misc.tags[tag].tagged;
                                     if(RANKING.Settings.recData[j].misc.tags[tag].tagged !== undefined)
                                         taggedData.push({"tag": tag, "number": RANKING.Settings.recData[j].misc.tags[tag].tagged,
                                         "stem": RANKING.Settings.recData[j].misc.tags[tag].stem});
+                                    if(RANKING.Settings.recData[j].misc.tags[tag].tagged > highestTagValue)
+                                        highestTagValue = RANKING.Settings.recData[j].misc.tags[tag].tagged;
+                                console.log("taggedData: ", taggedData);
                                 return taggedData;
                             }
                         }
@@ -436,8 +437,8 @@ var Ranking = (function(){
                     .append("rect")
                     .attr("class", barClass)
                     .attr("height", function(d, i) { return (y.rangeBand() - 5) * d.number / highestTagValue; })
-                    .attr("x", function(d, i) { return 15 * i + 3; })
-                    .attr("y", y.rangeBand() - 10/*function(d, i) { return y.rangeBand() -  (y.rangeBand() - 5) * d.number / highestTagValue; }*/)
+                    .attr("x", function(d, i) {return 15 * i + 3; })
+                    .attr("y", function(d, i) { return y.rangeBand() -  (y.rangeBand() - 5) * d.number / highestTagValue; })
                     .attr("width", 10)
                     .style("fill", function(d) { return color(d.stem); });
             }, 800);
