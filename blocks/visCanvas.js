@@ -47,8 +47,8 @@ var VisCanvas = (function(){
         }
         $scrollable.on('scroll', onScroll);
         $visContainer = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerClass).height(this.height);
-        $visContainerSeparation = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerSeparationClass).height(10);
-        $visContainerSocial = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerSocialClass).height(this.height);
+        //$visContainerSeparation = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerSeparationClass).height(10);
+        //$visContainerSocial = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerSocialClass).height(this.height);
         $visContainerTagged = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerTagged).height(this.height);
 
         var visModule = VIS_MODULES[opt.module] || VIS_MODULES.ranking;

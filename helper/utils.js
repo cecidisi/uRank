@@ -225,14 +225,3 @@ function getStyledWord (word, stemmedKeywords, colorScale){
     }
     return word;
 }
-
-
-
-
-
-
-
-
-
-
-
