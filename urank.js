@@ -96,7 +96,15 @@ var Urank = (function(){
         misc: {
             tagColorArray: tagColorRange,
             queryTermColorArray: queryTermColorRange,
+        },      
+        keywordExtractor: {
+	        extractedData : {
+	        	keywords : {},
+	        	keywordsDict: {}
+	        }, 
+	        extractionEnabled : true
         }
+        
     };
 
 
@@ -120,32 +128,37 @@ var Urank = (function(){
             _this.queryTermColorScale = null;
             _this.queryTermColorScale = d3.scale.ordinal().range(o.queryTermColorArray);
 
-            //  Initialize keyword extractor
-            var keywordExtractorOptions = { minRepetitions: (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5 };
-            var keywordExtractor = new KeywordExtractor(keywordExtractorOptions);
-
-            //  Clean documents and add them to the keyword extractor
-            _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
-
-            _this.data.forEach(function(d, i){
-                d.index = i;
-                d.title = d.title.clean();
-                d.description = d.description.clean();
-                var document = (d.description) ? d.title +'. '+ d.description : d.title;
-                keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id);
-            });
-
-            //  Extract collection and document keywords
-            keywordExtractor.processCollection();
-
-            //  Assign document keywords
-            _this.data.forEach(function(d, i){
-                d.keywords = keywordExtractor.listDocumentKeywords(i);
-            });
+			//  Clean documents and add them to the keyword extractor
+	        _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
+			
+			if(o.keywordExtractor.extractionEnabled) {
+	            //  Initialize keyword extractor
+	            var keywordExtractorOptions = { minRepetitions: (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5 };
+	            var keywordExtractor = new KeywordExtractor(keywordExtractorOptions);
+	            	
+	            _this.data.forEach(function(d, i){
+	                d.index = i;
+	                d.title = d.title.clean();
+	                d.description = d.description.clean();
+	                var document = (d.description) ? d.title +'. '+ d.description : d.title;
+	               	d.facets.language = d.facets.language ? d.facets.language : "en"
+	                keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id, d.facets.language );
+	            });
+	
+	            //  Extract collection and document keywords
+	            keywordExtractor.processCollection();
+	
+	            //  Assign document keywords
+	            _this.data.forEach(function(d, i){
+	                d.keywords = keywordExtractor.listDocumentKeywords(i);
+	            });
+	            o.keywordExtractor.keywords = keywordExtractor.getCollectionKeywords();
+	        	o.keywordExtractor.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
+	        }
 
             //  Assign collection keywords and set other necessary variables
-            _this.keywords = keywordExtractor.getCollectionKeywords();
-            _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
+            _this.keywords =  o.keywordExtractor.keywords; 
+            _this.keywordsDict = o.keywordExtractor.keywordsDict; 
             _this.rankingMode = RANKING_MODE.overall_score;
             _this.rankingModel.clear().setData(_this.data);
             _this.selectedKeywords = [];

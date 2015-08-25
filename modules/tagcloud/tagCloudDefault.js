@@ -27,7 +27,7 @@ var TagCloudDefault = (function(){
             background: function() {
 	            	    	var hoverBackground = '-webkit-linear-gradient('+backgroudGradient+')'; 
 					    	
-						    if (navigator.userAgent.search("MSIE") >= 0) {
+						    if (navigator.userAgent.match( /(MSIE |Trident.*rv[ :])([0-9]+)/ ) != null) {
 								return '-ms-linear-gradient('+backgroudGradient+')';  
 							}
 							else if (navigator.userAgent.search("Chrome") >= 0) {
