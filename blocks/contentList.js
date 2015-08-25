@@ -57,7 +57,7 @@ var ContentList = (function(){
         _this = this;
         s = $.extend({
             root: '',
-            onItemClicked: function(document){},
+            onItemClicked: function(document, event){},
             onItemMouseEnter: function(document){},
             onItemMouseLeave: function(document){},
             onFaviconClicked: function(document){},
@@ -81,7 +81,7 @@ var ContentList = (function(){
             event.stopPropagation();
             hideUnrankedListItems();
             if(!$(this).hasClass(liUnrankedClass))
-                s.onItemClicked.call(this, id);
+                s.onItemClicked.call(this, id, event);
         };
         var onLiMouseEnter = function(event){
             event.stopPropagation(); s.onItemMouseEnter.call(this, id);

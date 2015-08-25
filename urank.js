@@ -19,7 +19,7 @@ var Urank = (function(){
         docViewerRoot: '',
         onLoad: function(keywords){},
         onChange: function(rankingData, selecedKeywords){},
-        onItemClicked: function(documentId){},
+        onItemClicked: function(documentId, event){},
         onItemMouseEnter: function(documentId){},
         onItemMouseLeave: function(documentId){},
         onFaviconClicked: function(documentId){},
@@ -275,7 +275,7 @@ var Urank = (function(){
             s.onTagInBoxClick.call(this, index);
         },
 
-        onItemClicked : function(documentId) {
+        onItemClicked : function(documentId, event) {
             _this.selectedId = _this.selectedId === documentId ? STR_UNDEFINED : documentId;
 
             if(_this.selectedId !== STR_UNDEFINED) {    // select
@@ -289,7 +289,7 @@ var Urank = (function(){
                 docViewer.clear();
             }
             tagCloud.clearEffects();
-            s.onItemClicked.call(this, documentId);
+            s.onItemClicked.call(this, documentId, event);
         },
 
         onItemMouseEnter: function(documentId) {

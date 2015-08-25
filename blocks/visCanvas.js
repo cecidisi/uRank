@@ -22,7 +22,7 @@ var VisCanvas = (function(){
         _this = this;
         s = $.extend({
             root: '',
-            onItemClicked: function(id){},
+            onItemClicked: function(id, event){},
             onItemMouseEnter: function(id){},
             onItemMouseLeave: function(id){},
             onScroll: function(scroll){}
