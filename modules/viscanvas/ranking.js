@@ -201,12 +201,12 @@ var Ranking = (function(){
             // svg tagged elements
             svgTagged = d3.select(s.rootTagged).append("svg")
                 .attr("class", svgClass)
-                .attr("width", width + margin.left + margin.right)
+                .attr("width", $('.urank-viscanvas-container-tagged').width())
                 .attr("height", height + margin.top + margin.bottom + 30)
                 .append("g")
-                    .attr("width", width)
-                    .attr("height", height + 30)
-                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .attr("width", $('.urank-viscanvas-container-tagged').width())
+                .attr("height", height + 30)
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             //// Create drop shadow to use as filter when a bar is hovered or selected
             RANKING.Render.createShadow();
@@ -386,7 +386,7 @@ var Ranking = (function(){
                 stackedBars.append('rect')
                     .attr('class', function(d, i){ if(i%2) return darkBackgroundClass; return lightBackgroundClass; })
                     .attr('x', 0)
-                    .attr('width', width)
+                    .attr('width', $('.urank-viscanvas-container-tagged').width())
                     .attr('height', y.rangeBand())
                     .style('fill', function(d, i){
                         if(s.lightBackgroundColor != '' && s.darkBackgroundColor != '') {
@@ -409,8 +409,8 @@ var Ranking = (function(){
                     })
                     .enter()
                     .append("text")
-                    .attr("x", 75)
-                    .attr("y", 15)
+                    .attr("x", $('.urank-viscanvas-container-tagged').width() * 0.8)
+                    .attr("y", 11)
                     .text(function(d) { return d;});
 
 
@@ -444,7 +444,7 @@ var Ranking = (function(){
                         }
                     })
                     .attr("y", function(d, i) { return y.rangeBand() -  (y.rangeBand() * 0.8) * d.number / highestTagValue; })
-                    .attr("width", 10)
+                    .attr("width", $('.urank-viscanvas-container-tagged').width() * 0.1)
                     .style("fill", function(d) { return color(d.stem); });
             }, 800);
         },
