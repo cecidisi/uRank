@@ -578,8 +578,9 @@ var Ranking = (function(){
     }
 
 
-    var _update = function(rankingModel, colorScale, listHeight, recData){
+    var _update = function(rankingModel, colorScale, listHeight, recData, view){
 
+        alert(view)
         RANKING.Settings.recData = recData;
         console.log(recData);
 

@@ -14,7 +14,6 @@ var RankingModel = (function(){
      * */
     var computeScores =  function(_data, query){
         var ranking = new RankingArray();
-
         if(query.length > 0) {
             _data.forEach(function(d, i) {
                 ranking.addEmptyElement(d);

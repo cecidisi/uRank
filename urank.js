@@ -155,13 +155,14 @@ var Urank = (function(){
             _this.selectedId = STR_UNDEFINED;
 
             //  Build blocks
-/*            var buildOpt = {
+            /* var buildOpt = {
                 contentList: o.contentList,
                 tagCloud:    o.tagCloud, { customScrollBars: o.misc.customScrollBars }),
                 tagBox:      $.extend(o.tagBox, { customScrollBars: o.misc.customScrollBars }),
                 visCanvas:   $.extend(o.visCanvas, { customScrollBars: o.misc.customScrollBars }),
                 docViewer:   $.extend(o.docViewer, { customScrollBars: o.misc.customScrollBars })
             };*/
+
             contentList.build(_this.data, o.contentList);
             tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, o.tagCloud, _this.keywordsDict);
             tagBox.build(o.tagBox);
@@ -183,8 +184,9 @@ var Urank = (function(){
             s.onLoad.call(this, _this.keywords);
         },
 
-        onBetaChanged: function() {
+        onBetaOrViewChanged: function() {
             var beta = $('#beta-input').val();
+            var view = $('#select-view').val();
 
             if(isNaN(beta))
                 return;
@@ -197,7 +199,7 @@ var Urank = (function(){
             /*****/
 
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
-            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), recData);
+            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), recData, view);
             docViewer.clear();
             tagCloud.clearEffects();
 
@@ -205,10 +207,12 @@ var Urank = (function(){
         },
 
         onChange: function(selectedKeywords) {
-            var beta = $('#beta-input').val();
+            var view = $('#select-view').val();
 
             _this.selectedKeywords = selectedKeywords;
             _this.selectedId = STR_UNDEFINED;
+
+            console.log("selected keywords", selectedKeywords)
 
             var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode).getRanking();
             var status = _this.rankingModel.getStatus();
@@ -219,7 +223,7 @@ var Urank = (function(){
             /*****/
 
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
-            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), recData);
+            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), recData, view);
             docViewer.clear();
             tagCloud.clearEffects();
 
@@ -356,11 +360,6 @@ var Urank = (function(){
 
         onResize: function(event) {
             visCanvas.resize();
-        },
-
-        onBetaChange: function() {
-            alert("hier");
-            EVTHANDLER.onBetaChange(beta);
         },
 
         // Event handlers to return
@@ -522,7 +521,7 @@ var Urank = (function(){
         clear: EVTHANDLER.onClear,
         destroy: EVTHANDLER.onDestroy,
         getCurrentState: MISC.getCurrentState,
-        betaChanged: EVTHANDLER.onBetaChanged
+        betaOrViewChanged: EVTHANDLER.onBetaOrViewChanged
     };
 
     return Urank;

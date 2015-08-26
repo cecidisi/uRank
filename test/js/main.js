@@ -106,6 +106,9 @@
         _this.urank = urank;
         // Bind event handlers for dataset select
         $("#select-dataset").change(selectDatasetChanged);
+        $("#select-view").change(function() {
+            urank.betaOrViewChanged();
+        });
         // Bind event handlers for urank specific buttons
         $('#btn-reset').off().on('click', urank.reset);
         $('#btn-sort-by-overall-score').off().on('click', urank.rankByOverallScore);
@@ -128,7 +131,7 @@
                 }
                 else
                     beta = $('#beta-input').val();
-                urank.betaChanged();
+                urank.betaOrViewChanged();
             }
         }, 1000);
     };
