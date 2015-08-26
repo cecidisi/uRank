@@ -75,7 +75,7 @@ var Urank = (function(){
             },
         },
         visCanvas : {
-            module: 'ranking',
+            module: 'default',
             customOptions: {               // use only if contentList.custom = true and background in the ranking should match different light and dark background colors
                 lightBackgroundColor: '',
                 darkBackgroundColor: ''

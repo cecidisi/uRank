@@ -80,6 +80,7 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'modules/tagcloud/landscape/LandscapeController.js',
                     pathToUrank + 'modules/tagcloud/landscape/LandscapeTagCloud.js',
                     pathToUrank + 'modules/viscanvas/ranking.js',
+                    pathToUrank + 'modules/viscanvas/detailedview.js',
                     pathToUrank + 'helper/globals.js',
                     pathToUrank + 'helper/settings.js',
                     pathToUrank + 'helper/utils.js',

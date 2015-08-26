@@ -11,7 +11,9 @@ window.STR_UNDEFINED = 'undefined';
 
 
 window.VIS_MODULES = {
-    ranking: Ranking
+    default: Ranking,
+    ranking: Ranking,
+    detailedView: DetailedView
 };
 
 window.TAGCLOUD_MODULES = {

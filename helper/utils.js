@@ -225,3 +225,73 @@ function getStyledWord (word, stemmedKeywords, colorScale){
     }
     return word;
 }
+function getPositionArray (text, stemmedKeywords, position){
+    var positionArray = [];
+
+    var word = '';
+    text.split('').forEach(function(c){
+        position++;
+        if(c.match(/\w/))
+            word += c;
+        else {
+            if(word != '') {
+                var returnValue = getPositionOfWord(word, stemmedKeywords, position);
+                if(returnValue != null) {
+                    positionArray.push(returnValue);
+                    position = returnValue.position;
+                }
+                word = '';
+            }
+        }
+    });
+
+    if(word != '') {
+        var returnValue = getPositionOfWord(word, stemmedKeywords, position);
+        if(returnValue != null) {
+            positionArray.push(returnValue);
+            position = returnValue.position;
+        }
+        word = '';
+    }
+    return positionArray;
+}
+
+function getPositionOfWord (word, stemmedKeywords, position){
+
+    var trickyWords = ['it', 'is', 'us', 'ar'],
+        word = word.replace(/our$/, 'or'),
+        wordStem = word.stem();
+
+    // First clause solves words like 'IT', second clause that the stem of the doc term (or the singularized term) matches the keyword stem
+    if(trickyWords.indexOf(wordStem) == -1 || word.isAllUpperCase()) {
+        var positionArrayEntry;
+        var index = stemmedKeywords.indexOf(wordStem);
+
+        if(index > -1) {
+            positionArrayEntry = new Object;
+            positionArrayEntry.word = word;
+            positionArrayEntry.position = position - word.length / 2;
+            positionArrayEntry.keyword = stemmedKeywords[index];
+            return positionArrayEntry;
+        }
+
+        index = stemmedKeywords.indexOf(word.singularizeNoun().stem());
+        if(index > -1) {
+            positionArrayEntry = new Object;
+            positionArrayEntry.word = word;
+            positionArrayEntry.position = position - word.length / 2;
+            positionArrayEntry.keyword = stemmedKeywords[index];
+            return positionArrayEntry;
+        }
+    }
+
+    return null;
+}
+
+Array.prototype.pushIfNotExist = function(val) {
+    if (typeof(val) == 'undefined' || val == '') { return }
+    val = $.trim(val)
+    if ($.inArray(val, this) == -1) {
+        this.push(val);
+    }
+};
