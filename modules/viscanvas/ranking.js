@@ -228,10 +228,14 @@ var Ranking = (function(){
             RANKING.Render.updateCanvasDimensions(listHeight);
 
             // Redefine x & y scales' domain
-            if(RANKING.Settings.view === "score")
+            if(RANKING.Settings.view === "score") {
+                d3.select(s.rootSocial).select("svg").attr("width", 0);
                 x.domain([0, 2]).rangeRound( [0, width]).copy();
-            else if(RANKING.Settings.view === "separated-score")
+                }
+            else if(RANKING.Settings.view === "separated-score") {
+                d3.select(s.rootSocial).select("svg").attr("width", width);
                 x.domain([0, 1]).rangeRound( [0, width]).copy();
+            }
 
             d3.select(s.root).select('.'+svgClass).attr("width", width)
             svg.attr("width", width);
