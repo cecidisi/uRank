@@ -115,7 +115,6 @@ var Ranking = (function(){
         *
         * ***************************************************************************************************************/
         drawNew: function(rankingModel, colorScale, listHeight){
-
             _this.clear();
             _this.isRankingDrawn = true;
             // Define input variables
@@ -229,12 +228,13 @@ var Ranking = (function(){
             RANKING.Render.updateCanvasDimensions(listHeight);
 
             // Redefine x & y scales' domain
-            if(RANKING.Settings.view === "score") {
-                //alert("width= " + width)
+            if(RANKING.Settings.view === "score")
                 x.domain([0, 2]).rangeRound( [0, width]).copy();
-            }
             else if(RANKING.Settings.view === "separated-score")
                 x.domain([0, 1]).rangeRound( [0, width]).copy();
+
+            d3.select(s.root).select('.'+svgClass).attr("width", width)
+            svg.attr("width", width);
 
 
             y.rangeBands( [0, height], .02);
