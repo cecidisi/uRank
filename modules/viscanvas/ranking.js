@@ -27,8 +27,9 @@ var Ranking = (function(){
         _this = this;
         s = $.extend({
             root: '.urank-viscanvas-container',
-           // rootSocial: '.urank-viscanvas-container-social',
+            rootSocial: '.urank-viscanvas-container-social',
             rootTagged: '.urank-viscanvas-container-tagged',
+            rootSeparation: '.urank-viscanvas-container-separation',
             onItemClicked: function(document){},
             onItemMouseEnter: function(document){},
             onItemMouseLeave: function(document){},
@@ -574,13 +575,28 @@ var Ranking = (function(){
 
     var _build = function(containerHeight) {
         $root = $(s.root)
+        $rootSocial = $(s.rootSocial)
         $rootTagged = $(s.rootTagged)
+        $rootSeparation = $(s.rootSeparation)
     }
 
 
     var _update = function(rankingModel, colorScale, listHeight, recData, view){
 
-        alert(view)
+        console.log(view)
+        if(view === "score") {
+            $rootSocial.css('width', "0%");
+            $root.css('width', "90%");
+            $rootSeparation.css('width', "0%");
+        }
+        else if(view === "separated-score") {
+            $rootSocial.css('width', "44.5%");
+            $root.css('width', "44.5%");
+            $rootSeparation.css('width', "1%");
+        }
+
+
+
         RANKING.Settings.recData = recData;
         console.log(recData);
 
@@ -599,7 +615,9 @@ var Ranking = (function(){
     var _clear = function(){
         this.isRankingDrawn = false;
         $root.empty();
+        $rootSocial.empty();
         $rootTagged.empty();
+        $rootSeparation.empty();
         return this;
     };
 
