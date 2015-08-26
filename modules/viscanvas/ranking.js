@@ -42,6 +42,7 @@ var Ranking = (function(){
 
     RANKING.Settings = {
         recData: [],
+        view: "score",
         getInitData: function(rankingModel){
 
             var rankingData = rankingModel.getRanking();
@@ -173,6 +174,32 @@ var Ranking = (function(){
                 .call(yAxis)
                 .selectAll("text");
 
+            // svg social elements
+            svgSocial = d3.select(s.rootSocial).append("svg")
+                .attr("class", svgClass)
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom + 30)
+                .append("g")
+                    .attr("width", width)
+                    .attr("height", height + 30)
+                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            svgSocial.append("g")
+                .attr("class", xClass + ' ' + axisClass)
+                .attr("transform", "translate(0," + (height) + ")")
+                .call(xAxis)
+                .append("text")
+                    .attr("class", xAxisLabelClass)
+                    .attr("x", width)
+                    .attr("y", -6)
+                    .style("text-anchor", "end")
+                    .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
+
+            svgSocial.append("g")
+                .attr("class", yClass +' '+axisClass)
+                .call(yAxis)
+                .selectAll("text");
+
             // svg tagged elements
             svgTagged = d3.select(s.rootTagged).append("svg")
                 .attr("class", svgClass)
@@ -198,10 +225,17 @@ var Ranking = (function(){
 
             // Define input variables
             data = RANKING.Settings.getInitData(rankingModel);
-
+            width = $root.width()
             RANKING.Render.updateCanvasDimensions(listHeight);
+
             // Redefine x & y scales' domain
-            x.domain([0, 2]).copy();
+            if(RANKING.Settings.view === "score") {
+                //alert("width= " + width)
+                x.domain([0, 2]).rangeRound( [0, width]).copy();
+            }
+            else if(RANKING.Settings.view === "separated-score")
+                x.domain([0, 1]).rangeRound( [0, width]).copy();
+
 
             y.rangeBands( [0, height], .02);
             y.domain(data.map(function(d, i){ return i; })).copy();
@@ -220,6 +254,21 @@ var Ranking = (function(){
             transition.select('.'+yClass+'.'+axisClass).call(yAxis)
                 .selectAll("g").delay(delay);
 
+            if(RANKING.Settings.view === "separated-score") {
+                x.domain([0, 1]).copy();
+                svgSocial.select('.'+xClass+'.'+axisClass+' .'+xAxisLabelClass)
+                             .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
+
+                var transition = svgSocial.transition().duration(750),
+                 delay = function(d, i) { return i * 50; };
+
+                transition.select('.'+xClass+'.'+axisClass).call(xAxis)
+                 .selectAll("g").delay(delay);
+
+                transition.select('.'+yClass+'.'+axisClass).call(yAxis)
+                 .selectAll("g").delay(delay);
+             }
+
             RANKING.Render.drawStackedBars();
         },
 
@@ -235,90 +284,189 @@ var Ranking = (function(){
             svg.selectAll('.'+stackedbarClass).remove();
             svg.selectAll('.'+stackedbarClass).data(data).enter();
 
+            if(RANKING.Settings.view === "separated-score") {
+                // svg social elements
+                svgSocial.selectAll('.'+stackedbarClass).data([]).exit();
+                svgSocial.selectAll('.'+stackedbarClass).remove();
+                svgSocial.selectAll('.'+stackedbarClass).data(data).enter();
+            }
+
             // svg tagged elements
             svgTagged.selectAll('.'+stackedbarClass).data([]).exit();
             svgTagged.selectAll('.'+stackedbarClass).remove();
             svgTagged.selectAll('.'+stackedbarClass).data(data).enter();
 
             setTimeout(function(){
-                var stackedBars = svg.selectAll('.'+stackedbarClass)
-                .data(data).enter()
-                .append("g")
-                .attr("class", stackedbarClass)
-                .attr("id", function(d, i){ return "urank-ranking-stackedbar-" + d.id; })
-                .attr( "transform", function(d, i) { return "translate(0, " + y(i) + ")"; } )
-                .on('click', RANKING.Evt.itemClicked)
-                .on('mouseover', RANKING.Evt.itemMouseEntered)
-                .on('mouseout', RANKING.Evt.itemMouseLeft);
+                if(RANKING.Settings.view === "score") {
+                    var stackedBars = svg.selectAll('.'+stackedbarClass)
+                    .data(data).enter()
+                    .append("g")
+                    .attr("class", stackedbarClass)
+                    .attr("id", function(d, i){ return "urank-ranking-stackedbar-" + d.id; })
+                    .attr( "transform", function(d, i) { return "translate(0, " + y(i) + ")"; } )
+                    .on('click', RANKING.Evt.itemClicked)
+                    .on('mouseover', RANKING.Evt.itemMouseEntered)
+                    .on('mouseout', RANKING.Evt.itemMouseLeft);
 
-                stackedBars.append('rect')
-                    .attr('class', function(d, i){ if(i%2) return darkBackgroundClass; return lightBackgroundClass; })
-                    .attr('x', 0)
-                    .attr('width', width)
-                    .attr('height', y.rangeBand())
-                    .style('fill', function(d, i){
-                        if(s.lightBackgroundColor != '' && s.darkBackgroundColor != '') {
-                            if(i%2) return s.darkBackgroundColor;
-                            return s.lightBackgroundColor;
+                    stackedBars.append('rect')
+                        .attr('class', function(d, i){ if(i%2) return darkBackgroundClass; return lightBackgroundClass; })
+                        .attr('x', 0)
+                        .attr('width', width)
+                        .attr('height', y.rangeBand())
+                        .style('fill', function(d, i){
+                            if(s.lightBackgroundColor != '' && s.darkBackgroundColor != '') {
+                                if(i%2) return s.darkBackgroundColor;
+                                return s.lightBackgroundColor;
+                            }
+                            return  '';
+                        });
+
+                    noOfKeywords = 0;
+                    stackedBars.selectAll('.'+barClass)
+                        .data(function(d) { if(noOfKeywords == 0) noOfKeywords = d.weightedKeywords.length; return d.weightedKeywords; })
+                        .enter()
+                        .append("rect")
+                        .attr("class", barClass)
+                        .attr("height", y.rangeBand())
+                        .attr("x", function(d) { return x(d.x0); })
+                        .attr("width", 0)
+                        .style("fill", function(d) { return color(d.stem); });
+
+                    var bars = stackedBars.selectAll('.'+barClass);
+                    var widths = [];
+                    var v = 1, w = 0;
+
+                    var t0 = bars.transition()
+                    .duration(500)
+                    .attr({ "width": function(d) {
+                        w += (x(d.x1) - x(d.x0));
+                        if(v < noOfKeywords)
+                            v++;
+                        else {
+                            widths.push(w);
+                            w = 0; v = 1;
                         }
-                        return  '';
+                        return (x(d.x1) - x(d.x0));
+                    }
                     });
 
-                noOfKeywords = 0;
-                stackedBars.selectAll('.'+barClass)
-                    .data(function(d) { if(noOfKeywords == 0) noOfKeywords = d.weightedKeywords.length; return d.weightedKeywords; })
-                    .enter()
-                    .append("rect")
-                    .attr("class", barClass)
-                    .attr("height", y.rangeBand())
-                    .attr("x", function(d) { return x(d.x0); })
-                    .attr("width", 0)
-                    .style("fill", function(d) { return color(d.stem); });
+                    var z = 0;
+                    stackedBars.selectAll('.'+barClass + 'social')
+                        // return an array with a single entry thereby just one rectangle will be drawn (not for every keyword a rectangle)
+                        .data(function(d) { var x = []; x.push(d.weightedKeywords[0]); return x; })
+                        .enter()
+                        .append("rect")
+                        .attr("class", barClass + 'social')
+                        .attr("height", y.rangeBand())
+                        .attr("x", function() { z++; return widths[z-1]; })
+                        .attr("width", 0)
+                        .style("fill", "black")
+                        .style("opacity", 0.45);
 
-                var bars = stackedBars.selectAll('.'+barClass);
-                var widths = [];
-                var v = 1, w = 0;
+                    if(RANKING.Settings.recData.length == 0)
+                        return;
 
-                var t0 = bars.transition()
-                .duration(500)
-                .attr({ "width": function(d) {
-                    w += (x(d.x1) - x(d.x0));
-                    if(v < noOfKeywords)
-                        v++;
-                    else {
-                        widths.push(w);
-                        w = 0; v = 1;
-                    }
-                    return (x(d.x1) - x(d.x0));
+                    bars = stackedBars.selectAll('.'+barClass + 'social');
+                    var beta = RANKING.Settings.recData[0].misc.beta;
+                    bars.transition()
+                    .duration(500)
+                    .attr("width", function(d) {
+                        for(var i = 0; i < RANKING.Settings.recData.length; i++)
+                            if(RANKING.Settings.recData[i].doc === d.id)
+                                return x(RANKING.Settings.recData[i].score);
+                        return 0; });
+
                 }
-                });
+                else if(RANKING.Settings.view === "separated-score") {
+                    var stackedBars = svg.selectAll('.'+stackedbarClass)
+                        .data(data).enter()
+                        .append("g")
+                        .attr("class", stackedbarClass)
+                        .attr("id", function(d, i){ return "urank-ranking-stackedbar-" + d.id; })
+                        .attr( "transform", function(d, i) { return "translate(0, " + y(i) + ")"; } )
+                        .on('click', RANKING.Evt.itemClicked)
+                        .on('mouseover', RANKING.Evt.itemMouseEntered)
+                        .on('mouseout', RANKING.Evt.itemMouseLeft);
 
-                var z = 0;
-                stackedBars.selectAll('.'+barClass + 'social')
-                    // return an array with a single entry thereby just one rectangle will be drawn (not for every keyword a rectangle)
-                    .data(function(d) { var x = []; x.push(d.weightedKeywords[0]); return x; })
-                    .enter()
-                    .append("rect")
-                    .attr("class", barClass + 'social')
-                    .attr("height", y.rangeBand())
-                    .attr("x", function() { z++; return widths[z-1]; })
-                    .attr("width", 0)
-                    .style("fill", "black")
-                    .style("opacity", 0.45);
+                    stackedBars.append('rect')
+                        .attr('class', function(d, i){ if(i%2) return darkBackgroundClass; return lightBackgroundClass; })
+                        .attr('x', 0)
+                        .attr('width', width)
+                        .attr('height', y.rangeBand())
+                        .style('fill', function(d, i){
+                            if(s.lightBackgroundColor != '' && s.darkBackgroundColor != '') {
+                                if(i%2) return s.darkBackgroundColor;
+                                return s.lightBackgroundColor;
+                            }
+                            return  '';
+                        });
 
-                if(RANKING.Settings.recData.length == 0)
-                    return;
+                    stackedBars.selectAll('.'+barClass)
+                        .data(function(d) { return d.weightedKeywords; })
+                        .enter()
+                        .append("rect")
+                        .attr("class", barClass)
+                        .attr("height", y.rangeBand())
+                        .attr("x", function(d) { return x(d.x0); })
+                        .attr("width", 0)
+                        .style("fill", function(d) { return color(d.stem); });
 
-                bars = stackedBars.selectAll('.'+barClass + 'social');
-                var beta = RANKING.Settings.recData[0].misc.beta;
-                bars.transition()
-                .duration(500)
-                .attr("width", function(d) {
-                    for(var i = 0; i < RANKING.Settings.recData.length; i++)
-                        if(RANKING.Settings.recData[i].doc === d.id)
-                            return x(RANKING.Settings.recData[i].score);
-                    return 0; });
+                    var bars = stackedBars.selectAll('.'+barClass);
 
+                    var t0 = bars.transition()
+                    .duration(500)
+                    .attr({ "width": function(d) { return x(d.x1) - x(d.x0); } });
+
+                    // svg social elements
+                    stackedBars = svgSocial.selectAll('.'+stackedbarClass)
+                    .data(data).enter()
+                    .append("g")
+                    .attr("class", stackedbarClass)
+                    .attr("id", function(d, i){ return "urank-ranking-stackedbar-" + d.id; })
+                    .attr( "transform", function(d, i) { return "translate(0, " + y(i) + ")"; } )
+                    .on('click', RANKING.Evt.itemClicked)
+                    .on('mouseover', RANKING.Evt.itemMouseEntered)
+                    .on('mouseout', RANKING.Evt.itemMouseLeft);
+
+                    stackedBars.append('rect')
+                        .attr('class', function(d, i){ if(i%2) return darkBackgroundClass; return lightBackgroundClass; })
+                        .attr('x', 0)
+                        .attr('width', width)
+                        .attr('height', y.rangeBand())
+                        .style('fill', function(d, i){
+                            if(s.lightBackgroundColor != '' && s.darkBackgroundColor != '') {
+                                if(i%2) return s.darkBackgroundColor;
+                                return s.lightBackgroundColor;
+                            }
+                            return  '';
+                        });
+
+                    if(RANKING.Settings.recData.length == 0)
+                        return;
+
+                    stackedBars.selectAll('.'+barClass)
+                        // return an array with a single entry thereby just one rectangle will be drawn (not for every keyword a rectangle)
+                        .data(function(d) { var x = []; x.push(d.weightedKeywords[0]); return x; })
+                        .enter()
+                        .append("rect")
+                        .attr("class", barClass)
+                        .attr("height", y.rangeBand())
+                        .attr("x", 0)
+                        .attr("width", 0)
+                        .style("fill", "black")
+                        .style("opacity", 0.45);
+
+                    bars = stackedBars.selectAll('.'+barClass);
+                    var beta = RANKING.Settings.recData[0].misc.beta;
+                    bars.transition()
+                    .duration(500)
+                    .attr("width", function(d) {
+                        for(var i = 0; i < RANKING.Settings.recData.length; i++)
+                            if(RANKING.Settings.recData[i].doc === d.id)
+                                return x(RANKING.Settings.recData[i].score);
+                        return 0; });
+
+                }
                 // svg tagged elements
                 stackedBars = svgTagged.selectAll('.'+stackedbarClass)
                 .data(data).enter()
@@ -392,7 +540,7 @@ var Ranking = (function(){
                     .attr("width", $('.urank-viscanvas-container-tagged').width() * 0.1)
                     .style("fill", function(d) { return color(d.stem); });
 
-            }, 800);
+            }, 1000);
         },
 
 
@@ -431,6 +579,40 @@ var Ranking = (function(){
             // overlay original SourceGraphic over translated blurred opacity by using
             // feMerge filter. Order of specifying inputs is important!
             var feMerge = filter.append("feMerge");
+            feMerge.append("feMergeNode").attr("in", "offsetBlur")
+            feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+
+
+            // svg social elements
+            // filters go in defs element
+            defs = svgSocial.append("defs");
+
+            // create filter with id #drop-shadow
+            // height=130% so that the shadow is not clipped
+            filter = defs.append("filter")
+            .attr("id", "drop-shadow")
+            .attr("height", "130%");
+
+            // SourceAlpha refers to opacity of graphic that this filter will be applied to
+            // convolve that with a Gaussian with standard deviation 3 and store result
+            // in blur
+            filter.append("feGaussianBlur")
+                .attr("in", "SourceAlpha")
+                .attr("stdDeviation", 2)
+                .attr("result", "blur");
+
+            // translate output of Gaussian blur to the right and downwards with 2px
+            // store result in offsetBlur
+            filter.append("feOffset")
+                .attr("in", "blur")
+                .attr("dx", 0)
+                .attr("dy", 2)
+                .attr("result", "offsetBlur");
+
+            // overlay original SourceGraphic over translated blurred opacity by using
+            // feMerge filter. Order of specifying inputs is important!
+            feMerge = filter.append("feMerge");
             feMerge.append("feMergeNode").attr("in", "offsetBlur")
             feMerge.append("feMergeNode").attr("in", "SourceGraphic");
 
@@ -485,6 +667,18 @@ var Ranking = (function(){
 
             // update axes
             svg.select('.'+xClass+'.'+axisClass).attr("transform", "translate(0," + (height) + ")").call(xAxis.orient('bottom'));
+
+
+            // svg social elements
+            d3.select(svgSocial.node().parentNode)    // var svg = svg > g
+                .attr('height', height + margin.top + margin.bottom + 30);
+
+            svgSocial.attr("height", height + 30)
+                .attr("transform", "translate(" + (margin.left) + ", 0)");
+
+            // update axes
+            svgSocial.select('.'+xClass+'.'+axisClass).attr("transform", "translate(0," + (height) + ")").call(xAxis.orient('bottom'));
+
 
             // svg tagged elements
             d3.select(svgTagged.node().parentNode)    // var svg = svg > g
@@ -566,6 +760,37 @@ var Ranking = (function(){
             // Resize Social Bars
             svg.selectAll('.'+barClass+'social')
                 .attr("x", function() { z++; return widths[z-1];})
+
+            if(RANKING.Settings.view === "separated-score") {
+
+                // Update bars
+                svg.selectAll('.'+stackedbarClass).attr('width', width);
+                svg.selectAll('rect.'+backgroundClass).attr('width', width);
+
+                svg.selectAll('.'+barClass)
+                    .attr("x", function(d) { return x(d.x0); })
+                    .attr("width", function(d) { return x(d.x1) - x(d.x0); });
+
+                // svg social elements
+                d3.select(svgSocial.node().parentNode).attr('width',width + margin.left + margin.right);
+                svg.attr("width", width);
+
+                // update x-axis
+                svgSocial.select('.'+xClass + '.'+axisClass).call(xAxis.orient('bottom'));
+
+                // Update bars
+                var beta = RANKING.Settings.recData[0].misc.beta;
+                svgSocial.selectAll('.'+stackedbarClass).attr('width', width);
+                svgSocial.selectAll('rect.'+backgroundClass).attr('width', width);
+                svgSocial.selectAll('.'+barClass)
+                    .attr("x", function(d) { return x(d.x0); })
+                    .attr("width", function(d) {
+                            for(var i = 0; i < RANKING.Settings.recData.length; i++)
+                                if(RANKING.Settings.recData[i].doc === d.id)
+                                    return x(RANKING.Settings.recData[i].score);
+                            return 0; });
+            }
+
         }
 
     };
@@ -582,8 +807,8 @@ var Ranking = (function(){
 
 
     var _update = function(rankingModel, colorScale, listHeight, recData, view){
+        RANKING.Settings.view = view;
 
-        console.log(view)
         if(view === "score") {
             $rootSocial.css('width', "0%");
             $root.css('width', "90%");
@@ -594,8 +819,6 @@ var Ranking = (function(){
             $root.css('width', "44.5%");
             $rootSeparation.css('width', "1%");
         }
-
-
 
         RANKING.Settings.recData = recData;
         console.log(recData);
