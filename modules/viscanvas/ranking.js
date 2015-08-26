@@ -138,7 +138,7 @@ var Ranking = (function(){
             xAxis = d3.svg.axis()
                 .scale(x)
                 .orient("bottom")
-                .tickFormat(function(value){ if(value > 0 && value < 1) return (value * 100) + '%'; return ''; });
+                .tickFormat(function(value){ if(value > 0 && value < 2) return (value * 100 / 2) + '%'; return ''; });
 
             yAxis = d3.svg.axis()
                 .scale(y)
@@ -171,32 +171,6 @@ var Ranking = (function(){
                 .attr("class", yClass +' '+axisClass)
                 .call(yAxis)
                 .selectAll("text");
-
-            // svg social elements
-            /*svgSocial = d3.select(s.rootSocial).append("svg")
-                .attr("class", svgClass)
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom + 30)
-                .append("g")
-                    .attr("width", width)
-                    .attr("height", height + 30)
-                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            svgSocial.append("g")
-                .attr("class", xClass + ' ' + axisClass)
-                .attr("transform", "translate(0," + (height) + ")")
-                .call(xAxis)
-                .append("text")
-                    .attr("class", xAxisLabelClass)
-                    .attr("x", width)
-                    .attr("y", -6)
-                    .style("text-anchor", "end")
-                    .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
-
-            svgSocial.append("g")
-                .attr("class", yClass +' '+axisClass)
-                .call(yAxis)
-                .selectAll("text");*/
 
             // svg tagged elements
             svgTagged = d3.select(s.rootTagged).append("svg")
@@ -245,18 +219,6 @@ var Ranking = (function(){
             transition.select('.'+yClass+'.'+axisClass).call(yAxis)
                 .selectAll("g").delay(delay);
 
-            /*svgSocial.select('.'+xClass+'.'+axisClass+' .'+xAxisLabelClass)
-                         .text(function(){ if(rankingModel.getMode() === RANKING_MODE.overall_score) return "Overall Score"; return 'Max. Score'; });
-
-            var transition = svgSocial.transition().duration(750),
-             delay = function(d, i) { return i * 50; };
-
-            transition.select('.'+xClass+'.'+axisClass).call(xAxis)
-             .selectAll("g").delay(delay);
-
-            transition.select('.'+yClass+'.'+axisClass).call(yAxis)
-             .selectAll("g").delay(delay);*/
-
             RANKING.Render.drawStackedBars();
         },
 
@@ -271,11 +233,6 @@ var Ranking = (function(){
             svg.selectAll('.'+stackedbarClass).data([]).exit();
             svg.selectAll('.'+stackedbarClass).remove();
             svg.selectAll('.'+stackedbarClass).data(data).enter();
-
-            // svg social elements
-            /*svgSocial.selectAll('.'+stackedbarClass).data([]).exit();
-            svgSocial.selectAll('.'+stackedbarClass).remove();
-            svgSocial.selectAll('.'+stackedbarClass).data(data).enter();*/
 
             // svg tagged elements
             svgTagged.selectAll('.'+stackedbarClass).data([]).exit();
@@ -335,8 +292,7 @@ var Ranking = (function(){
                 }
                 });
 
-                if(RANKING.Settings.recData.length == 0)
-                    return;
+
 
                 var z = 0;
                 stackedBars.selectAll('.'+barClass + 'social')
@@ -401,6 +357,11 @@ var Ranking = (function(){
                     .attr("x", $('.urank-viscanvas-container-tagged').width() * 0.8)
                     .attr("y", 11)
                     .text(function(d) { return d;});
+
+
+
+                if(RANKING.Settings.recData.length == 0)
+                    return;
 
                 var highestTagValue = 0;
                 stackedBars.selectAll('.'+barClass)
@@ -477,40 +438,6 @@ var Ranking = (function(){
             feMerge.append("feMergeNode").attr("in", "offsetBlur")
             feMerge.append("feMergeNode").attr("in", "SourceGraphic");
 
-
-            // svg social elements
-            // filters go in defs element
-            /*defs = svgSocial.append("defs");
-
-            // create filter with id #drop-shadow
-            // height=130% so that the shadow is not clipped
-            filter = defs.append("filter")
-            .attr("id", "drop-shadow")
-            .attr("height", "130%");
-
-            // SourceAlpha refers to opacity of graphic that this filter will be applied to
-            // convolve that with a Gaussian with standard deviation 3 and store result
-            // in blur
-            filter.append("feGaussianBlur")
-                .attr("in", "SourceAlpha")
-                .attr("stdDeviation", 2)
-                .attr("result", "blur");
-
-            // translate output of Gaussian blur to the right and downwards with 2px
-            // store result in offsetBlur
-            filter.append("feOffset")
-                .attr("in", "blur")
-                .attr("dx", 0)
-                .attr("dy", 2)
-                .attr("result", "offsetBlur");
-
-            // overlay original SourceGraphic over translated blurred opacity by using
-            // feMerge filter. Order of specifying inputs is important!
-            feMerge = filter.append("feMerge");
-            feMerge.append("feMergeNode").attr("in", "offsetBlur")
-            feMerge.append("feMergeNode").attr("in", "SourceGraphic");*/
-
-
             // svg tagged elements
             // filters go in defs element
             defs = svgTagged.append("defs");
@@ -563,18 +490,6 @@ var Ranking = (function(){
             // update axes
             svg.select('.'+xClass+'.'+axisClass).attr("transform", "translate(0," + (height) + ")").call(xAxis.orient('bottom'));
 
-
-            // svg social elements
-            /*d3.select(svgSocial.node().parentNode)    // var svg = svg > g
-                .attr('height', height + margin.top + margin.bottom + 30);
-
-            svgSocial.attr("height", height + 30)
-                .attr("transform", "translate(" + (margin.left) + ", 0)");
-
-            // update axes
-            svgSocial.select('.'+xClass+'.'+axisClass).attr("transform", "translate(0," + (height) + ")").call(xAxis.orient('bottom'));*/
-
-
             // svg tagged elements
             d3.select(svgTagged.node().parentNode)    // var svg = svg > g
                 .attr('height', height + margin.top + margin.bottom + 30);
@@ -620,24 +535,8 @@ var Ranking = (function(){
                 .attr("x", function(d) { return x(d.x0); })
                 .attr("width", function(d) { return x(d.x1) - x(d.x0); });
 
-            // svg social elements
-            /*d3.select(svgSocial.node().parentNode).attr('width',width + margin.left + margin.right);
-            svg.attr("width", width);
-
-            // update x-axis
-            svgSocial.select('.'+xClass + '.'+axisClass).call(xAxis.orient('bottom'));
-
-            // Update bars
-            var beta = RANKING.Settings.recData[0].misc.beta;
-            svgSocial.selectAll('.'+stackedbarClass).attr('width', width);
-            svgSocial.selectAll('rect.'+backgroundClass).attr('width', width);
-            svgSocial.selectAll('.'+barClass)
-                .attr("x", function(d) { return x(d.x0); })
-                .attr("width", function(d) {
-                        for(var i = 0; i < RANKING.Settings.recData.length; i++)
-                            if(RANKING.Settings.recData[i].doc === d.id)
-                                return x(RANKING.Settings.recData[i].score);
-                        return 0; });*/
+            // Resize Social Bars
+            alert("resize")
         }
 
     };
@@ -647,7 +546,6 @@ var Ranking = (function(){
 
     var _build = function(containerHeight) {
         $root = $(s.root)
-        //$rootSocial = $(s.rootSocial)
         $rootTagged = $(s.rootTagged)
     }
 
@@ -669,11 +567,9 @@ var Ranking = (function(){
         return this;
     };
 
-
     var _clear = function(){
         this.isRankingDrawn = false;
         $root.empty();
-        //$rootSocial.empty();
         $rootTagged.empty();
         return this;
     };
@@ -684,12 +580,10 @@ var Ranking = (function(){
         return this;
     };
 
-
     var _selectItem = function(id){
         if(this.isRankingDrawn) {
             id = _.isArray(id) ? id : [id];
             svg.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
-            //svgSocial.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
             svgTagged.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
         }
         return this;
@@ -699,7 +593,6 @@ var Ranking = (function(){
     var _deSelectAllItems = function(){
         if(this.isRankingDrawn) {
             svg.selectAll('.'+stackedbarClass).style('opacity', 1);
-            //svgSocial.selectAll('.'+stackedbarClass).style('opacity', 1);
             svgTagged.selectAll('.'+stackedbarClass).style('opacity', 1);
         }
         return this;
@@ -711,9 +604,9 @@ var Ranking = (function(){
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0)')
                 .style('filter', 'url(#drop-shadow)');
-            /*svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
+            svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass + 'social')
                 .attr('transform', 'translate(0, 0)')
-                .style('filter', 'url(#drop-shadow)');*/
+                .style('filter', 'url(#drop-shadow)');
             svgTagged.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                             .attr('transform', 'translate(0, 0)')
                             .style('filter', 'url(#drop-shadow)');
@@ -727,9 +620,9 @@ var Ranking = (function(){
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')
                 .style('filter', '');
-            /*svgSocial.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
+            svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass + 'social')
                 .attr('transform', 'translate(0, 0.2)')
-                .style('filter', '');*/
+                .style('filter', '');
             svgTagged.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                             .attr('transform', 'translate(0, 0.2)')
                             .style('filter', '');
