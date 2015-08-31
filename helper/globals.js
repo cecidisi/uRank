@@ -11,6 +11,7 @@ window.STR_UNDEFINED = 'undefined';
 
 
 window.VIS_MODULES = {
+    'use strict';
     default: Ranking,
     ranking: Ranking,
     detailedView: DetailedView
@@ -31,8 +32,9 @@ window.RANKING_STATUS = {
 
 
 window.RANKING_MODE = {
-    overall_score: 'overallScore',
-    max_score: 'maxScore'
+    by_CB: 'by_CB',
+    by_TU: 'by_TU',
+    overall: 'overall'
 };
 
 window.USER_ACTION = {

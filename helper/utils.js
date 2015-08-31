@@ -5,6 +5,7 @@
  * */
 
 function parseDate( dateString ){
+    'use strict';
 
     if(dateString instanceof Date)
         return dateString;
@@ -107,7 +108,7 @@ String.prototype.removeUnnecessaryChars = function() {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Number prototype gunctionto parse milliseconds to minutes:seconds format
+ * Number prototype gunction to parse milliseconds to minutes:seconds format
  *
  * */
 
@@ -125,6 +126,18 @@ Number.prototype.round = function(places) {
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * Math prototype
+ *
+ * */
+
+if(!Math.roundTo)
+    Math.roundTo = function(value, places) { return +(Math.round(value + "e+" + places)  + "e-" + places); }
+
+
+if(!Math.log2)
+    Math.log2 = function(value) { return (Math.log(value) / Math.log(2)); }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////

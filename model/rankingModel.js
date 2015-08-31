@@ -1,9 +1,12 @@
 
 var RankingModel = (function(){
+    'use strict';
 
     var _this = this;
 
     function RankingModel(data) {
+        this.cbRS = new RSContent();
+        this.tuRS = new RSTagUser();
         this.clear().setData(data);
     }
 
@@ -12,15 +15,21 @@ var RankingModel = (function(){
      *	Creates the ranking items with default values and calculates the weighted score for each selected keyword (tags in tag box)
      *
      * */
-    var computeScores =  function(_data, query){
+    var computeScores =  function(_data, _query, _user){
+
+        var temp = _this.cbRS.getCBScores(_data, _query);
+        _this.data = _this.tuRS.getTagUserScores({ user: _user, keywords: _query, data: temp });
+
+
+
         var ranking = new RankingArray();
         if(query.length > 0) {
             _data.forEach(function(d, i) {
                 ranking.addEmptyElement(d);
                 var docNorm = getEuclidenNorm(d.keywords);
-                var unitQueryVectorDot = parseFloat(1.00/Math.sqrt(query.length));
+                var unitQueryVectorDot = parseFloat(1.00/Math.sqrt(_query.length));
                 var max = 0;
-                query.forEach(function(q) {
+                _query.forEach(function(q) {
                     // termScore = tf-idf(d, t) * unitQueryVector(t) * weight(query term) / |d|   ---    |d| = euclidenNormalization(d)
                     var termScore = (d.keywords[q.stem]) ? ((parseFloat(d.keywords[q.stem]) / docNorm) * unitQueryVectorDot * parseFloat(q.weight)).round(3) :  0;
                     // if item doesn't contain query term => maxScore and overallScore are not changed
@@ -85,7 +94,7 @@ var RankingModel = (function(){
         },
 
         update: function(keywords, rankingMode) {
-            this.mode = rankingMode || RANKING_MODE.overall_score;
+            this.mode = rankingMode || RANKING_MODE.by_CB;
             this.previousRanking.set(this.ranking);
             this.ranking = computeScores(this.data, keywords)
                 .sortBy(this.mode)
