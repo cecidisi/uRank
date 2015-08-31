@@ -42,9 +42,8 @@ window.RSTagUser = (function(){
 
             var recData = [];
 
-            $.getJSON('../recommender/initial-bookmarks.json', function(data){
-                console.log('RS initialized');
-
+            $.getJSON('../model/tagUserBasedRS/initial-bookmarks.json', function(data){
+                console.log('Bookmarks retrieved');
                 data.forEach(function(r, i){
                     r['tasks-results'].forEach(function(t){
                         t['questions-results'].forEach(function(q, j){
@@ -110,13 +109,14 @@ window.RSTagUser = (function(){
                 keywords: [],
                 data: [],
                 options: {
-                    beta: args.beta,
+                    rWeight: 0.5,
+                    beta: 0.5,
                     neighborhoodSize: 20,
                     recSize: 0,
                 }
             }, args);
 
-            var _data = p.data;
+            var _data = p.data.slice();
            //  Get neighbors
             var neighbors = [];
 
@@ -143,11 +143,10 @@ window.RSTagUser = (function(){
                 }).slice(0, p.options.neighborhoodSize);
             }
 
-            var recs = [];
             //   Keys are doc ids
-            _data.forEach(function(doc){
+            _data.forEach(function(doc, i){
                 //  Checks that current user has not made any boomark or selected the doc yet
-                if(!_this.userItemMatrix[p.user] || !_this.userItemMatrix[p.user][doc.id]) {
+//                if(!_this.userItemMatrix[p.user] || !_this.userItemMatrix[p.user][doc.id]) {
 
                     var tagBasedScore = 0,
                         userBasedScore = 0,
@@ -156,11 +155,11 @@ window.RSTagUser = (function(){
                     //  Compute tag-based score
                     if(p.options.beta > 0) {
                         p.keywords.forEach(function(k){
-                            if(_this.itemTagMatrix[doc.id][k.term]) {
+                            if(_this.itemTagMatrix[doc.id] && _this.itemTagMatrix[doc.id][k.term]) {
                                 var normalizedFreq = _this.itemTagMatrix[doc.id][k.term] / _this.maxTagAcrossDocs[k.term];           // normalized item-tag frequency
                                 var scalingFactor = 1 / (Math.pow(Math.E, (1 / _this.itemTagMatrix[doc.id][k.term])));   // raises final score of items bookmarked many times
                                 var tagScore = Math.roundTo((normalizedFreq * k.weight * scalingFactor / p.keywords.length), 3);
-                                tags[k.term] = { tagged: _this.itemTagMatrix[doc][k.term], score: tagScore, stem: k.stem };
+                                tags[k.term] = { tagged: _this.itemTagMatrix[doc.id][k.term], score: tagScore, stem: k.stem };
                                 tagBasedScore += tagScore;
                             }
                         });
@@ -177,16 +176,15 @@ window.RSTagUser = (function(){
                         });
                     }
 
-                    var finalScore = tagBasedScore * p.options.beta + userBasedScore * (1 - p.options.beta);
-                    doc.tuScore = finalScore;
-                    doc.tuMisc = {
-                        tagcore: Math.roundTo(tagBasedScore, 3),
+                    var finalScore = Math.roundTo(tagBasedScore * p.options.beta + userBasedScore * (1 - p.options.beta), 3);
+                    doc.ranking.tuScore = finalScore;
+                    doc.ranking.tuMisc = {
+                        tagScore: Math.roundTo(tagBasedScore, 3),
                         userScore: Math.roundTo(userBasedScore, 3),
                         tags: tags,
                         users: users
                     };
-
-                }
+//                }
             });
             return _data;
         },

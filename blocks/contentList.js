@@ -135,24 +135,24 @@ var ContentList = (function(){
     var showRankingPositions = function() {
 
         var color = function(d) {
-            if(d.positionsChanged > 0) return "rgba(0, 200, 0, 0.8)";
-            if(d.positionsChanged < 0) return "rgba(250, 0, 0, 0.8)";
+            if(d.ranking.posChanged > 0) return "rgba(0, 200, 0, 0.8)";
+            if(d.ranking.posChanged < 0) return "rgba(250, 0, 0, 0.8)";
             return "rgba(128, 128, 128, 0.8)";
         };
 
         var posMoved = function(d) {
-            if(d.positionsChanged == 1000) return STR_JUST_RANKED;
-            if(d.positionsChanged > 0) return "+" + d.positionsChanged;
-            if(d.positionsChanged < 0) return d.positionsChanged;
+            if(d.ranking.posChanged == 1000) return STR_JUST_RANKED;
+            if(d.ranking.posChanged > 0) return "+" + d.ranking.posChanged;
+            if(d.ranking.posChanged < 0) return d.ranking.posChanged;
             return "=";
         };
 
         _this.data.forEach(function(d, i){
-            if(d.overallScore > 0){
+            if(d.ranking.overallScore > 0){
                 //var rankingDiv = $(liItem + '' + d.id).find('.'+liRankingContainerClass);
                 var rankingDiv = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').find('.'+liRankingContainerClass);
                 rankingDiv.css('visibility', 'visible');
-                rankingDiv.find('.'+rankingPosClass).text(d.rankingPos);
+                rankingDiv.find('.'+rankingPosClass).text(d.ranking.pos);
                 rankingDiv.find('.'+rankingPosMovedClass).css('color', color(d)).text(posMoved(d));
             }
         });
@@ -163,7 +163,7 @@ var ContentList = (function(){
 
         if(_this.status !== RANKING_STATUS.no_ranking) {
             _this.data.forEach(function(d){
-                var display = d.rankingPos > 0 ? '' : 'none';
+                var display = d.ranking.pos > 0 ? '' : 'none';
                 //$(liItem + '' + d.id).css('display', display);
                 $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').css('display', display);
             });
@@ -212,7 +212,7 @@ var ContentList = (function(){
         _this.data.forEach(function(d, i){
 
             var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
-            if(d.rankingPos > 0) {
+            if(d.ranking.pos > 0) {
                 var shift = (i+1) * 5;
                 var duration = timeLapse * (i+1);
 
@@ -238,12 +238,12 @@ var ContentList = (function(){
         var listTop = $ul.position().top;
 
         _this.data.forEach(function(d, i){
-            if(d.rankingPos > 0) {
+            if(d.ranking.pos > 0) {
                 //var $item = $(liItem +''+ d.id);
                 var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
                 var itemTop = $item.position().top;
                 var shift = listTop +  acumHeight - itemTop;
-                var movingClass = (d.positionsChanged > 0) ? liMovingUpClass : ((d.positionsChanged < 0) ? liMovingDownClass : '');
+                var movingClass = (d.ranking.posChanged > 0) ? liMovingUpClass : ((d.ranking.posChanged < 0) ? liMovingDownClass : '');
 
                 $item.addClass(movingClass);
                 $item.animate({"top": '+=' + shift+'px'}, duration, easing);
@@ -436,7 +436,6 @@ var ContentList = (function(){
         //  When animations are triggered too fast and they can't finished in order, older timeouts are canceled and only the last one is executed
         //  (list is resorted according to last ranking state)
         this.animationTimeout = updateFunc[this.status].call(this);
-
         setTimeout(removeMovingStyle, removeDelay);
     };
 

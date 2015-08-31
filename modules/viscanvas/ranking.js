@@ -45,37 +45,36 @@ var Ranking = (function(){
         view: "score",
         getInitData: function(rankingModel){
 
-            var rankingData = rankingModel.getRanking();
-            var attr = rankingModel.getMode();
+            var rankingData = rankingModel.getRanking().slice();
+            var score = rankingModel.getMode();
             var a = [];
             var i = 0;
 
             rankingData.forEach(function(d, i){
-                if(d.overallScore > 0) {
-                    a[i] = d;
-                    var x0 = 0;
-                    var maxWeightedScoreFound = false;
-                    a[i].weightedKeywords.forEach(function(wk){
-                        wk['id'] = d.id;
-                        if(attr === RANKING_MODE.overall_score){
-                            wk['x0'] = x0;
-                            wk['x1'] = x0 + wk['weightedScore'];
-                            x0 = wk['x1'];
-                        }
-                        else{
-                            if(wk['weightedScore'] == a[i]['maxScore'] && !maxWeightedScoreFound){
-                                wk['x0'] = x0;
-                                wk['x1'] = x0 + wk['weightedScore'];
-                                x0 = wk['x1'];
-                                maxWeightedScoreFound = true;
-                            }
-                            else{
-                                wk['x0'] = x0;
-                                wk['x1'] = x0;
-                            }
-                        }
+                var x0 = 0;
+                d.bars = [];
+                // keyword bars
+                d.ranking.cbKeywords.forEach(function(k, i){
+
+                    d.bars.push({
+                        desc: k.stem,
+                        x0: x0,
+                        x1: x0 + k.weightedScore,
+                        color: color(k.stem)
                     });
-                }
+                    x0 = d.bars[i].x1;
+                });
+
+                if(score == window.RANKING_MODE.by_CB || score == window.RANKING_MODE.by_TU)
+                    x0 = 1;
+
+                d.bars.psuh({
+                    desc: 'TU',
+                    x0: x0,
+                    x1: x0 + d.ranking.tuScore,
+                    color: '#606060'
+                });
+
             });
             return a;
         }

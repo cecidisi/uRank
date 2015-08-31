@@ -51,7 +51,8 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'libs/pos/pos.js',
                     pathToUrank + 'libs/pos/POSTagger.js',
                     pathToUrank + 'model/keywordExtractor.js',
-                    pathToUrank + 'model/rankingArray.js',
+                    pathToUrank + 'model/RSContent.js',
+                    pathToUrank + 'model/RSTagUser.js',
                     pathToUrank + 'model/rankingModel.js',
                     pathToUrank + 'blocks/contentList.js',
                     pathToUrank + 'blocks/docViewer.js',
@@ -94,8 +95,7 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'css/urank.css',
                     pathToUrank + 'css/urank-blocks-default.css',
                     pathToUrank + 'css/vis-ranking.css',
-                    pathToUrank + 'urank.js',
-                    pathToUrank + 'recommender/rs.js'   /////
+                    pathToUrank + 'urank.js'
                 ],
                 complete: function(){
                     console.log('urank loaded');

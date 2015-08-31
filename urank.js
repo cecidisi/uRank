@@ -2,8 +2,6 @@
 var Urank = (function(){
 
     /////
-    var recommender;
-
     var _this, s = {},
         contentList, tagCloud, tagBox, visCanvas, docViewer;
     // Color scales
@@ -149,19 +147,10 @@ var Urank = (function(){
             //  Assign collection keywords and set other necessary variables
             _this.keywords = keywordExtractor.getCollectionKeywords();
             _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
-            _this.rankingMode = RANKING_MODE.overall_score;
+            _this.rankingMode = RANKING_MODE.by_CB;
             _this.rankingModel.clear().setData(_this.data);
             _this.selectedKeywords = [];
             _this.selectedId = STR_UNDEFINED;
-
-            //  Build blocks
-            /* var buildOpt = {
-                contentList: o.contentList,
-                tagCloud:    o.tagCloud, { customScrollBars: o.misc.customScrollBars }),
-                tagBox:      $.extend(o.tagBox, { customScrollBars: o.misc.customScrollBars }),
-                visCanvas:   $.extend(o.visCanvas, { customScrollBars: o.misc.customScrollBars }),
-                docViewer:   $.extend(o.docViewer, { customScrollBars: o.misc.customScrollBars })
-            };*/
 
             contentList.build(_this.data, o.contentList);
             tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, o.tagCloud, _this.keywordsDict);
@@ -184,6 +173,7 @@ var Urank = (function(){
             s.onLoad.call(this, _this.keywords);
         },
 
+        //MATHIAS!!
         onBetaOrViewChanged: function() {
             var beta = $('#beta-input').val();
             var view = $('#select-view').val();
@@ -193,10 +183,6 @@ var Urank = (function(){
 
             var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode).getRanking();
             var status = _this.rankingModel.getStatus();
-
-            /*****/
-            var recData = recommender.getRecommendations({ keywords: _this.selectedKeywords, beta: beta });
-            /*****/
 
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
             visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), recData, view);
@@ -212,16 +198,16 @@ var Urank = (function(){
             _this.selectedKeywords = selectedKeywords;
             _this.selectedId = STR_UNDEFINED;
 
-            console.log("selected keywords", selectedKeywords)
-
-            var rankingData = _this.rankingModel.update(_this.selectedKeywords, _this.rankingMode).getRanking();
+            var updateOpt = {
+                query: _this.selectedKeywords,
+                mode: _this.rankingMode,
+                rWeight: 0.5,
+                user: 'NN'
+            };
+            var rankingData = _this.rankingModel.update(updateOpt).getRanking();
             var status = _this.rankingModel.getStatus();
 
-
-            /*****/
-            var recData = recommender.getRecommendations({ keywords: _this.selectedKeywords, beta: $('#beta-input').val() });
-            /*****/
-
+            console.log(_this.rankingModel);
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
             visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), recData, view);
             docViewer.clear();
@@ -375,6 +361,11 @@ var Urank = (function(){
             s.onRankByMaximumScore.call(this);
         },
 
+        onChangeRankingMode: function(mode) {
+            _this.rankingMode = window.RANKING_MODE[mode] || window.RANKING_MODE.by_CB;
+            // Add method to viscanvas for mode changing
+        },
+
         onReset: function(event) {
             if(event) event.stopPropagation();
             contentList.reset();
@@ -477,7 +468,6 @@ var Urank = (function(){
             				value:	0.5,
             				linkTo:	"beta-input"
             			});
-        recommender = new RS();
     }
 
 

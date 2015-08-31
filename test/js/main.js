@@ -68,7 +68,6 @@
 
     // Event handler for dataset-select change
     var selectDatasetChanged = function(){
-
         $('.processing-message').css('visibility', 'visible');
         var datasetId = $("#select-dataset").val();
         setTimeout(function(){

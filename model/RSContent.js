@@ -22,25 +22,38 @@ window.RSContent = (function(){
  ****************************************************************************************************/
     RSContent.prototype = {
 
-        getCBScores: function(_data, _keywords) {
+        getCBScores: function(options) {
 
-            if(_keywords.length > 0) {
+            var opt = $.extend(true, {
+                data: [],
+                keywords: [],
+                options: {
+                    rWeight: 0.5
+                }
+            }, options);
+            var _data = opt.data.slice();
+
+            if(opt.keywords.length > 0) {
                 _data.forEach(function(d, i) {
+                    d.ranking.cbScore = 0;
+                    d.ranking.cbMaxScore = 0;
+                    d.ranking.cbKeywords = [];
                     var docNorm = getEuclidenNorm(d.keywords);
-                    var unitQueryVectorDot = parseFloat(1.00/Math.sqrt(_keywords.length));
+                    var unitQueryVectorDot = parseFloat(1.00/Math.sqrt(opt.keywords.length));
                     var max = 0;
-                    _keywords.forEach(function(q) {
+                    opt.keywords.forEach(function(q) {
                     // termScore = tf-idf(d, t) * unitQueryVector(t) * weight(query term) / |d|   ---    |d| = euclidenNormalization(d)
                         var termScore = (d.keywords[q.stem]) ? ((parseFloat(d.keywords[q.stem]) / docNorm) * unitQueryVectorDot *   parseFloat(q.weight)).round(3) :  0;
                         // if item doesn't contain query term => maxScore and overallScore are not changed
-                        d.cbScore += termScore;
-                        d.cbMaxScore = termScore > d.maxScore ? termScore : d.maxScore;
-                        d.cbKeywords.push({ term: q.term, stem: q.stem, weightedScore: termScore });
+                        d.ranking.cbScore += termScore;
+                        d.ranking.cbMaxScore = termScore > d.ranking.cbMaxScore ? termScore : d.ranking.cbMaxScore;
+                        d.ranking.cbKeywords.push({ term: q.term, stem: q.stem, weightedScore: termScore });
                     });
                 });
             }
-        return _data;
-        };
+            return _data;
+        }
+    }
 
     return RSContent;
 })();

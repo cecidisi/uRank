@@ -301,10 +301,10 @@ function getPositionOfWord (word, stemmedKeywords, position){
     return null;
 }
 
-Array.prototype.pushIfNotExist = function(val) {
-    if (typeof(val) == 'undefined' || val == '') { return }
-    val = $.trim(val)
-    if ($.inArray(val, this) == -1) {
-        this.push(val);
-    }
-};
+//Array.prototype.pushIfNotExist = function(val) {
+//    if (typeof(val) == 'undefined' || val == '') { return }
+//    val = $.trim(val)
+//    if ($.inArray(val, this) == -1) {
+//        this.push(val);
+//    }
+//};
