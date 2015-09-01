@@ -171,24 +171,30 @@ header select{
 	vertical-align: top;
 }
 
-/*  LEFT    */
 
-#tagcloud {
-    float: left;
-    width: 18%;
-    height: 100%;
-}
-
-
-/*  CENTER-LEFT */
-
-.central-left-panel {
+/*  LEFT */
+.left-panel {
     display: inline-block;
     float:  left;
     width: 30%;
     height: 100%;
 }
 
+/*  CENTER */
+.central-panel {
+    display: inline-block;
+    float:  left;
+    width: 52%;
+    /*    width: 31%;*/
+    height: 100%;
+}
+
+/*    RIGHT */
+.right-panel {
+    float: right;
+    width: 18%;
+    height: 100%;
+}
 
 /*
 *   Ranking Controls (upper mid-left)
@@ -207,12 +213,18 @@ header select{
 }
 
 
+.ranking-controls select {
+    height: 25px;
+    width: 100px;
+    padding: 2px;
+}
+
+
 .ranking-controls button {
-    min-width: 2.1em;
-    height: 1.7em;
-    margin: .6em .3em;
-    padding: .3em .6em;
-    border-radius: .9em;
+    min-width: 16px;
+    height: 24px;
+    margin: 7px;
+    border-radius: 7px;
 }
 
 
@@ -223,7 +235,6 @@ header select{
     background-repeat: no-repeat;
     display: block;
 }
-
 
 .ranking-controls button span.sprite-reset {
     width: 16px;
@@ -255,33 +266,13 @@ header select{
 
 
 
-/*  CENTER-RIGHT */
-
-.central-right-panel {
-    display: inline-block;
-    float:  left;
-    width: 52%;
-    //width: 31%;
-    height: 100%;
-}
-
 /*
-*   Tagbox (upper mid-right header)
+*   TAGBOX
 */
 #tagbox {
     float: right;
-    width: 85%;
+    width: 100%;
     height: 5em;
-}
-
-#beta-slider-outta {
-    float: right;
-    width: 15%;
-    height: 5em;
-}
-
-#beta-slider, #beta-input {
-    margin-top: 10px;
 }
 
 #viscanvas {

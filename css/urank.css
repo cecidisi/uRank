@@ -25,8 +25,34 @@
 }
 
 
+.urank-tagcloud-controls {
+    width: calc(100% - 10px);
+    height: 30px;
+    margin: 5px;
+    padding: 10px 0px;
+}
+
+.urank-tagcloud-controls input[type="text"] {
+    display: inline-block;
+    height: 20px;
+    width: calc(100% - 57px);
+    margin: 2px;
+    background-color: white;
+    border: 1px #ddd solid;
+    border-radius: 5px;
+    color: #666;
+}
+
+.urank-tagcloud-controls input[type="button"] {
+    display: inline-block;
+    min-width: 16px;
+    height: 24px;
+    margin: 2px;
+    border-radius: 7px;
+}
+
 .urank-tagcloud-tag-container-outer {
-    height: calc(100% - 10px);
+    height: calc(100% - 65px);
     width: calc(100% - 10px);
     margin: 5px;
     overflow-y: auto;
@@ -532,23 +558,7 @@ Canvas section (right-center) - displays ranking vis
 }
 
 .urank-viscanvas-container {
- width: 90%;
- float: left;
-}
-
-.urank-viscanvas-container-separation {
- width: 0%;
- float: left;
- background-color: white;
-}
-
-.urank-viscanvas-container-social {
- width: 0%;
- float: left;
-}
-
-.urank-viscanvas-container-tagged {
- width: 10%;
+ width: 100%;
  float: left;
 }
 

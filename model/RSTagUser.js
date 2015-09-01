@@ -148,9 +148,7 @@ window.RSTagUser = (function(){
                 //  Checks that current user has not made any boomark or selected the doc yet
 //                if(!_this.userItemMatrix[p.user] || !_this.userItemMatrix[p.user][doc.id]) {
 
-                    var tagBasedScore = 0,
-                        userBasedScore = 0,
-                        tags = {}, users = 0, beta = p.options.beta;
+                var tagBasedScore = 0, userBasedScore = 0, tags = {}, users = 0, beta = p.options.beta;
 
                     //  Compute tag-based score
                     if(p.options.beta > 0) {

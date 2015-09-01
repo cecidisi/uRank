@@ -43,3 +43,10 @@
 .urank-tag-user-section {
     float: right;
 }
+
+.urank-user-hint {
+    width: 16px;
+    height: 16px;
+    background-image: url(../media/user.png);
+    background-repeat: no-repeat;
+}

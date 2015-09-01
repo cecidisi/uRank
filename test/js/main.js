@@ -106,34 +106,17 @@
         _this.urank = urank;
         // Bind event handlers for dataset select
         $("#select-dataset").change(selectDatasetChanged);
-        $("#select-view").change(function() {
-            urank.betaOrViewChanged();
-        });
         // Bind event handlers for urank specific buttons
         $('#btn-reset').off().on('click', urank.reset);
-        $('#btn-sort-by-overall-score').off().on('click', urank.rankByOverallScore);
-        $('#btn-sort-by-max-score').off().on('click', urank.rankByMaximumScore);
-
-        $('#select-dataset').trigger('change');
+//        $('#btn-sort-by-overall-score').off().on('click', urank.rankByOverallScore);
+//        $('#btn-sort-by-max-score').off().on('click', urank.rankByMaximumScore);
+//        $("#select-mode").off().change(urank.changeRankingMode($("#select-mode").val()));
+        $("#select-mode").off().change(function(){ urank.changeRankingMode($(this).val()) });
         $('#btn-destroy').click(function(){ urank.destroy(); })
 
-        var beta = $('#beta-input').val();
 
-        setInterval(function() {
-            if(beta != $('#beta-input').val()) {
-                if($('#beta-input').val() > 1) {
-                    beta = 1;
-                    $('#beta-input').val(1);
-                }
-                else if($('#beta-input').val() < 0) {
-                    beta = 0;
-                    $('#beta-input').val(0);
-                }
-                else
-                    beta = $('#beta-input').val();
-                urank.betaOrViewChanged();
-            }
-        }, 1000);
+        $('#select-dataset').trigger('change');
+
     };
 
     //  Calling Urank

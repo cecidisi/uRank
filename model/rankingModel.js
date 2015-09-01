@@ -135,6 +135,7 @@ var RankingModel = (function(){
                 rWeight: 0.5,
                 user: 'NN'
             }, options);
+            this.query = opt.query;
             this.mode = options.mode;
             this.rWeight = options.rWeight;
             this.previousRanking = this.ranking.slice();
@@ -147,6 +148,7 @@ var RankingModel = (function(){
             this.previousRanking = [];
             this.ranking = [];
             this.status = updateStatus();
+            this.query = [];
             return this;
         },
 
@@ -154,6 +156,7 @@ var RankingModel = (function(){
             this.ranking = [];
             this.previousRanking = [];
             this.data = [];
+            this.query = [];
             this.status = RANKING_STATUS.no_ranking;
             this.mode = RANKING_MODE.by_CB;
             return this;
@@ -173,6 +176,10 @@ var RankingModel = (function(){
 
         getMode: function() {
             return this.mode;
+        },
+
+        getQuery: function() {
+            return this.query;
         },
 
         getActualIndex: function(index){

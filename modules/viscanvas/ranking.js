@@ -3,7 +3,7 @@ var Ranking = (function(){
     var RANKING = {};
     var s, _this;
     var width, height, margin;
-    var x, y, color, xAxis, yAxis;
+    var x, y, color, xAxis, yAxis, xUpperLimit;
     var svg;
     var data;
     var $root = $('');
@@ -46,13 +46,14 @@ var Ranking = (function(){
             var a = [];
             var rankingData = rankingModel.getRanking().slice();
             var score = rankingModel.getMode();
+
             rankingData.forEach(function(d, i){
                 if(d.ranking.overallScore > 0) {
-                    var x0 = 0;
+                    // Tag information
                     d.bars = [];
+                    var x0 = 0;
                     // keyword bars
                     d.ranking.cbKeywords.forEach(function(k, i){
-
                         d.bars.push({
                             desc: k.stem,
                             x0: x0,
@@ -68,6 +69,15 @@ var Ranking = (function(){
                         x0: x0,
                         x1: x0 + d.ranking.tuScore,
                         color: '#606060'
+                    });
+
+                    // Tag information
+                    d.tags = [];
+                    var tagsObj = d.ranking.tuMisc.tags;
+                    Object.keys(tagsObj).forEach(function(tk, j){
+                        d.tags.push(tagsObj[tk]);
+                        d.tags[j].term = tk;
+                        d.tags[j].color = color(d.tags[j].stem);
                     });
                     a.push(d);
                 }
@@ -118,7 +128,7 @@ var Ranking = (function(){
             margin = { top: 0, bottom: 0, left: 0, right: 1 };
             width = $root.width() - margin.left - margin.right;
             height = listHeight;
-            var xUpperLimit = rankingModel.getMode() == RANKING_MODE.overall ? 1 : 2;
+            xUpperLimit = rankingModel.getMode() == RANKING_MODE.overall ? 1 : 2;
 
             // Define scales
 		    x = d3.scale.linear()
@@ -135,7 +145,6 @@ var Ranking = (function(){
             xAxis = d3.svg.axis()
                 .scale(x)
                 .orient("bottom")
-//                .tickFormat(function(value){ if(value > 0 && value < 2) return (value * 100 / 2) + '%'; return ''; });
                 .tickValues('');
 
             yAxis = d3.svg.axis()
@@ -165,22 +174,11 @@ var Ranking = (function(){
                 .call(yAxis)
                 .selectAll("text");
 
-
-//            // svg tagged elements
-//            svgTagged = d3.select(s.rootTagged).append("svg")
-//                .attr("class", svgClass)
-//                .attr("width", $('.urank-viscanvas-container-tagged').width())
-//                .attr("height", height + margin.top + margin.bottom + 30)
-//                .append("g")
-//                .attr("width", $('.urank-viscanvas-container-tagged').width())
-//                .attr("height", height + 30)
-//                .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
             //// Create drop shadow to use as filter when a bar is hovered or selected
             RANKING.Render.createShadow();
             //// Add stacked bars
             RANKING.Render.drawStackedBars();
-            RANKING.Render.drawTagsAndUsersHints();
+            RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery());
         },
 
         /******************************************************************************************************************
@@ -199,7 +197,7 @@ var Ranking = (function(){
             d3.select(s.root).select('.'+svgClass).attr("width", width)
             svg.attr("width", width);
 
-            var xUpperLimit = rankingModel.getMode() == RANKING_MODE.overall ? 1 : 2;
+            xUpperLimit = rankingModel.getMode() == RANKING_MODE.overall ? 1 : 2;
             x.rangeRound( [0, width] )
              .domain([0, xUpperLimit]).copy();
 
@@ -217,7 +215,7 @@ var Ranking = (function(){
                 .selectAll("g").delay(delay);
 
             RANKING.Render.drawStackedBars();
-            RANKING.Render.drawTagsAndUsersHints();
+            RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery());
         },
 
 
@@ -282,107 +280,76 @@ var Ranking = (function(){
         *	Draw minimal views for tag- and user-based recommendations
         *
         * ***************************************************************************************************************/
-        drawTagsAndUsersHints: function() {
+        drawTagsAndUsersHints: function(query) {
+
+            var tagHintWidth = query.length * 10 + 6;
+            var userHintWidth = 18;
+            var xTUOffset = x(xUpperLimit) - tagHintWidth - userHintWidth;
+            var maxBarHeight = y.rangeBand();
+
+            // Define scales
+            var xTU = d3.scale.ordinal().domain(query.map(function(q){ return q.stem; })).rangeBands( [0, tagHintWidth - 10], .3);
+            var yTU = d3.scale.linear().domain([0, 1]).rangeRound([maxBarHeight, 0]);
+
+            // Define axis' function
+            var xAxisTU = d3.svg.axis().scale(xTU).orient("bottom").tickValues('');
+            var yAxisTU = d3.svg.axis().scale(yTU).orient("left").tickValues('');
+
 
             setTimeout(function(){
-                var tagUserSection = svg.selectAll('.urank-ranking-stackedbar').append('g')
-                    .attr('width', 50)
-                    .attr('height', y.rangeBand())
-                    .attr("transform", function(d, i){ "translate(" + x(0.8) + "," + y(i) + ")" })
-;
 
-                tagUserSection.append('rect')
-                    .attr('class', tuSectionClass)
-                    .attr('width', 50)
-                    .attr('height', y.rangeBand())
-                    .attr('x', x(1.8))
-//                    .attr("transform", function(d, i){ "translate(" + x(0.8) + "," + y(i) + ")" })
-                    .style('fill', 'red');
+                var stackedbars = svg.selectAll('.'+stackedbarClass);
 
+                var tuHints = stackedbars.append('g')
+                    .attr('width', tagHintWidth + userHintWidth)
+                    .attr('height', maxBarHeight)
+                    .attr("transform", function(d, i){ "translate(" + xTUOffset + "," + y(i) + ")" });
 
+                // draw x axis
+                tuHints.append('g')
+                    .attr('class', xClass + ' ' + axisClass)
+                    .attr('transform', function(d, i){ return 'translate(' + xTUOffset + ',' + (y(i) + maxBarHeight) + ')' })
+                    .call(xAxisTU)
+                    .selectAll('text');
 
-            }, 801);
+                // draw y axis
+                tuHints.append('g')
+                    .attr('class', yClass + ' ' + axisClass)
+                    .attr('transform', function(d, i){ return 'translate(' + xTUOffset + ',0)' })
+                    .call(yAxisTU)
+                    .selectAll('text');
 
-            // svg tagged elements
-            /*            svgTagged.selectAll('.'+stackedbarClass).data([]).exit();
-            svgTagged.selectAll('.'+stackedbarClass).remove();
-            svgTagged.selectAll('.'+stackedbarClass).data(data).enter();*/
-
-
-            // svg tagged elements
-            /*                stackedBars = svgTagged.selectAll('.'+stackedbarClass)
-                .data(data).enter()
-                .append("g")
-                .attr("class", stackedbarClass)
-                .attr("id", function(d, i){ return "urank-ranking-stackedbar-" + d.id; })
-                .attr( "transform", function(d, i) { return "translate(0, " + y(i) + ")"; } )
-                .on('click', RANKING.Evt.itemClicked)
-                .on('mouseover', RANKING.Evt.itemMouseEntered)
-                .on('mouseout', RANKING.Evt.itemMouseLeft);
-
-                stackedBars.append('rect')
-                    .attr('class', function(d, i){ if(i%2) return darkBackgroundClass; return lightBackgroundClass; })
-                    .attr('x', 0)
-                    .attr('width', $('.urank-viscanvas-container-tagged').width())
-                    .attr('height', y.rangeBand())
-                    .style('fill', function(d, i){
-                        if(s.lightBackgroundColor != '' && s.darkBackgroundColor != '') {
-                            if(i%2) return s.darkBackgroundColor;
-                            return s.lightBackgroundColor;
-                        }
-                        return  '';
-                    });
-
-                stackedBars.selectAll('.'+barClass)
-                    .data(function(d) {
-                        for(var j = 0; j < RANKING.Settings.recData.length; j++) {
-                            if(RANKING.Settings.recData[j].doc === d.id) {
-                                var users = [];
-                                users.push(RANKING.Settings.recData[j].misc.users);
-                                return users;
-                            }
-                        }
-                        return 0;
-                    })
-                    .enter()
-                    .append("text")
-                    .attr("x", $('.urank-viscanvas-container-tagged').width() * 0.8)
-                    .attr("y", 11)
-                    .text(function(d) { return d;});
-
-                var highestTagValue = 0;
-                stackedBars.selectAll('.'+barClass)
-                    .data(function(d) {
-                        for(var j = 0; j < RANKING.Settings.recData.length; j++) {
-                            if(RANKING.Settings.recData[j].doc === d.id) {
-                                var taggedData = [];
-                                for(var tag in RANKING.Settings.recData[j].misc.tags) {
-                                    if(RANKING.Settings.recData[j].misc.tags[tag].tagged !== undefined)
-                                        taggedData.push({"tag": tag, "number": RANKING.Settings.recData[j].misc.tags[tag].tagged,
-                                        "stem": RANKING.Settings.recData[j].misc.tags[tag].stem});
-                                    if(RANKING.Settings.recData[j].misc.tags[tag].tagged > highestTagValue)
-                                        highestTagValue = RANKING.Settings.recData[j].misc.tags[tag].tagged;
-                                }
-                                //console.log("taggedData: ", taggedData);
-                                return taggedData;
-                            }
-                        }
-                        return 0;
-                    })
+                // draw vertical tag bars
+                tuHints.selectAll('.tag-bar')
+                    .data(function(d) { return d.tags })
                     .enter()
                     .append("rect")
-                    .attr("class", barClass)
-                    .attr("height", function(d, i) { return (y.rangeBand() * 0.8) * d.number / highestTagValue; })
-                    .attr("x", function(d, i) {
-                        for(var j = 0; j < data[0].weightedKeywords.length; j++)
-                            if(d.tag === data[0].weightedKeywords[j].term)
-                                return 15 * j + 3;
-                    })
-                    .attr("y", function(d, i) { return y.rangeBand() -  (y.rangeBand() * 0.8) * d.number / highestTagValue; })
-                    .attr("width", $('.urank-viscanvas-container-tagged').width() * 0.1)
-                    .style("fill", function(d) { return color(d.stem); });*/
+                    .attr("class", 'tag-bar')
+                    .attr("x", function(t) { return xTUOffset + xTU(t.stem); })
+                    .attr("width", xTU.rangeBand())
+                    .attr("y", function(t) { return yTU(t.score); })
+                    .attr("height", function(t){ return maxBarHeight - yTU(t.score); })
+                    .style("fill", function(t) { return t.color; });
+
+                // draw user hint
+                tuHints.append('svg:img')
+                    .attr('xlink:href', function(d){ return '../media/user.png' })
+                    .attr('x', xTUOffset + tagHintWidth )
+                    .attr('width', userHintWidth)
+                    .attr('y', function(d, i){ return y(i) })
+                    .attr('height', '16');
 
 
+
+//                tuHints.append('rect')
+//                    .attr('class', tuSectionClass)
+//                    .attr('width', tuSectionWidth)
+//                    .attr('height', y.rangeBand())
+//                    .attr('x', xTUOffset)
+//                    .style('border', 'black solid 1px')
+//                    .style('opacity', 1);
+
+            }, 801);
 
         },
 
@@ -477,18 +444,6 @@ var Ranking = (function(){
             // update axes
             svg.select('.'+xClass+'.'+axisClass).attr("transform", "translate(0," + (height) + ")").call(xAxis.orient('bottom'));
 
-
-            // svg tagged elements
-/*
-            d3.select(svgTagged.node().parentNode)    // var svg = svg > g
-                .attr('height', height + margin.top + margin.bottom + 30);
-
-            svgTagged.attr("height", height + 30)
-                .attr("transform", "translate(" + (margin.left) + ", 0)");
-
-            // update axes
-            svgTagged.select('.'+xClass+'.'+axisClass).attr("transform", "translate(0," + (height) + ")").call(xAxis.orient('bottom'));
-*/
         },
 
         /*****************************************************************************************************************
@@ -541,38 +496,6 @@ var Ranking = (function(){
                 .attr("x", function(d) { return x(d.x0); })
                 .attr("width", function(d) { return x(d.x1) - x(d.x0); });
 
-
-//
-//            if(RANKING.Settings.view === "separated-score") {
-//
-//                // Update bars
-//                svg.selectAll('.'+stackedbarClass).attr('width', width);
-//                svg.selectAll('rect.'+backgroundClass).attr('width', width);
-//
-//                svg.selectAll('.'+barClass)
-//                    .attr("x", function(d) { return x(d.x0); })
-//                    .attr("width", function(d) { return x(d.x1) - x(d.x0); });
-//
-//                // svg social elements
-//                d3.select(svgSocial.node().parentNode).attr('width',width + margin.left + margin.right);
-//                svg.attr("width", width);
-//
-//                // update x-axis
-//                svgSocial.select('.'+xClass + '.'+axisClass).call(xAxis.orient('bottom'));
-//
-//                // Update bars
-//                var beta = RANKING.Settings.recData[0].misc.beta;
-//                svgSocial.selectAll('.'+stackedbarClass).attr('width', width);
-//                svgSocial.selectAll('rect.'+backgroundClass).attr('width', width);
-//                svgSocial.selectAll('.'+barClass)
-//                    .attr("x", function(d) { return x(d.x0); })
-//                    .attr("width", function(d) {
-//                            for(var i = 0; i < RANKING.Settings.recData.length; i++)
-//                                if(RANKING.Settings.recData[i].doc === d.id)
-//                                    return x(RANKING.Settings.recData[i].score);
-//                            return 0; });
-//            }
-//
         }
 
     };
@@ -593,7 +516,7 @@ var Ranking = (function(){
         updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.unchanged] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.no_ranking] = _this.clear;
-        updateFunc[rankingModel.getStatus()].call(this, rankingModel, colorScale, listHeight, recData);
+        updateFunc[rankingModel.getStatus()].call(this, rankingModel, colorScale, listHeight);
         return this;
     };
 
@@ -632,11 +555,8 @@ var Ranking = (function(){
         if(this.isRankingDrawn) {
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0)')
-                .style('filter', 'url(#drop-shadow)');
-
-/*            svgTagged.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
-                            .attr('transform', 'translate(0, 0)')
-                            .style('filter', 'url(#drop-shadow)');*/
+                .style('filter', 'url(#drop-shadow)')
+                .text(function(d){ return d.score });
         }
         return this;
     };
@@ -646,13 +566,9 @@ var Ranking = (function(){
         if(this.isRankingDrawn) {
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')
-                .style('filter', '');
+                .style('filter', '')
+                .text('');
 
-/*
-            svgTagged.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
-                            .attr('transform', 'translate(0, 0.2)')
-                            .style('filter', '');
-*/
         }
         return this;
     };

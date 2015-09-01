@@ -5,6 +5,7 @@ var TagCloudDefault = (function(){
     var s = {};
     //  Classes
     var tagcloudDefaultClass = 'urank-tagcloud-default',
+        tagcloudControlsClass = 'urank-tagcloud-controls',
         tagContainerOuterClass = 'urank-tagcloud-tag-container-outer',
         tagContainerClass = 'urank-tagcloud-tag-container',
         tagClass = 'urank-tagcloud-tag',
@@ -245,9 +246,7 @@ var TagCloudDefault = (function(){
                 },
                 mousedown: function(event){ event.stopPropagation(); }
             });
-
         }
-
         return $tag;
     };
 
@@ -268,6 +267,13 @@ var TagCloudDefault = (function(){
         // Empty tag container and add appropriate class/es
         $root = $(s.root).empty().addClass(tagcloudDefaultClass);
 
+        //  Create tagcloud controls
+        var $tagcloudControls = $('<div/>').appendTo($root).addClass(tagcloudControlsClass);
+        var $tagInput = $('<input>', { type: 'text', placeholder: 'new keyword' }).appendTo($tagcloudControls);
+        var $addButton = $('<input>', { type:'button', val: 'Add' }).appendTo($tagcloudControls);
+
+
+        // Create tag contained
         var $outerTagContainer = $('<div></div>').appendTo($root)
             .addClass(tagContainerOuterClass)
             .on('scroll', onRootScrolled);
