@@ -109,7 +109,7 @@ window.RSTagUser = (function(){
                 keywords: [],
                 data: [],
                 options: {
-                    rWeight: 0.5,
+                    rWeight: 1,
                     beta: 0.5,
                     neighborhoodSize: 20,
                     recSize: 0,
@@ -158,7 +158,7 @@ window.RSTagUser = (function(){
                             if(_this.itemTagMatrix[doc.id] && _this.itemTagMatrix[doc.id][k.term]) {
                                 var normalizedFreq = _this.itemTagMatrix[doc.id][k.term] / _this.maxTagAcrossDocs[k.term];           // normalized item-tag frequency
                                 var scalingFactor = 1 / (Math.pow(Math.E, (1 / _this.itemTagMatrix[doc.id][k.term])));   // raises final score of items bookmarked many times
-                                var tagScore = Math.roundTo((normalizedFreq * k.weight * scalingFactor / p.keywords.length), 3);
+                                var tagScore = Math.roundTo((normalizedFreq * k.weight * scalingFactor * p.options.rWeight / p.keywords.length), 3);
                                 tags[k.term] = { tagged: _this.itemTagMatrix[doc.id][k.term], score: tagScore, stem: k.stem };
                                 tagBasedScore += tagScore;
                             }
@@ -169,7 +169,7 @@ window.RSTagUser = (function(){
                     if(p.options.beta < 1) {
                         neighbors.forEach(function(n){
                             if(_this.userItemMatrix[n.user] && _this.userItemMatrix[n.user][doc.id]) {
-                                var userScore = (n.score / neighbors.length);
+                                var userScore = (n.score / neighbors.length) * p.options.rWeight;
                                 userBasedScore += userScore;
                                 users++;
                             }

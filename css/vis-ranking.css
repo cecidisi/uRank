@@ -3,6 +3,7 @@
 	float: left;
 }
 
+/*
 .urank-ranking-x.urank-ranking-axis path,
 .urank-ranking-x.urank-ranking-axis line {
 	fill: none;
@@ -15,21 +16,21 @@
     fill: none;
 	stroke-width : 0;
 }
+*/
 
-.urank-ranking-y.urank-ranking-axis line {
+.urank-ranking-axis path,
+.urank-ranking-axis line {
 	fill: none;
     stroke: none;
     opacity: 0.5;
 }
 
-.urank-ranking-y.urank-ranking-axis .tick {
+
+.urank-ranking-axis .tick {
 	stroke : none;
 	stroke-width : 0;
 }
 
-.urank-ranking-y.urank-ranking-axis .tick > text {
-    font-family : sans-serif;
-}
 
 .urank-ranking-stackedbar rect.urank-ranking-light-background {
     fill: #eee;
@@ -37,4 +38,8 @@
 
 .urank-ranking-stackedbar rect.urank-ranking-dark-background {
     fill: #ddd;
+}
+
+.urank-tag-user-section {
+    float: right;
 }

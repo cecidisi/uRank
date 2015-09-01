@@ -200,7 +200,7 @@ var Urank = (function(){
 
             var updateOpt = {
                 query: _this.selectedKeywords,
-                mode: _this.rankingMode,
+                mode: RANKING_MODE.by_TU,//_this.rankingMode,
                 rWeight: 0.5,
                 user: 'NN'
             };
@@ -209,7 +209,7 @@ var Urank = (function(){
 
             console.log(_this.rankingModel);
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
-            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight(), recData, view);
+            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight());
             docViewer.clear();
             tagCloud.clearEffects();
 

@@ -163,7 +163,7 @@ var ContentList = (function(){
 
         if(_this.status !== RANKING_STATUS.no_ranking) {
             _this.data.forEach(function(d){
-                var display = d.ranking.pos > 0 ? '' : 'none';
+                var display = d.ranking.overallScore > 0 ? '' : 'none';
                 //$(liItem + '' + d.id).css('display', display);
                 $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').css('display', display);
             });

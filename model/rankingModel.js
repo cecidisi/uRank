@@ -64,19 +64,26 @@ var RankingModel = (function(){
      *	Creates the ranking items with default values and calculates the weighted score for each selected keyword (tags in tag box)
      * */
     var updateRanking =  function(opt){
+        var score = opt.mode;
+        var cbWeight = (score == RANKING_MODE.overall) ? opt.rWeight : 1;
+        var tuWeight = (score == RANKING_MODE.overall) ? (1- opt.rWeight) : 1;
 
         var ranking = _this.data.slice();
         ranking.forEach(function(d){ d.ranking = {}; });
-        ranking = _this.cbRS.getCBScores({data: ranking, keywords: opt.query, options: { rWeight: opt.rWeight}});
-        ranking = _this.tuRS.getTagUserScores({ user: opt.user, keywords: opt.query, data: ranking, options:{ rWeight: (1 - opt.rWeight) }});
+        ranking = _this.cbRS.getCBScores({ data: ranking, keywords: opt.query, options: { rWeight: cbWeight } });
+        ranking = _this.tuRS.getTagUserScores({ user: opt.user, keywords: opt.query, data: ranking, options: { rWeight: tuWeight } });
         ranking.forEach(function(d){
             d.ranking.overallScore = d.ranking.cbScore + d.ranking.tuScore;
         });
 
-        var score = opt.mode;
+
+        var secScore = opt.mode == RANKING_MODE.by_CB ? RANKING_MODE.by_TU : (opt.mode == RANKING_MODE.by_TU ? RANKING_MODE.by_CB : undefined)
+
         ranking = ranking.sort(function(d1, d2){
             if(d1.ranking[score] > d2.ranking[score]) return -1;
             if(d1.ranking[score] < d2.ranking[score]) return 1;
+            if(d1.ranking[secScore] && d1.ranking[secScore] > d2.ranking[secScore]) return -1;
+            if(d1.ranking[secScore] && d1.ranking[secScore] < d2.ranking[secScore]) return 1;
             return 0;
         });
         ranking = assignRankingPositions(ranking, score);
@@ -137,8 +144,8 @@ var RankingModel = (function(){
         },
 
         reset: function() {
-            this.previousRanking.clear();
-            this.ranking.clear();
+            this.previousRanking = [];
+            this.ranking = [];
             this.status = updateStatus();
             return this;
         },
