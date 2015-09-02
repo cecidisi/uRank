@@ -1,4 +1,16 @@
 
+.urank-header-style {
+    color: #888;
+    background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
+    background: -o-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
+    background: -moz-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
+    background: -ms-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
+    /* background: linear-gradient(to top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1)); */
+    box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;
+}
+
+
+
 
 /************************************************************************************************
 
@@ -27,15 +39,17 @@
 
 .urank-tagcloud-controls {
     width: calc(100% - 10px);
-    height: 30px;
+    height: 45px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
     margin: 5px;
-    padding: 10px 0px;
 }
 
 .urank-tagcloud-controls input[type="text"] {
     display: inline-block;
     height: 20px;
-    width: calc(100% - 57px);
+    width: calc(100% - 45px);
     margin: 2px;
     background-color: white;
     border: 1px #ddd solid;
@@ -43,12 +57,23 @@
     color: #666;
 }
 
-.urank-tagcloud-controls input[type="button"] {
+.urank-tagcloud-controls button {
     display: inline-block;
-    min-width: 16px;
+    min-width: 30px;
     height: 24px;
     margin: 2px;
-    border-radius: 7px;
+    border-radius: 5px;
+    padding: 1px 3px;
+}
+
+
+.urank-tagcloud-controls button span {
+    display: block;
+    background-image: url(../media/in.png);
+    background-repeat: no-repeat;
+    background-position: 3px 3px;
+    width: 20px;
+    height: 20px;
 }
 
 .urank-tagcloud-tag-container-outer {
@@ -193,22 +218,31 @@
     overflow: hidden;
 }
 
-.urank-tagbox-default {
-    background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
-    background: -o-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
-	background: -moz-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
-	background: -ms-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
-	/*background: linear-gradient(to top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));*/    
-    box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;
+
+.urank-tagbox-ranking-mode-header {
+    width: 100%;
+    height: 18px;
 }
+
+.urank-tagbox-ranking-mode-header .urank-tagbox-ranking-mode-header-split {
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+}
+
+.urank-tagbox-ranking-mode-header-highlighted {
+    color: darkred;
+    font-weight: bold;
+}
+
 
 .urank-tagbox-container {
     overflow-x: hidden;
     overflow-y: auto;
     align-items: center;
-    width: calc(100% - 6px);
-    height: 100%;
-    margin: 0px 3px;
+    width: 100%;
+    height: calc(100% - 18px);
+    padding: 0px 3px;
     list-style-type: none;
     text-align: left;
 }
@@ -217,7 +251,8 @@
     font-size: 1em;
     text-align: center;
     color: #888;
-    line-height: 3em;
+    line-height: 2em;
+    font-weight: bold;
 }
 
 .urank-tagbox-tag {
@@ -225,18 +260,17 @@
     display: inline-block;
     text-align: left;
     min-width: 65px;
-    height: 23px;
+    height: 21px;
     margin: 14px 3px 0px 3px;
     padding: .2em;
     -webkit-border-radius: 6px;
     border-radius: 6px;
     -webkit-box-shadow: 0em 7px 6px -6px #333;
     box-shadow: 0em 7px 6px -6px #333;
-    /*-webkit-text-shadow: -0.1em 0.1em 0.5em #eee;*/
-    /*text-shadow: -0.1em 0.1em 0.5em #eee;*/
     -webkit-text-shadow: 0px 1px 5px #eee, 0px -1px 5px #eee;
     text-shadow: 0px 1px 5px #eee, 0px -1px 5px #eee;
-
+    font-size: .95em;
+    color: #222;
 }
 
 .urank-tagbox-tag:hover {
@@ -312,6 +346,51 @@
 
 **********************************************************************************************************************/
 
+/***************************    header     ************************************/
+
+.urank-list {
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+}
+
+.urank-list-header {
+    width: 100%;
+}
+
+.urank-list-header-pos-and-shift, .urank-list-header-title {
+    height: 100%;
+    display: inline-block;
+    float: left;
+}
+
+.urank-list-header-pos-and-shift {
+    width: 27px;
+}
+
+.urank-list-header-pos-and-shift .label-container {
+
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    transform-origin: 124% 192% 0;
+    color: #888;
+}
+
+.urank-list-header-title {
+    width: calc(100% - 54px);
+}
+
+.urank-list-header-title p {
+    font-size: 1em;
+    text-align: center;
+    line-height: 2em;
+}
+
+
+
+
 
 .urank-list-ul-padding-bottom {
     padding-bottom: 50px;
@@ -331,7 +410,7 @@
 /* <li> items */
 .urank-list-li-default {
     position: relative;
-    height: 26px;
+    height: 30px;
     vertical-align: top;
     -webkit-transition: box-shadow 4s ease-in;
     cursor: pointer;
@@ -350,11 +429,11 @@
 }
 
 .urank-list-li-lightbackground {
-    background: #eee;
+    background: #fafafa;
 }
 
 .urank-list-li-darkbackground {
-    background: #ddd;
+    background: #f0f0f0;
 }
 
 .urank-list-li-unranked {

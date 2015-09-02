@@ -125,7 +125,7 @@ var Ranking = (function(){
             // Define input variables
             data = RANKING.Settings.getInitData(rankingModel, colorScale);
             // Define canvas dimensions
-            margin = { top: 0, bottom: 0, left: 0, right: 1 };
+            margin = { top: 0, bottom: 0, left: 0, right: 0 };
             width = $root.width() - margin.left - margin.right;
             height = listHeight;
             xUpperLimit = rankingModel.getMode() == RANKING_MODE.overall ? 1 : 2;
@@ -136,7 +136,7 @@ var Ranking = (function(){
                 .rangeRound( [0, width] );
 
             y = d3.scale.ordinal()
-                .domain(data.map(function(d, i){ return i; }))
+                .domain(data.map(function(d){ return d.id; }))
                 .rangeBands( [0, height], .02);
 
             //color = colorScale;
@@ -178,7 +178,7 @@ var Ranking = (function(){
             RANKING.Render.createShadow();
             //// Add stacked bars
             RANKING.Render.drawStackedBars();
-            RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery());
+//            RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery(), rankingModel.getMaxTagFrequency());
         },
 
         /******************************************************************************************************************
@@ -202,7 +202,7 @@ var Ranking = (function(){
              .domain([0, xUpperLimit]).copy();
 
             y.rangeBands( [0, height], .02);
-            y.domain(data.map(function(d, i){ return i; })).copy();
+            y.domain(data.map(function(d){ return d.id })).copy();
 
 
             var transition = svg.transition().duration(750),
@@ -215,7 +215,7 @@ var Ranking = (function(){
                 .selectAll("g").delay(delay);
 
             RANKING.Render.drawStackedBars();
-            RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery());
+ //           RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery(), rankingModel.getMaxTagFrequency());
         },
 
 
@@ -228,16 +228,22 @@ var Ranking = (function(){
         drawStackedBars: function(){
             svg.selectAll('.'+stackedbarClass).data([]).exit();
             svg.selectAll('.'+stackedbarClass).remove();
-            svg.selectAll('.'+stackedbarClass).data(data).enter();
-
+            //svg.selectAll('.'+stackedbarClass).data(data).enter();
 
             setTimeout(function(){
+
+                console.log(y.domain());
+                console.log(y.range());
+
                 var stackedBars = svg.selectAll('.'+stackedbarClass)
                     .data(data).enter()
                     .append("g")
                     .attr("class", stackedbarClass)
-                    .attr("id", function(d, i){ return "urank-ranking-stackedbar-" + d.id; })
-                    .attr( "transform", function(d, i) { return "translate(0, " + y(i) + ")"; } )
+                    .attr("id", function(d){ return "urank-ranking-stackedbar-" + d.id; })
+                    .attr( "transform", function(d) {
+                        //console.log(d.id);
+                        return "translate(0, " + y(d.id) + ")";
+                    })
                     .on('click', RANKING.Evt.itemClicked)
                     .on('mouseover', RANKING.Evt.itemMouseEntered)
                     .on('mouseout', RANKING.Evt.itemMouseLeft);
@@ -254,7 +260,6 @@ var Ranking = (function(){
                         }
                         return  '';
                     });
-
 
                 stackedBars.selectAll('.'+barClass)
                     .data(function(d) { return d.bars })
@@ -280,16 +285,17 @@ var Ranking = (function(){
         *	Draw minimal views for tag- and user-based recommendations
         *
         * ***************************************************************************************************************/
-        drawTagsAndUsersHints: function(query) {
+        drawTagsAndUsersHints: function(query, maxTagFreq) {
 
-            var tagHintWidth = query.length * 10 + 6;
-            var userHintWidth = 18;
-            var xTUOffset = x(xUpperLimit) - tagHintWidth - userHintWidth;
+            var tagHintWidth = query.length * 10;
+            var userHintWidth = 24;
+            var xTagHintOffset = x(xUpperLimit) - tagHintWidth - userHintWidth;
+            var xUserHintOffset = x(xUpperLimit) - userHintWidth;
             var maxBarHeight = y.rangeBand();
 
             // Define scales
-            var xTU = d3.scale.ordinal().domain(query.map(function(q){ return q.stem; })).rangeBands( [0, tagHintWidth - 10], .3);
-            var yTU = d3.scale.linear().domain([0, 1]).rangeRound([maxBarHeight, 0]);
+            var xTU = d3.scale.ordinal().domain(query.map(function(q){ return q.stem; })).rangeBands( [0, tagHintWidth - 10], .2);
+            var yTU = d3.scale.linear().domain([0, maxTagFreq]).rangeRound([maxBarHeight, 0]);
 
             // Define axis' function
             var xAxisTU = d3.svg.axis().scale(xTU).orient("bottom").tickValues('');
@@ -300,54 +306,54 @@ var Ranking = (function(){
 
                 var stackedbars = svg.selectAll('.'+stackedbarClass);
 
-                var tuHints = stackedbars.append('g')
-                    .attr('width', tagHintWidth + userHintWidth)
+                var tagHints = stackedbars.append('g')
+                    .attr('width', tagHintWidth)
                     .attr('height', maxBarHeight)
-                    .attr("transform", function(d, i){ "translate(" + xTUOffset + "," + y(i) + ")" });
+                    .attr("transform", function(d, i){ "translate(" + xTagHintOffset + "," + y(i) + ")" });
 
                 // draw x axis
-                tuHints.append('g')
+                tagHints.append('g')
                     .attr('class', xClass + ' ' + axisClass)
-                    .attr('transform', function(d, i){ return 'translate(' + xTUOffset + ',' + (y(i) + maxBarHeight) + ')' })
+                    .attr('transform', function(d, i){ return 'translate(' + xTagHintOffset + ',' + maxBarHeight + ')' })
                     .call(xAxisTU)
                     .selectAll('text');
 
                 // draw y axis
-                tuHints.append('g')
+                tagHints.append('g')
                     .attr('class', yClass + ' ' + axisClass)
-                    .attr('transform', function(d, i){ return 'translate(' + xTUOffset + ',0)' })
+                    .attr('height', maxBarHeight)
+                    .attr('transform', function(d, i){ return 'translate(' + xTagHintOffset + ',0)' })
                     .call(yAxisTU)
                     .selectAll('text');
 
                 // draw vertical tag bars
-                tuHints.selectAll('.tag-bar')
+                tagHints.selectAll('.tag-bar')
                     .data(function(d) { return d.tags })
                     .enter()
                     .append("rect")
                     .attr("class", 'tag-bar')
-                    .attr("x", function(t) { return xTUOffset + xTU(t.stem); })
+                    .attr("x", function(t) { return xTagHintOffset + xTU(t.stem); })
                     .attr("width", xTU.rangeBand())
-                    .attr("y", function(t) { return yTU(t.score); })
-                    .attr("height", function(t){ return maxBarHeight - yTU(t.score); })
+                    .attr("y", function(t) { return yTU(t.tagged); })
+                    .attr("height", function(t){ return maxBarHeight - yTU(t.tagged); })
                     .style("fill", function(t) { return t.color; });
 
                 // draw user hint
-                tuHints.append('svg:img')
-                    .attr('xlink:href', function(d){ return '../media/user.png' })
-                    .attr('x', xTUOffset + tagHintWidth )
-                    .attr('width', userHintWidth)
-                    .attr('y', function(d, i){ return y(i) })
-                    .attr('height', '16');
+                var userHints = stackedbars.append('g')
+                    .attr('class', 'urank-ranking-user-hint')
+                    .attr('transform', function(d, i){ 'translate(' + xUserHintOffset + ',' + y(i) + ')' });
 
+                userHints.append('svg:image')
+                    .attr('xlink:href', function(d){ return d.ranking.tuMisc.users > 0 ? '../media/user.png' : '' })
+                    .attr('x', xUserHintOffset - 2)
+                    .attr('width', 13)
+                    .attr('y', 10)
+                    .attr('height', 13)
 
-
-//                tuHints.append('rect')
-//                    .attr('class', tuSectionClass)
-//                    .attr('width', tuSectionWidth)
-//                    .attr('height', y.rangeBand())
-//                    .attr('x', xTUOffset)
-//                    .style('border', 'black solid 1px')
-//                    .style('opacity', 1);
+                userHints.append('text')
+                    .attr('dx', xUserHintOffset + 10)
+                    .attr('dy', 13)
+                    .text(function(d){ return d.ranking.tuMisc.users > 0 ? d.ranking.tuMisc.users : '' });
 
             }, 801);
 
@@ -510,7 +516,7 @@ var Ranking = (function(){
 
 
     var _update = function(rankingModel, colorScale, listHeight, recData, view){
-
+        console.log(rankingModel.getStatus());
         var updateFunc = {};
         updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
         updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;

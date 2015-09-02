@@ -33,20 +33,16 @@
 
 
 .urank-ranking-stackedbar rect.urank-ranking-light-background {
-    fill: #eee;
+    fill: #fafafa;
 }
 
 .urank-ranking-stackedbar rect.urank-ranking-dark-background {
-    fill: #ddd;
+    fill: #f0f0f0;
 }
 
-.urank-tag-user-section {
-    float: right;
+.urank-ranking-user-hint > text {
+    fill: dimgrey;
+    font-size: .8em;
+    font-weight: bold;
 }
 
-.urank-user-hint {
-    width: 16px;
-    height: 16px;
-    background-image: url(../media/user.png);
-    background-repeat: no-repeat;
-}

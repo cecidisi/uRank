@@ -182,6 +182,10 @@ var RankingModel = (function(){
             return this.query;
         },
 
+        getMaxTagFrequency: function(){
+            return this.tuRS.getmaxSingleTagFrequency();
+        },
+
         getActualIndex: function(index){
             if(this.status == RANKING_STATUS.no_ranking)
                 return index;

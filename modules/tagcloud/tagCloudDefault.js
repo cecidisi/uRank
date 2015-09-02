@@ -269,8 +269,8 @@ var TagCloudDefault = (function(){
 
         //  Create tagcloud controls
         var $tagcloudControls = $('<div/>').appendTo($root).addClass(tagcloudControlsClass);
-        var $tagInput = $('<input>', { type: 'text', placeholder: 'new keyword' }).appendTo($tagcloudControls);
-        var $addButton = $('<input>', { type:'button', val: 'Add' }).appendTo($tagcloudControls);
+        var $tagInput = $('<input>', { type: 'text', placeholder: 'Enter keyword' }).appendTo($tagcloudControls);
+        var $addButton = $('<button/>').appendTo($tagcloudControls).append($('<span/>'));
 
 
         // Create tag contained

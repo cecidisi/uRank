@@ -90,15 +90,15 @@ Hover style for all buttons
 */
 input[type="button"]:hover, button:hover {
     background: -webkit-linear-gradient(top, #eee, #ccc);
-    border: 0.1em solid #ccc;
+    border: 1px solid #ccc;
 }
 
 
 
 select {
     background-color: white;
-    border: 0.1em #ddd solid;
-    border-radius: 0.5em;
+    border: 1px #ddd solid;
+    border-radius: 5px;
     color: #666;
 }
 
@@ -148,14 +148,18 @@ header {
     align-items: stretch;
     justify-content: space-between;
     width: 100%;
-    height: 5em;
-    padding: .5em 0em;
+    height: 30px;
+    padding: 5px 0px;
     background: -webkit-linear-gradient(top, rgba(102, 102, 102, 1), rgba(115, 115, 115, 1), rgba(102, 102, 102, 1));
 }
 
 header select{
     height: 23px;
-    margin: 16px 14px;
+    margin: 5px 14px;
+}
+
+header input[type="button"] {
+    margin: 3px 14px;
 }
 
 
@@ -166,9 +170,20 @@ header select{
 	display: inline-flex;
     justify-content: space-between;
     width: 100%;
-	height: calc(100% - 6em);
+	height: calc(100% - 40px);
     text-align: center;
 	vertical-align: top;
+}
+
+/*  LEFT -- Control Panel */
+
+.control-panel {
+    width: 15%;
+    height: 100%;
+    float: left;
+    display: inline-block;
+    background: -webkit-linear-gradient(top, rgba(175, 175, 175, 1), rgba(170, 170, 170, 1));
+    box-shadow: inset .1em .1em .5em #aaa, inset -.1em -.1em .5em #aaa;
 }
 
 
@@ -176,7 +191,7 @@ header select{
 .left-panel {
     display: inline-block;
     float:  left;
-    width: 30%;
+    width: 28%;
     height: 100%;
 }
 
@@ -184,7 +199,7 @@ header select{
 .central-panel {
     display: inline-block;
     float:  left;
-    width: 52%;
+    width: 39%;
     /*    width: 31%;*/
     height: 100%;
 }
@@ -197,38 +212,30 @@ header select{
 }
 
 /*
-*   Ranking Controls (upper mid-left)
+*   Controls (left)
 *
 */
 
-.ranking-controls {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    /*width: 45%;*/
-    width: 100%;
-    height: 5em;
-    background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
-    box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;
+.control-panel label {
+    margin: 0px 4px;
 }
 
-
-.ranking-controls select {
+.control-panel select {
     height: 25px;
-    width: 100px;
+    width: 125px;
     padding: 2px;
 }
 
 
-.ranking-controls button {
+.control-panel button {
     min-width: 16px;
     height: 24px;
     margin: 7px;
-    border-radius: 7px;
+    border-radius: 5px;
 }
 
 
-.ranking-controls button span {
+.control-panel button span {
     /*width: 100%;
     height: 100%;*/
     background-image: url(../media/sprites.png);
@@ -236,19 +243,19 @@ header select{
     display: block;
 }
 
-.ranking-controls button span.sprite-reset {
+.control-panel button span.sprite-reset {
     width: 16px;
     height: 16px;
     background-position: -5px -5px;
 }
 
-.ranking-controls button span.sprite-sort-down {
+.control-panel button span.sprite-sort-down {
     width: 16px;
     height: 11px;
     background-position: -31px -5px;
 }
 
-.ranking-controls button span.sprite-wiggle {
+.control-panel button span.sprite-wiggle {
     width: 16px;
     height: 16px;
     background-position: -57px -5px;
@@ -256,10 +263,13 @@ header select{
 
 
 
+/***********************************************/
+
+
 #contentlist {
     float: left;
     width: 100%;
-    height: calc(100% - 5em);
+    height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -272,13 +282,13 @@ header select{
 #tagbox {
     float: right;
     width: 100%;
-    height: 5em;
+    height: 70px;
 }
 
 #viscanvas {
     float: left;
     width: 100%;
-    height: calc(100% - 5em);
+    height: calc(100% - 70px);
 }
 
 

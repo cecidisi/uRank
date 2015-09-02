@@ -11,6 +11,7 @@ window.RSTagUser = (function(){
         this.userTagMatrix = {};        //  counts repetitions
         this.maxTagAcrossDocs = {};     //  highest frequency of each tag in a document. Depends on item-tag matrix
         this.maxTagAccrossUsers = {};   //  highest frequency of each tag for a user. Depends on user-tag matrix
+        this.maxSingleTagFrequency = 0;
 
         this.init();
     }
@@ -42,7 +43,7 @@ window.RSTagUser = (function(){
 
             var recData = [];
 
-            $.getJSON('../model/tagUserBasedRS/initial-bookmarks.json', function(data){
+            $.getJSON('../model/initial-bookmarks.json', function(data){
                 console.log('Bookmarks retrieved');
                 data.forEach(function(r, i){
                     r['tasks-results'].forEach(function(t){
@@ -143,6 +144,7 @@ window.RSTagUser = (function(){
                 }).slice(0, p.options.neighborhoodSize);
             }
 
+            _this.maxSingleTagFrequency = 0
             //   Keys are doc ids
             _data.forEach(function(doc, i){
                 //  Checks that current user has not made any boomark or selected the doc yet
@@ -158,6 +160,7 @@ window.RSTagUser = (function(){
                                 var scalingFactor = 1 / (Math.pow(Math.E, (1 / _this.itemTagMatrix[doc.id][k.term])));   // raises final score of items bookmarked many times
                                 var tagScore = Math.roundTo((normalizedFreq * k.weight * scalingFactor * p.options.rWeight / p.keywords.length), 3);
                                 tags[k.term] = { tagged: _this.itemTagMatrix[doc.id][k.term], score: tagScore, stem: k.stem };
+                                _this.maxSingleTagFrequency = tags[k.term].tagged > _this.maxSingleTagFrequency ? tags[k.term].tagged : _this.maxSingleTagFrequency;
                                 tagBasedScore += tagScore;
                             }
                         });
@@ -193,6 +196,7 @@ window.RSTagUser = (function(){
             this.userTagMatrix = {};
             this.maxTagAcrossDocs = {};
             this.maxTagAccrossUsers = {};
+            this.maxSingleTagFrequency = 0;
         },
 
         //  Miscelaneous
@@ -207,6 +211,10 @@ window.RSTagUser = (function(){
 
         getItemTagMatrix: function() {
             return this.itemTagMatrix;
+        },
+
+        getmaxSingleTagFrequency: function(){
+            return this.maxSingleTagFrequency;
         }
 
     };

@@ -39,8 +39,6 @@ var Urank = (function(){
         onTagInBoxClick: function(index){},
         onNewKeywordAdded: function(word){},
         onTagFrequencyChanged: function(min, sup){},
-        onReset: function(){},
-        onRankingModeChange: function(){}
     };
 
     var defaultLoadOptions = {
@@ -52,6 +50,7 @@ var Urank = (function(){
             }
         },
         contentList: {
+            header: true,        // boolean
             custom: false,
             customOptions: {     //  only used when contentListType.custom = true
                 selectors: {
@@ -148,14 +147,15 @@ var Urank = (function(){
             //  Assign collection keywords and set other necessary variables
             _this.keywords = keywordExtractor.getCollectionKeywords();
             _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
-            _this.rankingMode = RANKING_MODE.by_CB;
+            _this.rMode = RANKING_MODE.by_CB;
+            _this.rWeight = 0.5;
             _this.rankingModel.clear().setData(_this.data);
             _this.selectedKeywords = [];
             _this.selectedId = STR_UNDEFINED;
 
-            contentList.build(_this.data, o.contentList);
             tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, o.tagCloud, _this.keywordsDict);
             tagBox.build(o.tagBox);
+            contentList.build(_this.data, o.contentList, tagBox.getHeight());
             visCanvas.build(contentList.getListHeight(), o.visCanvas);
             docViewer.build(o.docViewer);
 
@@ -181,14 +181,15 @@ var Urank = (function(){
 
             var updateOpt = {
                 query: _this.selectedKeywords,
-                mode: _this.rankingMode,
-                rWeight: 0.5,
+                mode: _this.rMode,
+                rWeight: _this.rMode === RANKING_MODE.overall ? _this.rWeight : 1,
                 user: 'NN'
             };
             var rankingData = _this.rankingModel.update(updateOpt).getRanking();
             var status = _this.rankingModel.getStatus();
 
             console.log(_this.rankingModel);
+            tagBox.updateMode(_this.rMode);
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
             visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight());
             docViewer.clear();
@@ -343,9 +344,16 @@ var Urank = (function(){
         // Event handlers to return
 
         onRankingModeChange: function(mode) {
-            _this.rankingMode = window.RANKING_MODE[mode] || window.RANKING_MODE.by_CB;
-            EVTHANDLER.onChange();
-            s.onRankingModeChange.call(this);
+            _this.rMode = window.RANKING_MODE[mode] || window.RANKING_MODE.by_CB;
+            if(_this.selectedKeywords.length > 0)
+                EVTHANDLER.onChange();
+        },
+
+
+        onRankingWeightChange: function(rWeight) {
+            _this.rWeight = rWeight;
+            if(_this.selectedKeywords.length > 0)
+                EVTHANDLER.onChange();
         },
 
         onReset: function(event) {
@@ -358,7 +366,6 @@ var Urank = (function(){
             _this.rankingModel.reset();
             _this.selectedId = STR_UNDEFINED;
             _this.selectedKeywords = [];
-            s.onReset.call(this);
         },
 
         onDestroy: function() {
@@ -452,7 +459,7 @@ var Urank = (function(){
     var MISC = {
         getCurrentState: function(){
             return {
-                mode: _this.rankingMode,
+                mode: _this.rMode,
                 status: _this.rankingModel.getStatus(),
                 selectedKeywords: _this.selectedKeywords.map(function(sk){ return { term: sk.term, weight: sk.weight } }),
                 ranking: _this.rankingModel.getRanking().map(function(d){
@@ -481,6 +488,7 @@ var Urank = (function(){
         loadData: EVTHANDLER.onLoad,
         reset: EVTHANDLER.onReset,
         changeRankingMode: EVTHANDLER.onRankingModeChange,
+        changeRankingWeight: EVTHANDLER.onRankingWeightChange,
         clear: EVTHANDLER.onClear,
         destroy: EVTHANDLER.onDestroy,
         getCurrentState: MISC.getCurrentState

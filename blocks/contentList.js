@@ -36,14 +36,19 @@ var ContentList = (function(){
         // default-style classes
         ulClassDefault = ulClass + '-default',
         liClassDefault = liClass + '-default',
-        liTitleClassDefault = liTitleClass + '-default';
+        liTitleClassDefault = liTitleClass + '-default',
+        // header classes
+        headerClass = 'urank-list-header',
+        headerPosAndshiftClass = 'urank-list-header-pos-and-shift',
+        headerTitleClass = 'urank-list-header-title',
+        headerStyleClass = 'urank-header-style';
 
     // Ids
     var liItem = '#urank-list-li-';
 
     var urankIdAttr = 'urank-id';
     // Helper
-    var $root = $(''), $scrollable = $(''), $ul = $('');
+    var $root = $(''), $header = $(''), $listContainer = $(''), $scrollable = $(''), $ul = $('');
 
     var onScroll = function(event){
         event.stopPropagation();
@@ -333,7 +338,12 @@ var ContentList = (function(){
 
     var buildDefaultList = function() {
 
-        $root.empty().addClass(hiddenScrollbarClass);
+        $('.'+listContainerClass).remove();
+        var listHeight = 'calc(100% - ' +  ($header.fullHeight() || 0) + ')';
+        $listContainer = $('<div/>').appendTo($root).addClass(listContainerClass).css('height', listHeight);
+
+//        $root.empty().addClass(hiddenScrollbarClass);
+        $listContainer.addClass(hiddenScrollbarClass);
         $scrollable = $('<div></div>').appendTo($root)
             .addClass(hiddenScrollbarInnerClass)
             .on('scroll', onScroll);
@@ -366,16 +376,34 @@ var ContentList = (function(){
     };
 
 
+    var buildHeader = function(height){
+
+        $('.'+headerClass).remove();
+        $header = $('<div/>').appendTo($root).addClass(headerClass).css('height', height);
+        var $headerPos = $('<div/>').appendTo($header).addClass(headerPosAndshiftClass + ' ' + headerStyleClass);
+        $('<div/>', { text: 'Position'}).appendTo($headerPos).addClass('label-container');
+
+        var $headerShift = $('<div/>').appendTo($header).addClass(headerPosAndshiftClass + ' ' + headerStyleClass);
+        $('<div/>', { text: 'Shift'}).appendTo($headerShift).addClass('label-container');
+
+        var $headerTitle = $('<div/>').appendTo($header).addClass(headerTitleClass + ' ' + headerStyleClass);
+        $('<p/>', { text: 'Document Titles'}).appendTo($headerTitle);
+
+    };
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Prototype methods
 
-    var _build = function(data, opt) {
+    var _build = function(data, opt, headerHeight) {
         this.originalData = data.slice();
         this.data = data.slice();
         this.selectedKeywords = [];
         this.status = RANKING_STATUS.no_ranking;
         this.opt = opt;
         $root = $(s.root).addClass(contentListClass);
+
+        if(this.opt.header)
+            buildHeader(headerHeight);
 
         if(this.opt.custom)
             buildCustomList();
@@ -533,9 +561,9 @@ var ContentList = (function(){
         if(!this.opt.custom)
             $root.empty().removeClass(contentListClass+' '+hiddenScrollbarClass);
         else {
-            if($root.hasClass(hiddenScrollbarClass)) {
+            if($listContainer.hasClass(hiddenScrollbarClass)) {
                 var $ulCopy = $ul.clone(true);
-                $root.empty().removeClass(hiddenScrollbarClass).append($ulCopy);
+                $root.empty().append($ulCopy);
             }
             $root.removeClass(contentListClass);
             $('.'+ulClass).removeClass(ulClass);

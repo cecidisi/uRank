@@ -5,13 +5,17 @@ var TagBox = (function(){
     var s = {};
     //  Classes
     var tagboxClass = 'urank-tagbox',
-        tagboxDefaultClass = 'urank-tagbox-default',
         tagboxContainerClass = 'urank-tagbox-container',
         tagInBoxClass = 'urank-tagbox-tag',
         tagDeleteButtonClass = 'urank-tagbox-tag-delete-button',
         tagWeightsliderClass = 'urank-tagbox-tag-weight-slider',
         weightSliderRangeClass = 'urank-tagbox-tag-weight-slider-range',
-        weightSliderHandleClass = 'urank-tagbox-tag-weight-slider-handle';
+        weightSliderHandleClass = 'urank-tagbox-tag-weight-slider-handle',
+        rankingModeHeaderClass = 'urank-tagbox-ranking-mode-header',
+        headerSplitSectionClass = 'urank-tagbox-ranking-mode-header-split',
+        highlightedClass = 'urank-tagbox-ranking-mode-header-highlighted',
+        headerStyleClass = 'urank-header-style';
+
     //  Id prefix
     var tagIdPrefix = '#urank-tag-';
     //  Attribute
@@ -19,7 +23,7 @@ var TagBox = (function(){
     //  Custom Event
     var tagBoxChangeEvent = 'tagBoxChange';
     //  Helpers
-    var $root, $tagContainer;
+    var $root, $tagContainer, $rankingModeHeader;
 
     var onTagboxChanged = function(){
         setTimeout(function(){
@@ -93,22 +97,26 @@ var TagBox = (function(){
         this.selectedKeywords = [];
         this.destroy();
 
-        var tagboxClasses = (opt.misc.defaultBlockStyle) ? tagboxClass +' '+ tagboxDefaultClass : tagboxClass;
-        $root = $(s.root).addClass(tagboxClasses);
-        $tagContainer = $('<div></div>').appendTo($root).addClass(tagboxContainerClass)
+        $root = $(s.root).addClass(tagboxClass);
+
+        var tagboxContainerClasses = (opt.misc.defaultBlockStyle) ? tagboxContainerClass +' '+ headerStyleClass : tagboxContainerClass;
+        $tagContainer = $('<div/>').appendTo($root).addClass(tagboxContainerClasses)
             .off(tagBoxChangeEvent, onTagboxChanged)
             .on(tagBoxChangeEvent, onTagboxChanged)
             .droppable(this.droppableOptions)                       // bind droppable behavior to tag box;
             .append('<p>' + STR_DROP_TAGS_HERE + '</p>');
+
+        $rankingModeHeader = $('<div/>').appendTo($root).addClass(rankingModeHeaderClass + ' ' + headerStyleClass);
+        return this;
     };
 
 
     var _clear = function() {
-
         this.selectedKeywords = [];
         $root.find('.'+tagboxContainerClass).empty().append('<p>' + STR_DROP_TAGS_HERE + '</p>');
-        //TAGCLOUD.updateTagColor();
+        return this;
     };
+
 
 
     var _dropTag = function(index, color){
@@ -150,6 +158,7 @@ var TagBox = (function(){
             var term = $tag.getText(), stem = $tag.attr('stem');
             _this.selectedKeywords.push({ term: term, stem: stem, weight: 1 });
         }
+        return this;
     };
 
 
@@ -162,6 +171,8 @@ var TagBox = (function(){
         var indexToDelete = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
         _this.selectedKeywords.splice(indexToDelete, 1);
         $tagContainer.trigger(tagBoxChangeEvent);
+
+        return this;
     };
 
 
@@ -170,7 +181,31 @@ var TagBox = (function(){
             $tagContainer.droppable('destroy');
             $root.empty().removeClass(tagboxContainerClass);
         }
+        return this;
     };
+
+    var _getHeight = function(){
+        return $(s.root).height();
+    };
+
+
+    var _updateMode = function(mode) {
+
+        $rankingModeHeader.removeClass(highlightedClass).html('').empty();
+        if(mode == RANKING_MODE.overall) {
+            $rankingModeHeader.addClass(highlightedClass).html('Content + Social Ranking');
+        }
+        else{
+            var $contentHeader = $('<div/>').appendTo($rankingModeHeader).addClass(headerSplitSectionClass).html('Content Ranking');
+            var $socialHeader = $('<div/>').appendTo($rankingModeHeader).addClass(headerSplitSectionClass).html('Social Ranking');
+            if(mode == RANKING_MODE.by_CB)
+                $contentHeader.addClass(highlightedClass);
+            else
+                $socialHeader.addClass(highlightedClass);
+        }
+        return this;
+    };
+
 
     // Prototype
     Tagbox.prototype = {
@@ -178,7 +213,9 @@ var TagBox = (function(){
         clear: _clear,
         dropTag: _dropTag,
         deleteTag: _deleteTag,
-        destroy: _destroy
+        destroy: _destroy,
+        getHeight: _getHeight,
+        updateMode: _updateMode
     };
 
     return Tagbox;
