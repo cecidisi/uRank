@@ -339,14 +339,14 @@ var ContentList = (function(){
     var buildDefaultList = function() {
 
         $('.'+listContainerClass).remove();
-        var listHeight = 'calc(100% - ' +  ($header.fullHeight() || 0) + ')';
-        $listContainer = $('<div/>').appendTo($root).addClass(listContainerClass).css('height', listHeight);
+        $listContainer = $('<div/>').appendTo($root).addClass(listContainerClass + ' ' + hiddenScrollbarClass);
 
-//        $root.empty().addClass(hiddenScrollbarClass);
-        $listContainer.addClass(hiddenScrollbarClass);
+        var listHeight = 'calc(100% - ' + $header.fullHeight() || 0 + 'px)';
         $scrollable = $('<div></div>').appendTo($root)
             .addClass(hiddenScrollbarInnerClass)
+            //.css('height', listHeight)
             .on('scroll', onScroll);
+//        $scrollable.height($scrollable.fullHeight() - $header.fullHeight())
 
         $ul = $('<ul></ul>').appendTo($scrollable).addClass(ulClass +' '+ ulClassDefault);
 

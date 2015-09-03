@@ -185,11 +185,11 @@ var Urank = (function(){
                 rWeight: _this.rMode === RANKING_MODE.overall ? _this.rWeight : 1,
                 user: 'NN'
             };
+
             var rankingData = _this.rankingModel.update(updateOpt).getRanking();
             var status = _this.rankingModel.getStatus();
 
             console.log(_this.rankingModel);
-            tagBox.updateMode(_this.rMode);
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
             visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight());
             docViewer.clear();
@@ -344,16 +344,22 @@ var Urank = (function(){
         // Event handlers to return
 
         onRankingModeChange: function(mode) {
-            _this.rMode = window.RANKING_MODE[mode] || window.RANKING_MODE.by_CB;
-            if(_this.selectedKeywords.length > 0)
-                EVTHANDLER.onChange();
+            setTimeout(function(){
+                if(_this.rMode !== mode) {
+                    _this.rMode = mode;
+                    tagBox.updateRankingMode(_this.rMode);
+                    if(_this.selectedKeywords.length > 0)
+                        EVTHANDLER.onChange();
+                }
+            }, 1);
         },
 
-
         onRankingWeightChange: function(rWeight) {
-            _this.rWeight = rWeight;
-            if(_this.selectedKeywords.length > 0)
-                EVTHANDLER.onChange();
+            setTimeout(function(){
+                _this.rWeight = rWeight;
+                if(_this.selectedKeywords.length > 0)
+                    EVTHANDLER.onChange();
+            }, 1);
         },
 
         onReset: function(event) {
@@ -419,6 +425,8 @@ var Urank = (function(){
             tagBox: {
                 root: s.tagBoxRoot,
                 onChange: EVTHANDLER.onChange,
+                onModeChanged: EVTHANDLER.onRankingModeChange,
+                onRankingWeightChanged: EVTHANDLER.onRankingWeightChange,
                 onTagDropped: EVTHANDLER.onTagDropped,
                 onTagDeleted: EVTHANDLER.onTagDeleted,
                 onTagInBoxMouseEnter: EVTHANDLER.onTagInBoxMouseEnter,
@@ -487,8 +495,6 @@ var Urank = (function(){
     Urank.prototype = {
         loadData: EVTHANDLER.onLoad,
         reset: EVTHANDLER.onReset,
-        changeRankingMode: EVTHANDLER.onRankingModeChange,
-        changeRankingWeight: EVTHANDLER.onRankingWeightChange,
         clear: EVTHANDLER.onClear,
         destroy: EVTHANDLER.onDestroy,
         getCurrentState: MISC.getCurrentState

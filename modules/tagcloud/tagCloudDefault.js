@@ -146,11 +146,6 @@ var TagCloudDefault = (function(){
             $tag.find('.'+documentHintClass).css('visibility', 'visible').pin(documentHintPinOptions);
             $tag.find('.'+keywordHintClass).css('visibility', 'hidden');
         }
-        else {
-            console.log('entra');
-      /*      $tag.find('.'+documentHintClass).css('visibility', 'hidden');
-            $tag.find('.'+keywordHintClass).css('visibility', 'hidden');*/
-        }
     };
 
 

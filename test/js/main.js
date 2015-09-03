@@ -107,24 +107,35 @@
         // Bind event handlers for dataset select
         $("#select-dataset").change(selectDatasetChanged);
         // Bind event handlers for urank specific buttons
-        var rWeightSlider = new dhtmlXSlider({
-            parent: 'rweight-slider',
-            size: 150,
+
+        $('#rweight-slider').slider({
             min: 0,
             max: 1,
             step: 0.1,
-//            value: 0.5,
-//            onChange: function(){
-//                console.log('entra');
-//                console.log(rWeightSlider.getValue());
-//                _this.urank.changeRankingWeight(rWeightSlider.getValue());
-//            }
+            value: 0.5,
+            slide: function(event, ui) {
+            },
+            stop: function(event, ui) {
+                //setTimeout(function(){
+                    _this.urank.changeRankingWeight(ui.value);
+                //}, 1);
+            }
         });
 
-        rWeightSlider.attachEvent('onChange', function(){
-            console.log(rWeightSlider.getValue());
-            _this.urank.changeRankingWeight(rWeightSlider.getValue());
-        })
+//        var rWeightSlider = new dhtmlXSlider({
+//            parent: 'rweight-slider',
+//            size: 150,
+//            min: 0,
+//            max: 1,
+//            step: 0.1,
+//            value: 0.5
+//        });
+//
+//        rWeightSlider.attachEvent('onChange', function(){
+//            setTimeout(function(){
+//                _this.urank.changeRankingWeight(rWeightSlider.getValue());
+//            }, 1);
+//        })
 
         $('#btn-reset').off().on('click', urank.reset);
         $("#select-mode").off().change(function(){ urank.changeRankingMode($(this).val()) });

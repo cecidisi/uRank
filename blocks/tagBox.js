@@ -12,9 +12,13 @@ var TagBox = (function(){
         weightSliderRangeClass = 'urank-tagbox-tag-weight-slider-range',
         weightSliderHandleClass = 'urank-tagbox-tag-weight-slider-handle',
         rankingModeHeaderClass = 'urank-tagbox-ranking-mode-header',
-        headerSplitSectionClass = 'urank-tagbox-ranking-mode-header-split',
+        rankingModeHeaderInnerClass = 'urank-tagbox-ranking-mode-header-inner',
+        headerSectionClass = 'urank-tagbox-ranking-mode-header-section',
         highlightedClass = 'urank-tagbox-ranking-mode-header-highlighted',
-        headerStyleClass = 'urank-header-style';
+        headerStyleClass = 'urank-header-style',
+        modeLegendClass = 'urank-ranking-mode-legend',
+        legendWeightBar = 'urank-tagbox-ranking-weight-bar',
+        rankingWeightSliderClass = 'urank-tagbox-ranking-weight-slider';
 
     //  Id prefix
     var tagIdPrefix = '#urank-tag-';
@@ -23,7 +27,7 @@ var TagBox = (function(){
     //  Custom Event
     var tagBoxChangeEvent = 'tagBoxChange';
     //  Helpers
-    var $root, $tagContainer, $rankingModeHeader;
+    var $root, $tagContainer, $rankingModeHeader, $splitRankings, $sumRankings, $contentHeader, $socialHeader;
 
     var onTagboxChanged = function(){
         setTimeout(function(){
@@ -40,6 +44,8 @@ var TagBox = (function(){
             root: '',
             droppableClass: 'urank-tagcloud-tag',
             onChange: function(selectedKeywords){},
+            onModeChanged: function(mode){},
+            onRankingWeightChanged: function(rWeight) {},
             onTagDropped: function(index, queryTermColor){},
             onTagDeleted: function(index){},
             onTagWeightchanged: function(){},
@@ -87,8 +93,71 @@ var TagBox = (function(){
                 $tagContainer.trigger(tagBoxChangeEvent);
             }
         };
+
+        this.rankingWeightSliderOptions = {
+            animate: true,
+            //range: 'min',
+            min: 0,
+            max: 1,
+            step: 0.1,
+            value: 0.5,
+            slide: function(event, ui) {
+                $('.'+legendWeightBar+"[name='content']").css('background', 'rgba(0,0,0,' + ui.value + ')');
+                $('.'+legendWeightBar+"[name='social']").css('background', 'rgba(0,0,0,' + (1 - ui.value) + ')');
+
+//                $('.'+rankingWeightSliderClass).find('.ui-widget-header').css('background', 'rgba(0,0,0,' + ui.value + ')');
+//                $('.'+rankingWeightSliderClass).css('background', 'rgba(0,0,0,' + (1 - ui.value) + ')');
+            },
+            stop: function(event, ui) {
+                s.onRankingWeightChanged.call(this, ui.value);
+            }
+        };
+
         $root = $(s.root);
     }
+
+
+
+    var buildRankingModeHeader = function() {
+
+        $rankingModeHeader = $('<div/>').appendTo($root).addClass(rankingModeHeaderClass + ' ' + headerStyleClass)
+
+        // split cb and tu rankings
+        $splitRankings = $('<div/>').appendTo($rankingModeHeader).addClass(rankingModeHeaderInnerClass);//.hide();
+
+        $contentHeader = $('<div/>').appendTo($splitRankings).addClass(headerSectionClass + ' ' + highlightedClass)
+            .on('click', function(){ s.onModeChanged.call(this, RANKING_MODE.by_CB) });
+        $('<div/>', { class: modeLegendClass, text: 'Content Ranking' }).appendTo($contentHeader).append($('<span/>'));
+
+        $socialHeader = $('<div/>').appendTo($splitRankings).addClass(headerSectionClass)
+            .on('click', function(){ s.onModeChanged.call(this, RANKING_MODE.by_TU) });
+        $('<div/>', { class: modeLegendClass, text: 'Social Ranking' }).appendTo($socialHeader).append($('<span/>'));
+        // Sum button
+        $('<button/>', { title: 'Aggregate rankings' }).appendTo($splitRankings).addClass('sum').html("<span></span>")
+            .on('click', function(){ s.onModeChanged.call(this, RANKING_MODE.overall) });
+
+        //
+        $sumRankings = $('<div/>').appendTo($rankingModeHeader).addClass(rankingModeHeaderInnerClass).hide();
+
+        var $sumHeader = $('<div/>').appendTo($sumRankings).addClass(headerSectionClass + ' long ' + highlightedClass)
+            .on('click', function(){ s.onModeChanged.call(this, RANKING_MODE.overall) });
+
+        // header legend
+        $('<div/>', { name: 'content' }).appendTo($sumHeader).addClass(legendWeightBar)
+        $('<div/>', { name: 'content' , text: ' Content Ranking ' }).appendTo($sumHeader).addClass(modeLegendClass);
+        $('<div/>', { text: ' + ' }).appendTo($sumHeader).addClass(modeLegendClass + ' plus-symbol').html('<span></span>');
+        $('<div/>', { name: 'social' }).appendTo($sumHeader).addClass(legendWeightBar)
+        $('<div/>', { name: 'social', text: ' Social Ranking' }).appendTo($sumHeader).addClass(modeLegendClass);//.append($('<span/>'));
+
+        // ranking weight slider
+        $('<div/>', { title: "Move right to increase Content Ranking's weight" }).appendTo($sumHeader).addClass(rankingWeightSliderClass).slider(_this.rankingWeightSliderOptions);
+
+        // Split button
+        $('<button/>', { title: 'Split rankings' }).appendTo($sumRankings).addClass('split').html("<span></span>")
+            .on('click', function(){ s.onModeChanged.call(this, RANKING_MODE.by_CB) });
+
+    };
+
 
 
 
@@ -106,7 +175,7 @@ var TagBox = (function(){
             .droppable(this.droppableOptions)                       // bind droppable behavior to tag box;
             .append('<p>' + STR_DROP_TAGS_HERE + '</p>');
 
-        $rankingModeHeader = $('<div/>').appendTo($root).addClass(rankingModeHeaderClass + ' ' + headerStyleClass);
+        buildRankingModeHeader();
         return this;
     };
 
@@ -189,21 +258,33 @@ var TagBox = (function(){
     };
 
 
-    var _updateMode = function(mode) {
 
-        $rankingModeHeader.removeClass(highlightedClass).html('').empty();
+
+    var _updateRankingMode = function(mode) {
+
         if(mode == RANKING_MODE.overall) {
-            $rankingModeHeader.addClass(highlightedClass).html('Content + Social Ranking');
+            $splitRankings.hide();
+            $sumRankings.show();
         }
-        else{
-            var $contentHeader = $('<div/>').appendTo($rankingModeHeader).addClass(headerSplitSectionClass).html('Content Ranking');
-            var $socialHeader = $('<div/>').appendTo($rankingModeHeader).addClass(headerSplitSectionClass).html('Social Ranking');
-            if(mode == RANKING_MODE.by_CB)
+        else {
+            $splitRankings.show();
+            $sumRankings.hide();
+            if(mode == RANKING_MODE.by_CB) {
                 $contentHeader.addClass(highlightedClass);
-            else
+                $socialHeader.removeClass(highlightedClass);
+            }
+            else {
+                $contentHeader.removeClass(highlightedClass);
                 $socialHeader.addClass(highlightedClass);
+            }
         }
         return this;
+    };
+
+
+    var _updateRankingWeight = function(rWeight) {
+            console.log($('.'+legendWeightBar+"[name='content']"));
+
     };
 
 
@@ -215,7 +296,7 @@ var TagBox = (function(){
         deleteTag: _deleteTag,
         destroy: _destroy,
         getHeight: _getHeight,
-        updateMode: _updateMode
+        updateRankingMode: _updateRankingMode
     };
 
     return Tagbox;

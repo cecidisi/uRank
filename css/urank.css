@@ -115,6 +115,7 @@
     /*text-shadow: -0.1em 0.1em 0.5em #eee;*/
     -webkit-text-shadow: 0px 1px 5px #eee, 0px -1px 5px #eee;
     text-shadow: 0px 1px 5px #eee, 0px -1px 5px #eee;
+    font-size: 0.96em;
     cursor: move;
 }
 
@@ -221,13 +222,55 @@
 
 .urank-tagbox-ranking-mode-header {
     width: 100%;
-    height: 18px;
+    height: 25px;
+    cursor: pointer;
 }
 
-.urank-tagbox-ranking-mode-header .urank-tagbox-ranking-mode-header-split {
+.urank-tagbox-ranking-mode-header-inner {
+    width: 100%;
+    height: 100%;
+}
+
+.urank-tagbox-ranking-mode-header-section {
     display: inline-block;
     width: 50%;
     height: 100%;
+}
+
+.urank-tagbox-ranking-mode-header-section.long {
+    width: 100% !important;
+}
+
+.urank-tagbox-ranking-mode-header-section:hover{
+    background: -webkit-linear-gradient(top, rgba(220, 220, 220, 1), rgba(200, 200, 200, 1));
+    background: -o-linear-gradient(top, rgba(220, 220, 220, 1), rgba(200, 200, 200, 1));
+    background: -moz-linear-gradient(top, rgba(220, 220, 220, 1), rgba(200, 200, 200, 1));
+    background: -ms-linear-gradient(top, rgba(220, 220, 220, 1), rgba(200, 200, 200, 1));
+}
+
+div.urank-ranking-mode-legend {
+    display: inline-block;
+    padding: 4px 0px;
+}
+
+div.urank-ranking-mode-legend.plus-symbol span {
+    display: inline-block;
+    position: relative;
+    top: 1px;
+    width: 14px;
+    height: 14px;
+    background-image: url(../media/plus2.png);
+    background-repeat: no-repeat;
+}
+
+div.urank-tagbox-ranking-weight-bar {
+    display: inline-block;
+    position: relative;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    margin: 5px 3px 0px 8px;
+    background: rgba(0,0,0,.5);
 }
 
 .urank-tagbox-ranking-mode-header-highlighted {
@@ -235,13 +278,73 @@
     font-weight: bold;
 }
 
+.urank-tagbox-ranking-mode-header-highlighted span {
+    display: inline-block;
+    width: 15px;
+    height: 11px;
+    margin-left: 2px;
+    background-image: url(../media/sort-down.png);
+    background-position: 0px 0px;
+    background-repeat: no-repeat;
+}
+
+
+.urank-tagbox-ranking-mode-header button {
+    float: left;
+    min-width: 30px !important;
+    height: 22px;
+    position: relative;
+    top: -24px;
+}
+
+
+.urank-tagbox-ranking-mode-header button.sum {
+    left: calc(50% - 15px);
+}
+
+
+.urank-tagbox-ranking-mode-header button.split {
+    left: 5px;
+}
+
+
+.urank-tagbox-ranking-mode-header button span {
+    display: block;
+    width: 16px;
+    height: 16px;
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+}
+
+.urank-tagbox-ranking-mode-header button.sum span {
+    background-image: url(../media/add.png);
+}
+
+.urank-tagbox-ranking-mode-header button.split span {
+    background-image: url(../media/split.png);
+}
+
+
+.urank-tagbox-ranking-weight-slider {
+    display: inline-block;
+    position: relative;
+    width: 18%;
+    /* margin: 0px 15px; */
+    float: right;
+    top: 7px;
+    right: 16px;
+}
+
+
+
+/*****/
 
 .urank-tagbox-container {
     overflow-x: hidden;
     overflow-y: auto;
     align-items: center;
     width: 100%;
-    height: calc(100% - 18px);
+    height: calc(100% - 25px);
     padding: 0px 3px;
     list-style-type: none;
     text-align: left;
@@ -374,12 +477,14 @@
     -ms-transform: rotate(-90deg);
     -o-transform: rotate(-90deg);
     transform: rotate(-90deg);
-    transform-origin: 124% 192% 0;
+    transform-origin: 145% 214% 0;
     color: #888;
 }
 
 .urank-list-header-title {
     width: calc(100% - 54px);
+    height: calc(100% - 15px);
+    padding-top: 15px;
 }
 
 .urank-list-header-title p {
@@ -389,6 +494,12 @@
 }
 
 
+/***************************/
+
+
+ .urank-list .urank-hidden-scrollbar-inner {
+     height: calc(100% - 80px) !important;
+ }
 
 
 
@@ -462,7 +573,7 @@
     float: left;
     width: 18px;
     height: 18px;
-    margin: 4px 2px;
+    margin: 5px 2px;
     /*background: -webkit-linear-gradient(top, rgba(255, 175, 0, 0.8) 75%, rgba(235, 155, 0, 0.8));*/
     background: -webkit-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
 	background: -o-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
@@ -484,7 +595,7 @@
     float: left;
     width: 24px;
     height: 19px;
-    margin: 6px 2px 4px 2px;
+    margin: 7px 2px 4px 2px;
     line-height: 1.4em;
     font-size: .8em;
     font-weight: bold;
