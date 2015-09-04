@@ -121,7 +121,6 @@
 
 
 .urank-tagcloud-tag:hover, .urank-tagcloud-tag.selected {
-
     background: -webkit-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
     background: -o-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
 	background: -moz-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
@@ -133,7 +132,7 @@
 }
 
 
-.urank-tagcloud-tag.dimmed {
+.urank-tagcloud-tag.disabled {
     border: 1px solid rgba(202, 202, 202, 0.2);
     background: rgba(202, 202, 202, 0.2);
     color: #111;
@@ -142,67 +141,46 @@
 }
 
 
-.urank-keyword-hint {
+.urank-tagcloud-tag-hint {
     position: absolute;
     display: inline;
     width: 14px;
     height: 14px;
-    background: red;
-    border-radius: 8px;
-    color: #eee;
     text-align: center;
-    font-size: 8px;
-    line-height: 14px;
-    box-shadow: 0 1px 1px #777;
-    cursor: pointer;
+    cursor: inherit;
 }
 
 
-.urank-tagcloud-tag .urank-keyword-hint {
+.urank-tagcloud-tag-cooccurence-hint {
+    background: red;
+    border-radius: 8px;
+    color: #eee;
+    font-size: 8px;
+    line-height: 14px;
+    box-shadow: 0 1px 1px #777;
+}
+
+
+
+.urank-tagcloud-tag .urank-tagcloud-tag-hint {
     visibility: hidden;
     z-index: 999;
 }
 
-
-.urank-tagcloud-tag:hover.active .urank-keyword-hint {
+.urank-tagcloud-tag:hover .urank-tagcloud-tag-hint {
     visibility: visible;
 }
 
 
-.urank-tagcloud-tag:hover.active .urank-keyword-hint:hover {
+.urank-tagcloud-tag:hover .urank-tagcloud-tag-hintt:hover {
     transform: scale(1.1);
 }
 
-
-.urank-documents-hint {
-    position: absolute;
-    display: inline;
-    width: 14px;
-    height: 14px;
-    text-align: center;
-    cursor: pointer;
+.urank-tagcloud-tag:hover.disabled .urank-tagcloud-tag-hint {
+    visibility: hidden !important;
 }
 
-
-.urank-tagcloud-tag .urank-documents-hint {
-    visibility: hidden;
-}
-
-.urank-tagcloud-tag:hover.active .urank-documents-hint {
-    visibility: visible;
-}
-
-.urank-tagcloud-tag:hover.active .urank-documents-hint:hover {
-    transform: scale(1.1);
-}
-
-
-.urank-tagcloud-tag.dimmed .urank-documents-hint, .urank-tagcloud-tag.dimmed .urank-documents-hint {
-    display: none;
-}
-
-
-.hint--right:after {
+.hint--left:after {
     font-size: 10px;
 }
 
@@ -436,8 +414,8 @@ div.urank-tagbox-ranking-weight-bar {
     transform: scale(1.0);
 }
 
-.urank-tagbox-tag .urank-keyword-hint,
-.urank-tagbox-tag .urank-documents-hint {
+.urank-tagbox-tag .urank-tagcloud-tag-cooccurence-hint,
+.urank-tagbox-tag .urank-tagcloud-tag-document-hint {
     display: none;
 }
 

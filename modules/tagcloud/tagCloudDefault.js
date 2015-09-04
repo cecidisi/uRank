@@ -10,11 +10,13 @@ var TagCloudDefault = (function(){
         tagContainerClass = 'urank-tagcloud-tag-container',
         tagClass = 'urank-tagcloud-tag',
         selectedClass = 'selected',
-        dimmedClass = 'dimmed',
-        activeClass = 'active',
+        disabledClass = 'disabled',
+        //dimmedClass = 'dimmed',
+        //activeClass = 'active',
         draggingClass = 'dragging',
-        keywordHintClass = 'urank-keyword-hint',
-        documentHintClass = 'urank-documents-hint';
+        tagHintClass = 'urank-tagcloud-tag-hint',
+        keywordHintClass = 'urank-tagcloud-tag-cooccurence-hint',
+        documentHintClass = 'urank-tagcloud-tag-document-hint';
     //  Ids
     var tagIdPrefix = '#urank-tag-',
         tagPiePrefix = '#urank-tag-pie-';
@@ -50,18 +52,14 @@ var TagCloudDefault = (function(){
             'text-shadow': ''
         },
 
-        draggableOptions = {
-            revert: 'invalid',
-            helper: 'clone',
-            appendTo: '.urank-tagbox-container',
-            zIndex: 999,
-            start: function(event, ui){ $(this).hide(); },
-            stop: function(event, ui){ $(this).show(); }
+        tagHintPinOptions = {
+            document: {
+                top: - 6, right: -7, container: '.'+tagContainerOuterClass
+            },
+            cooccurence: {
+                bottom: -10, right: -7, container: '.'+tagContainerOuterClass
+            }
         },
-
-        documentHintPinOptions = { top: - 6, right: -7, container: '.'+tagContainerOuterClass },
-
-        keywordHintPintOptions = { bottom: -10, right: -7, container: '.'+tagContainerOuterClass },
 
         pieOptions = {
             size: { pieOuterRadius: '100%', canvasHeight: '14', canvasWidth: '14' },
@@ -94,42 +92,37 @@ var TagCloudDefault = (function(){
             autoHideScrollbar: true,
             scrollEasing: 'linear',
             scrollInertia: 0,
-            mouseWheel: {
-                enable: true,
-                axis: 'y'
-            },
-            keyboard: {
-                enable: true
-            },
-            advanced: {
-                updateOnContentResize: true
-            },
+            mouseWheel: { enable: true, axis: 'y' },
+            keyboard: { enable: true },
+            advanced: { updateOnContentResize: true },
             callbacks: {
-                whileScrolling: function() {
-                    //event.stopPropagation();
-                    var $tag = $('.'+selectedClass);
-                    if(_this.proxKeywordsMode) {
-                        $tag.find('.'+documentHintClass).css('visibility', 'hidden');
-                        $tag.find('.'+keywordHintClass).css('visibility', 'visible').pin(keywordHintPintOptions);
-                    }
-                    else if(_this.docHintMode) {
-                        $tag.find('.'+documentHintClass).css('visibility', 'visible').pin(documentHintPinOptions);
-                        $tag.find('.'+keywordHintClass).css('visibility', 'hidden');
-                    }
-                    /*else {
-                        $('.'+documentHintClass).trigger('mouseleave').pin(documentHintPinOptions).css('visibility', 'hidden');
-                          $('.'+keywordHintClass).trigger('mouseleave').pin(keywordHintPintOptions).css('visibility', 'hidden');
+                whileScrolling: function(){
+                    if(_this.tagHintMode)
+                        pinTagHints($('.'+tagClass+'.'+selectedClass));
+                }
+            }
+        },
 
-                        $('.'+documentHintClass).parent().removeClass(activeClass);
-                        $('.'+keywordHintClass).parent().removeClass(activeClass);
-                    }*/
-                }/*,
-                onScroll: function() {
-                    if(!_this.proxKeywordsMode && !_this.docHintMode) {
-                        $('.'+documentHintClass).pin(documentHintPinOptions).trigger('mouseleave').parent().addClass(activeClass).trigger('mouseleave');
-                        $('.'+keywordHintClass).pin(keywordHintPintOptions).trigger('mouseleave').parent().addClass(activeClass).trigger('mouseleave');
-                    }
-                }*/
+
+        draggableOptions = {
+            revert: 'invalid',
+            helper: 'clone',
+            appendTo: '.urank-tagbox-container',
+            zIndex: 999,
+            start: function(event, ui){
+                _this.isTagDragged = true;
+                $(this).find('.'+keywordHintClass).css('visibility', 'hidden');
+                $(this).find('.'+documentHintClass).css('visibility', 'hidden');
+
+                //    $(this).hide();
+
+            },
+            drag: function(event, ui){
+
+            },
+            stop: function(event, ui){
+                _this.isTagDragged = false;
+                $(this).show();
             }
         };
 
@@ -137,15 +130,8 @@ var TagCloudDefault = (function(){
     /// Tag Cloud root and container event handlers
     var onRootScrolled = function(event) {
         event.stopPropagation();
-        var $tag = $('.'+selectedClass);
-        if(_this.proxKeywordsMode) {
-            $tag.find('.'+documentHintClass).css('visibility', 'hidden');
-            $tag.find('.'+keywordHintClass).css('visibility', 'visible').pin(keywordHintPintOptions);
-        }
-        else if(_this.docHintMode) {
-            $tag.find('.'+documentHintClass).css('visibility', 'visible').pin(documentHintPinOptions);
-            $tag.find('.'+keywordHintClass).css('visibility', 'hidden');
-        }
+        if(_this.tagHintMode)
+            pinTagHints($('.'+tagClass+'.'+selectedClass));
     };
 
 
@@ -164,8 +150,8 @@ var TagCloudDefault = (function(){
         }, arguments);
 
         this.keywords = [];
-        this.proxKeywordsMode = false;
-        this.docHintMode = false;
+        this.isTagDragged = false;
+        this.tagHintMode = false;
     }
 
 
@@ -185,63 +171,37 @@ var TagCloudDefault = (function(){
     };
 
 
+    var pinTagHints = function($tag) {
+        $tag.find('.'+documentHintClass).css('visibility', 'visible').pin(tagHintPinOptions.document);
+        $tag.find('.'+keywordHintClass).css('visibility', 'visible').pin(tagHintPinOptions.cooccurence);
+    };
+
 
     var setTagProperties = function($tag) {
 
-        $tag.removeAttr('data-hint');
-        if(!$tag.hasClass(draggingClass)) {
-            $tag.removeClass(selectedClass)
-                .css({
-                background: getGradientString($tag.data('originalColor')),
-                border: '1px solid ' + $tag.data('originalColor'),
-                color: '', textShadow: '', cursor: ''
-            });
+        // Set default style
+        $tag.removeClass(selectedClass).removeClass(disabledClass).removeAttr('data-hint')
+        .css({
+            background: getGradientString($tag.data('originalColor')),
+            border: '1px solid ' + $tag.data('originalColor'),
+            color: '', textShadow: '', cursor: ''
+        })
+        // Set event handlers
+        .off().on({
+            mousedown : function(event){ if(event.which == 1 && !$(this).hasClass(disabledClass)) event.stopPropagation(); },
+            mouseenter: function(event){ s.onTagInCloudMouseEnter.call(this, $(this).attr(tagPosAttr)) },
+            mouseleave: function(event){ s.onTagInCloudMouseLeave.call(this, $(this).attr(tagPosAttr)) },
+            click: function(event){ event.stopPropagation(); s.onTagInCloudClick.call(this, $(this).attr(tagPosAttr)) }
+        });
 
-            //  Restore non-active classes (is dimmed or just initialized)
-            if(!$tag.hasClass(activeClass)) {
-                $tag.removeClass(dimmedClass).addClass(activeClass)
-                    .off().on({
-                    mousedown: function(event){
-                        if(event.which == 1) {
-                            $(this).addClass(draggingClass);
-                            $(this).find('.'+keywordHintClass).css('visibility', '');
-                            $(this).find('.'+documentHintClass).css('visibility', '');
-                        }
-                    },
-                    mouseup: function(event){ event.stopPropagation(); $(this).removeClass(draggingClass); },
-                    mouseenter: function(event){ s.onTagInCloudMouseEnter.call(this, $(this).attr(tagPosAttr)) },
-                    mouseleave: function(event){ s.onTagInCloudMouseLeave.call(this, $(this).attr(tagPosAttr)) },
-                    click: function(event){ event.stopPropagation(); s.onTagInCloudClick.call(this, $(this).attr(tagPosAttr)) }
-                });
-            }
+        // Set draggable
+        if($tag.is('.ui-draggable'))
+            $tag.draggable('destroy');
+        $tag.draggable(draggableOptions);
 
-            // Set draggable
-            if($tag.is('.ui-draggable'))
-                $tag.draggable('destroy');
-            $tag.draggable(draggableOptions);
+        $tag.find('.'+documentHintClass).css('visibility', '')
+        $tag.find('.'+keywordHintClass).css('visibility', '')
 
-            //  Set keyword hint properties
-            $tag.find('.'+keywordHintClass).css('visibility', '')
-                .off().on({
-                mouseenter: function(event){ s.onKeywordHintMouseEnter.call(this, $(this).parent().attr(tagPosAttr)) },
-                mouseleave: function(event){ s.onKeywordHintMouseLeave.call(this, $(this).parent().attr(tagPosAttr)) },
-                click: function(event){
-                    event.stopPropagation();
-                    s.onKeywordHintClick.call(this, $(this).parent().attr(tagPosAttr));
-                },
-                mousedown: function(event){ event.stopPropagation(); }
-            });
-
-            //  Set document hint properties
-            $tag.find('.'+documentHintClass).css('visibility', '')
-                .off().on({
-                click: function(event){
-                    event.stopPropagation();
-                    s.onDocumentHintClick.call(this, $(this).parent().attr(tagPosAttr));
-                },
-                mousedown: function(event){ event.stopPropagation(); }
-            });
-        }
         return $tag;
     };
 
@@ -284,7 +244,7 @@ var TagCloudDefault = (function(){
                 percentage = Math.floor(k.inDocument.length/_this.data.length * 100),
                 tooltipMsg = k.inDocument.length + " (" + percentage + "%) documents contain " + termUpperCase + ". Click to highlight documents";
 
-            var $docHint = $('<div></div>', { class: documentHintClass+' hint--right hint--info hint--rounded', id: 'urank-tag-pie-' + i, 'data-hint': tooltipMsg }).appendTo($tag);
+            var $docHint = $('<div></div>', { class: tagHintClass+' '+documentHintClass+' hint--right hint--info hint--rounded', id: 'urank-tag-pie-' + i, 'data-hint': tooltipMsg }).appendTo($tag);
             pieOptions.data.content[0].value = k.inDocument.length;
             pieOptions.data.content[1].value = _this.data.length - k.inDocument.length || 0.1;
             var tagPie = new d3pie(tagPiePrefix+''+i, pieOptions);
@@ -292,7 +252,7 @@ var TagCloudDefault = (function(){
             // Append red circle section for keywords in proximity indicator
             if(k.keywordsInProximity.length > 0) {
                 tooltipMsg = k.keywordsInProximity.length + " other keywords frequently found close to " + termUpperCase + "\n Click to lock view";
-                var $proyKeywordsIndicator = $('<div></div>', { class: keywordHintClass+' hint--right hint--info hint--rounded', 'data-hint': tooltipMsg, text: k.keywordsInProximity.length}).appendTo($tag);
+                var $proyKeywordsIndicator = $('<div></div>', { class: tagHintClass+' '+keywordHintClass+' hint--right hint--info hint--rounded', 'data-hint': tooltipMsg, text: k.keywordsInProximity.length}).appendTo($tag);
             }
 
             $tag.data({ 'originalColor': _this.colorScale(k.colorCategory) });
@@ -368,22 +328,65 @@ var TagCloudDefault = (function(){
 
     var _hoverTag = function(index) {
         var $tag = $(tagIdPrefix + '' + index);
-        $tag.css(tagHoverStyle);
-        $tag.find('.'+documentHintClass).pin(documentHintPinOptions).css('visibility', '');
-        $tag.find('.'+keywordHintClass).pin(keywordHintPintOptions).css('visibility', '');
+        if(!_this.tagHintMode) {
+            $tag.css(tagHoverStyle);
+            pinTagHints($tag);
+        }
     };
 
 
     var _unhoverTag = function(index) {
         var $tag = $(tagIdPrefix + '' + index);
-        if(!$tag.hasClass(selectedClass)) {
-            var color = $(tagIdPrefix + '' + index).data('originalColor');
+
+        if(!_this.tagHintMode) {
+            $tag.find('.'+documentHintClass).css('visibility', '');
+            $tag.find('.'+keywordHintClass).css('visibility', '');
+            var color = $tag.data('originalColor');
             $tag.css({ background: getGradientString(color), border: '1px solid ' + color, color: '#111' });
         }
     };
 
 
-    var _tagClicked = function(index) {};
+    var _tagClicked = function(index) {
+
+        if(!_this.isTagDragged) {
+
+            _hoverTag(index);
+            var $tag = $(tagIdPrefix + '' + index).addClass(selectedClass);
+            //$tag.find('.'+keywordHintClass).css('visibility', 'visible');
+            //$tag.find('.'+documentHintClass).css('visibility', 'visible');
+
+            var proxKeywords = _this.keywords[index].keywordsInProximity;
+
+            $tag.siblings().each(function(i, sibling){
+                var $siblingTag = $(sibling);
+                $siblingTag.find('.'+keywordHintClass).off().css('visibility', 'hidden');
+                $siblingTag.find('.'+documentHintClass).off().css('visibility', 'hidden');
+
+                // sibling tags that are not KW in proximity of current tag are dimmend and active class removed so they can't be dragged
+                if(_.findIndex(proxKeywords, function(proxKw){ return proxKw.stem == $siblingTag.attr('stem') }) === -1) {
+                    $siblingTag.addClass(disabledClass).css({ background: '', border: '' });
+                }
+                else {                                      // Active tags are the ones co-occuring with the selected tag. A tooltip is added during proxKeywordsmode
+                    var selectedKeyword = $tag.getText();
+                    var currentKeyword = $siblingTag.getText();
+                    var numberCoOccurrences = _this.keywords[index].keywordsInProximity[$siblingTag.attr('stem')];
+                    var tooltip = currentKeyword + ' and ' + selectedKeyword + ' appear in proximity ' + numberCoOccurrences + ' times';
+                    $siblingTag.addClass('hint--left hint--rounded').attr('data-hint', tooltip);
+                    if($siblingTag.is('ui-draggable'))
+                        $siblingTag.draggable('destroy');
+                    $siblingTag.draggable(draggableOptions);
+                }
+            });
+
+            if($tag.is('.ui-draggable'))
+                $tag.draggable('destroy');
+            $tag.draggable(draggableOptions);
+
+            _this.tagHintMode = true;
+        }
+    };
+
 
 
     var _keywordHintMouseEntered = function(index) {
@@ -401,74 +404,26 @@ var TagCloudDefault = (function(){
 
 
     var _keywordHintMouseLeft = function(index) {
-
-        if(!_this.proxKeywordsMode) {
-            var $tag = $(tagIdPrefix + '' + index);
-            $tag.siblings().each(function(i, siblingTag){
-            var color  = $(siblingTag).data('originalColor');
-            $(siblingTag).removeClass(dimmedClass)
-                .css({ background: getGradientString(color, 10), border: '1px solid ' + color });
-            });
-        }
     };
 
 
     var _keywordHintClicked = function(index) {
-
-        var $tag = $(tagIdPrefix + '' + index);
-        $tag.addClass(selectedClass);
-        $tag.find('.'+keywordHintClass).css('visibility', 'visible');
-        $tag.find('.'+documentHintClass).css('visibility', 'hidden');
-
-        $tag.siblings().each(function(i, sibling){
-            var $siblingTag = $(sibling);
-            $siblingTag.find('.'+keywordHintClass).off().css('visibility', 'hidden');
-            $siblingTag.find('.'+documentHintClass).off().css('visibility', 'hidden');
-
-            if($siblingTag.hasClass(dimmedClass))       // Dimmed tags get active class removed
-                $siblingTag.removeClass(activeClass).off();
-            else {                                      // Active tags are the ones co-occuring with the selected tag. A tooltip is added during proxKeywordsmode
-                var selectedKeyword = $tag.getText();
-                var currentKeyword = $siblingTag.getText();
-                var numberCoOccurrences = _this.keywords[index].keywordsInProximity[$siblingTag.attr('stem')];
-                var tooltip = currentKeyword + ' and ' + selectedKeyword + ' appear in proximity ' + numberCoOccurrences + ' times';
-                $siblingTag.addClass('hint--right hint--rounded').attr('data-hint', tooltip);
-            }
-        });
-
-        //$outerTagContainer.on('scroll', onRootScrolled);
-        _this.proxKeywordsMode = true;
     };
 
 
 
     var _documentHintClicked = function(index) {
-
-        var $tag = $(tagIdPrefix+''+index);
-        $tag.addClass(selectedClass);
-        $tag.find('.'+documentHintClass).css('visibility', 'visible');
-        $tag.find('.'+keywordHintClass).css('visibility', 'hidden');
-
-        $tag.siblings().each(function(i, siblingTag){
-            $(siblingTag).removeClass(activeClass).addClass(dimmedClass).off().css({background: '', border: '', color: ''});
-        });
-
-       // $tagContainer.on('scroll', onRootScrolled);
-        _this.docHintMode = true;
     };
 
 
 
     var _clearEffects = function() {
 
-        if(_this.docHintMode || _this.proxKeywordsMode) {
-            //$outerTagContainer.off('scroll', onRootScrolled);
+        if(_this.tagHintMode) {
             $('.'+tagClass).each(function(i, tag){
                 setTagProperties($(tag));
             });
-
-            _this.proxKeywordsMode = false;
-            _this.docHintMode = false;
+            _this.tagHintMode = false;
         }
     };
 

@@ -222,6 +222,10 @@ var Urank = (function(){
 
         onTagInCloudClick: function(index) {
             // TODO
+            tagCloud.tagClicked(index);
+            var idsArray = _this.keywords[index].inDocument;
+            contentList.highlightListItems(idsArray);
+            visCanvas.highlightItems(idsArray).resize(contentList.getListHeight());
             s.onTagInCloudClick.call(this, index);
         },
 
