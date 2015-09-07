@@ -40,70 +40,60 @@ var TagCloud = (function(){
         this.tagcloud.clear();
         var options = $.extend(opt.misc, { draggableClass: tagClass })
         this.tagcloud.build(keywords, data, colorScale, options, keywordsDict);
+        return this;
     };
-
 
 
     var _reset = function() {
         if(this.tagcloud) this.tagcloud.reset();
+        return this;
     };
 
 
     var _restoreTag = function(index){
         if(this.tagcloud) this.tagcloud.restoreTag(index);
+        return this;
     };
 
 
     var _hoverTag = function(index) {
         if(this.tagcloud) this.tagcloud.hoverTag(index);
+        return this;
     };
 
 
     var _unhoverTag = function(index) {
         if(this.tagcloud) this.tagcloud.unhoverTag(index);
+        return this;
     };
 
 
     var _tagClicked = function(index) {
         if(this.tagcloud) this.tagcloud.tagClicked(index);
+        return this;
     };
 
-
-    var _keywordHintMouseEntered = function(index) {
-        if(this.tagcloud) this.tagcloud.keywordHintMouseEntered(index);
+    var _updateDroppedTag = function(index, queryColor) {
+        if(this.tagcloud) this.tagcloud.updateDroppedTag(index, queryColor);
+        return this;
     };
-
-
-    var _keywordHintMouseLeft = function(index) {
-        if(this.tagcloud) this.tagcloud.keywordHintMouseLeft(index);
-    };
-
-
-    var _keywordHintClicked = function(index) {
-        if(this.tagcloud) this.tagcloud.keywordHintClicked(index);
-    };
-
-
-
-    var _documentHintClicked = function(index) {
-        if(this.tagcloud) this.tagcloud.documentHintClicked(index);
-    };
-
-
 
     var _clearEffects = function() {
         if(this.tagcloud) this.tagcloud.clearEffects();
+        return this;
     };
 
 
     var _clear = function() {
         if(this.tagcloud) this.tagcloud.clear();
+        return this;
     };
 
 
     var _destroy = function() {
         if(this.tagcloud) this.tagcloud.destroy();
         $root.removeClass(tagcloudClass);
+        return this;
     };
 
 
@@ -114,10 +104,7 @@ var TagCloud = (function(){
         hoverTag: _hoverTag,
         tagClicked:_tagClicked,
         unhoverTag: _unhoverTag,
-        keywordHintClicked: _keywordHintClicked,
-        keywordHintMouseEntered: _keywordHintMouseEntered,
-        keywordHintMouseLeft: _keywordHintMouseLeft,
-        documentHintClicked: _documentHintClicked,
+        updateDroppedTag: _updateDroppedTag,
         clearEffects: _clearEffects,
         clear: _clear,
         destroy: _destroy

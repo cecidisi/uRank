@@ -193,9 +193,7 @@ var ContentList = (function(){
 
     var sort = function(){
 
-        var start = $.now();
         var liHtml = [];
-
         _this.data.forEach(function(d, i){
             var $current = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').css('top', '');
             var $clon = $current.clone(true);
@@ -486,7 +484,6 @@ var ContentList = (function(){
     var _selectListItem = function(id) {
         stopAnimation();
         $('.'+liClass).css("opacity", "0.3");
-        //$(liItem + '' + id).css("opacity", "1");
         $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').css("opacity", "1");
     };
 
@@ -498,13 +495,11 @@ var ContentList = (function(){
 
     // receives actual index
     var _hover = function(id) {
-        //$(liItem +''+ id).addClass(liHoveredClass);
         $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').addClass(liHoveredClass);
     };
 
 
     var _unhover = function(id) {
-        //$(liItem +''+ id).removeClass(liHoveredClass);
         $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').removeClass(liHoveredClass);
     };
 

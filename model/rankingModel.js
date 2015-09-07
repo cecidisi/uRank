@@ -139,7 +139,7 @@ var RankingModel = (function(){
             this.mode = options.mode;
             this.rWeight = options.rWeight;
             this.previousRanking = this.ranking.slice();
-            this.ranking = updateRanking(opt);
+            this.ranking = this.query.length > 0 ? updateRanking(opt) : [];
             this.status = updateStatus();
             return this;
         },

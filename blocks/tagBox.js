@@ -61,9 +61,10 @@ var TagBox = (function(){
         this.droppableOptions = {
             tolerance: 'touch',
             drop: function(event, ui){
-                setTimeout(function() {
-                    $(ui.draggable).draggable("destroy");
-                }, 0);
+                ui.draggable.data('dropped', true);
+//                setTimeout(function() {
+//                    $(ui.draggable).draggable("destroy");
+//                }, 0);
                 s.onTagDropped.call(this, $(ui.draggable).attr(tagPosAttr));
                 $tagContainer.trigger(tagBoxChangeEvent);
             }

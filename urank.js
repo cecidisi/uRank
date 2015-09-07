@@ -5,7 +5,8 @@ var Urank = (function(){
     var _this, s = {},
         contentList, tagCloud, tagBox, visCanvas, docViewer;
     // Color scales
-    var tagColorRange = colorbrewer.Blues[TAG_CATEGORIES + 1].slice(1, TAG_CATEGORIES+1);
+//    var tagColorRange = colorbrewer.Blues[TAG_CATEGORIES + 1].slice(1, TAG_CATEGORIES+1);
+    var tagColorRange = colorbrewer.Greys[TAG_CATEGORIES + 2].slice(1, TAG_CATEGORIES+1);
   //  tagColorRange.splice(tagColorRange.indexOf("#08519c"), 1, "#2171b5");
     var queryTermColorRange = colorbrewer.Set1[9];
     queryTermColorRange.splice(queryTermColorRange.indexOf("#ffff33"), 1, "#ffd700");
@@ -28,10 +29,6 @@ var Urank = (function(){
         onTagInCloudMouseEnter: function(index){},
         onTagInCloudMouseLeave: function(index){},
         onTagInCloudClick: function(index){},
-        onDocumentHintClick: function(index){},
-        onKeywordHintMouseEnter: function(index){},
-        onKeywordHintMouseLeave: function(index){},
-        onKeywordHintClick: function(index){},
         onTagDeleted: function(index){},
         onTagDropped: function(index, queryTermColor){},
         onTagInBoxMouseEnter: function(index){},
@@ -201,6 +198,7 @@ var Urank = (function(){
         onTagDropped: function(index) {
             var queryTermColor = _this.queryTermColorScale(_this.keywords[index].stem);
             tagBox.dropTag(index, queryTermColor);
+            tagCloud.updateDroppedTag(index, queryTermColor);
             s.onTagDropped.call(this, index, queryTermColor);
         },
 
@@ -227,30 +225,6 @@ var Urank = (function(){
             contentList.highlightListItems(idsArray);
             visCanvas.highlightItems(idsArray).resize(contentList.getListHeight());
             s.onTagInCloudClick.call(this, index);
-        },
-
-        onKeywordHintEnter: function(index) {
-            tagCloud.keywordHintMouseEntered(index);
-            s.onKeywordHintMouseEnter.call(this, index);
-        },
-
-        onKeywordHintLeave: function(index) {
-            tagCloud.keywordHintMouseLeft(index);
-            s.onKeywordHintMouseLeave.call(this, index);
-        },
-
-        onKeywordHintClick: function(index) {
-            tagCloud.keywordHintClicked(index);
-            s.onKeywordHintClick.call(this, index);
-        },
-
-        onDocumentHintClick: function(index) {
-            tagCloud.documentHintClicked(index);
-            var idsArray = _this.keywords[index].inDocument;
-            contentList.highlightListItems(idsArray);
-            visCanvas.highlightItems(idsArray).resize(contentList.getListHeight());
-
-            s.onDocumentHintClick.call(this, index);
         },
 
         onNewKeywordAdded: function(word){
@@ -419,11 +393,7 @@ var Urank = (function(){
                 root: s.tagCloudRoot,
                 onTagInCloudMouseEnter: EVTHANDLER.onTagInCloudMouseEnter,
                 onTagInCloudMouseLeave: EVTHANDLER.onTagInCloudMouseLeave,
-                onTagInCloudClick: EVTHANDLER.onTagInCloudClick,
-                onDocumentHintClick: EVTHANDLER.onDocumentHintClick,
-                onKeywordHintMouseEnter : EVTHANDLER.onKeywordHintEnter,
-                onKeywordHintMouseLeave : EVTHANDLER.onKeywordHintLeave,
-                onKeywordHintClick : EVTHANDLER.onKeywordHintClick
+                onTagInCloudClick: EVTHANDLER.onTagInCloudClick
             },
 
             tagBox: {

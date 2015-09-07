@@ -82,10 +82,12 @@
     margin: 5px;
     overflow-y: auto;
     overflow-x: hidden;
+/*
     background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
     background: -o-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
 	background: -moz-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
 	background: -ms-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+*/
 	/*background: linear-gradient(to top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));*/    
     box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
 }
@@ -95,8 +97,11 @@
     width: calc(100% - 4px);
     padding: 5px 2px;
     text-align: center;
-    /*background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
-    box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;*/
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1), rgba(250, 250, 250, 1));
+    background: -o-linear-gradient(top, rgba(245, 245, 245, 1), rgba(240, 240, 240, 1));
+    background: -moz-linear-gradient(top, rgba(245, 245, 245, 1), rgba(240, 240, 240, 1));
+    background: -ms-linear-gradient(top, rgba(245, 245, 245, 1), rgba(240, 240, 240, 1));
+    box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
 }
 
 
@@ -104,10 +109,11 @@
 .urank-tagcloud-tag {
     display: inline-block;
     pointer-events: all;
-    margin: 0.2em;
-    padding: 3px 5px;
-    -webkit-border-radius: 7px;
-    border-radius: 7px;
+/*    margin: 0.2em;*/
+    margin: 2.5px 3px;
+    padding: 3px 4px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
     -webkit-box-shadow: 0em 0.1em 0.3em #222;
     /*box-shadow: 0em 0.1em 0.3em -0.1em #888;*/
     box-shadow: 0em 0.1em 0.3em #222;
@@ -126,20 +132,20 @@
 	background: -moz-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
 	background: -ms-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
 	/*background: linear-gradient(to top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));*/
-    border: solid 1px rgb(0, 102, 255);
+    border: solid 2px rgb(0, 102, 255);
     color: #eee;
     text-shadow: none;
 }
 
 
-.urank-tagcloud-tag.disabled {
-    border: 1px solid rgba(202, 202, 202, 0.2);
-    background: rgba(202, 202, 202, 0.2);
+.urank-tagcloud-tag.disabled, .urank-tagcloud-tag.dropped, .urank-tagcloud-tag.dropped:hover {
+    border: 2px solid rgba(202, 202, 202, 0.2);
+/*    background: rgba(202, 202, 202, 0.2);*/
+    background: rgba(230, 230, 230, 0);
     color: #111;
     text-shadow: -0.1em 0.1em 0.5em #eee;
     cursor: default;
 }
-
 
 .urank-tagcloud-tag-hint {
     position: absolute;
