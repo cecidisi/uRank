@@ -45,8 +45,13 @@ var DocViewer = (function(){
 
         this.opt = opt.misc;
 
+        if(s.root == '')
+            $root = $('<div/>').appendTo('body');
+        else
+            $root = $(s.root).empty();
+
         var containerClasses = (this.opt.defaultBlockStyle) ? docViewerContainerClass +' '+ defaultDocViewerContainerClass : docViewerContainerClass;
-        $root = $(s.root).empty().addClass(containerClasses);
+        $root.addClass(containerClasses).hide();
 
         // Append details section, titles and placeholders for doc details
         $detailsSection = $("<div class='" + detailsSectionClass + "'></div>").appendTo($root);
@@ -81,6 +86,8 @@ var DocViewer = (function(){
     * @param {Array} keywords (only stems)
     */
     var _showDocument = function(document, keywords, colorScale){
+         console.log(document);
+        $root.slideDown();
 
         $(detailItemIdPrefix + 'title').html(getStyledText(document.title, keywords, colorScale));
 
@@ -102,6 +109,7 @@ var DocViewer = (function(){
 
 
     var _clear = function(){
+        $root.hide();
         // Clear details section
         $(detailItemIdPrefix + 'title').empty();
         var facets = (this.opt && this.opt.facetsToShow) ? this.opt.facetsToShow : [];

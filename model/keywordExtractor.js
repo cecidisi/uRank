@@ -157,7 +157,7 @@ var KeywordExtractor = (function(){
         keywordDict = computeKeywordsInProximity(collection, keywordDict);
         var collectionKeywords = [];
 
-        _.keys(keywordDict).forEach(function(keyword){
+        _.keys(keywordDict).forEach(function(keyword, i){
             // Put keywords in proximity in sorted array
             var proxKeywords = [];
             _.keys(keywordDict[keyword].keywordsInProximity).forEach(function(proxKeyword){
@@ -179,27 +179,14 @@ var KeywordExtractor = (function(){
         });
 
         // sort keywords in array by document frequency
-        collectionKeywords = collectionKeywords
-            //.filter(function(ck){ return ck.repeated >= minRepetitions })
-            .sort(function(k1, k2){
+        collectionKeywords = collectionKeywords.sort(function(k1, k2){
                 if(k1.repeated < k2.repeated) return 1;
                 if(k1.repeated > k2.repeated) return -1;
                 return 0;
             });
-
-/*        collectionKeywords.forEach(function(k, i){
-            if(_.keys(k.variations).length == 0) {
-                console.log(k);
-                var ii = _.findIndex(collection, function(d){ return d.id == k.inDocument[0]; });
-                console.log(collection[ii]);
-            }
-            k.term = getRepresentativeTerm(k);
-        });*/
-
-/*        console.log('dictionary');
-        console.log(keywordDict);
-        console.log('array');
-        console.log(collectionKeywords);*/
+        collectionKeywords.forEach(function(k, i){
+            keywordDict[k.stem].index = i;
+        });
 
         return { array: collectionKeywords, dict: keywordDict };
     };

@@ -6,7 +6,7 @@ var Urank = (function(){
         contentList, tagCloud, tagBox, visCanvas, docViewer;
     // Color scales
 //    var tagColorRange = colorbrewer.Blues[TAG_CATEGORIES + 1].slice(1, TAG_CATEGORIES+1);
-    var tagColorRange = colorbrewer.Greys[TAG_CATEGORIES + 2].slice(1, TAG_CATEGORIES+1);
+    var tagColorRange = colorbrewer.Greys[TAG_CATEGORIES + 2].slice(2, TAG_CATEGORIES+2);
   //  tagColorRange.splice(tagColorRange.indexOf("#08519c"), 1, "#2171b5");
     var queryTermColorRange = colorbrewer.Set1[9];
     queryTermColorRange.splice(queryTermColorRange.indexOf("#ffff33"), 1, "#ffd700");
@@ -34,8 +34,8 @@ var Urank = (function(){
         onTagInBoxMouseEnter: function(index){},
         onTagInBoxMouseLeave: function(index){},
         onTagInBoxClick: function(index){},
-        onNewKeywordAdded: function(word){},
         onTagFrequencyChanged: function(min, sup){},
+        onKeywordEntered: function(term){}
     };
 
     var defaultLoadOptions = {
@@ -154,6 +154,9 @@ var Urank = (function(){
             tagBox.build(o.tagBox);
             contentList.build(_this.data, o.contentList, tagBox.getHeight());
             visCanvas.build(contentList.getListHeight(), o.visCanvas);
+            var docViewerDim = {
+                width: $(s.contentListRoot).fullWidth() + $(s.visCanvasRoot).fullWidth()
+            };
             docViewer.build(o.docViewer);
 
             //  Bind event handlers to resize window and undo effects on random click
@@ -227,10 +230,9 @@ var Urank = (function(){
             s.onTagInCloudClick.call(this, index);
         },
 
-        onNewKeywordAdded: function(word){
-
-
-            s.onNewKeywordAdded.call(this, word);
+        onKeywordEntered: function(keyword){
+            tagCloud.selectTag(keyword);
+            s.onKeywordEntered.call(this, keyword);
         },
 
         onTagFrequencyChanged: function(min, sup){
@@ -393,7 +395,8 @@ var Urank = (function(){
                 root: s.tagCloudRoot,
                 onTagInCloudMouseEnter: EVTHANDLER.onTagInCloudMouseEnter,
                 onTagInCloudMouseLeave: EVTHANDLER.onTagInCloudMouseLeave,
-                onTagInCloudClick: EVTHANDLER.onTagInCloudClick
+                onTagInCloudClick: EVTHANDLER.onTagInCloudClick,
+                onKeywordEntered: EVTHANDLER.onKeywordEntered
             },
 
             tagBox: {

@@ -1,7 +1,7 @@
 
 (function($) {
 
-    $.fn.scrollTo = function( target, options, callback ){
+    $.fn.scrollTo = function(target, options, callback){
 
         if(typeof options == 'function' && arguments.length == 2){
             callback = options;
@@ -11,7 +11,7 @@
         var settings =
             $.extend({
                 scrollTarget  : target,
-                offsetTop     : 50,
+                offsetTop     : 0,
                 duration      : 500,
                 easing        : 'swing'
             }, options);
@@ -29,7 +29,7 @@
                 }
                 else{
                     scrollTarget = $(settings.scrollTarget);
-                    settings.offsetTop = scrollPane.offset().top;
+                    settings.offsetTop += scrollPane.offset().top;
                 }
             }
 

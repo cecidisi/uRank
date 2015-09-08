@@ -340,7 +340,7 @@ var ContentList = (function(){
         $listContainer = $('<div/>').appendTo($root).addClass(listContainerClass + ' ' + hiddenScrollbarClass);
 
         var listHeight = 'calc(100% - ' + $header.fullHeight() || 0 + 'px)';
-        $scrollable = $('<div></div>').appendTo($root)
+        $scrollable = $('<div/>').appendTo($root)
             .addClass(hiddenScrollbarInnerClass)
             //.css('height', listHeight)
             .on('scroll', onScroll);
@@ -461,7 +461,7 @@ var ContentList = (function(){
         updateFunc[RANKING_STATUS.no_ranking] = _this.reset;
         //  When animations are triggered too fast and they can't finished in order, older timeouts are canceled and only the last one is executed
         //  (list is resorted according to last ranking state)
-        this.animationTimeout = updateFunc[this.status].call(this);
+        this.animationTimeout = updateFunc[this.status]();
         setTimeout(removeMovingStyle, removeDelay);
     };
 
@@ -469,7 +469,7 @@ var ContentList = (function(){
 
     var _reset = function() {
         //this.build(this.data, this.opt);
-        this.data = this.originalData.slice();
+        this.data = _this.originalData.slice();
         this.selectedKeywords = [];
         updateLiBackground();
         sort();
@@ -581,7 +581,6 @@ var ContentList = (function(){
     var _getListHeight = function() {
         return $ul.height();
     };
-
 
     // Prototype
     ContentList.prototype = {

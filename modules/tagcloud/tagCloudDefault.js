@@ -5,14 +5,14 @@ var TagCloudDefault = (function(){
     var s = {};
     //  Classes
     var tagcloudDefaultClass = 'urank-tagcloud-default',
-        tagcloudControlsClass = 'urank-tagcloud-controls',
-        tagContainerOuterClass = 'urank-tagcloud-tag-container-outer',
+        hiddenScrollbarClass = 'urank-hidden-scrollbar',
+        hiddenScrollbarInnerClass = 'urank-hidden-scrollbar-inner',
         tagContainerClass = 'urank-tagcloud-tag-container',
         tagClass = 'urank-tagcloud-tag',
         selectedClass = 'selected',
         disabledClass = 'disabled',
         droppedClass = 'dropped',
-        draggingClass = 'dragging',
+        focusedClass = 'focused',
         tagHintClass = 'urank-tagcloud-tag-hint',
         keywordHintClass = 'urank-tagcloud-tag-cooccurence-hint',
         documentHintClass = 'urank-tagcloud-tag-document-hint';
@@ -23,7 +23,7 @@ var TagCloudDefault = (function(){
     var tagPosAttr = 'tag-pos';
     //  Helpers
     var backgroudGradient = "top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255)";
-    var $root = $(''), $tagContainer = $(''),
+    var $root = $(''), $scrollable = $(''), $tagContainer = $(''),
 
         tagStyle = {
             background: function() { return getGradientString($(this).data('originalColor')) },
@@ -53,8 +53,8 @@ var TagCloudDefault = (function(){
         tagDisabledStyle = { background: '', color: '', border: ''},
 
         tagHintPinOptions = {
-            document: { top: -6, right: -10, container: '.'+tagContainerOuterClass },
-            cooccurence: { bottom: -10, right: -10, container: '.'+tagContainerOuterClass }
+            document: { top: -6, right: -10, container: '.'+tagcloudDefaultClass },
+            cooccurence: { bottom: -10, right: -10, container: '.'+tagcloudDefaultClass }
         },
 
         pieOptions = {
@@ -110,7 +110,6 @@ var TagCloudDefault = (function(){
     var $draggedTag = undefined;
     var onTagDragStarted = function(event, ui){
         _this.isTagDragged = true;
-        console.log('drag started');
         $(this).data('dropped', false).css(tagDisabledStyle);
         $(this).find('.'+keywordHintClass).css('visibility', 'hidden');
         $(this).find('.'+documentHintClass).css('visibility', 'hidden');
@@ -161,10 +160,6 @@ var TagCloudDefault = (function(){
             onTagInCloudMouseEnter: function(index){},
             onTagInCloudMouseLeave: function(index){},
             onTagInCloudClick: function(index){},
-            onDocumentHintClick: function(index){},
-            onKeywordHintMouseEnter : function(index){},
-            onKeywordHintMouseLeave : function(index){},
-            onKeywordHintClick : function(index){},
         }, arguments);
 
         this.keywords = [];
@@ -240,19 +235,11 @@ var TagCloudDefault = (function(){
 
         // Empty tag container and add appropriate class/es
         $root = $(s.root).empty().addClass(tagcloudDefaultClass);
+        $('<div/>').appendTo($root).addClass(hiddenScrollbarClass);
 
-        //  Create tagcloud controls
-        var $tagcloudControls = $('<div/>').appendTo($root).addClass(tagcloudControlsClass);
-        var $tagInput = $('<input>', { type: 'text', placeholder: 'Enter keyword' }).appendTo($tagcloudControls);
-        var $addButton = $('<button/>').appendTo($tagcloudControls).append($('<span/>'));
-
-
-        // Create tag contained
-        var $outerTagContainer = $('<div></div>').appendTo($root)
-            .addClass(tagContainerOuterClass)
+        $scrollable = $('<div/>').appendTo($root).addClass(hiddenScrollbarInnerClass)
             .on('scroll', onRootScrolled);
-
-        $tagContainer = $('<div></div>').appendTo($outerTagContainer).addClass(tagContainerClass);
+        $tagContainer = $('<div/>').appendTo($scrollable).addClass(tagContainerClass);
 
         this.keywords.forEach(function(k, i){
             var $tag = $('<div></div>', { class: tagClass, id: 'urank-tag-' + i, 'tag-pos': i, stem: k.stem, text: k.term }).appendTo($tagContainer)//.appendTo($root);
@@ -278,9 +265,8 @@ var TagCloudDefault = (function(){
             setTagProperties($tag);
         });
 
-        if(this.opt.customScrollBars) {
-            $outerTagContainer.mCustomScrollbar(customScrollOptions);
-        }
+//        if(this.opt.customScrollBars)
+//            $root.mCustomScrollbar(customScrollOptions);
     };
 
 
@@ -320,11 +306,21 @@ var TagCloudDefault = (function(){
             $tag.css({ position: '', top: '', left: '', 'z-index': '' });//.draggable(draggableOptions);
             setTagProperties($tag);
         });
+    };
 
+
+    var _selectTag = function(keyword/*, newOffset*/) {
+        var $tag = $('.'+tagClass + '[tag-pos=' + keyword.index + ']');
+        $tag.addClass(focusedClass);
+
+        setTimeout(function(){
+            $tag.removeClass(focusedClass, 2000);
+        }, 5000);
+
+        $scrollable.scrollTo('.'+tagClass + '[tag-pos=' + keyword.index + ']', { offsetTop: 10 });
     };
 
     var _hoverTag = function(index) {
-//        var $tag = $(tagIdPrefix + '' + index);
         var $tag = $('.'+tagClass + '[tag-pos=' + index + ']');
         if(!_this.tagHintMode && !_this.isTagDragged) {
             if(!$tag.hasClass(droppedClass))
@@ -335,7 +331,6 @@ var TagCloudDefault = (function(){
 
 
     var _unhoverTag = function(index) {
-//        var $tag = $(tagIdPrefix + '' + index);
         var $tag = $('.'+tagClass + '[tag-pos=' + index + ']');
 
         if(!_this.tagHintMode && !_this.isTagDragged) {
@@ -352,6 +347,7 @@ var TagCloudDefault = (function(){
     var _tagClicked = function(index) {
 
         if(!_this.isTagDragged) {
+            _clearEffects();
             _hoverTag(index);
 //            var $tag = $(tagIdPrefix + '' + index).addClass(selectedClass);
             var $tag = $('.'+tagClass + '[tag-pos=' + index + ']').addClass(selectedClass);
@@ -423,7 +419,7 @@ var TagCloudDefault = (function(){
 
     var _destroy = function() {
       //  $outerTagContainer.mCustomScrollbar('destroy');
-        $root.empty().removeClass(tagcloudDefaultClass);
+        $root.empty();
         return this;
     };
 
@@ -436,6 +432,7 @@ var TagCloudDefault = (function(){
         tagClicked:_tagClicked,
         unhoverTag: _unhoverTag,
         updateDroppedTag: _updateDroppedTag,
+        selectTag: _selectTag,
         clearEffects: _clearEffects,
         clear: _clear,
         destroy: _destroy

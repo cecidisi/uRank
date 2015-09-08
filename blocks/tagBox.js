@@ -254,11 +254,10 @@ var TagBox = (function(){
         return this;
     };
 
+
     var _getHeight = function(){
         return $(s.root).height();
     };
-
-
 
 
     var _updateRankingMode = function(mode) {
@@ -295,9 +294,9 @@ var TagBox = (function(){
         clear: _clear,
         dropTag: _dropTag,
         deleteTag: _deleteTag,
+        updateRankingMode: _updateRankingMode,
         destroy: _destroy,
-        getHeight: _getHeight,
-        updateRankingMode: _updateRankingMode
+        getHeight: _getHeight
     };
 
     return Tagbox;
