@@ -6,20 +6,23 @@ var TagCloud = (function(){
     //  Classes
     var tagcloudClass = 'urank-tagcloud',
         tagcloudControlsClass = 'urank-tagcloud-controls',
+        notFoundClass = 'not-found',
+        tagFreqSliderClass = 'urank-tagcloud-freq-slider',
         tagContainerOuterClass = 'urank-tagcloud-tag-container-outer',
         tagClass = 'urank-tagcloud-tag';
 
-    var $tagInput = $(''), $notFoundLabel = $('');
+    var $tagInput = $(''), $notFoundLabel = $(''), $tagFreqLabel = $(''), minFreq = 0, maxFreq = 0;
 
     //  Constructor
     function TagCloud(arguments) {
         _this = this;
         s = $.extend({
             root: '',
-            onKeywordEntered: function(term){},
             onTagInCloudMouseEnter: function(index){},
             onTagInCloudMouseLeave: function(index){},
             onTagInCloudClick: function(index){},
+            onKeywordEntered: function(keyword){},
+            onTagFrequencyChanged(min, max){}
         }, arguments);
         this.keywords = [];
         this.keywordsDict = {};
@@ -31,7 +34,16 @@ var TagCloud = (function(){
         if(_this.keywordsDict[stemmedText])
             s.onKeywordEntered.call(this, _this.keywordsDict[stemmedText]);
         else
-            $notFoundLabel.css('visibility', 'visible');
+            $notFoundLabel.addClass(notFoundClass);
+    };
+
+
+    var onSlide = function(event, ui) {
+        $tagFreqLabel.html('Keyword frequency: <strong>' + ui.values[0] + '</strong> - <strong>' + ui.values[1] + '</strong>');
+    };
+
+    var onSlideStopped = function(event, ui) {
+        s.onTagFrequencyChanged.call(this, ui.values[0], ui.values[1]);
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -49,20 +61,42 @@ var TagCloud = (function(){
         $root = $(s.root).empty().addClass(tagcloudClass);
         //  Create tagcloud controls
         var $tagcloudControls = $('<div/>').appendTo($root).addClass(tagcloudControlsClass);
-        $tagInput = $('<input>', { type: 'text', placeholder: 'Enter keyword' }).appendTo($tagcloudControls)
+
+        minFreq = _this.keywords[_this.keywords.length - 1].repeated;
+        maxFreq = _this.keywords[0].repeated;
+        $tagFreqLabel = $('<label/>').appendTo($tagcloudControls).addClass('tag-freq').html('Keyword frequency: <strong>' + minFreq + '</strong> - <strong>' + maxFreq + '</strong>');
+
+        var $tagFreqSlider = $('<div/>').appendTo($tagcloudControls)/*.addClass(tagFreqSliderClass)*/.slider({
+            range: true,
+            animate: true,
+            min: minFreq,
+            max: maxFreq,
+            values: [minFreq, maxFreq],
+            slide: onSlide,
+            stop: onSlideStopped
+        });
+
+        // Separator
+ //       $('<div/>').appendTo($tagcloudControls).addClass('sep-line');
+
+        // Notfound message label
+        $notFoundLabel = $('<a/>').appendTo($tagcloudControls);
+        // Keyword search input
+        $tagInput = $('<input>', { type: 'text', placeholder: 'Enter keyword' }).appendTo($tagcloudControls).addClass('not-found')
             .autocomplete({
                 source: _this.keywords.map(function(k){ return k.term })
             })
             .on('keyup', function(e){
-                $notFoundLabel.css('visibility', 'hidden');
+                $notFoundLabel.removeClass(notFoundClass);
                 if(e.keyCode == 13 && $(this).val() != '')
                     onTextEntered();
             });
         // Add button
-        $('<button/>').appendTo($tagcloudControls).append($('<span/>'))
-            .on('click', onTextEntered);
-        // Notfound message label
-        $notFoundLabel = $('<label/>').appendTo($tagcloudControls).addClass('message').text('Keyword not found!').css('visibility', 'hidden');
+//        $('<button/>').appendTo($tagcloudControls).append($('<span/>'))
+//            .on('click', onTextEntered);
+        //$('<span/>').appendTo($tagcloudControls).addClass('search-icon');
+
+        $('<a/>').appendTo($tagcloudControls).addClass('search-icon');
 
         // Create tag container
         var $outerTagContainer = $('<div></div>').appendTo($root).addClass(tagContainerOuterClass);
@@ -106,14 +140,18 @@ var TagCloud = (function(){
         return this;
     };
 
-    var _updateDroppedTag = function(index, queryColor) {
-        if(this.tagcloud) this.tagcloud.updateDroppedTag(index, queryColor);
+    var _updateClonOfDroppedTag = function(index, queryColor) {
+        if(this.tagcloud) this.tagcloud.updateClonOfDroppedTag(index, queryColor);
         return this;
     };
 
 
-    var _selectTag = function(keyword) {
-        this.tagcloud.selectTag(keyword);
+    var _focusTag = function(keyword) {
+        this.tagcloud.focusTag(keyword);
+    };
+
+    var _showTagsWithinRange = function(min, max) {
+        this.tagcloud.showTagsWithinRange(min, max);
     };
 
     var _clearEffects = function() {
@@ -142,8 +180,9 @@ var TagCloud = (function(){
         hoverTag: _hoverTag,
         tagClicked:_tagClicked,
         unhoverTag: _unhoverTag,
-        updateDroppedTag: _updateDroppedTag,
-        selectTag: _selectTag,
+        updateClonOfDroppedTag: _updateClonOfDroppedTag,
+        focusTag: _focusTag,
+        showTagsWithinRange: _showTagsWithinRange,
         clearEffects: _clearEffects,
         clear: _clear,
         destroy: _destroy

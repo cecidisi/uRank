@@ -179,7 +179,7 @@ var ContentList = (function(){
 
 
     var removeMovingStyle = function() {
-        $('.'+liClass).removeClass(liMovingUpClass).removeClass(liMovingDownClass);
+        $('.'+liClass).removeClass(liMovingUpClass).removeClass(liMovingDownClass).removeClass(liNotMovingClass);
     };
 
 
@@ -330,21 +330,18 @@ var ContentList = (function(){
         liHoveredClass = c.liHoverClass == '' ? liHoveredClass : c.liHoverClass;
         liLightBackgroundClass = c.liLightBackgroundClass == '' ? liLightBackgroundClass : c.liLightBackgroundClass;
         liDarkBackgroundClass = c.liDarkBackgroundClass == '' ? liDarkBackgroundClass : c.liDarkBackgroundClass;
-
     };
 
 
     var buildDefaultList = function() {
 
-        $('.'+listContainerClass).remove();
-        $listContainer = $('<div/>').appendTo($root).addClass(listContainerClass + ' ' + hiddenScrollbarClass);
+        $root.find('.'+listContainerClass).remove();
+        $root.find('.'+hiddenScrollbarInnerClass).remove();
 
-        var listHeight = 'calc(100% - ' + $header.fullHeight() || 0 + 'px)';
+        $listContainer = $('<div/>').appendTo($root).addClass(listContainerClass + ' ' + hiddenScrollbarClass);
         $scrollable = $('<div/>').appendTo($root)
             .addClass(hiddenScrollbarInnerClass)
-            //.css('height', listHeight)
             .on('scroll', onScroll);
-//        $scrollable.height($scrollable.fullHeight() - $header.fullHeight())
 
         $ul = $('<ul></ul>').appendTo($scrollable).addClass(ulClass +' '+ ulClassDefault);
 
@@ -550,6 +547,14 @@ var ContentList = (function(){
     };
 
 
+    var _clear = function() {
+        console.log(_this.opt);
+        if(!_this.opt.custom)
+            $root.empty();
+        /* todo else */
+    };
+
+
     var _destroy = function() {
         if(!this.opt || !this.opt.custom) return;
 
@@ -596,6 +601,7 @@ var ContentList = (function(){
         toggleFavicon: _toggleFavicon,
         toggleWatchListItem: _toggleWatchListItem,
         clearEffects: _clearEffects,
+        clear: _clear,
         destroy: _destroy,
         scrollTo: _scrollTo,
         getListHeight: _getListHeight

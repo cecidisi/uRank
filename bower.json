@@ -54,14 +54,16 @@
     "libs/modernizr-custom.js"
   ],
   "dependencies": {
+    "bootstrap": "~3.3.5",
     "colorbrewer": "~1.0.0",
     "d3": "~3.5.5",
     "d3pie": "~0.1.8",
     "dhtmlx": "~4.1.3",
+    "font-awesome": "~4.4.0",
     "hint.css": "~1.3.4",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",
-    "malihu-custom-scrollbar-plugin": "~3.0.8",
+    "malihu-custom-scrollbar-plugin": "~3.0.9",
     "underscore": "~1.8.3",
     "velocity": "~1.2.2"
   }

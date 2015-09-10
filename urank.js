@@ -34,17 +34,13 @@ var Urank = (function(){
         onTagInBoxMouseEnter: function(index){},
         onTagInBoxMouseLeave: function(index){},
         onTagInBoxClick: function(index){},
-        onTagFrequencyChanged: function(min, sup){},
+        onTagFrequencyChanged: function(min, max){},
         onKeywordEntered: function(term){}
     };
 
     var defaultLoadOptions = {
         tagCloud : {
-            module: 'default',      // default || landscape
-            misc: {
-                defaultBlockStyle: true,
-                customScrollBars: true
-            }
+            module: 'default'      // default || landscape
         },
         contentList: {
             header: true,        // boolean
@@ -201,7 +197,7 @@ var Urank = (function(){
         onTagDropped: function(index) {
             var queryTermColor = _this.queryTermColorScale(_this.keywords[index].stem);
             tagBox.dropTag(index, queryTermColor);
-            tagCloud.updateDroppedTag(index, queryTermColor);
+            tagCloud.updateClonOfDroppedTag(index, queryTermColor);
             s.onTagDropped.call(this, index, queryTermColor);
         },
 
@@ -231,14 +227,13 @@ var Urank = (function(){
         },
 
         onKeywordEntered: function(keyword){
-            tagCloud.selectTag(keyword);
+            tagCloud.focusTag(keyword);
             s.onKeywordEntered.call(this, keyword);
         },
 
-        onTagFrequencyChanged: function(min, sup){
-
-
-            s.onTagFrequencyChanged.call(this, min, sup);
+        onTagFrequencyChanged: function(min, max){
+            tagCloud.showTagsWithinRange(min, max)
+            s.onTagFrequencyChanged.call(this, min, max);
         },
 
         onTagInBoxMouseEnter: function(index) {
@@ -366,8 +361,8 @@ var Urank = (function(){
             tagCloud.clear();
             tagBox.clear();
             docViewer.clear();
-/*            contentList.destroy();
-            visCanvas.destroy();*/
+//            contentList.clear();
+            //visCanvas.destroy();
         }
     };
 
@@ -396,7 +391,8 @@ var Urank = (function(){
                 onTagInCloudMouseEnter: EVTHANDLER.onTagInCloudMouseEnter,
                 onTagInCloudMouseLeave: EVTHANDLER.onTagInCloudMouseLeave,
                 onTagInCloudClick: EVTHANDLER.onTagInCloudClick,
-                onKeywordEntered: EVTHANDLER.onKeywordEntered
+                onKeywordEntered: EVTHANDLER.onKeywordEntered,
+                onTagFrequencyChanged: EVTHANDLER.onTagFrequencyChanged
             },
 
             tagBox: {

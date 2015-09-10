@@ -178,7 +178,8 @@ header input[type="button"] {
 /*  LEFT -- Control Panel */
 
 .control-panel {
-    width: 15%;
+    min-width: 180px;
+    width: 10%;
     height: 100%;
     float: left;
     display: inline-block;
@@ -191,7 +192,7 @@ header input[type="button"] {
 .left-panel {
     display: inline-block;
     float:  left;
-    width: 28%;
+    width: 30%;
     height: 100%;
 }
 
@@ -199,7 +200,7 @@ header input[type="button"] {
 .central-panel {
     display: inline-block;
     float:  left;
-    width: 39%;
+    width: 40%;
     /*    width: 31%;*/
     height: 100%;
 }
@@ -207,7 +208,7 @@ header input[type="button"] {
 /*    RIGHT */
 .right-panel {
     float: right;
-    width: 18%;
+    width: 20%;
     height: 100%;
 }
 

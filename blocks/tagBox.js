@@ -17,8 +17,7 @@ var TagBox = (function(){
         highlightedClass = 'urank-tagbox-ranking-mode-header-highlighted',
         headerStyleClass = 'urank-header-style',
         modeLegendClass = 'urank-ranking-mode-legend',
-        legendWeightBar = 'urank-tagbox-ranking-weight-bar',
-        rankingWeightSliderClass = 'urank-tagbox-ranking-weight-slider';
+        legendWeightBar = 'urank-tagbox-ranking-weight-bar';
 
     //  Id prefix
     var tagIdPrefix = '#urank-tag-';
@@ -151,7 +150,7 @@ var TagBox = (function(){
         $('<div/>', { name: 'social', text: ' Social Ranking' }).appendTo($sumHeader).addClass(modeLegendClass);//.append($('<span/>'));
 
         // ranking weight slider
-        $('<div/>', { title: "Move right to increase Content Ranking's weight" }).appendTo($sumHeader).addClass(rankingWeightSliderClass).slider(_this.rankingWeightSliderOptions);
+        $('<div/>', { title: "Move right to increase Content Ranking's weight" }).appendTo($sumHeader).slider(_this.rankingWeightSliderOptions);
 
         // Split button
         $('<button/>', { title: 'Split rankings' }).appendTo($sumRankings).addClass('split').html("<span></span>")

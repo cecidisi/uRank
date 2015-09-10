@@ -1,12 +1,14 @@
 
 .urank-header-style {
     color: #888;
-    background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
+/*    background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));*/
+    background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1), rgba(240, 240, 240, 1));
     background: -o-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
     background: -moz-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
     background: -ms-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
     /* background: linear-gradient(to top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1)); */
-    box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;
+/*    box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;*/
+    box-shadow: inset .1em .1em .2em #ccc, inset -.1em -.1em .2em #ccc;
 }
 
 
@@ -43,45 +45,140 @@
     margin: 5px;
 }
 
+/* frequency tuning  */
+
+.urank-tagcloud-controls label.tag-freq {
+    display: block;
+    font-size: 0.9em;
+    color: white;
+}
+
+.urank-tagcloud-controls label.tag-freq strong {
+    color: firebrick;
+}
+
+
+.urank-tagcloud-controls div.ui-slider {
+    display: block;
+    width: 90%;
+    height: 5px;
+    margin: 3px 5%;
+}
+
+
+.urank-tagcloud-controls div.ui-slider .ui-slider-handle {
+    top: -4px;
+    width: 11px;
+    height: 11px;
+    border-radius: 6px;
+    background-color: rgba(208, 62, 62, 1);
+    border: 1px solid rgba(148,4,4, 1);
+}
+
+.urank-tagcloud-controls div.ui-slider .ui-slider-handle:hover {
+    background-color: rgba(168, 22, 22, 1);
+}
+
+.urank-tagcloud-controls div.ui-slider .ui-slider-range {
+    background: #ddd;
+}
+
+.urank-tagcloud-controls div.sep-line {
+    height: 0px;
+    width: calc(100% - 4px);
+    margin: 1px 2px;
+    border-bottom: 1px solid rgba(250,250,250,.8);
+}
+
+/* keyword search */
+
+.urank-tagcloud-controls a {
+    position: relative;
+    display: block;
+    margin-top: 13px;
+}
+
+.urank-tagcloud-controls a.not-found:before,
+.urank-tagcloud-controls a.not-found:after {
+    right: 100%;
+    bottom: 50%;
+
+}
+
+.urank-tagcloud-controls a.not-found:before {
+    content: '';
+    position: absolute;
+    background: transparent;
+    border: 6px solid transparent;
+    z-index: 1000001;
+
+    border-left-color: rgb(179, 78, 77);
+    margin-right: -6px;
+    margin-bottom: -6px;
+}
+
+.urank-tagcloud-controls a.not-found:after {
+    margin-bottom: -14px;
+    box-shadow: 4px 4px 8px rgba(0,0,0,.3);
+
+    content: "Keyword not found!";
+    background-color: rgb(179, 78, 77);
+    color: #fff;
+    padding: 8px 10px;
+    font-size: .8em;
+    line-height: 12px;
+    white-space: nowrap;
+
+    transition: .3s ease;
+    transform: translateX(-6px);
+    transition-delay: 100ms;
+
+    position: absolute;
+
+}
+
+
 .urank-tagcloud-controls input[type="text"] {
     display: inline-block;
-    height: 20px;
+    height: 18px;
     width: calc(100% - 40px);
-    margin: 2px;
+    max-width: 250px;
+/*    margin: 2px;*/
     background-color: white;
-    border: 1px #ddd solid;
+    border: 1px #eee solid;
     border-radius: 5px;
     color: #666;
-    margin-top: 15px;
-}
-
-.urank-tagcloud-controls button {
-    display: inline-block;
-    min-width: 30px;
-    height: 24px;
-    margin: 2px;
-    border-radius: 5px;
-    padding: 1px 3px;
-    margin-top: 15px;
+    margin-top: 13px;
+    padding-left: 2px;
 }
 
 
-.urank-tagcloud-controls button span {
-    display: block;
-    background-image: url(../media/in.png);
+/*
+.urank-tagcloud-controls span.search-icon {
+    position: relative;
+    left: -16px;
+    width: 16px;
+    height: 16px;
+    background-image: url(../media/search.png);
     background-repeat: no-repeat;
-    background-position: 3px 3px;
-    width: 20px;
-    height: 20px;
+    background-position: 0px 0px;
+}
+*/
+
+
+.urank-tagcloud-controls a.search-icon:before {
+    content: '\f002';
+    font-family: FontAwesome;
+    font-size: 1.1em;
+    position: absolute;
+    top: -7px;
+    right: 5px;
+    text-decoration: none;
 }
 
-.urank-tagcloud-controls label {
-    display: block;
-    color: red;
-    font-size: 0.9em;
-}
 
 
+/*****************/
 .urank-tagcloud-tag-container-outer {
     height: calc(100% - 85px);
     width: calc(100% - 10px);
@@ -91,6 +188,7 @@
 
 .urank-tagcloud-tag-container {
     width: calc(100% - 4px);
+    min-height: calc(100% - 10px);
     padding: 5px 2px;
     text-align: center;
     background: -webkit-linear-gradient(top, rgba(255, 255, 255, 1), rgba(250, 250, 250, 1));
@@ -114,11 +212,14 @@
     box-shadow: 0em 0.1em 0.1em #888;
     font-size: 0.9em;
     font-weight: 600;
-/*  color: #111;*/
+}
+
+
+.urank-tagcloud-tag.active {
+    /*  color: #111;*/
     color: ghostwhite;
-/*  text-shadow: 0px 1px 5px #fff, 0px -1px 5px #fff; */
+    /*  text-shadow: 0px 1px 5px #fff, 0px -1px 5px #fff; */
     text-shadow: 0px 1px 1px #888, 0px -1px 1px #888;
-    cursor: move;
 }
 
 
@@ -136,6 +237,7 @@
     border: solid 2px rgb(0, 102, 255);
     color: #eee;
     text-shadow: none;
+    cursor: move;
 }
 
 
@@ -181,7 +283,7 @@
 }
 
 
-.urank-tagcloud-tag:hover .urank-tagcloud-tag-hintt:hover {
+.urank-tagcloud-tag:hover .urank-tagcloud-tag-hint:hover {
     transform: scale(1.1);
 }
 
@@ -237,7 +339,7 @@
 
 div.urank-ranking-mode-legend {
     display: inline-block;
-    padding: 4px 0px;
+    padding: 2px 0px;
 }
 
 div.urank-ranking-mode-legend.plus-symbol span {
@@ -253,11 +355,13 @@ div.urank-ranking-mode-legend.plus-symbol span {
 div.urank-tagbox-ranking-weight-bar {
     display: inline-block;
     position: relative;
-    top: 2px;
+    top: 3px;
     width: 14px;
     height: 14px;
-    margin: 5px 3px 0px 8px;
+    margin: 2px 3px 0px 8px;
     background: rgba(0,0,0,.5);
+    border: 1px solid#000;
+    border-radius: 2px;
 }
 
 .urank-tagbox-ranking-mode-header-highlighted {
@@ -278,7 +382,7 @@ div.urank-tagbox-ranking-weight-bar {
 
 .urank-tagbox-ranking-mode-header button {
     float: left;
-    min-width: 30px !important;
+    min-width: 34px !important;
     height: 22px;
     position: relative;
     top: -24px;
@@ -286,7 +390,7 @@ div.urank-tagbox-ranking-weight-bar {
 
 
 .urank-tagbox-ranking-mode-header button.sum {
-    left: calc(50% - 15px);
+    left: calc(50% - 17px);
 }
 
 
@@ -297,10 +401,10 @@ div.urank-tagbox-ranking-weight-bar {
 
 .urank-tagbox-ranking-mode-header button span {
     display: block;
-    width: 16px;
+    width: 18px;
     height: 16px;
     background-repeat: no-repeat;
-    background-position: 0px 0px;
+    background-position: 2px 0px;
 }
 
 .urank-tagbox-ranking-mode-header button.sum span {
@@ -312,16 +416,22 @@ div.urank-tagbox-ranking-weight-bar {
 }
 
 
-.urank-tagbox-ranking-weight-slider {
+.urank-tagbox-ranking-mode-header .ui-slider {
     display: inline-block;
     position: relative;
     width: 18%;
-    /* margin: 0px 15px; */
+    height: 7px;
     float: right;
-    top: 7px;
+    top: 8px;
     right: 16px;
 }
 
+.urank-tagbox-ranking-mode-header .ui-slider .ui-slider-handle {
+    top: -4px;
+    width: 13px;
+    height: 13px;
+    border-radius: 7px;
+}
 
 
 /*****/
@@ -330,7 +440,7 @@ div.urank-tagbox-ranking-weight-bar {
     overflow-x: hidden;
     overflow-y: auto;
     align-items: center;
-    width: 100%;
+    width: calc(100% - 6px);
     height: calc(100% - 25px);
     padding: 0px 3px;
     list-style-type: none;
@@ -359,7 +469,10 @@ div.urank-tagbox-ranking-weight-bar {
     box-shadow: 0em 7px 6px -6px #333;
     -webkit-text-shadow: 0px 1px 5px #eee, 0px -1px 5px #eee;
     text-shadow: 0px 1px 5px #eee, 0px -1px 5px #eee;
-    font-size: .95em;
+    font-size: .9em;
+    color: #fff;
+    font-weight: 600;
+    white-space: nowrap;
     color: #222;
 }
 
@@ -770,6 +883,14 @@ Document Panel (right) - for visualizing highlighted text
 *   Document Controls (right)
 *
 */
+
+.urank-docviewrr-outer {
+    background: rgba(0,0,0,0.2);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
 .urank-docviewer-container {
     position: absolute;
     display: block;
