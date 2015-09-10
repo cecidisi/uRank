@@ -6687,7 +6687,7 @@ module.exports = function() {
     multiLingualService.getTextLanguage = function(text, language) {
     	//if(language == "unknown" || language == "mul" || !language) {
     		languageDetector.info(text, function(languageInfo) {
-    			language = languageInfo[0];
+    			language = languageInfo[0] == "unknown" ? language : languageInfo[0]; 
 			});
     	//}
     	return language; 
