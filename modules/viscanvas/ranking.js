@@ -68,7 +68,7 @@ var Ranking = (function(){
                         desc: 'TU',
                         x0: x0,
                         x1: x0 + d.ranking.tuScore,
-                        color: '#606060'
+                        color: 'rgb(140, 140, 140)'
                     });
 
                     // Tag information
