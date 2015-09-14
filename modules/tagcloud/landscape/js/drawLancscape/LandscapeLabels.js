@@ -247,12 +247,10 @@ function LandscapeLabels() {
 			$.each(labelsText, function(index, text) {
 				var stem = text;
 				var labelIndex = totalLabelCounter;
-				if(landscapeConfig.getLandscapeType() == "urankLandscape") {
-					for(var j=0; j < keywordsObj.length; j++) {
-						if(keywordsObj[j].term == text) {
-							stem = keywordsObj[j].stem;
-							labelIndex = keywordsObj[j].index;
-						}
+				for(var j=0; j < keywordsObj.length; j++) {
+					if(keywordsObj[j].term == text) {
+						stem = keywordsObj[j].stem;
+						labelIndex = keywordsObj[j].index;
 					}
 				}
 
@@ -321,9 +319,15 @@ function LandscapeLabels() {
 					}).on("click", function(d, i) {
 						var tag = $( this ).html();
 						var stem = d3.select(this).attr("stem"); 
+						
 						if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
-							var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 				
-							FilterHandler.setCurrentFilterCategories('category', tagDataset.dataList, "tag", [tag]);
+							var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 	
+					
+							FilterHandler.clearList();
+							var datasetList = tagDataset.dataList; 
+							for(var i=0; i < datasetList.length; i++ ) {
+								FilterHandler.singleItemSelected(datasetList[i], true); 
+							}		
 						}
 
 					})

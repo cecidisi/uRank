@@ -44,7 +44,12 @@ var WordsCloud = (function(){
         	var first = $tag.first().text();
         	if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
 				var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 				
-				FilterHandler.setCurrentFilterCategories('category', tagDataset.dataList, "tag", [tagLabel]);
+			//	FilterHandler.setCurrentFilterCategories('category', tagDataset.dataList, "tag", [tagLabel]);
+				FilterHandler.clearList();
+				var datasetList = tagDataset.dataList; 
+				for(var i=0; i < datasetList.length; i++ ) {
+					FilterHandler.singleItemSelected(datasetList[i], true); 
+				}		
 			}		
         },
 
@@ -463,9 +468,4 @@ function WordsCloudLandscape() {
 
 			});
 	}
-	
-
 }
-  	
-
-  	
