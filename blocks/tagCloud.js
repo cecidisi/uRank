@@ -40,9 +40,6 @@ var TagCloud = (function(){
 
     var onSlide = function(event, ui) {
         $tagFreqLabel.html('Keyword frequency: <strong>' + ui.values[0] + '</strong> - <strong>' + ui.values[1] + '</strong>');
-    };
-
-    var onSlideStopped = function(event, ui) {
         s.onTagFrequencyChanged.call(this, ui.values[0], ui.values[1]);
     };
 
@@ -66,18 +63,14 @@ var TagCloud = (function(){
         maxFreq = _this.keywords[0].repeated;
         $tagFreqLabel = $('<label/>').appendTo($tagcloudControls).addClass('tag-freq').html('Keyword frequency: <strong>' + minFreq + '</strong> - <strong>' + maxFreq + '</strong>');
 
-        var $tagFreqSlider = $('<div/>').appendTo($tagcloudControls)/*.addClass(tagFreqSliderClass)*/.slider({
+        var $tagFreqSlider = $('<div/>').appendTo($tagcloudControls).slider({
             range: true,
             animate: true,
             min: minFreq,
             max: maxFreq,
             values: [minFreq, maxFreq],
-            slide: onSlide,
-            stop: onSlideStopped
+            slide: onSlide
         });
-
-        // Separator
- //       $('<div/>').appendTo($tagcloudControls).addClass('sep-line');
 
         // Notfound message label
         $notFoundLabel = $('<a/>').appendTo($tagcloudControls);
@@ -91,11 +84,7 @@ var TagCloud = (function(){
                 if(e.keyCode == 13 && $(this).val() != '')
                     onTextEntered();
             });
-        // Add button
-//        $('<button/>').appendTo($tagcloudControls).append($('<span/>'))
-//            .on('click', onTextEntered);
-        //$('<span/>').appendTo($tagcloudControls).addClass('search-icon');
-
+        // Search icon in text input
         $('<a/>').appendTo($tagcloudControls).addClass('search-icon');
 
         // Create tag container
