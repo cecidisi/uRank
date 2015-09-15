@@ -22,7 +22,7 @@ var Urank = (function(){
         onItemClicked: function(documentId, event){},
         onItemMouseEnter: function(documentId){},
         onItemMouseLeave: function(documentId){},
-        onFaviconClicked: function(documentId){},
+        onFaviconClicked: function(documentId, event){},
         onWatchiconClicked: function(documentId){},
         onTagInCloudMouseEnter: function(index){},
         onTagInCloudMouseLeave: function(index){},
@@ -304,9 +304,9 @@ var Urank = (function(){
             s.onItemMouseLeave.call(this, documentId);
         },
 
-        onFaviconClicked: function(documentId){
+        onFaviconClicked: function(documentId, event){
             contentList.toggleFavicon(documentId);
-            s.onFaviconClicked.call(this, documentId);
+            s.onFaviconClicked.call(this, documentId, event);
         },
 
         onWatchiconClicked: function(documentId) {
