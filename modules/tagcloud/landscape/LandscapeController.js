@@ -304,6 +304,15 @@ var LandscapeController = (function(){
 					documentIds.push(id);
 				});
 				var datasetList = me.dataProcessor.getDatasetByIds(documentIds); 
+				
+				if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+					FilterHandler.clearList();
+					for(var i=0; i < datasetList.length; i++ ) {
+						FilterHandler.singleItemSelected(datasetList[i], true); 
+					}
+				}
+				
+				
 				var tagCloundData =  me.dataProcessor.getTagCloudData(documentIds);
 				var keywordsData =  me.dataProcessor.getTagCloudKeywordsAndData(documentIds);
 				
@@ -317,15 +326,7 @@ var LandscapeController = (function(){
 				else {
 					me.stateCurrent.drawTagsCloud(keywordsData);
 				}
-				// 
-				
-		
-				if(landscapeConfig.getLandscapeType() != "urankLandscape") {
-					FilterHandler.clearList();
-					for(var i=0; i < datasetList.length; i++ ) {
-						FilterHandler.singleItemSelected(datasetList[i], true); 
-					}
-				}
+	 
 				landscapeZoom.on("zoom",zoomLandscape);
 				landscapeZoom.translate(landscapeTranslate)
 				landscapeZoom.scale(landscapeScale)		

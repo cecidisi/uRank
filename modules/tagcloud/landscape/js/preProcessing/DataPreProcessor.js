@@ -178,7 +178,10 @@ var DataPreProcessor = (function(){
 		for (var j = 0; j < documentsIds.length; j++) {
 			var id = documentsIds[j];
 			if (dataLength > id) {
-				documentDataset.push(dataset[id]);
+				var docObject = dataset[id];  
+				var tempId = docObject.idOrig ? docObject.idOrig : docObject.id; 
+				docObject.id = tempId; 
+				documentDataset.push(docObject);
 			}
 		}
 		return documentDataset;
