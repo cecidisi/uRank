@@ -154,13 +154,17 @@ var DataPreProcessor = (function(){
 	};
 
 	DataPreProcessor.prototype.getObjectsBasedOnTag = function(tag) {
+
 		var docIndices = [];
 		var docData = []
 		dataset.forEach(function(d,index){
 			
 			if(Object.keys(d.keywords).indexOf(tag) != -1) {
+				var docObject = d; 
 				docIndices.push(index);
-				docData.push(d);
+				var tempId = docObject.idOrig ? docObject.idOrig : docObject.id; 
+				docObject.id = tempId; 
+				docData.push(docObject);
 			}
         });
         

@@ -172,7 +172,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
       	var loadingLandscape = "<div id=\"loadingLandscape\" style=\"margin-top: "+ (height/2)+"px;\"></br><img src=\"uRank/modules/tagcloud/landscape/images/ajax-loader.gif\"/></div>";
         var landscapeDiv = loadingLandscape + landscapeBoxDiv + landscapeLabelsDragableDiv +  closeDiv + landscapeHeader + closeDiv +  landscapeMainVis + closeDiv + landscapeTagCloudVis + closeDiv + closeDiv; 
 		
-		var legendWrapper = d3.select(domRoot).append("div").attr("id", "div-landscape-wrap-legends").style("width", "6em"); 
+		var legendWrapper = d3.select(domRoot).append("div").attr("id", "div-landscape-wrap-legends").style("width", "6.2em"); 
 		$(domRoot).append(landscapeDiv); 
 		
 		
@@ -190,6 +190,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 
        	data.forEach(function(d, i){
        		d.index = i;
+       		d.idOrig = d.id; 
        		d.id = d.id.replace(/([^A-Za-z0-9[\]{}_.:-])\s?/g, '_');
        		if (d.description == null || d.description == 'undefined') {
 				d.description = "";
