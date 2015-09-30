@@ -4,7 +4,8 @@ var DocViewer = (function(){
     // Settings
     var s = {};
     // Classes
-    var docViewerContainerClass = 'urank-docviewer-container',
+    var docViewerOuterClass = 'urank-docviewer-outer',
+        docViewerContainerClass = 'urank-docviewer-container',
         defaultDocViewerContainerClass = 'urank-docviewer-container-default',
         detailsSectionClass = 'urank-docviewer-details-section',
         contentSectionOuterClass = 'urank-docviewer-content-section-outer',
@@ -12,7 +13,7 @@ var DocViewer = (function(){
     // Id prefix
     var detailItemIdPrefix = '#urank-docviewer-details-';
     // Selectors
-    var $root = $(''),
+    var $root = $(''), $container = $(''),
         $detailsSection = $(''),
         $contentSection = $('');
     // Helper
@@ -38,6 +39,7 @@ var DocViewer = (function(){
         s = $.extend({
             root: ''
         }, arguments);
+        _this = this;
     }
 
 
@@ -45,16 +47,20 @@ var DocViewer = (function(){
 
         this.opt = opt.misc;
 
-        if(s.root == '')
-            $root = $('<div/>').appendTo('body');
-        else
+        if(s.root == '') {
+            $root = $('<div/>').appendTo('body').addClass(docViewerOuterClass).hide();
+            $container = $('<div/>').appendTo($root).addClass(docViewerContainerClass);
+        }
+        else {
             $root = $(s.root).empty();
+            $container = $root;
+        }
 
-        var containerClasses = (this.opt.defaultBlockStyle) ? docViewerContainerClass +' '+ defaultDocViewerContainerClass : docViewerContainerClass;
-        $root.addClass(containerClasses).hide();
+        $root.on('click', function(event){ event.stopPropagation(); _this.clear(); })
+        $container.on('click', function(event){ event.stopPropagation() });
 
         // Append details section, titles and placeholders for doc details
-        $detailsSection = $("<div class='" + detailsSectionClass + "'></div>").appendTo($root);
+        $detailsSection = $("<div class='" + detailsSectionClass + "'></div>").appendTo($container);
 
         var $titleContainer = $('<div></div>').appendTo($detailsSection);
         $("<label>Title:</label>").appendTo($titleContainer);
@@ -67,7 +73,7 @@ var DocViewer = (function(){
         });
 
         // Append content section for snippet placeholder
-        var $contentSectionOuter = $('<div></div>').appendTo($root).addClass(contentSectionOuterClass);
+        var $contentSectionOuter = $('<div></div>').appendTo($container).addClass(contentSectionOuterClass);
         $contentSection = $('<div></div>').appendTo($contentSectionOuter).addClass(contentSectionClass);
         $('<p></p>').appendTo($contentSection);
 
@@ -86,9 +92,8 @@ var DocViewer = (function(){
     * @param {Array} keywords (only stems)
     */
     var _showDocument = function(document, keywords, colorScale){
-         console.log(document);
-        $root.slideDown();
 
+        $root.show();
         $(detailItemIdPrefix + 'title').html(getStyledText(document.title, keywords, colorScale));
 
         var getFacet = function(facetName, facetValue){

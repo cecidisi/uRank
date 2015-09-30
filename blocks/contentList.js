@@ -482,6 +482,8 @@ var ContentList = (function(){
         stopAnimation();
         $('.'+liClass).css("opacity", "0.3");
         $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').css("opacity", "1");
+
+        //TODO handek opacity with classes and make selected item more noticeable
     };
 
 
