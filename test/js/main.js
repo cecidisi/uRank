@@ -32,6 +32,12 @@
                 lightBackgroundColor: '#dedede',
                 darkBackgroundColor: '#efefef'
             },
+        },
+        keywordExtractor :{
+//            minDocFrequency: 2,
+//            minRepetitionsInDocument: 1,
+            maxKeywordDistance: 3,
+            minRepetitionsProxKeywords: 4
         }
     }
 

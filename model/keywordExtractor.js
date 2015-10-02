@@ -242,7 +242,6 @@ var KeywordExtractor = (function(){
                 }
             });
         });
-
         return _keywordDict;
     };
 

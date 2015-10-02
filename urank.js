@@ -35,7 +35,8 @@ var Urank = (function(){
         onTagInBoxMouseLeave: function(index){},
         onTagInBoxClick: function(index){},
         onTagFrequencyChanged: function(min, max){},
-        onKeywordEntered: function(term){}
+        onKeywordEntered: function(term){},
+        onDocViewerHidden: function(){}
     };
 
     var defaultLoadOptions = {
@@ -90,6 +91,12 @@ var Urank = (function(){
         misc: {
             tagColorArray: tagColorRange,
             queryTermColorArray: queryTermColorRange,
+        },
+        keywordExtractor :{
+            minDocFrequency: 2,
+            minRepetitionsInDocument: 1,
+            maxKeywordDistance: 5,
+            minRepetitionsProxKeywords: 4
         }
     };
 
@@ -252,18 +259,19 @@ var Urank = (function(){
         },
 
         onItemClicked : function(documentId) {
-            _this.selectedId = _this.selectedId === documentId ? STR_UNDEFINED : documentId;
+//            _this.selectedId = _this.selectedId === documentId ? STR_UNDEFINED : documentId;
+            _this.selectedId = documentId;
 
-            if(_this.selectedId !== STR_UNDEFINED) {    // select
+//            if(_this.selectedId !== STR_UNDEFINED) {    // select
                 contentList.selectListItem(documentId);
                 visCanvas.selectItem(documentId);
                 docViewer.showDocument(_this.rankingModel.getDocumentById(documentId), _this.selectedKeywords.map(function(k){return k.stem}), _this.queryTermColorScale);
-            }
-            else {                   // deselect
-                contentList.deselectAllListItems();
-                visCanvas.deselectAllItems();
-                docViewer.clear();
-            }
+//            }
+//            else {                   // deselect
+//                contentList.deselectAllListItems();
+//                visCanvas.deselectAllItems();
+//                docViewer.clear();
+//            }
             tagCloud.clearEffects();
             s.onItemClicked.call(this, documentId);
         },
@@ -288,6 +296,13 @@ var Urank = (function(){
         onWatchiconClicked: function(documentId) {
             contentList.toggleWatchListItem(documentId);
             s.onWatchiconClicked.call(this, documentId);
+        },
+
+
+        onDocViewerHidden: function() {
+            docViewer.clear();
+            contentList.deselectAllListItems();
+            visCanvas.deselectAllItems();
         },
 
         onRootMouseDown: function(event){
@@ -416,7 +431,8 @@ var Urank = (function(){
             },
 
             docViewer: {
-                root: s.docViewerRoot
+                root: s.docViewerRoot,
+                onDocViewerHidden: EVTHANDLER.onDocViewerHidden
             }
         };
 

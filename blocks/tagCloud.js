@@ -11,7 +11,7 @@ var TagCloud = (function(){
         tagContainerOuterClass = 'urank-tagcloud-tag-container-outer',
         tagClass = 'urank-tagcloud-tag';
 
-    var $tagInput = $(''), $notFoundLabel = $(''), $tagFreqLabel = $(''), minFreq = 0, maxFreq = 0;
+    var $tagInput = $(''), $notFoundLabel = $(''), $tagFreqLabel = $(''), $tagFreqSlider = $(''), $outerTagContainer = $(''), minFreq = 0, maxFreq = 0;
 
     //  Constructor
     function TagCloud(arguments) {
@@ -26,8 +26,29 @@ var TagCloud = (function(){
         }, arguments);
         this.keywords = [];
         this.keywordsDict = {};
+        init();
     }
 
+    function init() {
+
+        // Empty tag container and add appropriateclass
+        $root = $(s.root);
+        $root.empty().addClass(tagcloudClass);
+        //  Create tagcloud controls
+        var $tagcloudControls = $('<div/>').appendTo($root).addClass(tagcloudControlsClass);
+        $tagFreqLabel = $('<label/>').appendTo($tagcloudControls).addClass('tag-freq');
+        $tagFreqSlider = $('<div/>').appendTo($tagcloudControls);
+
+        // Notfound message label
+        $notFoundLabel = $('<a/>').appendTo($tagcloudControls);
+        // Keyword search input
+        $tagInput = $('<input>', { type: 'text', placeholder: 'Enter keyword' }).appendTo($tagcloudControls);
+        // Search icon in text input
+        $('<a/>').appendTo($tagcloudControls).addClass('search-icon');
+
+        // Create tag container
+        $outerTagContainer = $('<div></div>').appendTo($root).addClass(tagContainerOuterClass);
+    }
 
     var onTextEntered = function() {
         var stemmedText = $tagInput.val().stem();
@@ -51,19 +72,14 @@ var TagCloud = (function(){
     */
     var _build = function(keywords, data, colorScale, opt, keywordsDict){
 
-        this.keywords = keywords;
-        this.keywordsDict = keywordsDict;
-
-        // Empty tag container and add appropriateclass
-        $root = $(s.root).empty().addClass(tagcloudClass);
-        //  Create tagcloud controls
-        var $tagcloudControls = $('<div/>').appendTo($root).addClass(tagcloudControlsClass);
+        _this.keywords = keywords;
+        _this.keywordsDict = keywordsDict;
 
         minFreq = _this.keywords[_this.keywords.length - 1].repeated;
         maxFreq = _this.keywords[0].repeated;
-        $tagFreqLabel = $('<label/>').appendTo($tagcloudControls).addClass('tag-freq').html('Keyword frequency: <strong>' + minFreq + '</strong> - <strong>' + maxFreq + '</strong>');
+        $tagFreqLabel.html('Keyword frequency: <strong>' + minFreq + '</strong> - <strong>' + maxFreq + '</strong>');
 
-        var $tagFreqSlider = $('<div/>').appendTo($tagcloudControls).slider({
+        $tagFreqSlider.slider({
             range: true,
             animate: true,
             min: minFreq,
@@ -72,23 +88,16 @@ var TagCloud = (function(){
             slide: onSlide
         });
 
-        // Notfound message label
-        $notFoundLabel = $('<a/>').appendTo($tagcloudControls);
         // Keyword search input
-        $tagInput = $('<input>', { type: 'text', placeholder: 'Enter keyword' }).appendTo($tagcloudControls).addClass('not-found')
-            .autocomplete({
+        $tagInput.autocomplete({
                 source: _this.keywords.map(function(k){ return k.term })
             })
-            .on('keyup', function(e){
+            .off('keyup').on('keyup', function(e){
                 $notFoundLabel.removeClass(notFoundClass);
                 if(e.keyCode == 13 && $(this).val() != '')
                     onTextEntered();
             });
-        // Search icon in text input
-        $('<a/>').appendTo($tagcloudControls).addClass('search-icon');
 
-        // Create tag container
-        var $outerTagContainer = $('<div></div>').appendTo($root).addClass(tagContainerOuterClass);
         // Initialize selected tagcloud module
         var tagcloudModule = TAGCLOUD_MODULES[opt.module] || TAGCLOUD_MODULES.default;
         this.tagcloud = new tagcloudModule($.extend(s, { root: '.'+tagContainerOuterClass }));
@@ -150,7 +159,14 @@ var TagCloud = (function(){
 
 
     var _clear = function() {
-        if(this.tagcloud) this.tagcloud.clear();
+
+        if(this.tagcloud) {
+            $tagFreqSlider.slider('destroy');
+            $tagInput.val('').autocomplete('destroy');
+            $notFoundLabel.removeClass(notFoundClass);
+            $outerTagContainer.empty();
+            this.tagcloud.clear();
+        }
         return this;
     };
 

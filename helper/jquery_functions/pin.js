@@ -18,7 +18,7 @@
             if($this.css('visibility') == 'visible') {
 
                 if(options.relativeTo !== 'none') {
-                    var $parent = options.relativeTo == 'parent' ? $this.parent() : $(options.relativeTo);
+                    var $parent = options.relativeTo == 'parent' ? $this.parent() : options.relativeTo;
                     options.left = options.right ? options.left + $parent.fullOffset().left + $parent.fullWidth() + options.right : options.left + $parent.fullOffset().left;
                     options.top = options.bottom ? options.top + $parent.fullOffset().top + $parent.fullHeight() + options.bottom : options.top + $parent.fullOffset().top;
                 }

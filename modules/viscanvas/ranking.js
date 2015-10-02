@@ -137,7 +137,8 @@ var Ranking = (function(){
 
             y = d3.scale.ordinal()
                 .domain(data.map(function(d){ return d.id; }))
-                .rangeBands( [0, height], .02);
+//                .rangeBands( [0, height], .02);
+                .rangeBands( [0, height]);
 
             //color = colorScale;
 
@@ -201,7 +202,8 @@ var Ranking = (function(){
             x.rangeRound( [0, width] )
              .domain([0, xUpperLimit]).copy();
 
-            y.rangeBands( [0, height], .02);
+//            y.rangeBands( [0, height], .02);
+            y.rangeBands( [0, height]);
             y.domain(data.map(function(d){ return d.id })).copy();
 
 
@@ -263,6 +265,7 @@ var Ranking = (function(){
                     .attr("height", y.rangeBand())
                     .attr("x", function(d) { return x(d.x0); })
                     .attr("width", 0)
+                    .attr('transform', 'translate(0, 0.2)')
                     .style("fill", function(d) { return d.color; });
 
                 var bars = stackedBars.selectAll('.'+barClass);
@@ -390,39 +393,6 @@ var Ranking = (function(){
             var feMerge = filter.append("feMerge");
             feMerge.append("feMergeNode").attr("in", "offsetBlur")
             feMerge.append("feMergeNode").attr("in", "SourceGraphic");
-
-//
-//            // svg tagged elements
-//            // filters go in defs element
-//            defs = svgTagged.append("defs");
-//
-//            // create filter with id #drop-shadow
-//            // height=130% so that the shadow is not clipped
-//            filter = defs.append("filter")
-//            .attr("id", "drop-shadow")
-//            .attr("height", "130%");
-//
-//            // SourceAlpha refers to opacity of graphic that this filter will be applied to
-//            // convolve that with a Gaussian with standard deviation 3 and store result
-//            // in blur
-//            filter.append("feGaussianBlur")
-//                .attr("in", "SourceAlpha")
-//                .attr("stdDeviation", 2)
-//                .attr("result", "blur");
-//
-//            // translate output of Gaussian blur to the right and downwards with 2px
-//            // store result in offsetBlur
-//            filter.append("feOffset")
-//                .attr("in", "blur")
-//                .attr("dx", 0)
-//                .attr("dy", 2)
-//                .attr("result", "offsetBlur");
-//
-//            // overlay original SourceGraphic over translated blurred opacity by using
-//            // feMerge filter. Order of specifying inputs is important!
-//            feMerge = filter.append("feMerge");
-//            feMerge.append("feMergeNode").attr("in", "offsetBlur")
-//            feMerge.append("feMergeNode").attr("in", "SourceGraphic");
         },
 
         /*****************************************************************************************************************

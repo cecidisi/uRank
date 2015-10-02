@@ -18,7 +18,8 @@ var TagCloudDefault = (function(){
         hiddenClass = 'hidden',
         tagHintClass = 'urank-tagcloud-tag-hint',
         keywordHintClass = 'urank-tagcloud-tag-cooccurence-hint',
-        documentHintClass = 'urank-tagcloud-tag-document-hint';
+        documentHintClass = 'urank-tagcloud-tag-document-hint',
+        addIcon = 'urank-tagcloud-tag-add-icon';
     //  Ids
     var tagIdPrefix = '#urank-tag-',
         tagPiePrefix = '#urank-tag-pie-';
@@ -249,7 +250,7 @@ var TagCloudDefault = (function(){
             tooltipMsg = k.keywordsInProximity.length > 0 ? tooltipMsg + ('<br/>' + k.keywordsInProximity.length + " other keywords appear frequently close to " + termUpperCase) : tooltipMsg;
 
             var $tag = $('<div/>', { id: 'urank-tag-' + i, 'tag-pos': i, stem: k.stem, text: k.term, title: tooltipMsg }).appendTo($tagContainer)
-                .addClass(tagClass + ' ' + activeClass + ' hint--bottom hint--info')
+                .addClass(tagClass + ' ' + activeClass)
                 .data({ 'originalColor': _this.colorScale(k.colorCategory) })
                 .hide()
                 .fadeIn((i+1)*20);
@@ -259,6 +260,13 @@ var TagCloudDefault = (function(){
             pieOptions.data.content[0].value = k.inDocument.length;
             pieOptions.data.content[1].value = _this.data.length - k.inDocument.length || 0.1;
             var tagPie = new d3pie(tagPiePrefix+''+i, pieOptions);
+
+//            var $addIcon = $('<div/>').appendTo($tag).addClass(addIcon);
+//            $addIcon.width($tag.fullWidth())
+//                .height($tag.fullHeight())
+//                .pin({ top: $tag.fullOffset().top, left: $tag.fullOffset().left, relativeTo: 'none'})
+//                .css('background', 'rgba(0,0,0,0.2)');
+//
 
             // Append red circle for keywords in proximity hint
             if(k.keywordsInProximity.length > 0)
@@ -305,14 +313,15 @@ var TagCloudDefault = (function(){
     var _tagClicked = function(index) {
 
         if(!_this.isTagDragged) {
-            var $tag = $('.'+tagClass + '[tag-pos=' + index + ']')
-                .addClass(selectedClass).removeClass(hiddenClass).setTagStyle()
-            _clearEffects();
+            var $tag = $('.'+tagClass + '[tag-pos=' + index + ']').addClass(selectedClass).removeClass(hiddenClass).setTagStyle()
+            _this.clearEffects();
 
             var proxKeywords = _this.keywords[index].keywordsInProximity;
 
             $tag.siblings().each(function(i, sibling){
                 var $siblingTag = $(sibling);
+                if($siblingTag.is('.ui-draggable'))
+                    $siblingTag.draggable('destroy');
                 $siblingTag.find('.'+keywordHintClass).off().css('visibility', 'hidden');
                 $siblingTag.find('.'+documentHintClass).off().css('visibility', 'hidden');
 
@@ -321,16 +330,17 @@ var TagCloudDefault = (function(){
                         $siblingTag.addClass(disabledClass).removeClass(activeClass).setTagStyle();
                 }
                 else {                                      // Active tags are the ones co-occuring with the selected tag. A tooltip is added during proxKeywordsmode
-                    var selectedKeyword = $tag.getText();
-                    var currentKeyword = $siblingTag.getText();
-                    var numberCoOccurrences = _this.keywords[index].keywordsInProximity[$siblingTag.attr('stem')];
-                    var tooltip = currentKeyword + ' and ' + selectedKeyword + ' appear in proximity ' + numberCoOccurrences + ' times';
 
                     if(!$siblingTag.hasClass(droppedClass)) {
-                        $siblingTag.addClass(activeClass);
-                        if($siblingTag.is('ui-draggable'))
-                            $siblingTag.draggable('destroy');
-                        $siblingTag.draggable(draggableOptions).show();
+//                        $siblingTag.addClass(activeClass);
+                        $siblingTag.addClass('addable');
+                        $siblingTag/*.draggable(draggableOptions)*/.show();
+
+                        var $addIcon = $('<div/>').appendTo($siblingTag).addClass(addIcon);
+                        $addIcon.width($siblingTag.fullWidth())
+                            .height($siblingTag.fullHeight())
+                            .pin({ top: 0, left: 0 })
+                            .css('background', 'rgba(0,0,0,0.2)');
                     }
                 }
                 pinTagHints($tag);

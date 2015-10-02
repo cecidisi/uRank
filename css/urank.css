@@ -252,6 +252,18 @@
     cursor: default;
 }
 
+
+.urank-tagcloud-tag.addable {
+    cursor: default;
+}
+
+.urank-tagcloud-tag.addable:hover {
+    opacity: 0.5;
+}
+
+
+
+
 .urank-tagcloud-tag-hint {
     position: absolute;
     display: inline;
@@ -339,7 +351,7 @@
 
 div.urank-ranking-mode-legend {
     display: inline-block;
-    padding: 2px 0px;
+    padding: 5px 0px;
 }
 
 div.urank-ranking-mode-legend.plus-symbol span {
@@ -460,8 +472,8 @@ div.urank-tagbox-ranking-weight-bar {
     display: inline-block;
     text-align: left;
     min-width: 65px;
-    height: 21px;
-    margin: 14px 3px 0px 3px;
+    height: 23px;
+    margin: 16px 3px 0px 3px;
     padding: .2em;
     font-size: .9em;
     font-weight: 600;
@@ -491,7 +503,7 @@ div.urank-tagbox-ranking-weight-bar {
 /* slider div*/
 .urank-tagbox-tag-weight-slider {
     height: 3px !important;
-    margin: 2px 0px 1px 0px !important;
+    margin: 4px 0px 1px 0px !important;
 }
 
 
@@ -613,7 +625,6 @@ div.urank-tagbox-ranking-weight-bar {
     clear:both;
     width: 100%;
     margin: 0;
-    margin-left: 1px;
     padding: 0;
     list-style: none;
     display: block;
@@ -625,8 +636,12 @@ div.urank-tagbox-ranking-weight-bar {
     position: relative;
     height: 30px;
     vertical-align: top;
-    -webkit-transition: box-shadow 4s ease-in;
     cursor: pointer;
+    border: 1px solid transparent;
+    -webkit-transition: box-shadow 4s ease-in;
+    -moz-transition: box-shadow 4s ease-in;
+    -o-transition: box-shadow 4s ease-in;
+    transition: box-shadow 4s ease-in;
 }
 
 
@@ -634,21 +649,28 @@ div.urank-tagbox-ranking-weight-bar {
 
 /* <li> items' hover style */
 .urank-list-li-default.hovered {
+
 /*
-    background: -webkit-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
-    background: -o-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
-	background: -moz-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
-	background: -ms-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
-*/
     background: -webkit-linear-gradient(top, rgb(230, 200, 200) 75%, #ccc);
     background: -o-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
     background: -moz-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
     background: -ms-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
-
+*/
+    background: -webkit-linear-gradient(top, rgba(150, 150, 150,0.3) 25%, rgba(150, 150, 150,0.6) 75%, rgba(150, 150, 150, 0.3));
+    border: 1px solid rgba(150,150,150,.3);
+    -webkit-transition: background 0s;
+    -moz-transition: background 0s;
+    -o-transition: background 0s;
+    transition: background 0s;
 }
 
 .urank-list-li-default.selected {
 
+    background: rgba(150, 150, 150, 0.5);
+}
+
+.urank-list-li-default.dimmed {
+    opacity: 0.3;
 }
 
 .urank-list-li-lightbackground {

@@ -29,12 +29,17 @@
             });
 
         if($tag.hasClass('dropped'))
+//            return $tag.css({
+//                background: $tag.data('queryColor'),
+//                border: 'solid 2px ' + $tag.data('queryColor'),
+//                color: 'white'
+//            });
             return $tag.css({
                 background: '',
                 border: 'solid 2px ' + $tag.data('queryColor')
             });
 
-        if($tag.hasClass('active'))
+        if($tag.hasClass('active') || $tag.hasClass('addable'))
             return $tag.css({
                 background: function() { return getGradientString($tag.data('originalColor')) },
                 border: function() { return '2px solid ' + $tag.data('originalColor') },

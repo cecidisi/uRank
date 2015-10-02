@@ -31,8 +31,10 @@ var ContentList = (function(){
         watchiconOffClass = 'urank-list-li-button-watchicon-off',
         watchiconOnClass = 'urank-list-li-button-watchicon-on',
         watchiconDefaultClass = 'urank-list-li-button-watchicon-default',
-        liHoveredClass = 'hovered',
-        liWatchedClass = 'watched',
+        selectedClass = 'selected',
+        dimmedClass = 'dimmed',
+        hoveredClass = 'hovered',
+        watchedClass = 'watched',
         // default-style classes
         ulClassDefault = ulClass + '-default',
         liClassDefault = liClass + '-default',
@@ -327,7 +329,7 @@ var ContentList = (function(){
             bindEventHandlers($li, id);
         });
 
-        liHoveredClass = c.liHoverClass == '' ? liHoveredClass : c.liHoverClass;
+        hoveredClass = c.liHoverClass == '' ? hoveredClass : c.liHoverClass;
         liLightBackgroundClass = c.liLightBackgroundClass == '' ? liLightBackgroundClass : c.liLightBackgroundClass;
         liDarkBackgroundClass = c.liDarkBackgroundClass == '' ? liDarkBackgroundClass : c.liDarkBackgroundClass;
     };
@@ -354,19 +356,28 @@ var ContentList = (function(){
             $("<div></div>").appendTo($rankingDiv).addClass(rankingPosMovedClass);
             // title section
             var $titleDiv = $("<div></div>").appendTo($li).addClass(liTitleContainerClass);
-            $('<h3></h3>', { id: 'urank-list-li-title-' + i, class: liTitleClass +' '+ liTitleClassDefault, html: d.title, title: d.title + '\n' + d.description }).appendTo($titleDiv);
+            $('<h3></h3>', { id: 'urank-list-li-title-' + i, class: liTitleClass +' '+ liTitleClassDefault, html: d.title/*, title: d.title + '\n' + d.description*/ }).appendTo($titleDiv);
             // buttons section
             var $buttonsDiv = $("<div></div>").appendTo($li).addClass(liButtonsContainerClass);
             $("<span>").appendTo($buttonsDiv).addClass(watchiconClass+' '+watchiconDefaultClass+' '+watchiconOffClass);
             $("<span>").appendTo($buttonsDiv).addClass(faviconClass+' '+faviconDefaultClass+' '+faviconOffClass);
             // Subtle animation
-            $li.animate({'top': 5}, {
-                'complete': function(){
-                    $(this).animate({'top': ''}, (i+1)*100, 'swing', function(){
-                        bindEventHandlers($li, d.id);
-                    });
-                }
-            });
+//            $li.animate({'top': 5}, {
+//                'complete': function(){
+//                    $(this).animate({'top': ''}, (i+1)*100, 'swing', function(){
+//                        bindEventHandlers($li, d.id);
+//                    });
+//                }
+//            });
+            $li.animate({ top: 0 }, 0)
+            .queue(function(){
+                $(this).animate({ top: 10 }, (i+1)*100, 'swing')
+            })
+            .queue(function(){
+                $(this).css('top', '');
+                bindEventHandlers($li, d.id);
+            })
+            .dequeue();
         });
     };
 
@@ -383,7 +394,6 @@ var ContentList = (function(){
 
         var $headerTitle = $('<div/>').appendTo($header).addClass(headerTitleClass + ' ' + headerStyleClass);
         $('<p/>', { text: 'Document Titles'}).appendTo($headerTitle);
-
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -480,35 +490,35 @@ var ContentList = (function(){
 
     var _selectListItem = function(id) {
         stopAnimation();
-        $('.'+liClass).css("opacity", "0.3");
-        $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').css("opacity", "1");
-
-        //TODO handek opacity with classes and make selected item more noticeable
+        $('.'+liClass+'['+urankIdAttr+'!='+id+']').addClass(dimmedClass);
+        $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').addClass(selectedClass);
     };
 
 
     var _deselectAllListItems = function() {
-        $('.'+liClass).css('opacity', '');
+        $('.'+liClass).removeClass(selectedClass, 1000, 'easeOutCirc').removeClass(dimmedClass);
     };
 
 
     // receives actual index
     var _hover = function(id) {
-        $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').addClass(liHoveredClass);
+        $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').addClass(hoveredClass);
     };
 
 
     var _unhover = function(id) {
-        $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').removeClass(liHoveredClass);
+        $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').removeClass(hoveredClass);
     };
 
 
     var _highlightListItems = function(idArray) {
         stopAnimation();   // fix bug
-        $('.'+liClass).css('opacity', .2);
+//        $('.'+liClass).css('opacity', .2);
+        $('.'+liClass).addClass(dimmedClass);
         idArray.forEach(function(id){
             //var $li = $(liItem+''+id);
             var $li = $('.'+liClass+'['+urankIdAttr+'="'+id+'"]');
+            $li.removeClass(dimmedClass);
             if(!$li.is(':visible'))
                 $li.removeClass(liDarkBackgroundClass).removeClass(liLightBackgroundClass).addClass(liUnrankedClass);
             $li.css({ display: '', opacity: ''});
@@ -539,7 +549,7 @@ var ContentList = (function(){
         var classToAdd = watchIcon.hasClass(watchiconOffClass) ? watchiconOnClass : watchiconOffClass;
         var classToRemove = classToAdd === watchiconOnClass ? watchiconOffClass : watchiconOnClass;
         watchIcon.switchClass(classToRemove, classToAdd);
-        $li.toggleClass(liWatchedClass);
+        $li.toggleClass(watchedClass);
     };
 
 
@@ -586,7 +596,7 @@ var ContentList = (function(){
     };
 
     var _getListHeight = function() {
-        return $ul.height();
+        return $ul.fullHeight();
     };
 
     // Prototype
