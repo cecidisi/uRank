@@ -3,6 +3,20 @@
     var _this = this;
     this.dsm = new datasetManager();
 
+    var testOptionsDef = {
+        docViewer : {
+            misc: {
+                facetsToShow: ['year']
+            }
+        },
+        keywordExtractor :{
+            //minDocFrequency: 2,
+            //minRepetitionsInDocument: 1,
+            maxKeywordDistance: 3,
+            minRepetitionsProxKeywords: 4
+        }
+    }
+
     var testOptions1 = {
         contentList: {
             custom: true,
@@ -90,7 +104,7 @@
                 /*
                  *    Default call
                  */
-                _this.urank.loadData(dataset);
+                _this.urank.loadData(dataset, testOptionsDef);
 
                 $('.processing-message').css('visibility', 'hidden');
             });

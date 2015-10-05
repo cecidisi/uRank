@@ -63,9 +63,12 @@ var DocViewer = (function(){
         // Append details section, titles and placeholders for doc details
         $detailsSection = $("<div class='" + detailsSectionClass + "'></div>").appendTo($container);
 
-        var $titleContainer = $('<div></div>').appendTo($detailsSection);
+        var $titleContainer = $('<div/>').appendTo($detailsSection);
         $("<label>Title:</label>").appendTo($titleContainer);
         $("<h3 id='urank-docviewer-details-title'></h3>").appendTo($titleContainer);
+        var $authorSection = $('<div/>').appendTo($detailsSection);
+        $('<label/>').appendTo($authorSection).html('Author:');
+        $('<span/>', { id: 'urank-docviewer-details-author' }).appendTo($authorSection);
 
         this.opt.facetsToShow.forEach(function(facetName){
             var $facetContainer = $('<div></div>').appendTo($detailsSection);
@@ -96,6 +99,7 @@ var DocViewer = (function(){
 
         $root.show();
         $(detailItemIdPrefix + 'title').html(getStyledText(document.title, keywords, colorScale));
+        $(detailItemIdPrefix + 'author').html(document.creator);
 
         var getFacet = function(facetName, facetValue){
             return facetName == 'year' ? parseDate(facetValue) : facetValue;
@@ -118,6 +122,7 @@ var DocViewer = (function(){
         $root.hide();
         // Clear details section
         $(detailItemIdPrefix + 'title').empty();
+        $(detailItemIdPrefix + 'author').empty();
         var facets = (this.opt && this.opt.facetsToShow) ? this.opt.facetsToShow : [];
         facets.forEach(function(facet){
             $(detailItemIdPrefix + '' + facet).empty();

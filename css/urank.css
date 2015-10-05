@@ -936,10 +936,10 @@ Document Panel (right) - for visualizing highlighted text
     max-height: 80%;
     background: #999;
     z-index: 9999;
+    box-shadow: 3px 3px 5px #555, -3px 3px 5px #555;
 }
 
 .urank-docviewer-details-section {
-    height: 4em;
     width: calc(100% - 10px);
     padding: 5px 10px;
     text-align: left;
@@ -948,24 +948,24 @@ Document Panel (right) - for visualizing highlighted text
 }
 
 .urank-docviewer-details-section div {
-    display: inline-flex;
+    display: block;
     width: 100%;
-    padding: .2em 0em;
+    padding: 2px 0px;
 }
 
 .urank-docviewer-details-section div label {
-    width: 44px;
+    padding: 0px 7px 0px 2px;
 }
 
 .urank-docviewer-details-section div h3 {
-    width: calc(100% - 44px);
-    height: 60px;
+/*    width: calc(100% - 44px);*/
+    display: inline-block;
     -webkit-margin-start: 0px;
     -webkit-margin-end: 0px;
     color: snow;
     /*text-shadow: 0em .1em green;*/
     font-weight: bold;
-    font-size: .9em;
+    font-size: 1.1em;
     line-height: 1.2em;
 }
 
@@ -975,7 +975,7 @@ Document Panel (right) - for visualizing highlighted text
 }
 
 .urank-docviewer-details-section div span {
-    font-size: .9em;
+    font-size: 1em;
 }
 
 
@@ -990,6 +990,7 @@ Document Panel (right) - for visualizing highlighted text
 	background: -ms-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
 	/*background: linear-gradient(to top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));*/     
     box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
+    box-shadow: inset 1px 1px 1px #888, inset -1px -1px 1px #888;
     overflow-y: auto;
     overflow-x: hidden;
 }

@@ -336,11 +336,11 @@ var TagCloudDefault = (function(){
                         $siblingTag.addClass('addable');
                         $siblingTag/*.draggable(draggableOptions)*/.show();
 
-                        var $addIcon = $('<div/>').appendTo($siblingTag).addClass(addIcon);
-                        $addIcon.width($siblingTag.fullWidth())
-                            .height($siblingTag.fullHeight())
-                            .pin({ top: 0, left: 0 })
-                            .css('background', 'rgba(0,0,0,0.2)');
+//                        var $addIcon = $('<div/>').appendTo($siblingTag).addClass(addIcon);
+//                        $addIcon.width($siblingTag.fullWidth())
+//                            .height($siblingTag.fullHeight())
+//                            .pin({ top: 0, left: 0 })
+//                            .css('background', 'rgba(0,0,0,0.2)');
                     }
                 }
                 pinTagHints($tag);
