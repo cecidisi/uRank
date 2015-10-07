@@ -30,25 +30,24 @@ var VisCanvas = (function(){
     }
 
 
-    var _build = function(height, opt) {
+    var _build = function(data, height, opt) {
         this.height = height;
         $root = $(s.root).empty().addClass(viscanvasClass);
 
         //  Set scrolling
         if(opt.misc.hideScrollbar) {
             $root.addClass(hiddenScrollbarClass);
-            $scrollable = $('<div></div>').appendTo($root).addClass(hiddenScrollbarInnerClass);
+            $scrollable = $('<div/>').appendTo($root).addClass(hiddenScrollbarInnerClass);
         }
         else {
             $scrollable = $root;
         }
         $scrollable.on('scroll', onScroll);
-        $visContainer = $('<div></div>').appendTo($scrollable).addClass(viscanvasContainerClass).height(this.height);
+        $visContainer = $('<div/>').appendTo($scrollable).addClass(viscanvasContainerClass).height(this.height);
 
         var visModule = VIS_MODULES[opt.module] || VIS_MODULES.ranking;
         this.vis = new visModule($.extend({}, s, { root: '.'+viscanvasContainerClass }, opt.customOpt));
-        this.vis.build();
-
+        this.vis.build(data, height);
         return this;
     };
 

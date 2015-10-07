@@ -30,7 +30,7 @@ var Urank = (function(){
         onTagInCloudMouseLeave: function(index){},
         onTagInCloudClick: function(index){},
         onTagDeleted: function(index){},
-        onTagDropped: function(index, queryTermColor){},
+        onTagDropped: function(droppedTags, dropMode){},
         onTagInBoxMouseEnter: function(index){},
         onTagInBoxMouseLeave: function(index){},
         onTagInBoxClick: function(index){},
@@ -156,7 +156,7 @@ var Urank = (function(){
             tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, o.tagCloud, _this.keywordsDict);
             tagBox.build(o.tagBox);
             contentList.build(_this.data, o.contentList, tagBox.getHeight());
-            visCanvas.build(contentList.getListHeight(), o.visCanvas);
+            visCanvas.build(_this.data, contentList.getListHeight(), o.visCanvas);
             var docViewerDim = {
                 width: $(s.contentListRoot).fullWidth() + $(s.visCanvasRoot).fullWidth()
             };
@@ -164,6 +164,7 @@ var Urank = (function(){
 
             //  Bind event handlers to resize window and undo effects on random click
             $(window).off('resize', EVTHANDLER.onResize).resize(EVTHANDLER.onResize);
+            $(document).off('keydown', EVTHANDLER.onKeyDown).on('keydown', EVTHANDLER.onKeyDown);
             $(s.root)
             .off({
                 'mousedown': EVTHANDLER.onRootMouseDown,
@@ -201,11 +202,17 @@ var Urank = (function(){
             s.onChange.call(this, rankingData, _this.selectedKeywords, status);
         },
 
-        onTagDropped: function(index) {
-            var queryTermColor = _this.queryTermColorScale(_this.keywords[index].stem);
-            tagBox.dropTag(index, queryTermColor);
-            tagCloud.updateClonOfDroppedTag(index, queryTermColor);
-            s.onTagDropped.call(this, index, queryTermColor);
+        onTagDropped: function(tagIndices) {
+            var droppedTags = [];
+            var dropMode = tagIndices.length > 1 ? 'multiple' : 'single';
+            tagIndices.forEach(function(index){
+                var queryTermColor = _this.queryTermColorScale(_this.keywords[index].stem);
+                var tag = { index: index, stem: _this.keywords[index].stem, term: _this.keywords[index].term, color: queryTermColor, weight: 1 };
+                tagBox.dropTag(tag);
+                tagCloud.updateClonOfDroppedTag(index, queryTermColor);
+                droppedTags.push(tag);
+            });
+            s.onTagDropped.call(this, droppedTags, dropMode);
         },
 
         onTagDeleted: function(index) {
@@ -225,8 +232,7 @@ var Urank = (function(){
         },
 
         onTagInCloudClick: function(index) {
-            // TODO
-            tagCloud.tagClicked(index);
+            //tagCloud.tagClicked(index);
             var idsArray = _this.keywords[index].inDocument;
             contentList.highlightListItems(idsArray);
             visCanvas.highlightItems(idsArray).resize(contentList.getListHeight());
@@ -331,6 +337,11 @@ var Urank = (function(){
             visCanvas.resize();
         },
 
+        onKeyDown: function(event){
+            if(event.keyCode === 27)
+                EVTHANDLER.onDocViewerHidden();
+        },
+
         // Event handlers to return
 
         onRankingModeChange: function(mode) {
@@ -341,7 +352,7 @@ var Urank = (function(){
                     if(_this.selectedKeywords.length > 0)
                         EVTHANDLER.onChange();
                 }
-            }, 1);
+            }, 0);
         },
 
         onRankingWeightChange: function(rWeight) {
@@ -349,19 +360,24 @@ var Urank = (function(){
                 _this.rWeight = rWeight;
                 if(_this.selectedKeywords.length > 0)
                     EVTHANDLER.onChange();
-            }, 1);
+            }, 0);
         },
 
         onReset: function(event) {
             if(event) event.stopPropagation();
             contentList.reset();
-            tagCloud.reset();
-            tagBox.clear();
+            tagBox.reset();
+            //tagCloud.reset();
             visCanvas.reset();
             docViewer.clear();
-            _this.rankingModel.reset();
-            _this.selectedId = STR_UNDEFINED;
+            _this.selectedKeywords.forEach(function(kw){
+                setTimeout(function(){
+                    tagCloud.restoreTag(kw.index);
+                }, 0);
+            });
             _this.selectedKeywords = [];
+//            _this.rankingModel.reset();
+//            _this.selectedId = STR_UNDEFINED;
         },
 
         onDestroy: function() {
@@ -419,7 +435,8 @@ var Urank = (function(){
                 onTagDeleted: EVTHANDLER.onTagDeleted,
                 onTagInBoxMouseEnter: EVTHANDLER.onTagInBoxMouseEnter,
                 onTagInBoxMouseLeave: EVTHANDLER.onTagInBoxMouseLeave,
-                onTagInBoxClick: EVTHANDLER.onTagInBoxClick
+                onTagInBoxClick: EVTHANDLER.onTagInBoxClick,
+                onReset: EVTHANDLER.onReset
             },
 
             visCanvas: {

@@ -441,20 +441,6 @@ var Ranking = (function(){
             svg.selectAll('.' + lightBackgroundClass)
                 .attr('width', width)
 
-//            svgTagged = d3.select(s.rootTagged).select("svg")
-//            .attr("width", $('.urank-viscanvas-container-tagged').width());
-//
-//            svgTagged.selectAll('.' + darkBackgroundClass)
-//                .attr("width", $('.urank-viscanvas-container-tagged').width())
-//            svgTagged.selectAll('.' + lightBackgroundClass)
-//                .attr("width", $('.urank-viscanvas-container-tagged').width())
-//
-//            svgTagged.selectAll("." + barClass)
-//                .attr("width", $('.urank-viscanvas-container-tagged').width() * 0.1);
-//
-//            svgTagged.selectAll("text")
-//                .attr("x", $('.urank-viscanvas-container-tagged').width() * 0.8);
-
             // update x-axis
             svg.select('.'+xClass + '.'+axisClass).call(xAxis.orient('bottom'));
 
@@ -465,16 +451,17 @@ var Ranking = (function(){
             svg.selectAll('.'+barClass)
                 .attr("x", function(d) { return x(d.x0); })
                 .attr("width", function(d) { return x(d.x1) - x(d.x0); });
-
         }
-
     };
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Prototype methods
 
-    var _build = function(containerHeight) {
-        $root = $(s.root)
+    var _build = function(data, containerHeight) {
+        $root = $(s.root);
+
+
+
         return this;
     }
 

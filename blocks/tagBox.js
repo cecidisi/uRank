@@ -6,6 +6,7 @@ var TagBox = (function(){
     //  Classes
     var tagboxClass = 'urank-tagbox',
         tagboxContainerClass = 'urank-tagbox-container',
+        clearBtnClass = 'urank-tagbox-clear-btn',
         tagInBoxClass = 'urank-tagbox-tag',
         tagDeleteButtonClass = 'urank-tagbox-tag-delete-button',
         tagWeightsliderClass = 'urank-tagbox-tag-weight-slider',
@@ -26,14 +27,22 @@ var TagBox = (function(){
     //  Custom Event
     var tagBoxChangeEvent = 'tagBoxChange';
     //  Helpers
-    var $root, $tagContainer, $rankingModeHeader, $splitRankings, $sumRankings, $contentHeader, $socialHeader;
+    var $root, $tagContainer, $rankingModeHeader, $splitRankings, $sumRankings, $contentHeader, $socialHeader, $resetBtn, $message;
 
     var onTagboxChanged = function(){
+        if(_this.selectedKeywords.length == 0) {
+            setTimeout(function(){
+                $message.show();
+                $resetBtn.hide();
+            }, 1);
+        }
+        else {
+            $resetBtn.css('display', '');
+            $message.hide();
+        }
         setTimeout(function(){
             s.onChange.call(this, _this.selectedKeywords)   // Bind onChange event handler for custom event
-            if(_this.selectedKeywords.length == 0)
-                $tagContainer.append('<p>' + STR_DROP_TAGS_HERE + '</p>');
-        }, 1);
+        }, 0);
     };
 
     function Tagbox(arguments) {
@@ -45,12 +54,13 @@ var TagBox = (function(){
             onChange: function(selectedKeywords){},
             onModeChanged: function(mode){},
             onRankingWeightChanged: function(rWeight) {},
-            onTagDropped: function(index, queryTermColor){},
+            onTagDropped: function(tagIndices){},
             onTagDeleted: function(index){},
             onTagWeightchanged: function(){},
             onTagInBoxMouseEnter: function(index){},
             onTagInBoxMouseLeave: function(index){},
             onTagInBoxClick: function(index){},
+            onReset: function(){},
             defaultBlockStyle: true
         }, arguments);
 
@@ -61,10 +71,11 @@ var TagBox = (function(){
             tolerance: 'touch',
             drop: function(event, ui){
                 ui.draggable.data('dropped', true);
-//                setTimeout(function() {
-//                    $(ui.draggable).draggable("destroy");
-//                }, 0);
-                s.onTagDropped.call(this, $(ui.draggable).attr(tagPosAttr));
+                var tagIndices = [$(ui.draggable).attr(tagPosAttr)];
+                ui.draggable.data('addedTags').forEach(function(index){
+                    tagIndices.push(index);
+                });
+                s.onTagDropped.call(this, tagIndices);
                 $tagContainer.trigger(tagBoxChangeEvent);
             }
         };
@@ -155,7 +166,6 @@ var TagBox = (function(){
         // Split button
         $('<button/>', { title: 'Split rankings' }).appendTo($sumRankings).addClass('split').html("<span></span>")
             .on('click', function(){ s.onModeChanged.call(this, RANKING_MODE.by_CB) });
-
     };
 
 
@@ -172,8 +182,9 @@ var TagBox = (function(){
         $tagContainer = $('<div/>').appendTo($root).addClass(tagboxContainerClasses)
             .off(tagBoxChangeEvent, onTagboxChanged)
             .on(tagBoxChangeEvent, onTagboxChanged)
-            .droppable(this.droppableOptions)                       // bind droppable behavior to tag box;
-            .append('<p>' + STR_DROP_TAGS_HERE + '</p>');
+            .droppable(this.droppableOptions);                       // bind droppable behavior to tag box;
+        $message = $('<p>' + STR_DROP_TAGS_HERE + '</p>').appendTo($tagContainer);
+        $resetBtn = $('<a/>', { href: '#' }).appendTo($tagContainer).addClass(clearBtnClass).on('click', function(){ s.onReset.call(this); }).hide();
 
         buildRankingModeHeader();
         return this;
@@ -182,40 +193,41 @@ var TagBox = (function(){
 
     var _clear = function() {
         this.selectedKeywords = [];
-        $root.find('.'+tagboxContainerClass).empty().append('<p>' + STR_DROP_TAGS_HERE + '</p>');
+        if($tagContainer) {
+            $tagContainer.find('.'+tagInBoxClass).remove();
+            //$tagContainer.append('<p>' + STR_DROP_TAGS_HERE + '</p>');
+            $message.show();
+            $resetBtn.hide();
+        }
+        //$root.find('.'+tagboxContainerClass).empty().append('<p>' + STR_DROP_TAGS_HERE + '</p>');
         return this;
     };
 
 
-
-    var _dropTag = function(index, color){
-        var $tag = $(tagIdPrefix + '' + index);
-        $tagContainer.find('p').remove();
-
+/*
+    tag = { index, stem, term, color }
+*/
+    var _dropTag = function(tag){
+        var $tag = $(tagIdPrefix + '' + tag.index);
         if ($tag.hasClass(s.droppableClass)) {
 
             // Append dragged tag to tag box
             $tagContainer.append($tag);
-
             // Change tag's class
             $tag.removeClass().addClass(tagInBoxClass);
-
             // Append "delete" button
             $('<span></span>').appendTo($tag).addClass(tagDeleteButtonClass);
-
             // Add new div to make it a slider
             var weightSlider = $("<div class='" + tagWeightsliderClass + "'></div>").appendTo($tag).slider(this.sliderOptions);
-            weightSlider.find('.ui-slider-range').addClass(weightSliderRangeClass).css('background', color);
+            weightSlider.find('.ui-slider-range').addClass(weightSliderRangeClass).css('background', tag.color);
             weightSlider.find('.ui-slider-handle').addClass(weightSliderHandleClass);
-
             // Retrieve color in weightColorScale for the corresponding label
-            var rgbSequence = hexToR(color) + ', ' + hexToG(color) + ', ' + hexToB(color);
-
+            var rgbSequence = hexToR(tag.color) + ', ' + hexToG(tag.color) + ', ' + hexToB(tag.color);
             // Set tag's style
-            $tag.data('queryTermColor', color).css({
+            $tag.data('queryTermColor', tag.color).css({
                 background: 'rgba(' + rgbSequence + ', 1)',
                 color: '',
-                border: 'solid 2px ' + color
+                border: 'solid 2px ' + tag.color
             }).off().on({
                 mouseenter: s.onTagInBoxMouseEnter($tag.attr(tagPosAttr)),
                 mouseleave: s.onTagInBoxMouseLeave($tag.attr(tagPosAttr)),
@@ -224,8 +236,7 @@ var TagBox = (function(){
                 event.stopPropagation(); s.onTagDeleted.call(this, event.data);
             });
 
-            var term = $tag.getText(), stem = $tag.attr('stem');
-            _this.selectedKeywords.push({ term: term, stem: stem, weight: 1 });
+            _this.selectedKeywords.push(tag);
         }
         return this;
     };
@@ -244,6 +255,15 @@ var TagBox = (function(){
         return this;
     };
 
+    var _reset = function() {
+        _this.selectedKeywords.forEach(function(kw){
+            $('.'+tagInBoxClass).find('.'+tagDeleteButtonClass).remove();
+            $('.'+tagInBoxClass).find('.'+tagWeightsliderClass).remove();
+        });
+
+        _this.selectedKeywords = [];
+        $tagContainer.trigger(tagBoxChangeEvent);
+    };
 
     var _destroy = function() {
         if($(s.root).hasClass(tagboxClass)) {
@@ -290,6 +310,7 @@ var TagBox = (function(){
     // Prototype
     Tagbox.prototype = {
         build: _build,
+        reset: _reset,
         clear: _clear,
         dropTag: _dropTag,
         deleteTag: _deleteTag,
