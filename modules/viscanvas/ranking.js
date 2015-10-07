@@ -28,9 +28,6 @@ var Ranking = (function(){
         _this = this;
         s = $.extend({
             root: '.urank-viscanvas-container',
-//            rootSocial: '.urank-viscanvas-container-social',
-//            rootTagged: '.urank-viscanvas-container-tagged',
-//            rootSeparation: '.urank-viscanvas-container-separation',
             onItemClicked: function(document){},
             onItemMouseEnter: function(document){},
             onItemMouseLeave: function(document){},
@@ -38,6 +35,7 @@ var Ranking = (function(){
             darkBackgroundColor: ''
         }, arguments);
 
+        console.log(s);
         this.isRankingDrawn = false;
     }
 

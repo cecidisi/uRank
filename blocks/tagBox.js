@@ -90,16 +90,13 @@ var TagBox = (function(){
             value: 1,
             start: function(event, ui) {},
             slide: function(event, ui) {
-
                 var $tag  = $(this.parentNode);
                 var color = $tag.data('queryTermColor');
                 $tag.css("background", "rgba("+ hexToR(color) + ', ' + hexToG(color) + ', ' + hexToB(color) + "," + ui.value + ")");
             },
             stop: function(event, ui) {
-
                 var term = $(this.parentNode).getText(),
                     indexToChange = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
-
                 _this.selectedKeywords[indexToChange].weight = ui.value;
                 $tagContainer.trigger(tagBoxChangeEvent);
             }
@@ -115,9 +112,6 @@ var TagBox = (function(){
             slide: function(event, ui) {
                 $('.'+legendWeightBar+"[name='content']").css('background', 'rgba(0,0,0,' + ui.value + ')');
                 $('.'+legendWeightBar+"[name='social']").css('background', 'rgba(0,0,0,' + (1 - ui.value) + ')');
-
-//                $('.'+rankingWeightSliderClass).find('.ui-widget-header').css('background', 'rgba(0,0,0,' + ui.value + ')');
-//                $('.'+rankingWeightSliderClass).css('background', 'rgba(0,0,0,' + (1 - ui.value) + ')');
             },
             stop: function(event, ui) {
                 s.onRankingWeightChanged.call(this, ui.value);
@@ -175,7 +169,6 @@ var TagBox = (function(){
 
         this.selectedKeywords = [];
         this.destroy();
-
         $root = $(s.root).addClass(tagboxClass);
 
         var tagboxContainerClasses = (opt.misc.defaultBlockStyle) ? tagboxContainerClass +' '+ headerStyleClass : tagboxContainerClass;
@@ -186,7 +179,12 @@ var TagBox = (function(){
         $message = $('<p>' + STR_DROP_TAGS_HERE + '</p>').appendTo($tagContainer);
         $resetBtn = $('<a/>', { href: '#' }).appendTo($tagContainer).addClass(clearBtnClass).on('click', function(){ s.onReset.call(this); }).hide();
 
-        buildRankingModeHeader();
+        if(opt.ranking.social) {
+            buildRankingModeHeader();
+        }
+        else {
+            $tagContainer.addClass('large');
+        }
         return this;
     };
 

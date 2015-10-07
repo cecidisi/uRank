@@ -541,6 +541,11 @@ div.urank-tagbox-ranking-weight-bar {
     text-align: left;
 }
 
+/* for content-based ranking only */
+.urank-tagbox-container.large {
+    height: 100%;
+}
+
 a.urank-tagbox-clear-btn {
     display: inline-block;
     float: right;
@@ -574,6 +579,10 @@ a.urank-tagbox-clear-btn:before {
     color: #888;
     line-height: 2em;
     font-weight: bold;
+}
+
+.urank-tagbox-container.large p {
+    padding-top: 15px;
 }
 
 .urank-tagbox-tag {

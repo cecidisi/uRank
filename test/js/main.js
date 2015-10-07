@@ -3,6 +3,10 @@
     var _this = this;
     this.dsm = new datasetManager();
 
+    var initOptions = {
+        ranking: { social: true }
+    };
+
     var testOptionsDef = {
         docViewer : {
             misc: {
@@ -10,8 +14,6 @@
             }
         },
         keywordExtractor :{
-            //minDocFrequency: 2,
-            //minRepetitionsInDocument: 1,
             maxKeywordDistance: 3,
             minRepetitionsProxKeywords: 4
         }

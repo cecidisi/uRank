@@ -14,6 +14,11 @@ var Urank = (function(){
     //   defaults
     var defaultInitOptions = {
         root: 'body',
+        ranking: {
+            content: true,
+            social: false,
+            custom: false
+        },
         tagCloudRoot: '',
         tagBoxRoot: '',
         contentListRoot: '',
@@ -68,6 +73,7 @@ var Urank = (function(){
         },
         visCanvas : {
             module: 'default',
+            ranking: {},
             customOptions: {               // use only if contentList.custom = true and background in the ranking should match different light and dark background colors
                 lightBackgroundColor: '',
                 darkBackgroundColor: ''
@@ -77,6 +83,7 @@ var Urank = (function(){
             }
         },
         tagBox: {
+            ranking: {},
             misc: {
                 defaultBlockStyle: true
             }
@@ -153,13 +160,12 @@ var Urank = (function(){
             _this.selectedKeywords = [];
             _this.selectedId = STR_UNDEFINED;
 
+            $.extend(true, o.tagBox.ranking, s.ranking);
+            $.extend(true, o.visCanvas.ranking, s.ranking);
             tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, o.tagCloud, _this.keywordsDict);
             tagBox.build(o.tagBox);
             contentList.build(_this.data, o.contentList, tagBox.getHeight());
             visCanvas.build(_this.data, contentList.getListHeight(), o.visCanvas);
-            var docViewerDim = {
-                width: $(s.contentListRoot).fullWidth() + $(s.visCanvasRoot).fullWidth()
-            };
             docViewer.build(o.docViewer);
 
             //  Bind event handlers to resize window and undo effects on random click
@@ -376,8 +382,6 @@ var Urank = (function(){
                 }, 0);
             });
             _this.selectedKeywords = [];
-//            _this.rankingModel.reset();
-//            _this.selectedId = STR_UNDEFINED;
         },
 
         onDestroy: function() {
@@ -404,7 +408,7 @@ var Urank = (function(){
 
         _this = this;
         // default user-defined arguments
-        s = $.extend(defaultInitOptions, arguments);
+        s = $.extend(true, defaultInitOptions, arguments || {});
 
         var options = {
             contentList: {
