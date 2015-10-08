@@ -32,14 +32,13 @@ window.RANKING_STATUS = {
 };
 
 
-window.RANKING_MODE = {
-    by_CB: 'cbScore',
-    by_TU: 'tuScore',
-    overall: 'overallScore',
-    by_CB_only: 'cbScore_only',
-};
+//window.RANKING_MODE = {
+//    by_CB: 'cbScore',
+//    by_TU: 'tuScore',
+//    overall: 'overallScore',
+//    by_CB_only: 'cbScore_only',
+//};
 
-/*
 window.RANKING_MODE = {
     by_CB: {
         attr: 'cbScore',
@@ -54,7 +53,6 @@ window.RANKING_MODE = {
         active: true
     }
 };
-*/
 
 
 window.USER_ACTION = {

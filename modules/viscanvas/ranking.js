@@ -39,7 +39,7 @@ var Ranking = (function(){
     }
 
     RANKING.Settings = {
-        getInitData: function(rankingModel, color){
+        getInitData: function(rankingModel, opt){
             var a = [];
             var rankingData = rankingModel.getRanking().slice();
             var score = rankingModel.getMode();
@@ -121,15 +121,15 @@ var Ranking = (function(){
         *	Draw ranking at first instance
         *
         * ***************************************************************************************************************/
-        drawNew: function(rankingModel, colorScale, listHeight){
+        drawNew: function(rankingModel, opt){
             _this.clear();
             _this.isRankingDrawn = true;
             // Define input variables
-            data = RANKING.Settings.getInitData(rankingModel, colorScale);
+            data = RANKING.Settings.getInitData(rankingModel, opt);
             // Define canvas dimensions
             margin = { top: 0, bottom: 0, left: 0, right: 0 };
             width = $root.width() - margin.left - margin.right;
-            height = listHeight;
+            height = opt.listHeight;
             xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode());
 
             // Define scales
@@ -141,8 +141,6 @@ var Ranking = (function(){
                 .domain(data.map(function(d){ return d.id; }))
 //                .rangeBands( [0, height], .02);
                 .rangeBands( [0, height]);
-
-            //color = colorScale;
 
             // Define axis' function
             xAxis = d3.svg.axis()
@@ -189,12 +187,12 @@ var Ranking = (function(){
         *	Redraw updated ranking and animate with transitions to depict changes
         *
         * ***************************************************************************************************************/
-        redrawUpdated: function(rankingModel, colorScale, listHeight){
+        redrawUpdated: function(rankingModel, opt){
 
             // Define input variables
-            data = RANKING.Settings.getInitData(rankingModel, colorScale);
+            data = RANKING.Settings.getInitData(rankingModel, opt);
             width = $root.width()
-            RANKING.Render.updateCanvasDimensions(listHeight);
+            RANKING.Render.updateCanvasDimensions(opt.listHeight);
 
             // Redefine x & y scales' domain
             d3.select(s.root).select('.'+svgClass).attr("width", width)
@@ -465,14 +463,13 @@ var Ranking = (function(){
     }
 
 
-    var _update = function(rankingModel, colorScale, listHeight, recData, view){
-        console.log(rankingModel.getStatus());
+    var _update = function(rankingModel, opt){
         var updateFunc = {};
         updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
         updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.unchanged] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.no_ranking] = _this.clear;
-        updateFunc[rankingModel.getStatus()].call(this, rankingModel, colorScale, listHeight);
+        updateFunc[rankingModel.getStatus()].call(this, rankingModel, opt);
         return this;
     };
 

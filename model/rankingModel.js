@@ -65,25 +65,27 @@ var RankingModel = (function(){
      * */
     var updateRanking =  function(opt){
         var score = opt.mode;
-        var cbWeight = (score == RANKING_MODE.overall) ? opt.rWeight : 1;
-        var tuWeight = (score == RANKING_MODE.overall) ? (1- opt.rWeight) : 1;
+        var cbWeight = (score == RANKING_MODE.overall.attr) ? opt.rWeight : 1;
+        var tuWeight = (score == RANKING_MODE.overall.attr) ? (1- opt.rWeight) : 1;
 
         var ranking = _this.data.slice();
-        //if(opt.ranking.content)
-            ranking.forEach(function(d){ d.ranking = {}; });
-        //if()
-        ranking = _this.cbRS.getCBScores({ data: ranking, keywords: opt.query, options: { rWeight: cbWeight } });
-
+        ranking.forEach(function(d){ d.ranking = {}; });
+        if(opt.ranking.content)
+            ranking = _this.cbRS.getCBScores({ data: ranking, keywords: opt.query, options: { rWeight: cbWeight } });
+        if(opt.ranking.social)
             ranking = _this.tuRS.getTagUserScores({ user: opt.user, keywords: opt.query, data: ranking, options: { rWeight: tuWeight } });
-            ranking.forEach(function(d){
-                d.ranking.overallScore = d.ranking.cbScore + d.ranking.tuScore;
-            });
+        ranking.forEach(function(d){
+            d.ranking.overallScore = 0;
+            if(opt.ranking.content)
+                d.ranking.overallScore += d.ranking.cbScore;
+            if(opt.ranking.content)
+                d.ranking.overallScore += d.ranking.tuScore;
+        });
 
-        score = score === RANKING_MODE.by_CB_only ? RANKING_MODE.by_CB : score;
         var secScore = undefined;
-        if(opt.mode === RANKING_MODE.by_CB) secScore = RANKING_MODE.by_TU;
-        else if(opt.mode == RANKING_MODE.by_TU) secScore = RANKING_MODE.by_CB;
-        //var secScore = opt.mode == RANKING_MODE.by_CB ? RANKING_MODE.by_TU : (opt.mode == RANKING_MODE.by_TU ? RANKING_MODE.by_CB : undefined)
+        if(opt.mode === RANKING_MODE.by_CB.attr && RANKING_MODE.by_TU.active) secScore = RANKING_MODE.by_TU.attr;
+        else if(opt.mode == RANKING_MODE.by_TU.attr && RANKING_MODE.by_CB.active) secScore = RANKING_MODE.by_CB.attr;
+        //var secScore = opt.mode == RANKING_MODE.by_CB.attr ? RANKING_MODE.by_TU.attr : (opt.mode == RANKING_MODE.by_TU ? RANKING_MODE.by_CB : undefined)
         ranking = ranking.sort(function(d1, d2){
             if(d1.ranking[score] > d2.ranking[score]) return -1;
             if(d1.ranking[score] < d2.ranking[score]) return 1;
@@ -164,7 +166,7 @@ var RankingModel = (function(){
             this.data = [];
             this.query = [];
             this.status = RANKING_STATUS.no_ranking;
-            this.mode = RANKING_MODE.by_CB;
+            this.mode = RANKING_MODE.by_CB.attr;
             return this;
         },
 

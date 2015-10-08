@@ -85,7 +85,7 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'modules/viscanvas/ranking.js',
                     pathToUrank + 'modules/viscanvas/detailedview.js',
                     pathToUrank + 'helper/globals.js',
-                    pathToUrank + 'helper/settings.js',
+//                    pathToUrank + 'helper/settings.js',
                     pathToUrank + 'helper/utils.js',
                     pathToUrank + 'helper/jquery_functions/outerHTML.js',
                     pathToUrank + 'helper/jquery_functions/scrollTo.js',

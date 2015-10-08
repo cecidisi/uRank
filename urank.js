@@ -99,7 +99,7 @@ var Urank = (function(){
             tagColorArray: tagColorRange,
             queryTermColorArray: queryTermColorRange,
         },
-        keywordExtractor :{
+        keywordExtractor: {
             minDocFrequency: 2,
             minRepetitionsInDocument: 1,
             maxKeywordDistance: 5,
@@ -118,15 +118,16 @@ var Urank = (function(){
         onLoad: function(data, options) {
 
             _this.clear();
-            var o = $.extend(true, defaultLoadOptions, options || {});
+        //    var o = $.extend(true, defaultLoadOptions, options || {});
+            _this.loadOpt = $.extend(true, defaultLoadOptions, options || {});
 
             //  Set color scales (need to be reset every time a new dataset is loaded)
-            o.tagColorArray = o.misc.tagColorArray.length >= TAG_CATEGORIES ? o.misc.tagColorArray : tagColorRange;
-            o.queryTermColorArray = o.misc.queryTermColorArray.length >= TAG_CATEGORIES ? o.misc.queryTermColorArray : queryTermColorRange;
+            _this.loadOpt.tagColorArray = _this.loadOpt.misc.tagColorArray.length >= TAG_CATEGORIES ? _this.loadOpt.misc.tagColorArray : tagColorRange;
+            _this.loadOpt.queryTermColorArray = _this.loadOpt.misc.queryTermColorArray.length >= TAG_CATEGORIES ? _this.loadOpt.misc.queryTermColorArray : queryTermColorRange;
             _this.tagColorScale = null;
-            _this.tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(o.tagColorArray);
+            _this.tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(_this.loadOpt.tagColorArray);
             _this.queryTermColorScale = null;
-            _this.queryTermColorScale = d3.scale.ordinal().range(o.queryTermColorArray);
+            _this.queryTermColorScale = d3.scale.ordinal().range(_this.loadOpt.queryTermColorArray);
 
             //  Initialize keyword extractor
             var keywordExtractorOptions = { minRepetitions: (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5 };
@@ -145,31 +146,29 @@ var Urank = (function(){
 
             //  Extract collection and document keywords
             keywordExtractor.processCollection();
-
             //  Assign document keywords
             _this.data.forEach(function(d, i){
                 d.keywords = keywordExtractor.listDocumentKeywords(i);
             });
-            console.log(JSON.stringify(_this.data));
 
-//            RANKING_MODE.by_CB.active = o.model.content;
-//            RANKING_MODE.by_TU.active o.model.social;
             //  Assign collection keywords and set other necessary variables
             _this.keywords = keywordExtractor.getCollectionKeywords();
             _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
-            _this.rMode = RANKING_MODE.by_CB;
+            _this.rMode = RANKING_MODE.by_CB.attr;
             _this.rWeight = 0.5;
             _this.rankingModel.clear().setData(_this.data);
             _this.selectedKeywords = [];
             _this.selectedId = undefined;
+            RANKING_MODE.by_CB.active = _this.loadOpt.model.content;
+            RANKING_MODE.by_TU.active = _this.loadOpt.model.social;
 
-            o.tagBox.ranking = o.model;
-            o.visCanvas.ranking = o.model;
-            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, o.tagCloud, _this.keywordsDict);
-            tagBox.build(o.tagBox);
-            contentList.build(_this.data, o.contentList, tagBox.getHeight());
-            visCanvas.build(_this.data, contentList.getListHeight(), o.visCanvas);
-            docViewer.build(o.docViewer);
+            _this.loadOpt.tagBox.ranking = _this.loadOpt.model;
+//            _this.loadOpt.visCanvas.ranking = _this.loadOpt.model;
+            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, _this.loadOpt.tagCloud, _this.keywordsDict);
+            tagBox.build(_this.loadOpt.tagBox);
+            contentList.build(_this.data, _this.loadOpt.contentList, tagBox.getHeight());
+            visCanvas.build(_this.data, contentList.getListHeight(), _this.loadOpt.visCanvas);
+            docViewer.build(_this.loadOpt.docViewer);
 
             //  Bind event handlers to resize window and undo effects on random click
             $(window).off('resize', EVTHANDLER.onResize).resize(EVTHANDLER.onResize);
@@ -181,7 +180,6 @@ var Urank = (function(){
                 'mousedown': EVTHANDLER.onRootMouseDown,
                 'click': EVTHANDLER.onRootClick
             });
-
             //  Custom callback
             s.onLoad.call(this, _this.keywords);
         },
@@ -195,8 +193,8 @@ var Urank = (function(){
                 user: 'NN',
                 query: _this.selectedKeywords,
                 mode: _this.rMode,
-                rWeight: _this.rMode === RANKING_MODE.overall ? _this.rWeight : 1
-                //ranking: o.model
+                rWeight: _this.rMode === RANKING_MODE.overall.attr ? _this.rWeight : 1,
+                ranking: _this.loadOpt.model
             };
 
             var rankingData = _this.rankingModel.update(updateOpt).getRanking();
@@ -204,7 +202,11 @@ var Urank = (function(){
 
             console.log(_this.rankingModel);
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
-            visCanvas.update(_this.rankingModel, _this.queryTermColorScale, contentList.getListHeight());
+            visCanvas.update(_this.rankingModel, {
+                colorSclae: _this.queryTermColorScale,
+                height: contentList.getListHeight(),
+                ranking: _this.loadOpt.model
+            });
             docViewer.clear();
             tagCloud.clearEffects();
 
