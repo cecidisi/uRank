@@ -43,25 +43,29 @@ var Ranking = (function(){
             var a = [];
             var rankingData = rankingModel.getRanking().slice();
             var score = rankingModel.getMode();
+            color = opt.colorScale;
 
             rankingData.forEach(function(d, i){
                 if(d.ranking.overallScore > 0) {
                     // Tag information
                     d.bars = [];
                     var x0 = 0;
-                    // keyword bars
-                    d.ranking.cbKeywords.forEach(function(k, i){
-                        d.bars.push({
-                            desc: k.stem,
-                            x0: x0,
-                            x1: x0 + k.weightedScore,
-                            color: color(k.stem)
-                        });
-                        x0 = d.bars[i].x1;
-                    });
 
-                    if(score != window.RANKING_MODE.by_CB_only) {
-                        x0 = (score == window.RANKING_MODE.by_CB || score == window.RANKING_MODE.by_TU) ? 1 : x0;
+                    if(score === RANKING_MODE.by_CB.attr || opt.ranking.content) {
+                        // keyword bars
+                        d.ranking.cbKeywords.forEach(function(k, i){
+                            d.bars.push({
+                                desc: k.stem,
+                                x0: x0,
+                                x1: x0 + k.weightedScore,
+                                color: color(k.stem)
+                            });
+                            x0 = d.bars[i].x1;
+                        });
+                        x0 = (score == window.RANKING_MODE.overall.attr) ? x0 :1;
+                    }
+                    if(score === RANKING_MODE.by_TU.attr || opt.ranking.social) {
+                        //x0 = (score !== window.RANKING_MODE.overall.attr || score == window.RANKING_MODE.by_TU) ? 1 : x0;
                         d.bars.push({
                             desc: 'TU',
                             x0: x0,
@@ -84,7 +88,7 @@ var Ranking = (function(){
             return a;
         },
         getXUpperLimit: function(rMode) {
-            if(rMode === RANKING_MODE.overall || rMode === RANKING_MODE.by_CB_only) return 1; return 2;
+            if(rMode === window.RANKING_MODE.overall.attr) return 1; return 2;
         }
     };
 
@@ -179,7 +183,8 @@ var Ranking = (function(){
             RANKING.Render.createShadow();
             //// Add stacked bars
             RANKING.Render.drawStackedBars();
-            RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery(), rankingModel.getMaxTagFrequency());
+            if(opt.ranking.social)
+                RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery(), rankingModel.getMaxTagFrequency());
         },
 
         /******************************************************************************************************************
@@ -217,7 +222,8 @@ var Ranking = (function(){
                 .selectAll("g").delay(delay);
 
             RANKING.Render.drawStackedBars();
-            RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery(), rankingModel.getMaxTagFrequency());
+            if(opt.ranking.social)
+                RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery(), rankingModel.getMaxTagFrequency());
         },
 
 

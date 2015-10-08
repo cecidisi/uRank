@@ -4,7 +4,7 @@
     this.dsm = new datasetManager();
 
     var initOptions = {
-        ranking: { social: true }
+        //ranking: { social: true }
     };
 
     var testOptionsDef = {

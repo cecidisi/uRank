@@ -163,9 +163,8 @@ var Urank = (function(){
             RANKING_MODE.by_TU.active = _this.loadOpt.model.social;
 
             _this.loadOpt.tagBox.ranking = _this.loadOpt.model;
-//            _this.loadOpt.visCanvas.ranking = _this.loadOpt.model;
-            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, _this.loadOpt.tagCloud, _this.keywordsDict);
             tagBox.build(_this.loadOpt.tagBox);
+            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, _this.loadOpt.tagCloud, _this.keywordsDict);
             contentList.build(_this.data, _this.loadOpt.contentList, tagBox.getHeight());
             visCanvas.build(_this.data, contentList.getListHeight(), _this.loadOpt.visCanvas);
             docViewer.build(_this.loadOpt.docViewer);
@@ -199,12 +198,12 @@ var Urank = (function(){
 
             var rankingData = _this.rankingModel.update(updateOpt).getRanking();
             var status = _this.rankingModel.getStatus();
-
+            console.log(status);
             console.log(_this.rankingModel);
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
             visCanvas.update(_this.rankingModel, {
-                colorSclae: _this.queryTermColorScale,
-                height: contentList.getListHeight(),
+                colorScale: _this.queryTermColorScale,
+                listHeight: contentList.getListHeight(),
                 ranking: _this.loadOpt.model
             });
             docViewer.clear();

@@ -45,7 +45,6 @@ var VisCanvas = (function(){
         $scrollable.on('scroll', onScroll);
         $visContainer = $('<div/>').appendTo($scrollable).addClass(viscanvasContainerClass).height(this.height);
 
-        console.log(opt);
         var visModule = VIS_MODULES[opt.module] || VIS_MODULES.ranking;
         var visOptions = {
             root: '.'+viscanvasContainerClass,

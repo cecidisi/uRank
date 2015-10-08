@@ -78,7 +78,7 @@ var RankingModel = (function(){
             d.ranking.overallScore = 0;
             if(opt.ranking.content)
                 d.ranking.overallScore += d.ranking.cbScore;
-            if(opt.ranking.content)
+            if(opt.ranking.social)
                 d.ranking.overallScore += d.ranking.tuScore;
         });
 
