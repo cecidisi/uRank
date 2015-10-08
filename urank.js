@@ -41,7 +41,9 @@ var Urank = (function(){
 
     var defaultLoadOptions = {
         model: {
-            'content-based-only': true
+        //    'content-based-only': true
+            content: true,
+            social: false
         },
         tagCloud : {
             module: 'default'      // default || landscape
@@ -148,18 +150,21 @@ var Urank = (function(){
             _this.data.forEach(function(d, i){
                 d.keywords = keywordExtractor.listDocumentKeywords(i);
             });
+            console.log(JSON.stringify(_this.data));
 
+//            RANKING_MODE.by_CB.active = o.model.content;
+//            RANKING_MODE.by_TU.active o.model.social;
             //  Assign collection keywords and set other necessary variables
             _this.keywords = keywordExtractor.getCollectionKeywords();
             _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
-            _this.rMode = o.model["content-based-only"] ? RANKING_MODE.by_CB_only : RANKING_MODE.by_CB;
+            _this.rMode = RANKING_MODE.by_CB;
             _this.rWeight = 0.5;
             _this.rankingModel.clear().setData(_this.data);
             _this.selectedKeywords = [];
-            _this.selectedId = STR_UNDEFINED;
+            _this.selectedId = undefined;
 
-            o.tagBox['content-based-only'] = o.model["content-based-only"];
-            o.visCanvas['content-based-only'] = o.model["content-based-only"];
+            o.tagBox.ranking = o.model;
+            o.visCanvas.ranking = o.model;
             tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, o.tagCloud, _this.keywordsDict);
             tagBox.build(o.tagBox);
             contentList.build(_this.data, o.contentList, tagBox.getHeight());
@@ -184,13 +189,14 @@ var Urank = (function(){
         onChange: function(selectedKeywords) {
 
             _this.selectedKeywords = selectedKeywords || _this.selectedKeywords;
-            _this.selectedId = STR_UNDEFINED;
+            _this.selectedId = undefined;
 
             var updateOpt = {
+                user: 'NN',
                 query: _this.selectedKeywords,
                 mode: _this.rMode,
-                rWeight: _this.rMode === RANKING_MODE.overall ? _this.rWeight : 1,
-                user: 'NN'
+                rWeight: _this.rMode === RANKING_MODE.overall ? _this.rWeight : 1
+                //ranking: o.model
             };
 
             var rankingData = _this.rankingModel.update(updateOpt).getRanking();

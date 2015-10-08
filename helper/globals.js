@@ -39,6 +39,24 @@ window.RANKING_MODE = {
     by_CB_only: 'cbScore_only',
 };
 
+/*
+window.RANKING_MODE = {
+    by_CB: {
+        attr: 'cbScore',
+        active: true
+    },
+    by_TU: {
+        attr: 'tuScore',
+        active: false
+    },
+    overall: {
+        attr: 'overallScore',
+        active: true
+    }
+};
+*/
+
+
 window.USER_ACTION = {
     added: 'keyword added',
     deleted: 'keyword deleted',

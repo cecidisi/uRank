@@ -69,14 +69,16 @@ var RankingModel = (function(){
         var tuWeight = (score == RANKING_MODE.overall) ? (1- opt.rWeight) : 1;
 
         var ranking = _this.data.slice();
-        ranking.forEach(function(d){ d.ranking = {}; });
+        //if(opt.ranking.content)
+            ranking.forEach(function(d){ d.ranking = {}; });
+        //if()
         ranking = _this.cbRS.getCBScores({ data: ranking, keywords: opt.query, options: { rWeight: cbWeight } });
-        if(opt.mode !== RANKING_MODE.by_CB_only) {
+
             ranking = _this.tuRS.getTagUserScores({ user: opt.user, keywords: opt.query, data: ranking, options: { rWeight: tuWeight } });
             ranking.forEach(function(d){
                 d.ranking.overallScore = d.ranking.cbScore + d.ranking.tuScore;
             });
-        }
+
         score = score === RANKING_MODE.by_CB_only ? RANKING_MODE.by_CB : score;
         var secScore = undefined;
         if(opt.mode === RANKING_MODE.by_CB) secScore = RANKING_MODE.by_TU;
@@ -133,10 +135,11 @@ var RankingModel = (function(){
 
         update: function(options) {
             var opt = $.extend(true, {
+                user: 'NN',
                 query: [],
-                mode: window.RANKING_MODE.by_CB,
+                mode: window.RANKING_MODE.by_CB.attr,
                 rWeight: 0.5,
-                user: 'NN'
+                ranking: { content: true, social: false }
             }, options);
             this.query = opt.query;
             this.mode = options.mode;
