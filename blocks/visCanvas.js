@@ -47,10 +47,14 @@ var VisCanvas = (function(){
 
         var visModule = VIS_MODULES[opt.module] || VIS_MODULES.ranking;
         var visOptions = {
-            root: '.'+viscanvasContainerClass
+            root: '.'+viscanvasContainerClass,
+            onItemClicked: s.onItemClicked,
+            onItemMouseEnter: s.onItemMouseEnter,
+            onItemMouseLeave: s.onItemMouseLeave,
+            lightBackgroundColor: opt.customOptions.lightBackgroundColor,
+            darkBackgroundColor: opt.customOptions.darkBackgroundColor,
         };
-        console.log(opt);
-        this.vis = new visModule($.extend({}, s, { root: '.'+viscanvasContainerClass }, opt.customOpt));
+        this.vis = new visModule(visOptions);
         this.vis.build(data, height);
         return this;
     };

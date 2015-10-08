@@ -179,11 +179,11 @@ var TagBox = (function(){
         $message = $('<p>' + STR_DROP_TAGS_HERE + '</p>').appendTo($tagContainer);
         $resetBtn = $('<a/>', { href: '#' }).appendTo($tagContainer).addClass(clearBtnClass).on('click', function(){ s.onReset.call(this); }).hide();
 
-        if(opt.ranking.social) {
-            buildRankingModeHeader();
+        if(opt['content-based-only']) {
+            $tagContainer.addClass('large');
         }
         else {
-            $tagContainer.addClass('large');
+            buildRankingModeHeader();
         }
         return this;
     };

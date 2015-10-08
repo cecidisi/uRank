@@ -14,11 +14,6 @@ var Urank = (function(){
     //   defaults
     var defaultInitOptions = {
         root: 'body',
-        ranking: {
-            content: true,
-            social: false,
-            custom: false
-        },
         tagCloudRoot: '',
         tagBoxRoot: '',
         contentListRoot: '',
@@ -45,6 +40,9 @@ var Urank = (function(){
     };
 
     var defaultLoadOptions = {
+        model: {
+            'content-based-only': true
+        },
         tagCloud : {
             module: 'default'      // default || landscape
         },
@@ -154,14 +152,14 @@ var Urank = (function(){
             //  Assign collection keywords and set other necessary variables
             _this.keywords = keywordExtractor.getCollectionKeywords();
             _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
-            _this.rMode = RANKING_MODE.by_CB;
+            _this.rMode = o.model["content-based-only"] ? RANKING_MODE.by_CB_only : RANKING_MODE.by_CB;
             _this.rWeight = 0.5;
             _this.rankingModel.clear().setData(_this.data);
             _this.selectedKeywords = [];
             _this.selectedId = STR_UNDEFINED;
 
-            $.extend(true, o.tagBox.ranking, s.ranking);
-            $.extend(true, o.visCanvas.ranking, s.ranking);
+            o.tagBox['content-based-only'] = o.model["content-based-only"];
+            o.visCanvas['content-based-only'] = o.model["content-based-only"];
             tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, o.tagCloud, _this.keywordsDict);
             tagBox.build(o.tagBox);
             contentList.build(_this.data, o.contentList, tagBox.getHeight());
@@ -171,8 +169,7 @@ var Urank = (function(){
             //  Bind event handlers to resize window and undo effects on random click
             $(window).off('resize', EVTHANDLER.onResize).resize(EVTHANDLER.onResize);
             $(document).off('keydown', EVTHANDLER.onKeyDown).on('keydown', EVTHANDLER.onKeyDown);
-            $(s.root)
-            .off({
+            $(s.root).off({
                 'mousedown': EVTHANDLER.onRootMouseDown,
                 'click': EVTHANDLER.onRootClick
             }).on({

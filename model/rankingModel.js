@@ -71,14 +71,17 @@ var RankingModel = (function(){
         var ranking = _this.data.slice();
         ranking.forEach(function(d){ d.ranking = {}; });
         ranking = _this.cbRS.getCBScores({ data: ranking, keywords: opt.query, options: { rWeight: cbWeight } });
-        ranking = _this.tuRS.getTagUserScores({ user: opt.user, keywords: opt.query, data: ranking, options: { rWeight: tuWeight } });
-        ranking.forEach(function(d){
-            d.ranking.overallScore = d.ranking.cbScore + d.ranking.tuScore;
-        });
-
-
-        var secScore = opt.mode == RANKING_MODE.by_CB ? RANKING_MODE.by_TU : (opt.mode == RANKING_MODE.by_TU ? RANKING_MODE.by_CB : undefined)
-
+        if(opt.mode !== RANKING_MODE.by_CB_only) {
+            ranking = _this.tuRS.getTagUserScores({ user: opt.user, keywords: opt.query, data: ranking, options: { rWeight: tuWeight } });
+            ranking.forEach(function(d){
+                d.ranking.overallScore = d.ranking.cbScore + d.ranking.tuScore;
+            });
+        }
+        score = score === RANKING_MODE.by_CB_only ? RANKING_MODE.by_CB : score;
+        var secScore = undefined;
+        if(opt.mode === RANKING_MODE.by_CB) secScore = RANKING_MODE.by_TU;
+        else if(opt.mode == RANKING_MODE.by_TU) secScore = RANKING_MODE.by_CB;
+        //var secScore = opt.mode == RANKING_MODE.by_CB ? RANKING_MODE.by_TU : (opt.mode == RANKING_MODE.by_TU ? RANKING_MODE.by_CB : undefined)
         ranking = ranking.sort(function(d1, d2){
             if(d1.ranking[score] > d2.ranking[score]) return -1;
             if(d1.ranking[score] < d2.ranking[score]) return 1;

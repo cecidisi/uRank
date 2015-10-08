@@ -31,7 +31,7 @@ var TagCloudDefault = (function(){
     //  Helpers
     var backgroudGradient = "top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255)";
     var $root = $(''), $scrollable = $(''), $tagContainer = $(''), $tooltip = $(''),
-        tooltipTimeOut,
+        tooltipTimeOut, fadeOutTimeOut,
 
         tagHintPinOptions = {
             document: { top: -6, right: -10, container: '.'+tagcloudDefaultClass },
@@ -77,13 +77,12 @@ var TagCloudDefault = (function(){
         _this.isTagDragged = true;
         $tooltip.hide();
         clearTimeout(tooltipTimeOut);
+        clearTimeout(fadeOutTimeOut);
 
         $(this).data('dropped', false).data('addedTags', _this.addedTags)
-        //    .addClass(selectedClass)
-        //    .addClass(disabledClass)
-        //.addClass('dragging')
         //.removeClass(hoveredClass)
-        .setTagStyle();
+        //.setTagStyle()
+        ;
 
         $(ui.helper).addClass('dragging');
 
@@ -315,7 +314,7 @@ var TagCloudDefault = (function(){
                 $tooltip.find("[name='tag']").html(_this.keywords[index].term.toUpperCase());
                 $tooltip.find("[name='num-kw']").html(_this.keywords[index].keywordsInProximity.length);
                 $tooltip.fadeIn();
-                setTimeout(function(){
+                fadeOutTimeOut = setTimeout(function(){
                     $tooltip.fadeOut();
                 }, 4000);
             }, 500);
@@ -332,6 +331,7 @@ var TagCloudDefault = (function(){
                 $tag.removeClass(hoveredClass).setTagStyle();
             //}
             clearTimeout(tooltipTimeOut);
+            clearTimeout(fadeOutTimeOut);
             $tooltip.hide();
         }
     };

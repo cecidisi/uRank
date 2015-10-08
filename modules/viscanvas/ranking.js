@@ -34,8 +34,7 @@ var Ranking = (function(){
             lightBackgroundColor: '',
             darkBackgroundColor: ''
         }, arguments);
-
-        console.log(s);
+        this.opt = {};
         this.isRankingDrawn = false;
     }
 
@@ -61,26 +60,31 @@ var Ranking = (function(){
                         x0 = d.bars[i].x1;
                     });
 
-                    x0 = (score == window.RANKING_MODE.by_CB || score == window.RANKING_MODE.by_TU) ? 1 : x0;
-                    d.bars.push({
-                        desc: 'TU',
-                        x0: x0,
-                        x1: x0 + d.ranking.tuScore,
-                        color: 'rgb(140, 140, 140)'
-                    });
+                    if(score != window.RANKING_MODE.by_CB_only) {
+                        x0 = (score == window.RANKING_MODE.by_CB || score == window.RANKING_MODE.by_TU) ? 1 : x0;
+                        d.bars.push({
+                            desc: 'TU',
+                            x0: x0,
+                            x1: x0 + d.ranking.tuScore,
+                            color: 'rgb(140, 140, 140)'
+                        });
 
-                    // Tag information
-                    d.tags = [];
-                    var tagsObj = d.ranking.tuMisc.tags;
-                    Object.keys(tagsObj).forEach(function(tk, j){
-                        d.tags.push(tagsObj[tk]);
-                        d.tags[j].term = tk;
-                        d.tags[j].color = color(d.tags[j].stem);
-                    });
+                        // Tag information
+                        d.tags = [];
+                        var tagsObj = d.ranking.tuMisc.tags;
+                        Object.keys(tagsObj).forEach(function(tk, j){
+                            d.tags.push(tagsObj[tk]);
+                            d.tags[j].term = tk;
+                            d.tags[j].color = color(d.tags[j].stem);
+                        });
+                    }
                     a.push(d);
                 }
             });
             return a;
+        },
+        getXUpperLimit: function(rMode) {
+            if(rMode === RANKING_MODE.overall || rMode === RANKING_MODE.by_CB_only) return 1; return 2;
         }
     };
 
@@ -126,7 +130,7 @@ var Ranking = (function(){
             margin = { top: 0, bottom: 0, left: 0, right: 0 };
             width = $root.width() - margin.left - margin.right;
             height = listHeight;
-            xUpperLimit = rankingModel.getMode() == RANKING_MODE.overall ? 1 : 2;
+            xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode());
 
             // Define scales
 		    x = d3.scale.linear()
@@ -196,7 +200,7 @@ var Ranking = (function(){
             d3.select(s.root).select('.'+svgClass).attr("width", width)
             svg.attr("width", width);
 
-            xUpperLimit = rankingModel.getMode() == RANKING_MODE.overall ? 1 : 2;
+            xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode());
             x.rangeRound( [0, width] )
              .domain([0, xUpperLimit]).copy();
 
@@ -457,9 +461,6 @@ var Ranking = (function(){
 
     var _build = function(data, containerHeight) {
         $root = $(s.root);
-
-
-
         return this;
     }
 
