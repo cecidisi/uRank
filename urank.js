@@ -20,17 +20,18 @@ var Urank = (function(){
         visCanvasRoot: '',
         docViewerRoot: '',
         onLoad: function(keywords){},
-        onChange: function(rankingData, selecedKeywords){},
+        onChange: function(rankingData, selectedKeywords){},
         onItemClicked: function(documentId){},
         onItemMouseEnter: function(documentId){},
         onItemMouseLeave: function(documentId){},
         onFaviconClicked: function(documentId){},
         onWatchiconClicked: function(documentId){},
-        onTagInCloudMouseEnter: function(index){},
-        onTagInCloudMouseLeave: function(index){},
-        onTagInCloudClick: function(index){},
-        onTagDeleted: function(index){},
+        onTagInCloudMouseEnter: function(tag){},
+        onTagInCloudMouseLeave: function(tag){},
+        onTagInCloudClick: function(tag){},
         onTagDropped: function(droppedTags, dropMode){},
+        onTagDeleted: function(tag){},
+        onTagWeightChanged: function(tag){},
         onTagInBoxMouseEnter: function(index){},
         onTagInBoxMouseLeave: function(index){},
         onTagInBoxClick: function(index){},
@@ -198,8 +199,8 @@ var Urank = (function(){
 
             var rankingData = _this.rankingModel.update(updateOpt).getRanking();
             var status = _this.rankingModel.getStatus();
-            console.log(status);
-            console.log(_this.rankingModel);
+//            console.log(status);
+//            console.log(_this.rankingModel);
             contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
             visCanvas.update(_this.rankingModel, {
                 colorScale: _this.queryTermColorScale,
@@ -228,17 +229,23 @@ var Urank = (function(){
         onTagDeleted: function(index) {
             tagBox.deleteTag(index);
             tagCloud.restoreTag(index);
-            s.onTagDeleted.call(this, index);
+            var tag = { index: index, stem: _this.keywords[index].stem, term: _this.keywords[index].term };
+            s.onTagDeleted.call(this, tag);
+        },
+
+        onTagWeightChanged: function(index, weight){
+            var tag = { index: index, stem: _this.keywords[index].stem, term: _this.keywords[index].term, weight: weight };
+            s.onTagWeightChanged.call(this, tag);
         },
 
         onTagInCloudMouseEnter: function(index) {
             tagCloud.hoverTag(index);
-            s.onTagInCloudMouseEnter.call(this, index);
+            s.onTagInCloudMouseEnter.call(this, _this.keywords[index]);
         },
 
         onTagInCloudMouseLeave: function(index) {
             tagCloud.unhoverTag(index);
-            s.onTagInCloudMouseLeave.call(this, index);
+            s.onTagInCloudMouseLeave.call(this, _this.keywords[index]);
         },
 
         onTagInCloudClick: function(index) {
@@ -246,7 +253,7 @@ var Urank = (function(){
             var idsArray = _this.keywords[index].inDocument;
             contentList.highlightListItems(idsArray);
             visCanvas.highlightItems(idsArray).resize(contentList.getListHeight());
-            s.onTagInCloudClick.call(this, index);
+            s.onTagInCloudClick.call(this, _this.keywords[index]);
         },
 
         onKeywordEntered: function(keyword){
@@ -441,6 +448,7 @@ var Urank = (function(){
                 onRankingWeightChanged: EVTHANDLER.onRankingWeightChange,
                 onTagDropped: EVTHANDLER.onTagDropped,
                 onTagDeleted: EVTHANDLER.onTagDeleted,
+                onTagWeightChanged: EVTHANDLER.onTagWeightChanged,
                 onTagInBoxMouseEnter: EVTHANDLER.onTagInBoxMouseEnter,
                 onTagInBoxMouseLeave: EVTHANDLER.onTagInBoxMouseLeave,
                 onTagInBoxClick: EVTHANDLER.onTagInBoxClick,

@@ -59,11 +59,6 @@ var TagCloud = (function(){
     };
 
 
-    var onSlide = function(event, ui) {
-        $tagFreqLabel.html('Keyword frequency: <strong>' + ui.values[0] + '</strong> - <strong>' + ui.values[1] + '</strong>');
-        s.onTagFrequencyChanged.call(this, ui.values[0], ui.values[1]);
-    };
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Prototype methods
 
@@ -85,7 +80,12 @@ var TagCloud = (function(){
             min: minFreq,
             max: maxFreq,
             values: [minFreq, maxFreq],
-            slide: onSlide
+            slide: function(event, ui) {
+                $tagFreqLabel.html('Keyword frequency: <strong>' + ui.values[0] + '</strong> - <strong>' + ui.values[1] + '</strong>');
+            },
+            stop: function(event, ui) {
+                s.onTagFrequencyChanged.call(this, ui.values[0], ui.values[1]);
+            }
         });
 
         // Keyword search input

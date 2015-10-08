@@ -118,8 +118,59 @@
         tagCloudRoot: '#tagcloud',
         tagBoxRoot: '#tagbox',
         contentListRoot: '#contentlist',
-        visCanvasRoot: '#viscanvas'/*,
-        docViewerRoot: '#docviewer'*/
+        visCanvasRoot: '#viscanvas',
+//        onChange: function(rankingData, selectedKeywords){
+//            console.log('Change');
+//            console.log(rankingData);
+//            console.log(selectedKeywords);
+//        },
+        onItemClicked: function(documentId){
+            console.log('Item clicked (document visited) --> '+ documentId);
+        },
+//        onItemMouseEnter: function(documentId){
+//            console.log('Item mourse over --> '+ documentId);
+//        },
+//        onItemMouseLeave: function(documentId){
+//            console.log('Item mourse leave --> '+ documentId);
+//        },
+        onFaviconClicked: function(documentId){
+            console.log('Fav icon clicked --> '+ documentId);
+        },
+        onWatchiconClicked: function(documentId){
+            console.log('Watch icon clicked --> '+ documentId);
+        },
+//        onTagInCloudMouseEnter: function(tag){
+//            console.log('Tag hovered');
+//            console.log(tag);
+//        },
+        onTagInCloudMouseLeave: function(tag){},
+        onTagInCloudClick: function(tag){
+            console.log('Tag clicked');
+            console.log(tag);
+        },
+        onTagDropped: function(droppedTags, dropMode){
+            console.log('Tag/s dropped --> mode = ' + dropMode);
+            console.log(droppedTags);
+        },
+        onTagDeleted: function(tag){
+            console.log('Tag deleted');
+            console.log(tag);
+        },
+        onTagWeightChanged: function(tag){
+            console.log('Tag Weight changed');
+            console.log(tag);
+        },
+        onTagInBoxMouseEnter: function(index){},
+        onTagInBoxMouseLeave: function(index){},
+        onTagInBoxClick: function(index){},
+        onTagFrequencyChanged: function(min, max){
+            console.log('Tag frequency changed --> min = ' + min + '; max = ' + max);
+        },
+        onKeywordEntered: function(term){
+            console.log('Term searched');
+            console.log(term);
+        },
+        onDocViewerHidden: function(){}
     };
 
     // uRank initialization function to be passed as callback

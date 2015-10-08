@@ -56,7 +56,7 @@ var TagBox = (function(){
             onRankingWeightChanged: function(rWeight) {},
             onTagDropped: function(tagIndices){},
             onTagDeleted: function(index){},
-            onTagWeightchanged: function(){},
+            onTagWeightChanged: function(index, weight){},
             onTagInBoxMouseEnter: function(index){},
             onTagInBoxMouseLeave: function(index){},
             onTagInBoxClick: function(index){},
@@ -98,6 +98,7 @@ var TagBox = (function(){
                 var term = $(this.parentNode).getText(),
                     indexToChange = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
                 _this.selectedKeywords[indexToChange].weight = ui.value;
+                s.onTagWeightChanged.call(this, $(this.parentNode).attr(tagPosAttr), ui.value);
                 $tagContainer.trigger(tagBoxChangeEvent);
             }
         };
