@@ -21,18 +21,18 @@
         <!-- top panel -->
         <header>
             <select id="select-dataset"></select>
-            <input type="button" id="btn-destroy" value="Destroy"/>
+            <input type="button" id="btn-action-logs" value="Action Logs"/>
+            <input type="button" id="btn-finish" value="Finish"/>
       	</header>
 
         <div class="main-panel">
 
             <div class="control-panel">
-                <div class="inner"></div>
-<!--
-                    <button id="btn-reset" title="Reset">
-                        <span class="sprite-reset"></span>
-                    </button>
--->
+                <div class="container">
+                    <h4>Bookmarked Documents</h4>
+                    <span class="favicon"></span>
+                    <div class="bookmark-area"></div>
+                </div>
             </div>
 
             <div class="left-panel">
@@ -48,7 +48,7 @@
 
 		</div>
 
-        <div class="processing-message">Processing Data...</div>
+        <div class="processing-message" style="display:none;">Processing Data...</div>
 
         <!-- bower:js -->
         <!-- endbower -->
@@ -58,6 +58,7 @@
 
         <script type="text/javascript" src="../dependencies/jquery.js"></script>
         <script type="text/javascript" src="../urank-loader.js"></script>
+        <script type="text/javascript" src="js/actionLogger.js"></script>
         <script type="text/javascript" src="js/datasetManager.js" charset="utf-8" ></script>
         <script type="text/javascript" src="js/main.js" charset="utf-8"></script>
 

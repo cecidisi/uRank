@@ -185,6 +185,7 @@ header input[type="button"] {
     display: inline-block;
     background: -webkit-linear-gradient(top, rgba(175, 175, 175, 1), rgba(170, 170, 170, 1));
     box-shadow: inset .1em .1em .5em #aaa, inset -.1em -.1em .5em #aaa;
+    text-align: left;
 }
 
 
@@ -217,57 +218,106 @@ header input[type="button"] {
 *
 */
 
-.control-panel .inner {
-    margin: 6px 2px;
 
-
+.control-panel .container {
+    height: calc(100% - 20px);
+    margin: 10px 5px;
 }
 
-.control-panel label {
-    margin: 0px 4px;
+.control-panel .container h4 {
+    display: inline-block;
+    font-size: 0.9em;
+    color: white;
 }
 
-.control-panel select {
-    height: 25px;
-    width: 125px;
-    padding: 2px;
-}
-
-
-.control-panel button {
-    min-width: 16px;
-    height: 24px;
-    margin: 7px;
-    border-radius: 5px;
-}
-
-
-.control-panel button span {
-    /*width: 100%;
-    height: 100%;*/
-    background-image: url(../media/sprites.png);
+.control-panel .container span.favicon {
+    float: left;
+    display: inline-block;
+    background-image: url(../../media/favicon_on.png);
     background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    margin-top: 12px;
+    margin-right: 6px;
+}
+
+.control-panel .container .bookmark-area {
     display: block;
+    width: calc(100% - 4px);
+    min-height: 300px;
+    max-height: calc(100% - 50px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 5px 2px;
+    border-radius: 2px;
+    background-color: rgba(220,220,220, 0.9);
 }
 
-.control-panel button span.sprite-reset {
+.control-panel .container .bookmark-area .item {
+    display: inline-block;
+    width: calc(100%- 10px);
+    min-height: 30px;
+    margin: 2px 3px;
+    padding: 2px;
+    border-radius: 4px;
+    border: 1px solid rgb(150,150,150);
+    background-color: rgba(180,180,180,1);
+    box-shadow: 0px 1px 3px #888;
+}
+
+.control-panel .container .bookmark-area .item a.doc-icon {
+    display: inline-block;
+    float: left;
     width: 16px;
-    height: 16px;
-    background-position: -5px -5px;
+    margin: 6px 3px;
+    font-size: 1.2em;
+    color: snow;
+    text-decoration: none;
+    cursor: default;
 }
 
-.control-panel button span.sprite-sort-down {
-    width: 16px;
-    height: 11px;
-    background-position: -31px -5px;
+.control-panel .container .bookmark-area .item a.doc-icon:before {
+    content: '\f15c';
+    font-family: FontAwesome;
 }
 
-.control-panel button span.sprite-wiggle {
-    width: 16px;
-    height: 16px;
-    background-position: -57px -5px;
+.control-panel .container .bookmark-area .item span {
+    display: inline-block;
+    float: left;
+    width: calc(100% - 22px);
+    font-size: 0.9em;
+    color: snow;
 }
 
+.control-panel .container .bookmark-area .item a.remove-icon {
+    display: inline-block;
+    float: right;
+    width: 0px;
+    height: 0px;
+    font-size: 1.4em;
+    text-decoration: none;
+    color: red;
+}
+
+.control-panel .container .bookmark-area .item a.remove-icon:before {
+    display: none;
+/*    display: inline-block;*/
+    position: relative;
+    right: 14px;
+    top: 3px;
+    content: '\f00d';
+    font-family: FontAwesome;
+    text-decoration: none;
+}
+
+
+.control-panel .container .bookmark-area .item:hover a.remove-icon:before {
+    display: inline-block;
+}
+
+.control-panel .container .bookmark-area .item:hover a.remove-icon:hover:before {
+    transform: scale(1.1);
+}
 
 
 /***********************************************/

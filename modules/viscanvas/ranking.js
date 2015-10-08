@@ -101,17 +101,17 @@ var Ranking = (function(){
 
     RANKING.Evt.itemClicked = function(d, i){
         d3.event.stopPropagation();
-        s.onItemClicked.call(this, d.id);
+        s.onItemClicked.call(this, d.id, i);
     };
 
     RANKING.Evt.itemMouseEntered = function(d, i){
         d3.event.stopPropagation();
-        s.onItemMouseEnter.call(this, d.id);
+        s.onItemMouseEnter.call(this, d.id, i);
     };
 
     RANKING.Evt.itemMouseLeft = function(d, i){
         d3.event.stopPropagation();
-        s.onItemMouseLeave.call(this, d.id);
+        s.onItemMouseLeave.call(this, d.id, i);
     };
 
 
@@ -491,7 +491,7 @@ var Ranking = (function(){
         return this;
     };
 
-    var _selectItem = function(id){
+    var _selectItem = function(id, index){
         if(this.isRankingDrawn) {
             id = _.isArray(id) ? id : [id];
             svg.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
@@ -510,7 +510,7 @@ var Ranking = (function(){
     };
 
 
-    var _hoverItem = function(id) {
+    var _hoverItem = function(id, index) {
         if(this.isRankingDrawn) {
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0)')
@@ -521,7 +521,7 @@ var Ranking = (function(){
     };
 
 
-    var _unhoverItem = function(id) {
+    var _unhoverItem = function(id, index) {
         if(this.isRankingDrawn) {
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')

@@ -21,11 +21,11 @@ var Urank = (function(){
         docViewerRoot: '',
         onLoad: function(keywords){},
         onChange: function(rankingData, selectedKeywords){},
-        onItemClicked: function(documentId){},
-        onItemMouseEnter: function(documentId){},
-        onItemMouseLeave: function(documentId){},
-        onFaviconClicked: function(documentId){},
-        onWatchiconClicked: function(documentId){},
+        onItemClicked: function(document){},
+        onItemMouseEnter: function(document){},
+        onItemMouseLeave: function(document){},
+        onFaviconClicked: function(document){},
+        onWatchiconClicked: function(document){},
         onTagInCloudMouseEnter: function(tag){},
         onTagInCloudMouseLeave: function(tag){},
         onTagInCloudClick: function(tag){},
@@ -37,7 +37,8 @@ var Urank = (function(){
         onTagInBoxClick: function(index){},
         onTagFrequencyChanged: function(min, max){},
         onKeywordEntered: function(term){},
-        onDocViewerHidden: function(){}
+        onDocViewerHidden: function(){},
+        onReset: function(){}
     };
 
     var defaultLoadOptions = {
@@ -240,12 +241,14 @@ var Urank = (function(){
 
         onTagInCloudMouseEnter: function(index) {
             tagCloud.hoverTag(index);
-            s.onTagInCloudMouseEnter.call(this, _this.keywords[index]);
+            var tag = { index: index, term: _this.keywords[index].term }
+            s.onTagInCloudMouseEnter.call(this, tag);
         },
 
         onTagInCloudMouseLeave: function(index) {
             tagCloud.unhoverTag(index);
-            s.onTagInCloudMouseLeave.call(this, _this.keywords[index]);
+            var tag = { index: index, term: _this.keywords[index].term }
+            s.onTagInCloudMouseLeave.call(this, tag);
         },
 
         onTagInCloudClick: function(index) {
@@ -253,7 +256,8 @@ var Urank = (function(){
             var idsArray = _this.keywords[index].inDocument;
             contentList.highlightListItems(idsArray);
             visCanvas.highlightItems(idsArray).resize(contentList.getListHeight());
-            s.onTagInCloudClick.call(this, _this.keywords[index]);
+            var tag = { index: index, term: _this.keywords[index].term }
+            s.onTagInCloudClick.call(this, tag);
         },
 
         onKeywordEntered: function(keyword){
@@ -281,44 +285,36 @@ var Urank = (function(){
             s.onTagInBoxClick.call(this, index);
         },
 
-        onItemClicked : function(documentId) {
+        onItemClicked : function(documentId, index) {
 //            _this.selectedId = _this.selectedId === documentId ? STR_UNDEFINED : documentId;
             _this.selectedId = documentId;
-
-//            if(_this.selectedId !== STR_UNDEFINED) {    // select
-                contentList.selectListItem(documentId);
-                visCanvas.selectItem(documentId);
-                docViewer.showDocument(_this.rankingModel.getDocumentById(documentId), _this.selectedKeywords.map(function(k){return k.stem}), _this.queryTermColorScale);
-//            }
-//            else {                   // deselect
-//                contentList.deselectAllListItems();
-//                visCanvas.deselectAllItems();
-//                docViewer.clear();
-//            }
+            contentList.selectListItem(documentId, index);
+            visCanvas.selectItem(documentId, index);
+            docViewer.showDocument(_this.rankingModel.getDocumentById(documentId), _this.selectedKeywords.map(function(k){return k.stem}), _this.queryTermColorScale);
             tagCloud.clearEffects();
-            s.onItemClicked.call(this, documentId);
+            s.onItemClicked.call(this, { index: index, id: documentId, title: _this.data[index].title });
         },
 
-        onItemMouseEnter: function(documentId) {
-            contentList.hover(documentId);
-            visCanvas.hoverItem(documentId);
-            s.onItemMouseEnter.call(this, documentId);
+        onItemMouseEnter: function(documentId, index) {
+            contentList.hover(documentId, index);
+            visCanvas.hoverItem(documentId, index);
+            s.onItemMouseEnter.call(this, { index: index, id: documentId, title: _this.data[index].title });
         },
 
-        onItemMouseLeave: function(documentId) {
-            contentList.unhover(documentId);
-            visCanvas.unhoverItem(documentId);
-            s.onItemMouseLeave.call(this, documentId);
+        onItemMouseLeave: function(documentId, index) {
+            contentList.unhover(documentId, index);
+            visCanvas.unhoverItem(documentId, index);
+            s.onItemMouseLeave.call(this, { index: index, id: documentId, title: _this.data[index].title });
         },
 
-        onFaviconClicked: function(documentId){
-            contentList.toggleFavicon(documentId);
-            s.onFaviconClicked.call(this, documentId);
+        onFaviconClicked: function(documentId, index){
+            contentList.toggleFavicon(documentId), index;
+            s.onFaviconClicked.call(this, { index: index, id: documentId, title: _this.data[index].title });
         },
 
-        onWatchiconClicked: function(documentId) {
-            contentList.toggleWatchListItem(documentId);
-            s.onWatchiconClicked.call(this, documentId);
+        onWatchiconClicked: function(documentId, index) {
+            contentList.toggleWatchListItem(documentId, index);
+            s.onWatchiconClicked.call(this, { index: index, id: documentId, title: _this.data[index].title });
         },
 
 
@@ -393,6 +389,7 @@ var Urank = (function(){
                 }, 0);
             });
             _this.selectedKeywords = [];
+            s.onReset.call(this);
         },
 
         onDestroy: function() {
@@ -409,6 +406,16 @@ var Urank = (function(){
             docViewer.clear();
 //            contentList.clear();
             //visCanvas.destroy();
+        },
+
+        bookmarkItem: function(documentId, index){
+            _this.data[index].bookmarked = true;
+            contentList.toggleFavicon(documentId);
+        },
+
+        unbookmarkItem: function(documentId, index){
+            _this.data[index].bookmarked = false;
+            contentList.toggleFavicon(documentId);
         }
     };
 
@@ -504,10 +511,10 @@ var Urank = (function(){
                     }
                 })
             };
-        }
+        },
+        getSelectedKeywords: function(){ return _this.selectedKeywords }
 
     };
-
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -516,10 +523,12 @@ var Urank = (function(){
 
     Urank.prototype = {
         loadData: EVTHANDLER.onLoad,
-        reset: EVTHANDLER.onReset,
         clear: EVTHANDLER.onClear,
         destroy: EVTHANDLER.onDestroy,
-        getCurrentState: MISC.getCurrentState
+        bookmarkItem: EVTHANDLER.bookmarkItem,
+        unbookmarkItem: EVTHANDLER.unbookmarkItem,
+        getCurrentState: MISC.getCurrentState,
+        getSelectedKeywords: MISC.getSelectedKeywords
     };
 
     return Urank;

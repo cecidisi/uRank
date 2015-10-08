@@ -48,7 +48,8 @@ var ContentList = (function(){
     // Ids
     var liItem = '#urank-list-li-';
 
-    var urankIdAttr = 'urank-id';
+    var urankIdAttr = 'urank-id',
+        originalIndex = 'original-index';
     // Helper
     var $root = $(''), $header = $(''), $listContainer = $(''), $scrollable = $(''), $ul = $('');
 
@@ -64,11 +65,11 @@ var ContentList = (function(){
         _this = this;
         s = $.extend({
             root: '',
-            onItemClicked: function(document){},
-            onItemMouseEnter: function(document){},
-            onItemMouseLeave: function(document){},
-            onFaviconClicked: function(document){},
-            onWatchiconClicked: function(document){},
+            onItemClicked: function(documentId, index){},
+            onItemMouseEnter: function(documentId, index){},
+            onItemMouseLeave: function(documentId, index){},
+            onFaviconClicked: function(documentId, indext){},
+            onWatchiconClicked: function(documentId, index){},
             defaultStyle: true
         }, arguments);
 
@@ -82,25 +83,29 @@ var ContentList = (function(){
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //  Internal functions
 
-    var bindEventHandlers = function($li, id) {
+    var bindEventHandlers = function($li, id, index) {
 
         var onLiClick = function(event){
             event.stopPropagation();
             hideUnrankedListItems();
             if(!$(this).hasClass(liUnrankedClass))
-                s.onItemClicked.call(this, id);
+                s.onItemClicked.call(this, id, index);
         };
         var onLiMouseEnter = function(event){
-            event.stopPropagation(); s.onItemMouseEnter.call(this, id);
+            event.stopPropagation(); s.onItemMouseEnter.call(this, id, index);
         };
         var onLiMouseLeave = function(event){
-            event.stopPropagation(); s.onItemMouseLeave.call(this, id);
+            event.stopPropagation(); s.onItemMouseLeave.call(this, id, index);
         };
         var onWatchiconClick = function(event){
-            event.stopPropagation(); s.onWatchiconClicked.call(this, event.data);
+            event.stopPropagation();
+            var $item = $(event.data)
+            s.onWatchiconClicked.call(this, $item.attr(urankIdAttr), $item.attr(originalIndex));
         };
         var onFaviconClick = function(event){
-            event.stopPropagation(); s.onFaviconClicked.call(this, event.data);
+            event.stopPropagation();
+            var $item = $(event.data)
+            s.onFaviconClicked.call(this, $item.attr(urankIdAttr), $item.attr(originalIndex));
         };
 
         $li.off({
@@ -113,10 +118,8 @@ var ContentList = (function(){
             mouseenter: onLiMouseEnter,
             mouseleave: onLiMouseLeave
         })
-        .off('click', '.'+watchiconClass, $li.attr(urankIdAttr), onWatchiconClick)
-        .off('click', '.'+faviconClass, $li.attr(urankIdAttr), onFaviconClick)
-        .on('click', '.'+watchiconClass, $li.attr(urankIdAttr), onWatchiconClick)
-        .on('click', '.'+faviconClass, $li.attr(urankIdAttr), onFaviconClick);
+        .off('click', '.'+watchiconClass, $li, onWatchiconClick).on('click', '.'+watchiconClass, $li, onWatchiconClick)
+        .off('click', '.'+faviconClass, $li, onFaviconClick).on('click', '.'+faviconClass, $li, onFaviconClick);
     };
 
 
@@ -227,6 +230,7 @@ var ContentList = (function(){
                 })
                 .queue(function(){
                     $(this).css('top', '');
+                    bindEventHandlers($item, d.id, i);
                 })
                 .dequeue();
             }
@@ -326,7 +330,7 @@ var ContentList = (function(){
             $li.find(c.watchicon).addClass(watchiconClass+' '+watchiconOffClass);
             $li.find(c.favicon).addClass(faviconClass+' '+faviconOffClass);
 
-            bindEventHandlers($li, id);
+            bindEventHandlers($li, id, i);
         });
 
         hoveredClass = c.liHoverClass == '' ? hoveredClass : c.liHoverClass;
@@ -349,7 +353,7 @@ var ContentList = (function(){
 
         _this.data.forEach(function(d, i){
             // li element
-            var $li = $('<li></li>', { 'urank-id': d.id }).appendTo($ul).addClass(liClass +' '+ liClassDefault);
+            var $li = $('<li></li>', { 'urank-id': d.id, 'original-index': i }).appendTo($ul).addClass(liClass +' '+ liClassDefault);
             // ranking section
             var $rankingDiv = $("<div></div>").appendTo($li).addClass(liRankingContainerClass).css('visibility', 'hidden');
             $("<div></div>").appendTo($rankingDiv).addClass(rankingPosClass);
@@ -360,24 +364,16 @@ var ContentList = (function(){
             // buttons section
             var $buttonsDiv = $("<div></div>").appendTo($li).addClass(liButtonsContainerClass);
             $("<span>").appendTo($buttonsDiv).addClass(watchiconClass+' '+watchiconDefaultClass+' '+watchiconOffClass);
-            $("<span>").appendTo($buttonsDiv).addClass(faviconClass+' '+faviconDefaultClass+' '+faviconOffClass);
+            var favIconStateClass = d.bookmarked ? faviconOnClass : faviconOffClass;
+            $("<span>").appendTo($buttonsDiv).addClass(faviconClass+' '+faviconDefaultClass+' '+favIconStateClass);
             // Subtle animation
-//            $li.animate({'top': 5}, {
-//                'complete': function(){
-//                    $(this).animate({'top': ''}, (i+1)*100, 'swing', function(){
-//                        bindEventHandlers($li, d.id);
-//                    });
-//                }
-//            });
-            $li.animate({ top: 0 }, 0)
-            .queue(function(){
-                $(this).animate({ top: 10 }, (i+1)*100, 'swing')
-            })
-            .queue(function(){
-                $(this).css('top', '');
-                bindEventHandlers($li, d.id);
-            })
-            .dequeue();
+            $li.animate({ opacity: 0 }, 0)
+                .queue(function(){
+                $(this).animate({ opacity: 1 }, (i+1)*100, 'swing')
+            }).queue(function(){
+                $(this).css('opacity', '');
+                bindEventHandlers($li, d.id, i);
+            }).dequeue();
         });
     };
 

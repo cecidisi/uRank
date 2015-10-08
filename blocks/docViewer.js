@@ -51,6 +51,7 @@ var DocViewer = (function(){
         this.opt = opt.misc;
 
         if(s.root == '') {
+            $('.'+docViewerOuterClass).remove();
             $root = $('<div/>').appendTo('body').addClass(docViewerOuterClass).hide();
             $container = $('<div/>').appendTo($root).addClass(docViewerContainerClass);
         }

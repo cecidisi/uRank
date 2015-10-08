@@ -45,8 +45,10 @@ function datasetManager(){
         else {
             console.log("Invalid dataset id (value=" + datasetId + ')');
         }
-
     };
 
+    this.getDescription = function(id) {
+        return datasetMappings[id].description;
+    };
 
 }

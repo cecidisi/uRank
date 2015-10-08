@@ -84,8 +84,8 @@ var VisCanvas = (function(){
         return this;
     };
 
-    var _selectItem =function(id) {
-        if(this.vis) this.vis.selectItem(id);
+    var _selectItem =function(id, index) {
+        if(this.vis) this.vis.selectItem(id, index);
         return this;
     };
 
@@ -94,13 +94,13 @@ var VisCanvas = (function(){
         return this;
     };
 
-    var _hoverItem = function(id) {
-        if(this.vis) this.vis.hoverItem(id);
+    var _hoverItem = function(id, index) {
+        if(this.vis) this.vis.hoverItem(id, index);
         return this;
     };
 
-    var _unhoverItem = function(id) {
-        if(this.vis) this.vis.unhoverItem(id);
+    var _unhoverItem = function(id, index) {
+        if(this.vis) this.vis.unhoverItem(id, index);
         return this;
     };
 
