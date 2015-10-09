@@ -1,13 +1,21 @@
 <?php
-if(empty($_POST['filename']) || empty($_POST['content'])){
-    echo "Exit";
-    exit;
+header('Access-Control-Allow-Origin: *');
+
+$dir = './logs/';
+$files = glob($dir.'*'); // get all file names
+$zipname = 'urank-test-logs.zip';
+$zip = new ZipArchive;
+
+$zip->open($zipname, ZipArchive::CREATE);
+
+foreach($files as $file){ // iterate files
+    $zip->addFile($file);
 }
-// Sanitizing the filename:
-$filename = preg_replace('/[^a-z0-9\-\_\.]/i','',$_POST['filename']);
+$zip->close();
+
 // Outputting headers:
-header("Cache-Control: ");
-header("Content-type: text/plain");
-header('Content-Disposition: attachment; filename="'.$filename.'"');
-echo $_POST['content'];
+header('Content-Type: application/zip');
+header('Content-disposition: attachment; filename='.$zipname);
+header('Content-Length: ' . filesize($zipname));
+readfile($zipname);
 ?>

@@ -9,8 +9,7 @@ if(empty($_POST['data'])){
 $output_dir = "./logs/";
 chmod($output_dir, 0755);
 
-
-}if(!is_writable($output_dir)) {
+if(!is_writable($output_dir)) {
     return_error('ERROR no writing permission', 1337);
     exit;
 }

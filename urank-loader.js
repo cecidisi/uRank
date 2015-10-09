@@ -38,7 +38,8 @@ function UrankLoader(callback, args) {
             },
             {
                 load: [
-                    pathToUrank + 'dependencies/hint.min.css',
+//                    pathToUrank + 'dependencies/hint.min.css',
+                    pathToUrank + 'dependencies/font-awesome/css/font-awesome.css',
                     pathToUrank + 'dependencies/theme/jquery-ui.min.css',
                     pathToUrank + 'dependencies/velocity.js',
                     pathToUrank + 'dependencies/velocity.ui.js',
