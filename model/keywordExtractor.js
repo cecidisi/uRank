@@ -93,7 +93,7 @@ var KeywordExtractor = (function(){
         });
 
         candidateAdjectives.forEach(function(ca){
-            if(ca.repeated >= parseInt(_collection.length * 0.5))
+            if(ca.repeated >= parseInt(_collection.length * 0.25))
                 keyAdjectives.push(ca.adj);
         });
         return keyAdjectives;

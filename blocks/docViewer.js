@@ -13,14 +13,12 @@ var DocViewer = (function(){
     // Id prefix
     var detailItemIdPrefix = '#urank-docviewer-details-';
     // Selectors
-    var $root = $(''), $container = $(''),
-        $detailsSection = $(''),
-        $contentSection = $('');
+    var $root = $(''), $container = $(''), $detailsSection = $(''), $contentSectionOuter = $(''), $contentSection = $('');
     // Helper
     var customScrollOptions = {
         axis: 'y',
         theme: 'light',
-        //scrollbarPosition: 'outside',
+        scrollbarPosition: 'outside',
         autoHideScrollbar: true,
         scrollEasing: 'linear',
         mouseWheel: {
@@ -80,14 +78,14 @@ var DocViewer = (function(){
         });
 
         // Append content section for snippet placeholder
-        var $contentSectionOuter = $('<div></div>').appendTo($container).addClass(contentSectionOuterClass);
+        $contentSectionOuter = $('<div></div>').appendTo($container).addClass(contentSectionOuterClass);
         $contentSection = $('<div></div>').appendTo($contentSectionOuter).addClass(contentSectionClass);
         $('<p></p>').appendTo($contentSection);
 
         $root.on('mousedown', function(event){ event.stopPropagation(); });
 
-        if(this.opt.customScrollBars)
-            $contentSectionOuter.css('overflowY', 'hidden').mCustomScrollbar(customScrollOptions);
+        //if(this.opt.customScrollBars)
+            $contentSectionOuter/*.css('overflowY', 'hidden')*/.mCustomScrollbar(customScrollOptions);
     };
 
 
@@ -118,6 +116,7 @@ var DocViewer = (function(){
         $contentSection.empty();
         var $p = $('<p></p>').appendTo($contentSection).html(getStyledText(document.description, keywords, colorScale));
         $p.hide().fadeIn('slow').scrollTo('top');
+        $contentSectionOuter.mCustomScrollbar('update');
     };
 
 

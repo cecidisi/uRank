@@ -82,9 +82,10 @@ var TagCloud = (function(){
             values: [minFreq, maxFreq],
             slide: function(event, ui) {
                 $tagFreqLabel.html('Keyword frequency: <strong>' + ui.values[0] + '</strong> - <strong>' + ui.values[1] + '</strong>');
+                s.onTagFrequencyChanged.call(this, ui.values[0], ui.values[1]);
             },
             stop: function(event, ui) {
-                s.onTagFrequencyChanged.call(this, ui.values[0], ui.values[1]);
+//                s.onTagFrequencyChanged.call(this, ui.values[0], ui.values[1]);
             }
         });
 

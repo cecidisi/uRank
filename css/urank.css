@@ -1036,7 +1036,7 @@ Document Panel (right) - for visualizing highlighted text
 */
 
 .urank-docviewer-outer {
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,0,0,0.7);
     position: absolute;
     top: 0;
     left: 0;
@@ -1054,7 +1054,7 @@ Document Panel (right) - for visualizing highlighted text
     max-height: 70%;
     background: #999;
     z-index: 9999;
-    box-shadow: 3px 3px 5px #555, -3px 3px 5px #555;
+    box-shadow: 5px 5px 8px #333, -5px 5px 8px #333;
 }
 
 .urank-docviewer-details-section {
@@ -1071,8 +1071,13 @@ Document Panel (right) - for visualizing highlighted text
     padding: 2px 0px;
 }
 
+.urank-docviewer-details-section strong {
+    font-size: 0.9em;
+}
+
 .urank-docviewer-details-section div label {
     padding: 0px 7px 0px 2px;
+    margin: 2px 0px;
 }
 
 .urank-docviewer-details-section div h3 {
@@ -1085,6 +1090,7 @@ Document Panel (right) - for visualizing highlighted text
     font-weight: bold;
     font-size: 1.1em;
     line-height: 1.2em;
+    margin: 2px 0px;
 }
 
 .urank-docviewer-details-section div h3 strong {
@@ -1094,6 +1100,7 @@ Document Panel (right) - for visualizing highlighted text
 
 .urank-docviewer-details-section div span {
     font-size: 1em;
+    margin: 2px 0px;
 }
 
 
@@ -1114,7 +1121,7 @@ Document Panel (right) - for visualizing highlighted text
 }
 
 .urank-docviewer-content-section {
-    margin: 0.5em;
+    margin: 10px 6px;
     /*display: inline-block;
     width: calc(100% - 10px);
     height: calc(100% - 8em - 10px);
@@ -1126,7 +1133,8 @@ Document Panel (right) - for visualizing highlighted text
 
 .urank-docviewer-content-section p {
     margin: 2px 1px 2px 5px;
-    font-size: .95em;
+    font-size: 1em;
+    line-height: 1.3em;
     text-align: left;
     color: white;
 }

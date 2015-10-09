@@ -2,6 +2,16 @@ function datasetManager(){
 
     var datasetMappings = {
 
+        DS_RS: {
+            description: 'Recommender Systems',
+            file: 'recommender_systems.json',
+            parse: true
+        },
+        DS_SRV: {
+            description: 'Search Result Visualization',
+            file: 'search_result_visualization.json',
+            parse: true
+        },
         DS_Ro: {
             description: 'Robots',
             file: 'dataset_Ro.json'
@@ -17,27 +27,31 @@ function datasetManager(){
         DS_CE: {
             description: 'Circular Economy',
             file: 'dataset_CE.json'
-        },
-        DS_test: {
-            description: 'Time Series Visualization',
-            file: 'test.json',
-            parse: true
         }
     };
 
     function adaptJSON(_data) {
         var data = [];
         _data.xml.records.record.forEach(function(d, i){
+
+            function getCreators(contributors) {
+                if(contributors.authors && contributors.authors.author)
+                    return Array.isArray(contributors.authors.author) ? contributors.authors.author.join('; ') : contributors.authors.author;
+                if(contributors['secondary-authors'] && contributors['secondary-authors'].author)
+                    return Array.isArray(contributors['secondary-authors'].author) ? contributors['secondary-authors'].author.join('; ') : contributors['secondary-authors'].author;
+                return '';
+            }
+//            console.log('*************   ' + i + '   ************');
+//            console.log(d);
             data.push({
-                id: d.isbn + '-doc-' + i,
+                id: d.isbn ? (d.isbn + '-doc-' + i) : 'doc-' + i,
                 title: d.titles.title,
-                creator: d.contributors.authors.author.join(', '),
+                creator: getCreators(d.contributors),
                 description: d.abstract || '',
-                uri: d.urls['web-urls'].url,
+                uri: (d.urls && d.urls['web-urls'] && d.urls['web-urls'].url) ? d.urls['web-urls'].url : '',
                 facets: {
                     year: d.dates.year
                 },
-
             });
         });
         return data
@@ -60,7 +74,7 @@ function datasetManager(){
                 if(datasetMappings[datasetId].parse) {
                     data = adaptJSON(data);
                 }
-                console.log('Dataset '+ datasetId +' retrieved');
+                console.log('Dataset '+ datasetId +' retrieved --> (' + data.length + ' documents)');
                 callback.call(this, data);
             })
             .fail(function(jqXHR, textStatus, errorThrown) { console.log('getJSON request failed! ' + textStatus + ' --- ' + errorThrown.message);

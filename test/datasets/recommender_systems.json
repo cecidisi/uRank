@@ -1,0 +1,1978 @@
+{
+    "xml":{
+        "records":{
+            "record":[
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Puerta Melguizo, M C",
+                                "Boves, L",
+                                "Ramos, O M"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"A proactive recommendation system for writing: Helping without disrupting",
+                        "secondary-title":"International Journal of Industrial Ergonomics"
+                    },
+                    "periodical":{
+                        "full-title":"International Journal of Industrial Ergonomics"
+                    },
+                    "pages":"516-523",
+                    "volume":"39",
+                    "issue":"3",
+                    "keywords":{
+                        "keyword":[
+                            "article",
+                            "automation",
+                            "cognition",
+                            "computer program",
+                            "documentation",
+                            "experiment",
+                            "human",
+                            "information processing",
+                            "planning",
+                            "priority journal",
+                            "proactive recommendation system",
+                            "professional practice",
+                            "task performance",
+                            "time",
+                            "work environment",
+                            "writing"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2009"
+                    },
+                    "isbn":"0169-8141",
+                    "electronic-resource-num":"10.1016/j.ergon.2008.10.004",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Puerta Melguizo, Boves, Ramos - 2009 - A proactive recommendation system for writing Helping without disrupting.pdf"
+                        }
+                    },
+                    "abstract":"Writing professional documents are situations in which finding relevant, related information is important. Seeking for information is however not easy. A proactive recommendation system (PRS) retrieves information relevant to the written text, and presents it without user intervention. The information presented can improve the quality of the text but can also interrupt the process of writing. We describe two experiments performed to optimize the design of the PRS A Propos. Our goal is to develop a PRS for professional writers that present information non-intrusively and timely so as to minimize disturbing the writing process. The results of our experiments suggest that the tendency to interleave (re)search and writing implies a need for integrating the PRS in a writing environment able to support the task of writing the text itself and the stage of planning the contents and structure of the document. Relevance to industry: While automation has increased the efficiency of repetitive processes, the impact on professional tasks has been minor. Professional writing is a complex task that takes a lot of time. The PRS that we are developing can result in substantial reductions of the cost of writing documents, and in substantial improvements of the quality of the written texts. (copyright) 2008 Elsevier B.V. All rights reserved."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Puerta Melguizo, M. C.",
+                                "Muñoz Ramos, O.",
+                                "Bogers, T.",
+                                "Boves, L.",
+                                "Van Den Bosch, a."
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"A personalized recommender system for writing in the internet age",
+                        "secondary-title":"ICEIS 2008 - Proceedings of the 10th International Conference on Enterprise Information Systems"
+                    },
+                    "periodical":{
+                        "full-title":"ICEIS 2008 - Proceedings of the 10th International Conference on Enterprise Information Systems"
+                    },
+                    "pages":"335-338",
+                    "volume":"HCI",
+                    "keywords":{
+                        "keyword":[
+                            "Information seeking",
+                            "Long-term memory",
+                            "Proactive recommender systems",
+                            "Writing stages"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2008"
+                    },
+                    "isbn":"9789898111388",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Puerta Melguizo et al. - 2008 - A personalized recommender system for writing in the internet age.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://www.scopus.com/inward/record.url?eid=2-s2.0-55849084321&partnerID=tZOtx3y1"
+                        }
+                    },
+                    "abstract":"With the advent of Internet, writing and finding information to plan and structure the text have become increasingly intertwined. We think that it is necessary to develop systems able to support the task of finding relevant information, without interfering with the writing process. The Proactive Recommender System À Propos is being developed in order to support writers in finding relevant information during writing. We present our research findings and raise the question whether the tendency to interleave (re)search and writing implies a need for developing more comprehensive models of the cognitive processes involved in writing scientific and policy papers."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Hijikata, Y.",
+                                "Hijikata, Y.",
+                                "Shimizu, T.",
+                                "Shimizu, T.",
+                                "Nishida, S.",
+                                "Nishida, S."
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Discovery-oriented collaborative filtering for improving user satisfaction",
+                        "secondary-title":"Proceedings of the 13th international conference on Intelligent user interfaces"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 13th international conference on Intelligent user interfaces"
+                    },
+                    "pages":"67-76",
+                    "dates":{
+                        "year":"2009"
+                    },
+                    "isbn":"9781605581682",
+                    "electronic-resource-num":"10.1145/1502650.1502663",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Hijikata et al. - 2009 - Discovery-oriented collaborative filtering for improving user satisfaction.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://portal.acm.org/citation.cfm?id=1502650.1502663"
+                        }
+                    },
+                    "abstract":"Many recommender systems employed in commercial web sites use collaborative filtering. The main goal of traditional collaborative filtering techniques is improvement of the accuracy of recommendation. Nevertheless, such techniques present the problem that they include many items that the user already knows. These recommendations appear to be good when we consider accuracy alone. On the other hand, when we consider users' satisfaction, they are not necessarily good because of the lack of discovery. In our work, we infer items that a user does not know by calculating the similarity of users or items based on information about what items users already know. We seek to recommend items that the user would probably like and does not know by combining the above method and the most popular method of collaborative filtering."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Konstan, Joseph a.",
+                                "Riedl, John"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Recommender systems: From algorithms to user experience",
+                        "secondary-title":"User Modelling and User-Adapted Interaction"
+                    },
+                    "periodical":{
+                        "full-title":"User Modelling and User-Adapted Interaction"
+                    },
+                    "pages":"101-123",
+                    "volume":"22",
+                    "issue":"1-2",
+                    "keywords":{
+                        "keyword":[
+                            "Collaborative filtering",
+                            "Evaluation",
+                            "Metrics",
+                            "Recommender systems",
+                            "User experience"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2012"
+                    },
+                    "isbn":"0924-1868",
+                    "electronic-resource-num":"10.1007/s11257-011-9112-x",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Konstan, Riedl - 2012 - Recommender systems From algorithms to user experience.pdf"
+                        }
+                    },
+                    "abstract":"Since their introduction in the early 1990’s, automated recommender systems have revolutionized the marketing and delivery of commerce and content by providing personalized recommendations and predictions over a variety of large and complex product offerings. In this article, we review the key advances in collaborative filtering recommender systems, focusing on the evolution from research concentrated purely on algorithms to research concentrated on the rich set of questions around the user experience with the recommender. We show through examples that the embedding of the algorithm in the user experience dramatically affects the value to the user of the recommender. We argue that evaluating the user experience of a recommender requires a broader set of measures than have been commonly used, and suggest additional measures that have proven effective. Based on our analysis of the state of the field, we identify the most important open research problems, and outline key challenges slowing the advance of the state of the art, and in some cases limiting the relevance of research to real-world applications."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Rashid, Am",
+                                "Albert, Istvan",
+                                "Cosley, Dan"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Getting to know you: learning new user preferences in recommender systems",
+                        "secondary-title":"Proceedings of the 7th International Conference on Intelligent User Interfaces"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 7th International Conference on Intelligent User Interfaces"
+                    },
+                    "pages":"127-134",
+                    "keywords":{
+                        "keyword":[
+                            "collaborative filtering",
+                            "entropy",
+                            "filtering",
+                            "information",
+                            "recommender systems",
+                            "startup problem",
+                            "user modeling"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2002"
+                    },
+                    "pub-location":"San Francisco, California, USA",
+                    "publisher":"ACM",
+                    "isbn":"1581134592",
+                    "electronic-resource-num":"10.1145/502716.502737",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Rashid, Albert, Cosley - 2002 - Getting to know you learning new user preferences in recommender systems.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://dl.acm.org/citation.cfm?id=502737"
+                        }
+                    },
+                    "abstract":"Recommender systems have become valuable resources for users seeking intelligent ways to search through the enormous volume of information available to them. One crucial unsolved problem for recommender systems is how best to learn about a new user. In this paper we study six techniques that collaborative filtering recommender systems can use to learn about new users. These techniques select a sequence of items for the collaborative filtering system to present to each new user for rating. The techniques include the use of information theory to select the items that will give the most value to the recommender system, aggregate statistics to select the items the user is most likely to have an opinion about, balanced techniques that seek to maximize the expected number of bits learned per presented item, and personalized techniques that predict which items a user will have an opinion about. We study the techniques thru offline experiments with a large pre- existing user data set, and thru a live experiment with over 300 users. We show that the choice of learning technique significantly affects the user experience, in both the user effort and the accuracy of the resulting predictions."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":"Burke, Robin"
+                        }
+                    },
+                    "titles":{
+                        "title":"Hybrid web recommender systems",
+                        "secondary-title":"The adaptive web"
+                    },
+                    "periodical":{
+                        "full-title":"The adaptive web"
+                    },
+                    "pages":"377-408",
+                    "dates":{
+                        "year":"2007"
+                    },
+                    "isbn":"978-3-540-72078-2",
+                    "accession-num":"12211685",
+                    "electronic-resource-num":"10.1007/978-3-540-72079-9_12",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Burke - 2007 - Hybrid web recommender systems.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://link.springer.com/chapter/10.1007%2F978-3-540-72079-9_12"
+                        }
+                    },
+                    "abstract":" Adaptive web sites may offer automated recommendations generated through any number of well-studied techniques including collaborative, content-based and knowledge-based recommendation. Each of these techniques has its own strengths and weaknesses. In search of better performance, researchers have combined recommendation techniques to build hybrid recommender systems. This chapter surveys the space of two-part hybrid recommender systems, comparing four different recommendation techniques and seven different hybridization strategies. Implementations of 41 hybrids including some novel combinations are examined and compared. The study finds that cascade and augmented hybrids work well, especially when combining two components of differing strengths."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Pu, Pearl",
+                                "Chen, Li"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Trust Building with Explanation Interfaces",
+                        "secondary-title":"Proceedings of the 11th international conference on Intelligent user interfaces - IUI '06"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 11th international conference on Intelligent user interfaces - IUI '06"
+                    },
+                    "pages":"93-100",
+                    "keywords":{
+                        "keyword":[
+                            "explanation interfaces",
+                            "recommender agents",
+                            "tradeoff",
+                            "trust building"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2006"
+                    },
+                    "isbn":"1595932879",
+                    "electronic-resource-num":"10.1145/1111449.1111475",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Pu, Chen - 2006 - Trust Building with Explanation Interfaces.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://portal.acm.org/citation.cfm?doid=1111449.1111475"
+                        }
+                    },
+                    "abstract":"Based on our recent work on the development of a trust model for recommender agents and a qualitative survey, we explore the potential of building users’ trust with explanation interfaces. We present the major results from the survey, which provided a roadmap identifying the most promising areas for investigating design issues for trust-inducing interfaces. We then describe a set of general principles derived from an in-depth examination of various design dimensions for constructing explanation interfaces, which most contribute to trust formation. We present results of a significant- scale user study, which indicate that the explanation is highly effective in building users’ trust in the recommendation interface, with the benefit of intention to return to the agent and save cognitive effort. organization-based increasing users’"
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Woerndl, Wolfgang",
+                                "Schueller, Christian",
+                                "Wojtech, Rolf"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"A hybrid recommender system for context-aware recommendations of mobile applications",
+                        "secondary-title":"Proceedings - International Conference on Data Engineering"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings - International Conference on Data Engineering"
+                    },
+                    "pages":"871-878",
+                    "dates":{
+                        "year":"2007"
+                    },
+                    "isbn":"1424408326",
+                    "electronic-resource-num":"10.1109/ICDEW.2007.4401078",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Woerndl, Schueller, Wojtech - 2007 - A hybrid recommender system for context-aware recommendations of mobile applications.pdf"
+                        }
+                    },
+                    "abstract":"The goal of the work in this paper is towards the incorporation of context in recommender systems in the domain of mobile applications. The approach recommends mobile applications to users based on what other users have installed in a similar context. The idea is to apply a hybrid recommender system to deal with the added complexity of context. We have designed and realized the application to test our ideas. Users can select among several content-based or collaborative filtering components, including a rule-based module using information on point-of-interests in the vicinity of the user, and a component for the integration of traditional collaborative filtering. The implementation is integrated in a framework supporting the development and deployment of mobile services."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Pu, Pearl",
+                                "Chen, Li"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Trust-inspiring explanation interfaces for recommender systems",
+                        "secondary-title":"Knowledge-Based Systems"
+                    },
+                    "periodical":{
+                        "full-title":"Knowledge-Based Systems"
+                    },
+                    "pages":"542-556",
+                    "volume":"20",
+                    "issue":"6",
+                    "keywords":{
+                        "keyword":[
+                            "Competence perception",
+                            "Decision support",
+                            "Explanation interfaces",
+                            "Interface design",
+                            "Recommender agents",
+                            "Recommender systems",
+                            "Trust model",
+                            "Trusting intentions",
+                            "User evaluation"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2007"
+                    },
+                    "isbn":"09507051",
+                    "electronic-resource-num":"10.1016/j.knosys.2007.04.004",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Pu, Chen - 2007 - Trust-inspiring explanation interfaces for recommender systems.pdf"
+                        }
+                    },
+                    "abstract":"A recommender system's ability to establish trust with users and convince them of its recommendations, such as which camera or PC to purchase, is a crucial design factor especially for e-commerce environments. This observation led us to build a trust model for recommender agents with a focus on the agent's trustworthiness as derived from the user's perception of its competence and especially its ability to explain the recommended results. We present in this article new results of our work in developing design principles and algorithms for constructing explanation interfaces. We show the effectiveness of these principles via a significant-scale user study in which we compared an interface developed based on these principles with a traditional one. The new interface, called the organization interface where results are grouped according to their tradeoff properties, is shown to be significantly more effective in building user trust than the traditional approach. Users perceive it more capable and efficient in assisting them to make decisions, and they are more likely to return to the interface. We therefore recommend designers to build trust-inspiring interfaces due to their high likelihood to increase users' intention to save cognitive effort and the intention to return to the recommender system. ?? 2007 Elsevier B.V. All rights reserved."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Bostandjiev, Svetlin",
+                                "Donovan, John O",
+                                "Höllerer, Tobias"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"TasteWeights : A Visual Interactive Hybrid Recommender System",
+                        "secondary-title":"Proceedings of the 6th ACM conference on Recommender systems - RecSys '12"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 6th ACM conference on Recommender systems - RecSys '12"
+                    },
+                    "pages":"35-42",
+                    "keywords":{
+                        "keyword":[
+                            "data integration",
+                            "hybrid recommender systems",
+                            "social web",
+                            "user interfaces",
+                            "visual knowledge representation"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2012"
+                    },
+                    "isbn":"9781450312707",
+                    "electronic-resource-num":"10.1145/2365952.2365964",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Bostandjiev, Donovan, Höllerer - 2012 - TasteWeights A Visual Interactive Hybrid Recommender System.pdf"
+                        }
+                    },
+                    "abstract":"This paper presents an interactive hybrid recommendation system that generates item predictions from multiple social and semantic web resources, such as Wikipedia, Facebook, and Twitter. The system employs hybrid techniques from traditional recommender system literature, in addition to a novel interactive interface which serves to explain the recom- mendation process and elicit preferences from the end user. We present an evaluation that compares different interactive and non-interactive hybrid strategies for computing recom- mendations across diverse social and semantic web APIs. Results of the study indicate that explanation and interac- tion with a visual representation of the hybrid system in- crease user satisfaction and relevance of predicted content."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Claypool, Mark",
+                                "Le, Phong",
+                                "Wased, Makoto",
+                                "Brown, David"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Implicit interest indicators",
+                        "secondary-title":"Proceedings of the 6th international conference on Intelligent user interfaces - IUI '01"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 6th international conference on Intelligent user interfaces - IUI '01"
+                    },
+                    "pages":"33-40",
+                    "dates":{
+                        "year":"2001"
+                    },
+                    "isbn":"1581133251",
+                    "accession-num":"18356530",
+                    "electronic-resource-num":"10.1145/359784.359836",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Claypool et al. - 2001 - Implicit interest indicators.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://doi.acm.org/10.1145/359784.359836\\nhttp://dl.acm.org/ft_gateway.cfm?id=359836&type=pdf\\nhttp://dl.acm.org/citation.cfm?id=359836\\nhttp://portal.acm.org/citation.cfm?doid=359784.359836"
+                        }
+                    },
+                    "abstract":"Recommender systems provide personalized suggestions about items that users will find interesting. Typically, recommender systems require a user interface that can ``intelligently'' determine the interest of a user and use this information to make suggestions. The common solution, ``explicit ratings'', where users tell the system what they think about a piece of information, is well-understood and fairly precise. However, having to stop to enter explicit ratings can alter normal patterns of browsing and reading. A more ``intelligent'' method is to useimplicit ratings, where a rating is obtained by a method other than obtaining it directly from the user. These implicit interest indicators have obvious advantages, including removing the cost of the user rating, and that every user interaction with the system can contribute to an implicit rating. Current recommender systems mostly do not use implicit ratings, nor is the ability of implicit ratings to predict actual user interest well-understood. This research studies the correlation between various implicit ratings and the explicit rating for a single Web page. A Web browser was developed to record the user's actions (implicit ratings) and the explicit rating of a page. Actions included mouse clicks, mouse movement, scrolling and elapsed time. This browser was used by over 80 people that browsed more than 2500 Web pages. Using the data collected by the browser, the individual implicit ratings and some combinations of implicit ratings were analyzed and compared with the explicit rating. We found that the time spent on a page, the amount of scrolling on a page and the combination of time and scrolling had a strong correlation with explicit interest, while individual scrolling methods and mouse-clicks were ineffective in predicting explicit interest."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "McNee, Sean",
+                                "Lam, Shyong",
+                                "Konstan, Joseph",
+                                "Riedl, John"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Interfaces for Eliciting New User Preferences in Recommender Systems",
+                        "secondary-title":"User Modeling 2003"
+                    },
+                    "periodical":{
+                        "full-title":"User Modeling 2003"
+                    },
+                    "pages":"148",
+                    "volume":"2702",
+                    "dates":{
+                        "year":"2003"
+                    },
+                    "isbn":"978-3-540-40381-4",
+                    "electronic-resource-num":"10.1007/3-540-44963-9_24",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://McNee et al. - 2003 - Interfaces for Eliciting New User Preferences in Recommender Systems.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://dx.doi.org/10.1007/3-540-44963-9_24"
+                        }
+                    },
+                    "abstract":"Recommender systems build user models to help users find the items they will find most interesting from among many available items. One way to build such a model is to ask the user to rate a selection of items. The choice of items selected affects the quality of the user model generated. In this paper, we explore the effects of letting the user participate in choosing the items that are used to develop the model. We compared three interfaces to elicit information from new users: having the system choose items for users to rate, asking the users to choose items themselves, and a mixed-initiative interface that combines the other two methods. We found that the two pure interfaces both produced accurate user models, but that directly asking users for items to rate increases user loyalty in the system. Ironically, this increased loyalty comes despite a lengthier signup process. The mixed-initiative interface is not a reasonable compromise as it created less accurate user models with no increase in loyalty."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Gunawardana, Asela",
+                                "Meek, Christopher"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"A unified approach to building hybrid recommender systems",
+                        "secondary-title":"Proceedings of the third ACM conference on Recommender systems RecSys 09"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the third ACM conference on Recommender systems RecSys 09"
+                    },
+                    "pages":"117",
+                    "volume":"27",
+                    "issue":"5",
+                    "keywords":{
+                        "keyword":[
+                            "all part",
+                            "boltzmann machines",
+                            "cold start",
+                            "collaborative filtering",
+                            "content based",
+                            "filtering",
+                            "hard copies",
+                            "permission make digital",
+                            "recommender systems",
+                            "work"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2009"
+                    },
+                    "isbn":"9781605584355",
+                    "electronic-resource-num":"10.1145/1639714.1639735",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Gunawardana, Meek - 2009 - A unified approach to building hybrid recommender systems.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://portal.acm.org/citation.cfm?doid=1639714.1639735"
+                        }
+                    },
+                    "abstract":"Content-based recommendation systems can provide recommendations for \"cold-start\" items for which little or no training data is available, but typically have lower accuracy than collaborative filtering systems. Conversely, collaborative filtering techniques often provide accurate recommendations, but fail on cold start items. Hybrid schemes attempt to combine these different kinds of information to yield better recommendations across the board. We describe unified Boltzmann machines, which are probabilistic models that combine collaborative and content information in a coherent manner. They encode collaborative and content information as features, and then learn weights that reflect how well each feature predicts user actions. In doing so, information of different types is automatically weighted, without the need for careful engineering of features or for post-hoc hybridization of distinct recommender systems. We present empirical results in the movie and shopping domains showing that unified Boltzmann machines can be used to combine content and collaborative information to yield results that are competitive with collaborative techniques in recommending items that have been seen before, and also effective at recommending cold-start items."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Herlocker, Jonathan L",
+                                "Konstan, Joseph a",
+                                "Riedl, John"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Explaining collaborative filtering recommendations",
+                        "secondary-title":"Proceedings of the 2000 ACM conference on Computer supported cooperative work"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 2000 ACM conference on Computer supported cooperative work"
+                    },
+                    "pages":"241-250",
+                    "keywords":{
+                        "keyword":[
+                            "Explanations",
+                            "GroupLens",
+                            "MovieLens",
+                            "collaborative filtering",
+                            "recommender systems"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2000"
+                    },
+                    "isbn":"1581132220",
+                    "accession-num":"8234466",
+                    "electronic-resource-num":"10.1145/358916.358995",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Herlocker, Konstan, Riedl - 2000 - Explaining collaborative filtering recommendations.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://dl.acm.org/citation.cfm?id=358995"
+                        }
+                    },
+                    "abstract":"Automated collaborative filtering (ACF) systems predict a person's affinity for items or information by connecting that person's recorded interests with the recorded interests of a community of people and sharing ratings between like-minded persons. However, current recommender systems are black boxes, providing no transparency into the working of the recommendation. Explanations provide that transparency, exposing the reasoning and data behind a recommendation. In this paper, we address explanation interfaces for ACF systems - how they should be implemented and why they should be implemented. To explore how, we present a model for explanations based on the user's conceptual model of the recommendation process. We then present experimental results demonstrating what components of an explanation are the most compelling. To address why, we present experimental evidence that shows that providing explanations can improve the acceptance of ACF systems. We also describe some initial explorations into measuring how explanations can improve the filtering performance of users."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Verbert, Katrien",
+                                "Parra, Denis",
+                                "Brusilovsky, Peter",
+                                "Duval, Erik"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Visualizing recommendations to support exploration, transparency and controllability",
+                        "secondary-title":"Proceedings of the 2013 international conference on Intelligent user interfaces - IUI '13"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 2013 international conference on Intelligent user interfaces - IUI '13"
+                    },
+                    "pages":"351",
+                    "keywords":{
+                        "keyword":[
+                            "information visualization",
+                            "user interfaces for recommender systems",
+                            "user studies"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2013"
+                    },
+                    "isbn":"9781450319652",
+                    "electronic-resource-num":"10.1145/2449396.2449442",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Verbert et al. - 2013 - Visualizing recommendations to support exploration, transparency and controllability.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://dl.acm.org/citation.cfm?id=2449396.2449442"
+                        }
+                    },
+                    "abstract":"Research on recommender systems has traditionally focused on the development of algorithms to improve accuracy of recommendations. So far, little research has been done to enable user interaction with such systems as a basis to support exploration and control by end users. In this paper, we present our research on the use of information visualization techniques to interact with recommender systems. We investigated how information visualization can improve user understanding of the typically black-box rationale behind recommendations in order to increase their perceived relevance and meaning and to support exploration and user involvement in the recommendation process. Our study has been performed using TalkExplorer, an interactive visualization tool developed for attendees of academic conferences. The results of user studies performed at two conferences allowed us to obtain interesting insights to enhance user interfaces that integrate recommendation technology. More specifically, effectiveness and probability of item selection both increase when users are able to explore and interrelate multiple entities -- i.e. items bookmarked by users, recommendations and tags."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":"Karypis, George"
+                        }
+                    },
+                    "titles":{
+                        "title":"Evaluation of Item-Based Top-N Recommendation Algorithms",
+                        "secondary-title":"Proceedings of the tenth international conference on"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the tenth international conference on"
+                    },
+                    "pages":"247-254",
+                    "issue":"TR 00--046",
+                    "dates":{
+                        "year":"2001"
+                    },
+                    "isbn":"1581134363",
+                    "electronic-resource-num":"10.1145/502585.502627",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Karypis - 2001 - Evaluation of Item-Based Top-N Recommendation Algorithms.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://portal.acm.org/citation.cfm?id=502585.502627"
+                        }
+                    },
+                    "abstract":"The explosive growth of the world-wide-web and the emergence of e-commerce has led to the development of recommender systems--a personalized information filtering technology used to identify a set of N items that will be of interest to a certain user. User-based Collaborative filtering is the most successful technology for building recommender systems to date, and is extensively used in many commercial recommender systems. Unfortunately, the computational complexity of these methods grows linearly with the number of customers that in typical commercial applications can grow to be several millions. To address these scalability concerns item-based recommendation techniques have been developed that analyze the user-item matrix to identify relations between the different items, and use these relations to compute the list of recommendations. In this paper we present one such class of item-based recommendation algorithms that first determine the similarities between the various ite..."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Knijnenburg, Bart P.",
+                                "Willemsen, Martijn C.",
+                                "Gantner, Zeno",
+                                "Soncu, Hakan",
+                                "Newell, Chris"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Explaining the user experience of recommender systems",
+                        "secondary-title":"User Modelling and User-Adapted Interaction"
+                    },
+                    "periodical":{
+                        "full-title":"User Modelling and User-Adapted Interaction"
+                    },
+                    "pages":"441-504",
+                    "volume":"22",
+                    "issue":"4-5",
+                    "keywords":{
+                        "keyword":[
+                            "Decision support systems-user experience",
+                            "Decision-making",
+                            "Human-computer interaction",
+                            "Preference elicitation",
+                            "Privacy",
+                            "Recommender systems",
+                            "User testing",
+                            "User-centric evaluation"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2012"
+                    },
+                    "isbn":"0924-1868",
+                    "electronic-resource-num":"10.1007/s11257-011-9118-4",
+                    "abstract":"Research on recommender systems typically focuses on the accuracy of prediction algorithms. Because accuracy only partially constitutes the user experience of a recommender system, this paper proposes a framework that takes a user-centric approach to recommender system evaluation. The framework links objective system aspects to objective user behavior through a series of perceptual and evaluative constructs (called subjective system aspects and experience, respectively). Furthermore, it incorporates the influence of personal and situational characteristics on the user experience. This paper reviews how current literature maps to the framework and identifies several gaps in existing work. Consequently, the framework is validated with four field trials and two controlled experiments and analyzed using Structural Equation Modeling. The results of these studies show that subjective system aspects and experience variables are invaluable in explaining why and how the user experience of recommender systems comes about. In all studies we observe that perceptions of recommendation quality and/or variety are important mediators in predicting the effects of objective system aspects on the three components of user experience: process (e.g. perceived effort, difficulty), system (e.g. perceived system effectiveness) and outcome (e.g. choice satisfaction). Furthermore, we find that these subjective aspects have strong and sometimes interesting behavioral correlates (e.g. reduced browsing indicates higher system effectiveness). They also show several tradeoffs between system aspects and personal and situational characteristics (e.g. the amount of preference feedback users provide is a tradeoff between perceived system usefulness and privacy concerns). These results, as well as the validated framework itself, provide a platform for future research on the user-centric evaluation of recommender systems."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":"Kay, Judy"
+                        }
+                    },
+                    "titles":{
+                        "title":"Scrutable adaptation: Because we can and must",
+                        "secondary-title":"Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)"
+                    },
+                    "periodical":{
+                        "full-title":"Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)"
+                    },
+                    "pages":"11-19",
+                    "volume":"4018 LNCS",
+                    "dates":{
+                        "year":"2006"
+                    },
+                    "isbn":"3540346961",
+                    "electronic-resource-num":"10.1007/11768012_2",
+                    "abstract":"Beginning with the motivations for scrutability, this paper introduces PLUS, a vision of Pervasive Lifelong User-models that are Scrutable. The foundation for PLUS is the Accretion/Resolution representation for active user models that can drive adaptive hypermedia, with support for scrutability. The paper illustrates PLUS in terms of its existing, implemented elements as well as some examples of applications built upon this approach. The concluding section is a research agenda for essential elements of this PLUS vision."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Cremonesi, Paolo",
+                                "Koren, Yehuda",
+                                "Turrin, Roberto"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Performance of recommender algorithms on top-n recommendation tasks",
+                        "secondary-title":"Proceedings of the fourth ACM conference on Recommender systems - RecSys '10"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the fourth ACM conference on Recommender systems - RecSys '10"
+                    },
+                    "pages":"39--46",
+                    "keywords":{
+                        "keyword":[
+                            "evaluation",
+                            "precision",
+                            "recall",
+                            "top-n recommendations"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2010"
+                    },
+                    "isbn":"9781605589060",
+                    "electronic-resource-num":"10.1145/1864708.1864721",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Cremonesi, Koren, Turrin - 2010 - Performance of recommender algorithms on top-n recommendation tasks.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://portal.acm.org/citation.cfm?doid=1864708.1864721"
+                        }
+                    },
+                    "abstract":"In many commercial systems, the ‘best bet’ recommenda- tions are shown, but the predicted rating values are not. This is usually referred to as a top-N recommendation task, where the goal of the recommender system is to find a few specific items which are supposed to be most appealing to the user. Common methodologies based on error metrics (such as RMSE) are not a natural fit for evaluating the top- N recommendation task. Rather, top-N performance can be directly measured by alternative methodologies based on accuracy metrics (such as precision/recall). An extensive evaluation of several state-of-the art recom- mender algorithms suggests that algorithms optimized for minimizing RMSE do not necessarily perform as expected in terms of top-N recommendation task. Results show that improvements in RMSE often do not translate into accu- racy improvements. In particular, a naive non-personalized algorithm can outperform some common recommendation approaches and almost match the accuracy of sophisticated algorithms. Another finding is that the very few top popular items can skew the top-N performance. The analysis points out that when evaluating a recommender algorithm on the top-N recommendation task, the test set should be chosen carefully in order to not bias accuracy metrics towards non- personalized solutions. Finally, we offer practitioners new variants of two collaborative filtering algorithms that, re- gardless of their RMSE, significantly outperform other rec- ommender algorithms in pursuing the top-N recommenda- tion task, with offering additional practical advantages. This comes at surprise given the simplicity of these two methods."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Cremonesi, Paolo",
+                                "Turrin, Roberto",
+                                "Lentini, Eugenio",
+                                "Matteucci, Matteo"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"An evaluation methodology for collaborative recommender systems",
+                        "secondary-title":"Proceedings - 4th International Conference on Automated Solutions for Cross Media Content and Multi-Channel Distribution, Axmedis 2008"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings - 4th International Conference on Automated Solutions for Cross Media Content and Multi-Channel Distribution, Axmedis 2008"
+                    },
+                    "pages":"224-231",
+                    "issue":"March",
+                    "dates":{
+                        "year":"2008"
+                    },
+                    "isbn":"9780769534060",
+                    "electronic-resource-num":"10.1109/AXMEDIS.2008.13",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Cremonesi et al. - 2008 - An evaluation methodology for collaborative recommender systems.pdf"
+                        }
+                    },
+                    "abstract":"Recommender systems use statistical and knowledge discovery techniques in order to recommend products to users and to mitigate the problem of information overload. The evaluation of the quality of recommender systems has become an important issue for choosing the best learning algorithms. In this paper we propose an evaluation methodology for collaborative filtering (CF) algorithms. This methodology carries out a clear, guided and repeatable evaluation of a CF algorithm. We apply the methodology on two datasets, with different characteristics, using two CF algorithms: singular value decomposition and naive bayesian networks."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Trattner, Christoph",
+                                "Kowald, Dominik",
+                                "Lacic, Emmanuel"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"TagRec : Towards a Toolkit for Reproducible Evaluation and Development of Tag-Based Recommender Algorithms"
+                    },
+                    "dates":{
+                        "year":"2015"
+                    },
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Trattner, Kowald, Lacic - 2015 - TagRec Towards a Toolkit for Reproducible Evaluation and Development of Tag-Based Recommender Algorith.pdf"
+                        }
+                    },
+                    "abstract":"This article presents TagRec, a framework to foster reproducible evaluation and development of recommender algorithms based on folksonomy data. The purpose of TagRec is to provide the research community with a standardised framework that supports all steps of the development process and the evaluation of tag-based recommendation algorithms in a reproducible way, in- cluding methods for data pre-processing, data modeling and recommender evaluation. TagRec currently contains 32 state-of-the-art algorithms for tag and item prediction, including a set of novel and very efficient algorithms based on the human cognition theories ACT-R and MINERVA2. The framework should be relevant for researchers, teachers, students and developers working on recommender systems and predictive modeling in general and those interested in tag-based recommender algorithms in particular."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Tso-Sutter, Karen H L",
+                                "Marinho, Leandro Balby",
+                                "Schmidt-Thieme, Lars"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Tag-aware Recommender Systems by Fusion of Collaborative Filtering Algorithms Categories and Subject Descriptors",
+                        "secondary-title":"Proceedings of the 2008 ACM symposium on Applied computing Pages"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 2008 ACM symposium on Applied computing Pages"
+                    },
+                    "pages":"1995-1999",
+                    "keywords":{
+                        "keyword":[
+                            "and technological re-",
+                            "brazilian national council scientific",
+                            "cnpq",
+                            "collaborative filtering",
+                            "recommender systems",
+                            "scholarship holder",
+                            "search",
+                            "tags"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2008"
+                    },
+                    "isbn":"9781595937537",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Tso-Sutter, Marinho, Schmidt-Thieme - 2008 - Tag-aware Recommender Systems by Fusion of Collaborative Filtering Algorithms Categories an.pdf"
+                        }
+                    },
+                    "abstract":"Recommender Systems (RS) aim at predicting items or rat- ings of items that the user are interested in. Collabora- tive Filtering (CF) algorithms such as user- and item-based methods are the dominant techniques applied in RS algo- rithms. To improve recommendation quality, metadata such as content information of items has typically been used as additional knowledge. With the increasing popularity of the collaborative tagging systems, tags could be interesting and useful information to enhance RS algorithms. Unlike at- tributes which are “global” descriptions of items, tags are “local” descriptions of items given by the users. To the best of our knowledge, there hasn’t been any prior study on tag- aware RS. In this paper, we propose a generic method that allows tags to be incorporated to standard CF algorithms, by reducing the three-dimensional correlations to three two- dimensional correlations and then applying a fusion method to re-associate these correlations. Additionally, we investi- gate the effect of incorporating tags information to different CF algorithms. Empirical evaluations on three CF algo- rithms with real-life data set demonstrate that incorporat- ing tags to our proposed approach provides promising and significant results."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Zheng, Nan",
+                                "Li, Qiudan"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"A recommender system based on tag and time information for social tagging systems",
+                        "secondary-title":"Expert Systems with Applications"
+                    },
+                    "periodical":{
+                        "full-title":"Expert Systems with Applications"
+                    },
+                    "pages":"4575-4587",
+                    "volume":"38",
+                    "issue":"4",
+                    "keywords":{
+                        "keyword":[
+                            "Collaborative filtering",
+                            "Interest drift",
+                            "Recommender system",
+                            "Social tagging"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2011"
+                    },
+                    "publisher":"Elsevier Ltd",
+                    "electronic-resource-num":"10.1016/j.eswa.2010.09.131",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Zheng, Li - 2011 - A recommender system based on tag and time information for social tagging systems.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://dx.doi.org/10.1016/j.eswa.2010.09.131"
+                        }
+                    },
+                    "abstract":"Recently, social tagging has become increasingly prevalent on the Internet, which provides an effective way for users to organize, manage, share and search for various kinds of resources. These tagging systems offer lots of useful information, such as tag, an expression of user's preference towards a certain resource; time, a denotation of user's interests drift. As information explosion, it is necessary to recommend resources that a user might like. Since collaborative filtering (CF) is aimed to provide personalized services, how to integrate tag and time information in CF to provide better personalized recommendations for social tagging systems becomes a challenging task. In this paper, we investigate the importance and usefulness of tag and time information when predicting users' preference and examine how to exploit such information to build an effective resource-recommendation model. We design a recommender system to realize our computational approach. Also, we show empirically using data from a real-world dataset that tag and time information can well express users' taste and we also show that better performances can be achieved if such information is integrated into CF. ?? 2010 Elsevier Ltd. All rights reserved."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Harman, Jason L.",
+                                "O'Donovan, John",
+                                "Abdelzaher, Tarek",
+                                "Gonzalez, Cleotilde"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Dynamics of human trust in recommender systems",
+                        "secondary-title":"Proceedings of the 8th ACM Conference on Recommender systems - RecSys '14"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 8th ACM Conference on Recommender systems - RecSys '14"
+                    },
+                    "pages":"305-308",
+                    "keywords":{
+                        "keyword":[
+                            "cognitive processes",
+                            "decision making",
+                            "trust"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2014"
+                    },
+                    "isbn":"9781450326681",
+                    "electronic-resource-num":"10.1145/2645710.2645761",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Harman et al. - 2014 - Dynamics of human trust in recommender systems.pdf"
+                        }
+                    }
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Kangasrääsiö, Antti",
+                                "Głowacka, Dorota",
+                                "Kaski, Samuel"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Improving Controllability and Predictability of Interactive Recommendation Interfaces for Exploratory Search",
+                        "secondary-title":"IUI"
+                    },
+                    "periodical":{
+                        "full-title":"IUI"
+                    },
+                    "pages":"247-251",
+                    "keywords":{
+                        "keyword":[
+                            "Controllability",
+                            "exploratory search",
+                            "information retrieval",
+                            "interactive user modelling",
+                            "predictability",
+                            "probabilistic user models",
+                            "user interfaces"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2015"
+                    },
+                    "isbn":"9781450333061",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Kangasrääsiö, Głowacka, Kaski - 2015 - Improving Controllability and Predictability of Interactive Recommendation Interfaces for Explora.pdf"
+                        }
+                    }
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Groh, G.",
+                                "Ehmig, C."
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Recommendations in Taste Related Domains: Collaborative Filtering vs. Social Filtering",
+                        "secondary-title":"Proceedings of the 2007 International ACM Conference on Supporting Group Work-Group 2007. (Nov. 4-7, Sanibel Island, FL, USA)"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 2007 International ACM Conference on Supporting Group Work-Group 2007. (Nov. 4-7, Sanibel Island, FL, USA)"
+                    },
+                    "pages":"127-136",
+                    "dates":{
+                        "year":"2007"
+                    },
+                    "isbn":"978-1-59593-845-9",
+                    "electronic-resource-num":"http://doi.acm.org/10.1145/1316624.1316643",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Groh, Ehmig - 2007 - Recommendations in Taste Related Domains Collaborative Filtering vs. Social Filtering.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://portal.acm.org/citation.cfm?id=1316643"
+                        }
+                    },
+                    "abstract":"We investigate how social networks can be used in recommendation\\ngeneration in taste related domains. Social Filtering (using social\\nnetworks for neighborhood generation) is compared to Collaborative\\nFiltering with respect to prediction accuracy in the domain of rating\\nclubs. After reviewing background and related work, we present an\\nextensive empirical study where over thousand participants from a social\\nnetworking community where asked to provide ratings for clubs in Munich.\\nWe then compare a typical traditional CF-approach to a social\\nrecommender/social filtering approach where friends from the underlying\\nsocial network are used as rating neighborhood and analyze the\\nexperiments statistically. Surprisingly, the social filtering approach\\noutperforms the CF approach in all variants of the experiment. The\\nimplications of the experiment, for professional and private-life\\ncollaborative environments and services where recommendations play a\\nrole are discussed. We conclude with future perspectives on social\\nrecommender systems, especially in upcoming mobile environments."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Guy, Ido",
+                                "Zwerdling, Naama",
+                                "Ronen, Inbal"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Social media recommendation based on people and tags",
+                        "secondary-title":"Proceedings of the 33rd …"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 33rd …"
+                    },
+                    "pages":"194-201",
+                    "issue":"Lc",
+                    "keywords":{
+                        "keyword":[
+                            "collaborative tagging",
+                            "media",
+                            "personalization",
+                            "recommender systems",
+                            "social",
+                            "social networks",
+                            "social software"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2010"
+                    },
+                    "isbn":"9781605588964",
+                    "electronic-resource-num":"10.1145/1835449.1835484",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Guy, Zwerdling, Ronen - 2010 - Social media recommendation based on people and tags.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://portal.acm.org/citation.cfm?id=1835484\\nhttp://dl.acm.org/citation.cfm?id=1835484"
+                        }
+                    },
+                    "abstract":"We study personalized item recommendation within an enterprise social media application suite that includes blogs, bookmarks, communities, wikis, and shared files. Recommendations are based on two of the core elements of social media - people and tags. Relationship information among people, tags, and items, is collected and aggregated across different sources within the enterprise. Based on these aggregated relationships, the system recommends items related to people and tags that are related to the user. Each recommended item is accompanied by an explanation that includes the people and tags that led to its recommendation, as well as their relationships with the user and the item. We evaluated our recommender system through an extensive user study. Results show a significantly better interest ratio for the tag-based recommender than for the people-based recommender, and an even better performance for a combined recommender. Tags applied on the user by other people are found to be highly effective in representing that user's topics of interest."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Wang, Li-Cai",
+                                "Meng, Xiang-Wu",
+                                "Zhang, Yu-Jie"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Context-Aware Recommender Systems",
+                        "secondary-title":"Journal of Software"
+                    },
+                    "periodical":{
+                        "full-title":"Journal of Software"
+                    },
+                    "pages":"1-20",
+                    "volume":"23",
+                    "dates":{
+                        "year":"2012"
+                    },
+                    "isbn":"9781605580937",
+                    "electronic-resource-num":"10.3724/SP.J.1001.2012.04100",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Wang, Meng, Zhang - 2012 - Context-Aware Recommender Systems.pdf"
+                        }
+                    },
+                    "abstract":"The importance of contextual information has been recognized by researchers and practitioners in many disciplines, including e-commerce personalization, information retrieval, ubiquitous and mobile computing, data mining, marketing, and management. While a substantial amount of research has already been performed in the area of recommender systems, most existing approaches focus on recommending the most relevant items to users without taking into account any additional contextual information, such as time, location, or the company of other people (e.g., for watching movies or dining out). In this chapter we argue that relevant contextual information does matter in recommender systems and that it is important to take this information into account when providing recommendations.We discuss the general notion of context and how it can be modeled in recommender systems. Furthermore, we introduce three different algorithmic paradigms – contextual pre-filtering, post-filtering, and modeling – for incorporating contextual information into the recommendation process, discuss the possibilities of combining several context-aware recommendation techniques into a single unifying approach, and provide a case study of one such combined approach. Finally, we present additional capabilities for context-aware recommenders and discuss important and promising directions for future research"
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":"Chen, Annie"
+                        }
+                    },
+                    "titles":{
+                        "title":"Context-aware collaborative filtering system: predicting the user's preferences in ubiquitous computing",
+                        "secondary-title":"Proceedings of ACM CHI 2005 Conference on Human Factors in Computing Systems"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of ACM CHI 2005 Conference on Human Factors in Computing Systems"
+                    },
+                    "pages":"1110-1111",
+                    "volume":"2",
+                    "dates":{
+                        "year":"2005"
+                    },
+                    "isbn":"1595930027",
+                    "electronic-resource-num":"10.1145/1056808.1056836",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Chen - 2005 - Context-aware collaborative filtering system predicting the user's preferences in ubiquitous computing.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://doi.acm.org/10.1145/1056808.1056836"
+                        }
+                    },
+                    "abstract":"In this paper I propose a context-aware collaborative filtering system that can predict a user's preference in different context situations based on past user-experiences. The system uses what other like-minded users have done in similar context to predict a user's preference towards an item in the current context."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Candillier, Laurent",
+                                "Jack, Kris",
+                                "Fessant, Françoise",
+                                "Meyer, Frank"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"State-of-the-Art Recommender Systems",
+                        "secondary-title":"Collaborative and Social Information Retrieval and AccessTechniques for Improved User Modeling"
+                    },
+                    "periodical":{
+                        "full-title":"Collaborative and Social Information Retrieval and AccessTechniques for Improved User Modeling"
+                    },
+                    "pages":"1-22",
+                    "dates":{
+                        "year":"2009"
+                    },
+                    "isbn":"1605663069",
+                    "electronic-resource-num":"10.4018/978-1-60566-306-7.ch001",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Candillier et al. - 2009 - State-of-the-Art Recommender Systems.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://64.225.152.8/downloads/excerpts/33031.pdf\\nhttp://www.mendeley.com/research/stateoftheart-recommender-systems/"
+                        }
+                    },
+                    "abstract":"The aim of Recommender Systems is to help users to find items that they should appreciate from huge catalogues. In that field, collaborative filtering approaches can be distinguished from content-based ones. The former is based on a set of user ratings on items, while the latter uses item content descriptions and user thematic profiles. While collaborative filtering systems often result in better predictive performance, content-based filtering offers solutions to the limitations of collaborative filtering, as well as a natural way to interact with users. These complementary approaches thus motivate the design of hybrid systems. In this chapter, the main algorithmic methods used for recommender systems are presented in a state of the art. The evaluation of recommender systems is currently an important issue. The authors focus on two kinds of evaluations. The first one concerns the performance accuracy: several approaches are compared through experiments on two real movies rating datasets MovieLens and Netflix. The second concerns user satisfaction and for this a hybrid system is implemented and tested with real users."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Swearingen, K.",
+                                "Sinha, R."
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Beyond Algorithms Beyond Algorithms : An HCI Perspective on Recommender Systems",
+                        "secondary-title":"ACM SIGIR 2001 Workshop on Recommender Systems (2001)"
+                    },
+                    "periodical":{
+                        "full-title":"ACM SIGIR 2001 Workshop on Recommender Systems (2001)"
+                    },
+                    "pages":"1-11",
+                    "keywords":{
+                        "keyword":[
+                            "evaluation",
+                            "recommender systems",
+                            "user interfaces"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2001"
+                    },
+                    "isbn":"0201847051",
+                    "electronic-resource-num":"10.1.1.23.9764",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Swearingen, Sinha - 2001 - Beyond Algorithms Beyond Algorithms An HCI Perspective on Recommender Systems.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://www.citeulike.org/user/lschiff/article/375842\\nhttp://citeseer.ist.psu.edu/cache/papers/cs/31330/http:zSzzSzweb.engr.oregonstate.eduzSz\\~{}herlockzSzrsw2001zSzfinalzSzfull\\_length\\_paperszSz4\\_swearingenzPz.pdf/swearingen01beyond.pdf"
+                        }
+                    },
+                    "abstract":"The accuracy of recommendations made by an online Recommender System (RS) is mostly dependent on the underlying collaborative filtering algorithm. However, the ultimate effectiveness of an RS is dependent on factors that go beyond the quality of the algorithm. The goal of an RS is to introduce users to items that might interest them, and convince users to sample those items. What design elements of an RS enable the system to achieve this goal? To answer this question, we examined the quality of recommendations and usability of three book RS (Amazon.com, RatingZone & Sleeper) and three movie RS (Amazon.com, MovieCritic, Reel.com). Our findings indicate that from a user’s perspective, an effective recommender system inspires trust in the system; has system logic that is at least somewhat transparent; points users towards new, not-yet-experienced items; provides details about recommended items, including pictures and community ratings; and finally, provides ways to refine recommendations by including or excluding particular genres. Users expressed willingness to provide more input to the system in return for more effective recommendations."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Generic",
+                        "#text":"31"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Kern, Roman",
+                                "Jack, Kris",
+                                "Granitzer, Michael"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Recommending Scientific Literature: Comparing Use-Cases and Algorithms"
+                    },
+                    "pages":"12",
+                    "dates":{
+                        "year":"2014"
+                    },
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Kern, Jack, Granitzer - 2014 - Recommending Scientific Literature Comparing Use-Cases and Algorithms.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://arxiv.org/abs/1409.1357"
+                        }
+                    },
+                    "abstract":"An important aspect of a researcher's activities is to find relevant and related publications. The task of a recommender system for scientific publications is to provide a list of papers that match these criteria. Based on the collection of publications managed by Mendeley, four data sets have been assembled that reflect different aspects of relatedness. Each of these relatedness scenarios reflect a user's search strategy. These scenarios are public groups, venues, author publications and user libraries. The first three of these data sets are being made publicly available for other researchers to compare algorithms against. Three recommender systems have been implemented: a collaborative filtering system; a content-based filtering system; and a hybrid of these two systems. Results from testing demonstrate that collaborative filtering slightly outperforms the content-based approach, but fails in some scenarios. The hybrid system, that combines the two recommendation methods, provides the best performance, achieving a precision of up to 70%. This suggests that both techniques contribute complementary information in the context of recommending scientific literature and different approaches suite for different information needs."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "McKerlich, Ross",
+                                "Ives, Cindy",
+                                "McGreal, Rory"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Measuring use and creation of open educational resources in higher education",
+                        "secondary-title":"International Review of Research in Open and Distance Learning"
+                    },
+                    "periodical":{
+                        "full-title":"International Review of Research in Open and Distance Learning"
+                    },
+                    "pages":"90-103",
+                    "volume":"14",
+                    "issue":"70",
+                    "keywords":{
+                        "keyword":[
+                            "OER",
+                            "Open educational resources",
+                            "Open learning",
+                            "Open textbooks"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2013"
+                    },
+                    "isbn":"9783848215430",
+                    "electronic-resource-num":"10.1002/asi",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://McKerlich, Ives, McGreal - 2013 - Measuring use and creation of open educational resources in higher education.pdf"
+                        }
+                    },
+                    "abstract":"(Open Nottingham OER report; survey of 51 undergraduates' use of OER.)"
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Book Section",
+                        "#text":"7"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Seitlinger, Paul",
+                                "Kowald, Dominik",
+                                "Kopeinik, Simone",
+                                "Hasani-Mavriqi, Ilire",
+                                "Ley, Tobias",
+                                "Lex, Elisabeth"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Attention Please ! A Hybrid Resource Recommender Mimicking Attention-Interpretation Dynamics",
+                        "secondary-title":"Proceedings of the 24th international conference on World Wide Web (WWW 2015) companion, May 18–22, 2015, Florence, Italy"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 24th international conference on World Wide Web (WWW 2015) companion, May 18–22, 2015, Florence, Italy"
+                    },
+                    "pages":"339-345",
+                    "keywords":{
+                        "keyword":[
+                            "accuracy",
+                            "attentional focus",
+                            "categorization",
+                            "collaborative filtering",
+                            "connectionism",
+                            "decision making",
+                            "hybrid rec-",
+                            "ommenders",
+                            "re-",
+                            "recommender",
+                            "source recommendations",
+                            "sustain"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2015"
+                    },
+                    "isbn":"9781450334730",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Seitlinger et al. - 2015 - Attention Please ! A Hybrid Resource Recommender Mimicking Attention-Interpretation Dynamics.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://www.www2015.it/documents/proceedings/companion/p339.pdf"
+                        }
+                    },
+                    "abstract":"Classic resource recommenders like Collaborative Filtering (CF) treat users as being just another entity, neglecting non- linear user-resource dynamics shaping attention and inter- pretation. In this paper, we propose a novel hybrid rec- ommendation strategy that refines CF by capturing these dynamics. The evaluation results reveal that our approach substantially improves CF and, depending on the dataset, successfully competes with a computationally much more expensive Matrix Factorization variant. Categories"
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":"McSherry, David"
+                        }
+                    },
+                    "titles":{
+                        "title":"Explanation in recommender systems",
+                        "secondary-title":"Artificial Intelligence Review"
+                    },
+                    "periodical":{
+                        "full-title":"Artificial Intelligence Review"
+                    },
+                    "pages":"179-197",
+                    "volume":"24",
+                    "issue":"August",
+                    "keywords":{
+                        "keyword":[
+                            "Attribute-selection strategy",
+                            "Case-based reasoning",
+                            "Explanation",
+                            "Recommender systems"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2005"
+                    },
+                    "electronic-resource-num":"10.1007/s10462-005-4612-x",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://McSherry - 2005 - Explanation in recommender systems.pdf"
+                        }
+                    },
+                    "abstract":"There is increasing awareness in recommender systems research of the need to make the recommendation process more transparent to users. Following a brief review of existing approaches to explanation in recommender systems, we focus in this paper on a case-based reasoning (CBR) approach to product recommendation that offers important benefits in terms of the ease with which the recommendation process can be explained and the systems recommendations can be justified. For example, recommendations based on incomplete queries can be justified on the grounds that the users preferences with respect to attributes not mentioned in her query cannot affect the outcome. We also show how the relevance of any question the user is asked can be explained in terms of its ability to discriminate between competing cases, thus giving users a unique insight into the recommendation process."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "O'Donovan, John",
+                                "Smyth, Barry",
+                                "Gretarsson, Brynjar",
+                                "Bostandjiev, Svetlin",
+                                "Höllerer, Tobias"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"PeerChooser: Visual Interactive Recommendation",
+                        "secondary-title":"Proceeding of the twenty-sixth annual SIGCHI conference on Human factors in computing systems"
+                    },
+                    "periodical":{
+                        "full-title":"Proceeding of the twenty-sixth annual SIGCHI conference on Human factors in computing systems"
+                    },
+                    "pages":"1085-1088",
+                    "dates":{
+                        "year":"2008"
+                    },
+                    "isbn":"9781605580111",
+                    "electronic-resource-num":"10.1145/1357054.1357222",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://O'Donovan et al. - 2008 - PeerChooser Visual Interactive Recommendation.pdf"
+                        }
+                    },
+                    "abstract":"Collaborative filtering (CF) has been successfully deployed over the years to compute predictions on items based on a user's correlation with a set of peers. The black-box nature of most CF applications leave the user wondering how the system arrived at its recommendation. This note introduces PeerChooser, a collaborative recommender system with an interactive graphical explanation interface. Users are provided with a visual explanation of the CF process and opportunity to manipulate their neighborhood at varying levels of granularity to reflect aspects of their current requirements. In this manner we overcome the problem of redundant profile information in CF systems, in addition to providing an explanation interface. Our layout algorithm produces an exact, noiseless graph representation of the underlying correlations between users. PeerChooser's prediction component uses this graph directly to yield the same results as the benchmark. User's then improve on these predictions by tweaking the graph to their current requirements. We present a user-survey in which PeerChooser compares favorably against a benchmark CF algorithm."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Knijnenburg, Bart P.",
+                                "Bostandjiev, Svetlin",
+                                "O'Donovan, John",
+                                "Kobsa, Alfred"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Inspectability and control in social recommenders",
+                        "secondary-title":"Proceedings of the 6th ACM conference on Recommender systems - RecSys '12"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 6th ACM conference on Recommender systems - RecSys '12"
+                    },
+                    "pages":"43",
+                    "keywords":{
+                        "keyword":[
+                            "control",
+                            "explanations",
+                            "human-computer interaction",
+                            "inspectability",
+                            "novelty",
+                            "satisfaction",
+                            "social recommender systems",
+                            "understandability",
+                            "usability",
+                            "user experience",
+                            "user interfaces",
+                            "visualization"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2012"
+                    },
+                    "isbn":"9781450312707",
+                    "electronic-resource-num":"10.1145/2365952.2365966",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Knijnenburg et al. - 2012 - Inspectability and control in social recommenders.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://dl.acm.org/citation.cfm?doid=2365952.2365966"
+                        }
+                    },
+                    "abstract":"Users of social recommender systems may want to inspect and control how their social relationships influence the recommenda- tions they receive, especially since recommendations of social recommenders are based on friends rather than anonymous “near- est neighbors”. We performed an online user experiment (N=267) with a Facebook music recommender system that gives users con- trol over the recommendations, and explains how they came about. The results show that inspectability and control indeed increase users’ perceived understanding of and control over the system, their rating of the recommendation quality, and their satis- faction with the system."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Bridge, Derek",
+                                "Dunleavy, Kevin"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"If you liked Herlocker et al.’s explanations paper, then you might like this paper too"
+                    },
+                    "pages":"22",
+                    "keywords":{
+                        "keyword":[
+                            "explanations",
+                            "recommender systems"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2014"
+                    },
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Bridge, Dunleavy - 2014 - If you liked Herlocker et al.’s explanations paper, then you might like this paper too.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://ceur-ws.org/Vol-1253/paper4.pdf"
+                        }
+                    },
+                    "abstract":"We present explanation rules, which provide explanations of user-based collaborative recommendations but in a form that is familiar from item-based collaborative recommenda- tions; for example, “People who liked Toy Story also like Finding Nemo”. We present an algorithm for computing ex- planation rules. We report the results of a web-based user trial that gives a preliminary evaluation of the perceived ef- fectiveness of explanation rules. In particular, we find that nearly 50% of participants found this style of explanation to be helpful, and nearly 80% of participants who expressed a preference found explanation rules to be more helpful than similar rules that were closely-related but partly-random."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Conference Proceedings",
+                        "#text":"3"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Parra, Denis",
+                                "Brusilovsky, Peter",
+                                "Trattner, Christoph"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"See what you want to see: Visual User-Driven Approach for Hybrid Recommendation",
+                        "secondary-title":"Proceedings of the 19th international conference on Intelligent User Interfaces - IUI '14"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings of the 19th international conference on Intelligent User Interfaces - IUI '14"
+                    },
+                    "pages":"235-240",
+                    "keywords":{
+                        "keyword":[
+                            "M_Recommendation",
+                            "M_conversational recommendation",
+                            "M_interface",
+                            "M_weighted",
+                            "human factors",
+                            "recommender systems",
+                            "setfusion",
+                            "user interfaces",
+                            "user studies"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2014"
+                    },
+                    "isbn":"9781450321846",
+                    "electronic-resource-num":"10.1145/2557500.2557542",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Parra, Brusilovsky, Trattner - 2014 - See what you want to see Visual User-Driven Approach for Hybrid Recommendation.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://dl.acm.org/citation.cfm?id=2557500.2557542"
+                        }
+                    },
+                    "abstract":"Research in recommender systems has traditionally focused on improving the predictive accuracy of recommendations by developing new algorithms or by incorporating new sources of data. However, several studies have shown that accu- racy does not always correlate with a better user experience, leading to recent research that puts emphasis on Human- Computer Interaction in order to investigate aspects of the interface and user characteristics that influence the user expe- rience on recommender systems. Following this newresearch this paper presents SetFusion, a visual user-controllable inter- face for hybrid recommender system. Our approach enables users to manually fuse and control the importance of recom- mender strategies and to inspect the fusion results using an interactive Venn diagram visualization. We analyze the re- sults of two field studies in the context of a conference talk recommendation system, performed to investigate the effect of user controllability in a hybrid recommender. Behavioral analysis and subjective evaluation indicate that the proposed controllable interface had a positive effect on the user experi- ence."
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Xian, Shen",
+                                "Xin, Jin",
+                                "Rongfang, Bie",
+                                "Yunchuan, Sun"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"MSC: A semantic ranking for hitting results of matchmaking of services",
+                        "secondary-title":"Proceedings - International Computer Software and Applications Conference"
+                    },
+                    "periodical":{
+                        "full-title":"Proceedings - International Computer Software and Applications Conference"
+                    },
+                    "pages":"291-296",
+                    "volume":"2",
+                    "keywords":{
+                        "keyword":[
+                            "Matchmaking service",
+                            "Relational Confidence",
+                            "Semantic Matching Degree",
+                            "Semantic support"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2006"
+                    },
+                    "isbn":"0769526551",
+                    "electronic-resource-num":"10.1109/COMPSAC.2006.147",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Xian et al. - 2006 - MSC A semantic ranking for hitting results of matchmaking of services.pdf"
+                        }
+                    },
+                    "abstract":"As the e-commerce is done faster, there is a continuous flourishing of e-marketplaces. Matchmaking is an important aspect of e-commerce interactions. Recently, an approach has been taken to service matchmaking based on semantic Web technologies; the designed matching rule can be used to find the sellers' compatible advertisements for buyers. In this paper, we define three categories of attributes for the matchmaking service. Then we present three factors: semantic matching degree, semantic support and relational confidence to capture the semantic characteristics and relationships of the attributes. And we design a semantic ranking MSC combining the three factors to rank the results of advertisements matchmaking. MSC can capture the semantic aspect of matchmaking results; evaluation shows that MSC makes the process of matchmaking more accurately and the advertisement with the highest MSC is better"
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Su, Xiaoyuan",
+                                "Khoshgoftaar, Taghi M."
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"A Survey of Collaborative Filtering Techniques",
+                        "secondary-title":"Advances in Artificial Intelligence"
+                    },
+                    "periodical":{
+                        "full-title":"Advances in Artificial Intelligence"
+                    },
+                    "pages":"1-19",
+                    "volume":"2009",
+                    "issue":"Section 3",
+                    "dates":{
+                        "year":"2009"
+                    },
+                    "electronic-resource-num":"10.1155/2009/421425",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Su, Khoshgoftaar - 2009 - A Survey of Collaborative Filtering Techniques.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://www.hindawi.com/journals/aai/2009/421425/"
+                        }
+                    },
+                    "abstract":"As one of the most successful approaches to building recommender systems, collaborative filtering (CF) uses the known preferences of a group of users to make recommendations or predictions of the unknown preferences for other users. In this paper, we first introduce CF tasks and their main challenges, such as data sparsity, scalability, synonymy, gray sheep, shilling attacks, privacy protection, etc., and their possible solutions. We then present three main categories of CF techniques: memory-based, model- based, and hybrid CF algorithms (that combine CF with other recommendation techniques), with examples for representative algorithms of each category, and analysis of their predictive performance and their ability to address the challenges. From basic techniques to the state-of-the-art, we attempt to present a comprehensive survey for CF techniques, which can be served as a roadmap for research and practice in this area. Copyright"
+                },
+                {
+                    "database":{
+                        "-name":"rs.enl",
+                        "-path":"rs.enl",
+                        "#text":"rs.enl"
+                    },
+                    "ref-type":{
+                        "-name":"Journal Article",
+                        "#text":"0"
+                    },
+                    "contributors":{
+                        "authors":{
+                            "author":[
+                                "Gomez-Nieto, Erick",
+                                "San Roman, Frizzi",
+                                "Pagliosa, Paulo",
+                                "Casaca, Wallace",
+                                "Helou, Elias S",
+                                "de Oliveira, Maria Cristina F",
+                                "Nonato, Luis Gustavo"
+                            ]
+                        }
+                    },
+                    "titles":{
+                        "title":"Similarity preserving snippet-based visualization of web search results.",
+                        "secondary-title":"IEEE transactions on visualization and computer graphics"
+                    },
+                    "periodical":{
+                        "full-title":"IEEE transactions on visualization and computer graphics"
+                    },
+                    "pages":"457-70",
+                    "volume":"20",
+                    "issue":"3",
+                    "keywords":{
+                        "keyword":[
+                            "Multidimensional projection",
+                            "web search visualization"
+                        ]
+                    },
+                    "dates":{
+                        "year":"2014"
+                    },
+                    "accession-num":"24434226",
+                    "electronic-resource-num":"10.1109/TVCG.2013.242",
+                    "urls":{
+                        "pdf-urls":{
+                            "url":"internal-pdf://Gomez-Nieto et al. - 2014 - Similarity preserving snippet-based visualization of web search results.pdf"
+                        },
+                        "web-urls":{
+                            "url":"http://www.ncbi.nlm.nih.gov/pubmed/24434226"
+                        }
+                    },
+                    "abstract":"Internet users are very familiar with the results of a search query displayed as a ranked list of snippets. Each textual snippet shows a content summary of the referred document (or webpage) and a link to it. This display has many advantages, for example, it affords easy navigation and is straightforward to interpret. Nonetheless, any user of search engines could possibly report some experience of disappointment with this metaphor. Indeed, it has limitations in particular situations, as it fails to provide an overview of the document collection retrieved. Moreover, depending on the nature of the query--for example, it may be too general, or ambiguous, or ill expressed--the desired information may be poorly ranked, or results may contemplate varied topics. Several search tasks would be easier if users were shown an overview of the returned documents, organized so as to reflect how related they are, content wise. We propose a visualization technique to display the results of web queries aimed at overcoming such limitations. It combines the neighborhood preservation capability of multidimensional projections with the familiar snippet-based representation by employing a multidimensional projection to derive two-dimensional layouts of the query search results that preserve text similarity relations, or neighborhoods. Similarity is computed by applying the cosine similarity over a \"bag-of-words\" vector representation of collection built from the snippets. If the snippets are displayed directly according to the derived layout, they will overlap considerably, producing a poor visualization. We overcome this problem by defining an energy functional that considers both the overlapping among snippets and the preservation of the neighborhood structure as given in the projected layout. Minimizing this energy functional provides a neighborhood preserving two-dimensional arrangement of the textual snippets with minimum overlap. The resulting visualization conveys both a global view of the query results and visual groupings that reflect related results, as illustrated in several examples shown."
+                }
+            ]
+        }
+    }
+}
