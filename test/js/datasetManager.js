@@ -1,5 +1,3 @@
-
-
 function datasetManager(){
 
     var datasetMappings = {
@@ -19,8 +17,32 @@ function datasetManager(){
         DS_CE: {
             description: 'Circular Economy',
             file: 'dataset_CE.json'
+        },
+        DS_test: {
+            description: 'Time Series Visualization',
+            file: 'test.json',
+            parse: true
         }
     };
+
+    function adaptJSON(_data) {
+        var data = [];
+        _data.xml.records.record.forEach(function(d, i){
+            data.push({
+                id: d.isbn + '-doc-' + i,
+                title: d.titles.title,
+                creator: d.contributors.authors.author.join(', '),
+                description: d.abstract || '',
+                uri: d.urls['web-urls'].url,
+                facets: {
+                    year: d.dates.year
+                },
+
+            });
+        });
+        return data
+    }
+
 
     this.getIDsAndDescriptions = function(){
         var idsAndDescriptions = [];
@@ -35,6 +57,9 @@ function datasetManager(){
 
         if(datasetMappings[datasetId]){
             $.getJSON('datasets/'+datasetMappings[datasetId].file, function(data){
+                if(datasetMappings[datasetId].parse) {
+                    data = adaptJSON(data);
+                }
                 console.log('Dataset '+ datasetId +' retrieved');
                 callback.call(this, data);
             })

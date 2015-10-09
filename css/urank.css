@@ -953,7 +953,7 @@ a.urank-tagbox-clear-btn:before {
 .urank-list-li.watched {
     box-shadow: inset 1px 1px 2px rgba(128, 128, 128, 0.6), inset -1px -1px 2px rgba(128, 128, 128, 0.6);
     -webkit-transition: box-shadow 0s linear;
-    z-index: 9999;
+    z-index: 99;
 }
 
 .urank-list-li.watched .urank-list-li-title {
@@ -1042,6 +1042,7 @@ Document Panel (right) - for visualizing highlighted text
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 9998;
 }
 
 .urank-docviewer-container {

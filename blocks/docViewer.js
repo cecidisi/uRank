@@ -60,7 +60,7 @@ var DocViewer = (function(){
             $container = $root;
         }
 
-        $root.on('click', function(event){ event.stopPropagation(); s.onDocViewerHidden.call(this); })
+        $root.on('click', function(event){ event.stopPropagation(); s.onDocViewerHidden.call(this); });
         $container.on('click', function(event){ event.stopPropagation() });
 
         // Append details section, titles and placeholders for doc details
