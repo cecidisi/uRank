@@ -775,7 +775,7 @@ a.urank-tagbox-clear-btn:before {
     background: -ms-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
 */
     background: -webkit-linear-gradient(top, rgba(150, 150, 150,0.3) 25%, rgba(150, 150, 150,0.6) 75%, rgba(150, 150, 150, 0.3));
-    border: 1px solid rgba(150,150,150,.3);
+/*    border: 1px solid rgba(150,150,150,.3);*/
     -webkit-transition: background 0s;
     -moz-transition: background 0s;
     -o-transition: background 0s;

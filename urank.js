@@ -132,8 +132,7 @@ var Urank = (function(){
             _this.queryTermColorScale = d3.scale.ordinal().range(_this.loadOpt.queryTermColorArray);
 
             //  Initialize keyword extractor
-            var keywordExtractorOptions = { minRepetitions: (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5 };
-            var keywordExtractor = new KeywordExtractor(keywordExtractorOptions);
+            var keywordExtractor = new KeywordExtractor(_this.loadOpt.keywordExtractor);
 
             //  Clean documents and add them to the keyword extractor
             _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
@@ -383,10 +382,10 @@ var Urank = (function(){
             //tagCloud.reset();
             visCanvas.reset();
             docViewer.clear();
-            _this.selectedKeywords.forEach(function(kw){
+            _this.selectedKeywords.forEach(function(kw, i){
                 setTimeout(function(){
                     tagCloud.restoreTag(kw.index);
-                }, 0);
+                }, (i+1)*50);
             });
             _this.selectedKeywords = [];
             s.onReset.call(this);
