@@ -1,5 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
+include 'error.php';
 
 $dir = './logs';
 

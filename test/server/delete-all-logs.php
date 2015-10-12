@@ -5,14 +5,13 @@ header('Access-Control-Allow-Origin: *');
 include 'error.php';
 
 $output_dir = "./logs";
-chmod($output_dir, 0755);
-
 
 if(!file_exists($output_dir)) {
     return_error('ERROR directory does not exist', 404);
     exit;
 }
 
+chmod($output_dir, 0755);
 if(!is_writable($output_dir)) {
     return_error('ERROR no writing permission', 1337);
     exit;
