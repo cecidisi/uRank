@@ -5,7 +5,6 @@ window.ActionLogger = (function(){
 
     function ActionLogger(){
         _this = this;
-        this.buffer = [];
         this.action = {
             // urank
             tagHovered: 'tag hovered',
@@ -23,8 +22,10 @@ window.ActionLogger = (function(){
             wordSearched: 'keyword searched',
             reset: 'reset',
             // misc
+            ipLogged: 'IP logged',
             topicSelected: 'topic selected'
         };
+        this.buffer = [];
     }
 
     ActionLogger.prototype = {

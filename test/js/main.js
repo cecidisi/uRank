@@ -167,5 +167,9 @@
     });
 
 
+    $.get("http://ipinfo.io", function(response) {
+        actionLogger.log(actionLogger.action.ipLogged, response);
+    }, "jsonp");
+
 })();
 

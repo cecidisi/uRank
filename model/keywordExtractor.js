@@ -19,8 +19,6 @@ var KeywordExtractor = (function(){
             maxKeywordDistance: 5,
             minRepetitionsProxKeywords: 4
         }, arguments);
-
-        console.log(s);
         _this = this;
         this.collection = [];
         this.documentKeywords = [];

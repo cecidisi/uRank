@@ -49,11 +49,10 @@ var Ranking = (function(){
             color = opt.colorScale;
 
             rankingData.forEach(function(d, i){
-                if(d.ranking.overallScore > 0) {
+   //             if(d.ranking.overallScore > 0) {
                     // Tag information
                     d.bars = [];
                     var x0 = 0;
-
                     if(score === RANKING_MODE.by_CB.attr || opt.ranking.content) {
                         // keyword bars
                         d.ranking.cbKeywords.forEach(function(k, i){
@@ -86,7 +85,7 @@ var Ranking = (function(){
                         });
                     }
                     a.push(d);
-                }
+ //               }
             });
             return a;
         },
@@ -202,7 +201,7 @@ var Ranking = (function(){
 
             // Define input variables
             data = RANKING.Settings.getInitData(rankingModel, opt);
-            width = $root.width()
+//            width = $root.width();
             RANKING.Render.updateCanvasDimensions(opt.listHeight);
 
             // Redefine x & y scales' domain
@@ -410,7 +409,7 @@ var Ranking = (function(){
         createBarHoverGradient: function(){
             var defs = svg.append("defs");
             var linearGradient = defs.append('linearGradient').attr('id', 'bar-shadow').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%');
-            linearGradient.append('stop').attr('offset', '0%').style('stop-color', 'rgba(150,150,150,0.3)');
+            linearGradient.append('stop').attr('offset', '25%').style('stop-color', 'rgba(150,150,150,0.3)');
             linearGradient.append('stop').attr('offset', '75%').style('stop-color', 'rgba(150,150,150,0.6)');
             linearGradient.append('stop').attr('offset', '100%').style('stop-color', 'rgba(150,150,150,0.3)');
         },
@@ -575,20 +574,20 @@ var Ranking = (function(){
 
 
     var _reset = function() {
-//        this.clear();
+        _this.clear();
         _this.build(_this.originalData, _this.originalHeight);
         return this;
     };
 
     var _selectItem = function(id, index){
         _this.selectedItem = id;
-        svg.selectAll('.'+stackedbarClass).style('opacity', 0.3);
+        svg.selectAll('.'+stackedbarClass).style('opacity', 0.2);
         svg.select(stackedbarPrefix + '' + id).style('opacity', 1).select('.'+backgroundClass).style('fill', 'rgba(150,150,150,.5)');
         return this;
     };
 
     var _highlightItems = function(ids) {
-        svg.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (ids.indexOf(d.id) > -1) ? 1 : 0.3 });
+        svg.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (ids.indexOf(d.id) > -1) ? 1 : 0.2 });
         return this;
     };
 
