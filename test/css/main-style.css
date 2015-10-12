@@ -176,7 +176,7 @@ header .num-results-msg {
     display: inline-block;
     float: left;
     width: 150px;
-    height: 23px;
+    height: 20px;
     margin: 4px 10px;
     border-radius: 4px;
     text-align: center;
@@ -184,7 +184,8 @@ header .num-results-msg {
     color: white;
     box-shadow: inset 2px 2px 4px #bbb, inset -2px -2px 4px #bbb;
     font-weight: bold;
-    line-height: 1.8em;
+    line-height: 1.9em;
+    padding: 2px;
 }
 
 

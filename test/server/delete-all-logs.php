@@ -18,7 +18,7 @@ if(!is_writable($output_dir)) {
 }
 
 $res = array();
-$files = glob($output_dir.'*'); // get all file names
+$files = glob($output_dir.'/*'); // get all file names
 foreach($files as $file){ // iterate files
     if(is_file($file)) {
         unlink($file); // delete file

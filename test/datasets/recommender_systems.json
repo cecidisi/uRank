@@ -367,7 +367,7 @@
                     },
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Bridge, Dunleavy - Unknown - If you liked Herlocker et al .’ s explanations paper , then you might like this paper too(2).pdf"
+                            "url": "internal-pdf://Bridge, Dunleavy - 2014 - If you liked Herlocker et al.’s explanations paper, then you might like this paper too.pdf"
                         },
                         "web-urls": {
                             "url": "http://ceur-ws.org/Vol-1253/paper4.pdf"
@@ -490,7 +490,7 @@
                     "electronic-resource-num": "10.4018/978-1-60566-306-7.ch001",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Candillier et al. - 2009 - State-of-the-Art Recommender Systems(2).pdf"
+                            "url": "internal-pdf://Candillier et al. - 2009 - State-of-the-Art Recommender Systems.pdf"
                         },
                         "web-urls": {
                             "url": "http://64.225.152.8/downloads/excerpts/33031.pdf\\nhttp://www.mendeley.com/research/stateoftheart-recommender-systems/"
@@ -630,7 +630,7 @@
                     "electronic-resource-num": "10.1145/1056808.1056836",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Chen - 2005 - Context-aware collaborative filtering system predicting the user's preferences in ubiquitous computing(2).pdf"
+                            "url": "internal-pdf://Chen - 2005 - Context-aware collaborative filtering system predicting the user's preferences in ubiquitous computing.pdf"
                         },
                         "web-urls": {
                             "url": "http://doi.acm.org/10.1145/1056808.1056836"
@@ -834,43 +834,6 @@
                         }
                     },
                     "titles": {
-                        "title": " Recommendation Algorithms",
-                        "secondary-title": "ACM Transactions on Information Systems"
-                    },
-                    "periodical": {
-                        "full-title": "ACM Transactions on Information Systems"
-                    },
-                    "pages": "143-177",
-                    "volume": "22",
-                    "issue": "1",
-                    "keywords": "",
-                    "dates": {
-                        "year": "2004"
-                    },
-                    "isbn": "1046-8188",
-                    "electronic-resource-num": "10.1145/963770.963776",
-                    "urls": "",
-                    "abstract": "The explosive growth of the world-wide-web and the emergence of e-commerce has led to the devel- opment of recommender systems—a personalized information filtering technology used to identify a set of items that will be of interest to a certain user. User-based collaborative filtering is the most successful technology for building recommender systems to date and is extensively used in many commercial recommender systems. Unfortunately, the computational complexity of these methods grows linearly with the number of customers, which in typical commercial applications can be sev- eral millions. To address these scalability concerns model-based recommendation techniques have been developed. These techniques analyze the user–item matrix to discover relations between the different items and use these relations to compute the list of recommendations. In this article, we present one such class of model-based recommendation algorithms that first determines the similarities between the various items and then uses them to identify the set of items to be recommended. The key steps in this class of algorithms are (i) the method used to compute the similarity between the items, and (ii) the method used to combine these similarities in order to compute the similarity between a basket of items and a candidate recommender item. Our experimental evaluation on eight real datasets shows that these item-based algorithms are up to two orders of magnitude faster than the traditional user-neighborhood based recommender systems and provide recommendations with comparable or better quality."
-                },
-                {
-                    "database": {
-                        "_name": "RS.enl",
-                        "_path": "RS.enl",
-                        "__text": "RS.enl"
-                    },
-                    "ref-type": {
-                        "_name": "Journal Article",
-                        "__text": "0"
-                    },
-                    "contributors": {
-                        "authors": {
-                            "author": [
-                                "Deshpande, Mukund",
-                                "Karypis, George"
-                            ]
-                        }
-                    },
-                    "titles": {
                         "title": "Item Based Top-N Recommendation Algorithms",
                         "secondary-title": "ACM Transactions on Information Systems"
                     },
@@ -893,6 +856,43 @@
                     "electronic-resource-num": "10.1145/963770.963776",
                     "urls": "",
                     "abstract": "this paper we present one such class of model-based recommendation algorithms that first determines the similarities between the various items and then uses them to identify the set of items to be recommended. The key steps in this class of algorithms are (i) the method used to compute the similarity between the items, and (ii) the method used to combine these similarities in order to compute the similarity between a basket of items and a candidate recommender item. Our experimental evaluation on eight real datasets shows that these item-based algorithms are up to two orders of magnitude faster than the traditional user-neighborhood based recommender systems and provide recommendations with comparable or better quality"
+                },
+                {
+                    "database": {
+                        "_name": "RS.enl",
+                        "_path": "RS.enl",
+                        "__text": "RS.enl"
+                    },
+                    "ref-type": {
+                        "_name": "Journal Article",
+                        "__text": "0"
+                    },
+                    "contributors": {
+                        "authors": {
+                            "author": [
+                                "Deshpande, Mukund",
+                                "Karypis, George"
+                            ]
+                        }
+                    },
+                    "titles": {
+                        "title": " Recommendation Algorithms",
+                        "secondary-title": "ACM Transactions on Information Systems"
+                    },
+                    "periodical": {
+                        "full-title": "ACM Transactions on Information Systems"
+                    },
+                    "pages": "143-177",
+                    "volume": "22",
+                    "issue": "1",
+                    "keywords": "",
+                    "dates": {
+                        "year": "2004"
+                    },
+                    "isbn": "1046-8188",
+                    "electronic-resource-num": "10.1145/963770.963776",
+                    "urls": "",
+                    "abstract": "The explosive growth of the world-wide-web and the emergence of e-commerce has led to the devel- opment of recommender systems—a personalized information filtering technology used to identify a set of items that will be of interest to a certain user. User-based collaborative filtering is the most successful technology for building recommender systems to date and is extensively used in many commercial recommender systems. Unfortunately, the computational complexity of these methods grows linearly with the number of customers, which in typical commercial applications can be sev- eral millions. To address these scalability concerns model-based recommendation techniques have been developed. These techniques analyze the user–item matrix to discover relations between the different items and use these relations to compute the list of recommendations. In this article, we present one such class of model-based recommendation algorithms that first determines the similarities between the various items and then uses them to identify the set of items to be recommended. The key steps in this class of algorithms are (i) the method used to compute the similarity between the items, and (ii) the method used to combine these similarities in order to compute the similarity between a basket of items and a candidate recommender item. Our experimental evaluation on eight real datasets shows that these item-based algorithms are up to two orders of magnitude faster than the traditional user-neighborhood based recommender systems and provide recommendations with comparable or better quality."
                 },
                 {
                     "database": {
@@ -977,7 +977,7 @@
                     "electronic-resource-num": "10.1145/1639714.1639784",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Gansner 2009 - Putting Recommendations on the Map – Visualizing Clusters and Relations.pdf"
+                            "url": "internal-pdf://Gansner et al. - 2009 - Putting Recommendations on the Map -- Visualizing Clusters and Relations.pdf"
                         },
                         "web-urls": {
                             "url": "http://arxiv.org/abs/0906.5286"
@@ -1163,7 +1163,7 @@
                     "electronic-resource-num": "10.1145/1502650.1502695",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Gotz 2009 - Behavior-Driven Visualization Recommendation.pdf"
+                            "url": "internal-pdf://Gotz, Wen - 2009 - Behavior-Driven Visualization Recommendation.pdf"
                         }
                     },
                     "abstract": "We present a novel approach to visualization recommendation that monitors user behavior for implicit signals of user intent to provide more effective recommendation. This is in contrast to previous approaches which are either insensitive to user intent or require explicit, user specified task information. Our approach, called Behavior-Driven Visualization Recommendation (BDVR), consists of two distinct phases: (1) pattern detection, and (2) visualization recommendation. In the first phase, user behavior is analyzed dynamically to find semantically meaningful interaction patterns using a library of pattern definitions developed through observations of real-world visual analytic activity. In the second phase, our BDVR algorithm uses the detected patterns to infer a user's intended visual task. It then automatically suggests alternative visualizations that support the inferred visual task more directly than the user's current visualization. We present the details of BDVR and describe its implementation within our lab's prototype visual analysis system. We also present study results that demonstrate that our approach shortens task completion time and reduces error rates when compared to behavior-agnostic recommendation"
@@ -1908,7 +1908,7 @@
                     },
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Kern, Jack, Granitzer - Unknown - Recommending Scientific Literature Comparing Use-Cases and Algorithms(2).pdf"
+                            "url": "internal-pdf://Kern, Jack, Granitzer - 2014 - Recommending Scientific Literature Comparing Use-Cases and Algorithms.pdf"
                         },
                         "web-urls": {
                             "url": "http://arxiv.org/abs/1409.1357"
@@ -1952,7 +1952,7 @@
                     "electronic-resource-num": "10.1109/MIS.2004.75",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Kim 2004 - Viscors. A Visual Content Recommender for the Mobile Web.pdf"
+                            "url": "internal-pdf://Kim, Lee, Advanced - 2004 - VISCORS A Visual- Content Recommender for the Mobile Web.pdf"
                         }
                     },
                     "abstract": "A n increasing selection of content is becoming available in the mobile-Web envi- ronment,where users navigate the Web using wireless devices such as cell phones and PDAs. The fast growth and excellent prospects of the mobile-Web content market have attracted many content providers. However, as continuing deregulation further lowers the entry barriers for providers, increased competition is quickly eliminating profit opportuni- ties. To survive in this environment, providers must offer an intelligent system that provides customers with a more pleasant mobile-shopping experience. A particularly popular form of mobile-Web con- tent is wallpaper images for cell phones.1 Although the market for this content is growing rapidly as related technologies evolve, customers experience much frus- tration when searching for the images they want, owing to inefficient sequential search (see Figure 1). When a customer logs on to an image-download site using a cell phone, the site presents the customer with a list of the best-selling or newest images. The cus- tomer pages through the list and selects an image to inspect. If the customer likes the image, he or she might buy it. Otherwise, the customer repeats these steps until he or she stumbles over the right image or gives up. With this method, the expected number of images the customer views before hitting the desired image far exceeds the acceptable level. These difficulties are partly attributable to the cell phone’s characteristics. Compared to PCs, cell phones have smaller screens, fewer input keys, and less sophisticated browsers. So, the user interface of mobile-Web applications isn’t as friendly as that of typical Web applications. Consequently, many cus- tomers use their PCs to select images and then request a download to their mobile devices. Nevertheless, searching generally remains inconvenient and com- plex. To make searching more acceptable, a more efficient search aid that suggests only the images meet- ing the customer’s preference is necessary. As a solution to these problems, we propose VIS- CORS (Visual Contents Recommender System). To reduce customers’search effort,VISCORS combines the two most popular information-filtering techniques: collaborative filtering and content-based image retrieval. Combined, these techniques properly han- dle the distinct characteristics of visual content while taking into account the mobile Web’s constraints"
@@ -2058,7 +2058,7 @@
                     "electronic-resource-num": "10.1145/2365952.2365966",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Knijnenburg et al. - 2012 - Inspectability and control in social recommenders(2).pdf"
+                            "url": "internal-pdf://Knijnenburg et al. - 2012 - Inspectability and control in social recommenders.pdf"
                         },
                         "web-urls": {
                             "url": "http://dl.acm.org/citation.cfm?doid=2365952.2365966"
@@ -2466,7 +2466,7 @@
                     "electronic-resource-num": "10.1007/s10462-005-4612-x",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://McSherry - 2005 - Explanation in recommender systems(2).pdf"
+                            "url": "internal-pdf://McSherry - 2005 - Explanation in recommender systems.pdf"
                         }
                     },
                     "abstract": "There is increasing awareness in recommender systems research of the need to make the recommendation process more transparent to users. Following a brief review of existing approaches to explanation in recommender systems, we focus in this paper on a case-based reasoning (CBR) approach to product recommendation that offers important benefits in terms of the ease with which the recommendation process can be explained and the systems recommendations can be justified. For example, recommendations based on incomplete queries can be justified on the grounds that the users preferences with respect to attributes not mentioned in her query cannot affect the outcome. We also show how the relevance of any question the user is asked can be explained in terms of its ability to discriminate between competing cases, thus giving users a unique insight into the recommendation process."
@@ -2590,7 +2590,7 @@
                     "electronic-resource-num": "10.1145/1357054.1357222",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://O'Donovan et al. - 2008 - PeerChooser Visual Interactive Recommendation(2).pdf"
+                            "url": "internal-pdf://O'Donovan et al. - 2008 - PeerChooser Visual Interactive Recommendation.pdf"
                         }
                     },
                     "abstract": "Collaborative filtering (CF) has been successfully deployed over the years to compute predictions on items based on a user's correlation with a set of peers. The black-box nature of most CF applications leave the user wondering how the system arrived at its recommendation. This note introduces PeerChooser, a collaborative recommender system with an interactive graphical explanation interface. Users are provided with a visual explanation of the CF process and opportunity to manipulate their neighborhood at varying levels of granularity to reflect aspects of their current requirements. In this manner we overcome the problem of redundant profile information in CF systems, in addition to providing an explanation interface. Our layout algorithm produces an exact, noiseless graph representation of the underlying correlations between users. PeerChooser's prediction component uses this graph directly to yield the same results as the benchmark. User's then improve on these predictions by tweaking the graph to their current requirements. We present a user-survey in which PeerChooser compares favorably against a benchmark CF algorithm."
@@ -2725,7 +2725,7 @@
                     "electronic-resource-num": "10.1145/2557500.2557542",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Parra, Brusilovsky, Trattner - 2014 - See what you want to see Visual User-Driven Approach for Hybrid Recommendation(2).pdf"
+                            "url": "internal-pdf://Parra, Brusilovsky, Trattner - 2014 - See what you want to see Visual User-Driven Approach for Hybrid Recommendation.pdf"
                         },
                         "web-urls": {
                             "url": "http://dl.acm.org/citation.cfm?id=2557500.2557542"
@@ -2827,55 +2827,6 @@
                         }
                     },
                     "titles": {
-                        "title": "Trust Building with Explanation Interfaces",
-                        "secondary-title": "Proceedings of the 11th international conference on Intelligent user interfaces - IUI '06"
-                    },
-                    "periodical": {
-                        "full-title": "Proceedings of the 11th international conference on Intelligent user interfaces - IUI '06"
-                    },
-                    "pages": "93-100",
-                    "keywords": {
-                        "keyword": [
-                            "explanation interfaces",
-                            "recommender agents",
-                            "tradeoff",
-                            "trust building"
-                        ]
-                    },
-                    "dates": {
-                        "year": "2006"
-                    },
-                    "isbn": "1595932879",
-                    "electronic-resource-num": "10.1145/1111449.1111475",
-                    "urls": {
-                        "pdf-urls": {
-                            "url": "internal-pdf://Pu, Chen - 2006 - Trust Building with Explanation Interfaces.pdf"
-                        },
-                        "web-urls": {
-                            "url": "http://portal.acm.org/citation.cfm?doid=1111449.1111475"
-                        }
-                    },
-                    "abstract": "Based on our recent work on the development of a trust model for recommender agents and a qualitative survey, we explore the potential of building users’ trust with explanation interfaces. We present the major results from the survey, which provided a roadmap identifying the most promising areas for investigating design issues for trust-inducing interfaces. We then describe a set of general principles derived from an in-depth examination of various design dimensions for constructing explanation interfaces, which most contribute to trust formation. We present results of a significant- scale user study, which indicate that the explanation is highly effective in building users’ trust in the recommendation interface, with the benefit of intention to return to the agent and save cognitive effort. organization-based increasing users’"
-                },
-                {
-                    "database": {
-                        "_name": "RS.enl",
-                        "_path": "RS.enl",
-                        "__text": "RS.enl"
-                    },
-                    "ref-type": {
-                        "_name": "Journal Article",
-                        "__text": "0"
-                    },
-                    "contributors": {
-                        "authors": {
-                            "author": [
-                                "Pu, Pearl",
-                                "Chen, Li"
-                            ]
-                        }
-                    },
-                    "titles": {
                         "title": "Trust-inspiring explanation interfaces for recommender systems",
                         "secondary-title": "Knowledge-Based Systems"
                     },
@@ -2909,6 +2860,55 @@
                         }
                     },
                     "abstract": "A recommender system's ability to establish trust with users and convince them of its recommendations, such as which camera or PC to purchase, is a crucial design factor especially for e-commerce environments. This observation led us to build a trust model for recommender agents with a focus on the agent's trustworthiness as derived from the user's perception of its competence and especially its ability to explain the recommended results. We present in this article new results of our work in developing design principles and algorithms for constructing explanation interfaces. We show the effectiveness of these principles via a significant-scale user study in which we compared an interface developed based on these principles with a traditional one. The new interface, called the organization interface where results are grouped according to their tradeoff properties, is shown to be significantly more effective in building user trust than the traditional approach. Users perceive it more capable and efficient in assisting them to make decisions, and they are more likely to return to the interface. We therefore recommend designers to build trust-inspiring interfaces due to their high likelihood to increase users' intention to save cognitive effort and the intention to return to the recommender system. ?? 2007 Elsevier B.V. All rights reserved."
+                },
+                {
+                    "database": {
+                        "_name": "RS.enl",
+                        "_path": "RS.enl",
+                        "__text": "RS.enl"
+                    },
+                    "ref-type": {
+                        "_name": "Journal Article",
+                        "__text": "0"
+                    },
+                    "contributors": {
+                        "authors": {
+                            "author": [
+                                "Pu, Pearl",
+                                "Chen, Li"
+                            ]
+                        }
+                    },
+                    "titles": {
+                        "title": "Trust Building with Explanation Interfaces",
+                        "secondary-title": "Proceedings of the 11th international conference on Intelligent user interfaces - IUI '06"
+                    },
+                    "periodical": {
+                        "full-title": "Proceedings of the 11th international conference on Intelligent user interfaces - IUI '06"
+                    },
+                    "pages": "93-100",
+                    "keywords": {
+                        "keyword": [
+                            "explanation interfaces",
+                            "recommender agents",
+                            "tradeoff",
+                            "trust building"
+                        ]
+                    },
+                    "dates": {
+                        "year": "2006"
+                    },
+                    "isbn": "1595932879",
+                    "electronic-resource-num": "10.1145/1111449.1111475",
+                    "urls": {
+                        "pdf-urls": {
+                            "url": "internal-pdf://Pu, Chen - 2006 - Trust Building with Explanation Interfaces.pdf"
+                        },
+                        "web-urls": {
+                            "url": "http://portal.acm.org/citation.cfm?doid=1111449.1111475"
+                        }
+                    },
+                    "abstract": "Based on our recent work on the development of a trust model for recommender agents and a qualitative survey, we explore the potential of building users’ trust with explanation interfaces. We present the major results from the survey, which provided a roadmap identifying the most promising areas for investigating design issues for trust-inducing interfaces. We then describe a set of general principles derived from an in-depth examination of various design dimensions for constructing explanation interfaces, which most contribute to trust formation. We present results of a significant- scale user study, which indicate that the explanation is highly effective in building users’ trust in the recommendation interface, with the benefit of intention to return to the agent and save cognitive effort. organization-based increasing users’"
                 },
                 {
                     "database": {
@@ -3390,7 +3390,7 @@
                     "isbn": "9781450334730",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Seitlinger et al. - Unknown - Attention Please ! A Hybrid Resource Recommender Mimicking Attention-Interpretation Dynamics(2).pdf"
+                            "url": "internal-pdf://Seitlinger et al. - 2015 - Attention Please ! A Hybrid Resource Recommender Mimicking Attention-Interpretation Dynamics.pdf"
                         },
                         "web-urls": {
                             "url": "http://www.www2015.it/documents/proceedings/companion/p339.pdf"
@@ -3649,7 +3649,7 @@
                     "electronic-resource-num": "10.1.1.23.9764",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Swearingen, Sinha - 2001 - Beyond Algorithms Beyond Algorithms An HCI Perspective on Recommender Systems(2).pdf"
+                            "url": "internal-pdf://Swearingen, Sinha - 2001 - Beyond Algorithms Beyond Algorithms An HCI Perspective on Recommender Systems.pdf"
                         },
                         "web-urls": {
                             "url": "http://www.citeulike.org/user/lschiff/article/375842\\nhttp://citeseer.ist.psu.edu/cache/papers/cs/31330/http:zSzzSzweb.engr.oregonstate.eduzSz\\~{}herlockzSzrsw2001zSzfinalzSzfull\\_length\\_paperszSz4\\_swearingenzPz.pdf/swearingen01beyond.pdf"
@@ -3786,7 +3786,7 @@
                     },
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Trattner - 2015 - TagRec Towards a Toolkit for Reproducible Evaluation and Development of Tag-Based Recommender Algorithms.pdf"
+                            "url": "internal-pdf://Trattner, Kowald, Lacic - 2015 - TagRec Towards a Toolkit for Reproducible Evaluation and Development of Tag-Based Recommender Algorith.pdf"
                         }
                     },
                     "abstract": "This article presents TagRec, a framework to foster reproducible evaluation and development of recommender algorithms based on folksonomy data. The purpose of TagRec is to provide the research community with a standardised framework that supports all steps of the development process and the evaluation of tag-based recommendation algorithms in a reproducible way, in- cluding methods for data pre-processing, data modeling and recommender evaluation. TagRec currently contains 32 state-of-the-art algorithms for tag and item prediction, including a set of novel and very efficient algorithms based on the human cognition theories ACT-R and MINERVA2. The framework should be relevant for researchers, teachers, students and developers working on recommender systems and predictive modeling in general and those interested in tag-based recommender algorithms in particular."
@@ -3836,7 +3836,7 @@
                     "isbn": "9781595937537",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Tso-sutter, Marinho, Schmidt-thieme - 2008 - Tag-aware Recommender Systems by Fusion of Collaborative Filtering Algorithms Categories an.pdf"
+                            "url": "internal-pdf://Tso-Sutter, Marinho, Schmidt-Thieme - 2008 - Tag-aware Recommender Systems by Fusion of Collaborative Filtering Algorithms Categories an.pdf"
                         }
                     },
                     "abstract": "Recommender Systems (RS) aim at predicting items or rat- ings of items that the user are interested in. Collabora- tive Filtering (CF) algorithms such as user- and item-based methods are the dominant techniques applied in RS algo- rithms. To improve recommendation quality, metadata such as content information of items has typically been used as additional knowledge. With the increasing popularity of the collaborative tagging systems, tags could be interesting and useful information to enhance RS algorithms. Unlike at- tributes which are “global” descriptions of items, tags are “local” descriptions of items given by the users. To the best of our knowledge, there hasn’t been any prior study on tag- aware RS. In this paper, we propose a generic method that allows tags to be incorporated to standard CF algorithms, by reducing the three-dimensional correlations to three two- dimensional correlations and then applying a fusion method to re-associate these correlations. Additionally, we investi- gate the effect of incorporating tags information to different CF algorithms. Empirical evaluations on three CF algo- rithms with real-life data set demonstrate that incorporat- ing tags to our proposed approach provides promising and significant results."
@@ -3965,7 +3965,7 @@
                     "electronic-resource-num": "10.1145/2449396.2449442",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Verbert 2013 - Visualizing Recommendations to Support Exploration,Transparency and Controllability.pdf"
+                            "url": "internal-pdf://Verbert et al. - 2013 - Visualizing recommendations to support exploration, transparency and controllability.pdf"
                         },
                         "web-urls": {
                             "url": "http://dl.acm.org/citation.cfm?id=2449396.2449442"
@@ -4152,7 +4152,7 @@
                     "electronic-resource-num": "10.3724/SP.J.1001.2012.04100",
                     "urls": {
                         "pdf-urls": {
-                            "url": "internal-pdf://Wang, Meng, Zhang - 2012 - Context-Aware Recommender Systems(2).pdf"
+                            "url": "internal-pdf://Wang, Meng, Zhang - 2012 - Context-Aware Recommender Systems.pdf"
                         }
                     },
                     "abstract": "The importance of contextual information has been recognized by researchers and practitioners in many disciplines, including e-commerce personalization, information retrieval, ubiquitous and mobile computing, data mining, marketing, and management. While a substantial amount of research has already been performed in the area of recommender systems, most existing approaches focus on recommending the most relevant items to users without taking into account any additional contextual information, such as time, location, or the company of other people (e.g., for watching movies or dining out). In this chapter we argue that relevant contextual information does matter in recommender systems and that it is important to take this information into account when providing recommendations.We discuss the general notion of context and how it can be modeled in recommender systems. Furthermore, we introduce three different algorithmic paradigms – contextual pre-filtering, post-filtering, and modeling – for incorporating contextual information into the recommendation process, discuss the possibilities of combining several context-aware recommendation techniques into a single unifying approach, and provide a case study of one such combined approach. Finally, we present additional capabilities for context-aware recommenders and discuss important and promising directions for future research"
@@ -4470,40 +4470,6 @@
                         "__text": "RS.enl"
                     },
                     "ref-type": {
-                        "_name": "Book Section",
-                        "__text": "7"
-                    },
-                    "contributors": {
-                        "authors": {
-                            "author": "Ziegler, Cai-Nicolas"
-                        }
-                    },
-                    "titles": {
-                        "title": "Semantic Web Recommender Systems",
-                        "secondary-title": "Current Trends in Database Technology - EDBT 2004 Workshops"
-                    },
-                    "periodical": {
-                        "full-title": "Current Trends in Database Technology - EDBT 2004 Workshops"
-                    },
-                    "pages": "78-89",
-                    "keywords": "",
-                    "dates": {
-                        "year": "2005"
-                    },
-                    "urls": {
-                        "web-urls": {
-                            "url": "http://www.springerlink.com/content/bvuy163jeh4fh6kh"
-                        }
-                    },
-                    "abstract": "Research on recommender systems has primarily addressed centralized\\nscenarios and largely ignored open, decentralized systems where remote\\ninformation distribution prevails. The absence of superordinate authorities\\nhaving full access and control introduces some serious issues requiring\\nnovel approaches and methods. Hence, our primary objective targets\\nthe successful deployment and integration of recommender system facilities\\nfor Semantic Web applications, making use of novel technologies and\\nconcepts and incorporating them into one coherent framework."
-                },
-                {
-                    "database": {
-                        "_name": "RS.enl",
-                        "_path": "RS.enl",
-                        "__text": "RS.enl"
-                    },
-                    "ref-type": {
                         "_name": "Journal Article",
                         "__text": "0"
                     },
@@ -4531,6 +4497,40 @@
                         }
                     },
                     "abstract": "Research on recommender systems has primarily addressed centralized scenarios and largely ignored open, decentralized systems where remote information distribution prevails. The absence of superordinate authorities having full access and control introduces some serious issues requiring novel approaches and methods. Hence, our primary objective targets the successful deployment and integration of recommender system facilities for Semantic Web applications, making use of novel technologies and concepts and incorporating them into one coherent framework. 1"
+                },
+                {
+                    "database": {
+                        "_name": "RS.enl",
+                        "_path": "RS.enl",
+                        "__text": "RS.enl"
+                    },
+                    "ref-type": {
+                        "_name": "Book Section",
+                        "__text": "7"
+                    },
+                    "contributors": {
+                        "authors": {
+                            "author": "Ziegler, Cai-Nicolas"
+                        }
+                    },
+                    "titles": {
+                        "title": "Semantic Web Recommender Systems",
+                        "secondary-title": "Current Trends in Database Technology - EDBT 2004 Workshops"
+                    },
+                    "periodical": {
+                        "full-title": "Current Trends in Database Technology - EDBT 2004 Workshops"
+                    },
+                    "pages": "78-89",
+                    "keywords": "",
+                    "dates": {
+                        "year": "2005"
+                    },
+                    "urls": {
+                        "web-urls": {
+                            "url": "http://www.springerlink.com/content/bvuy163jeh4fh6kh"
+                        }
+                    },
+                    "abstract": "Research on recommender systems has primarily addressed centralized\\nscenarios and largely ignored open, decentralized systems where remote\\ninformation distribution prevails. The absence of superordinate authorities\\nhaving full access and control introduces some serious issues requiring\\nnovel approaches and methods. Hence, our primary objective targets\\nthe successful deployment and integration of recommender system facilities\\nfor Semantic Web applications, making use of novel technologies and\\nconcepts and incorporating them into one coherent framework."
                 }
             ]
         }
