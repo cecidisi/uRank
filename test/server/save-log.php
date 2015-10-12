@@ -6,7 +6,10 @@ if(empty($_POST['data'])){
     exit;
 }
 
-$output_dir = "./logs/";
+$output_dir = "./logs";
+if(!file_exists($output_dir)) {
+    mkdir($output_dir, 0755, true);
+}
 chmod($output_dir, 0755);
 
 if(!is_writable($output_dir)) {
@@ -17,7 +20,7 @@ if(!is_writable($output_dir)) {
 $timestamp = date('Y-m-d').'_'.date('h').'-'.date('i').'-'.date('s');
 $filename = 'test-'.$timestamp.'.json';
 $data = $_POST['data'];
-$file = fopen($output_dir.$filename, 'w') or die('Unable to open file!');
+$file = fopen($output_dir.'/'.$filename, 'w') or die('Unable to open file!');
 fwrite($file, json_encode($data));
 fclose($file);
 echo "data saved succesfully";
