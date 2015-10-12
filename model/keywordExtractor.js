@@ -20,6 +20,7 @@ var KeywordExtractor = (function(){
             minRepetitionsProxKeywords: 4
         }, arguments);
 
+        console.log(s);
         _this = this;
         this.collection = [];
         this.documentKeywords = [];

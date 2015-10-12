@@ -21,6 +21,7 @@
         <!-- top panel -->
         <header>
             <select id="select-dataset"></select>
+            <div class="num-results-msg"></div>
             <input type="button" id="btn-action-logs" value="Action Logs"/>
             <input type="button" id="btn-finish" value="Finish"/>
       	</header>
@@ -29,8 +30,8 @@
 
             <div class="control-panel">
                 <div class="container">
-                    <h4>Bookmarked Documents</h4>
                     <span class="favicon"></span>
+                    <h4>Bookmarked Documents</h4>
                     <div class="bookmark-area"></div>
                 </div>
             </div>
@@ -48,7 +49,9 @@
 
 		</div>
 
-        <div class="processing-message" style="display:none;">Processing Data...</div>
+        <div class="processing-message" style="display:none;">
+           <div class="content">Processing Data...</div>
+       </div>
 
         <!-- bower:js -->
         <!-- endbower -->

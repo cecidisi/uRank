@@ -6,7 +6,9 @@
     var dsm = new datasetManager();
     var actionLogger = new ActionLogger();
 
-    var $bookmarks = $('.control-panel .container .bookmark-area');
+    var $message = $('.processing-message'),
+        $numResultsMsg = $('.num-results-msg'),
+        $bookmarks = $('.control-panel .container .bookmark-area');
 
     var testOptionsDef = {
         docViewer : {
@@ -15,8 +17,8 @@
             }
         },
         keywordExtractor :{
-            maxKeywordDistance: 3,
-            minRepetitionsProxKeywords: 4
+            maxKeywordDistance: 2,
+            minRepetitionsProxKeywords: 5
         }
     };
 
@@ -34,13 +36,15 @@
             topic= dsm.getDescription(datasetId);
 
         if(datasetId !== 'null') {
-            $('.processing-message').show();
+            $message.show();
             actionLogger.log(actionLogger.action.topicSelected, { datasetId: datasetId, topic: topic })
             setTimeout(function(){
                 dsm.getDataset(datasetId, function(dataset){
                     _this.data = dataset;
+                    testOptionsDef.keywordExtractor.minRepetitions = (parseInt(_this.data.length * 0.05) >= 5) ? parseInt(_this.data.length * 0.05) : 5
                     _this.urank.loadData(dataset, testOptionsDef);
-                    $('.processing-message').fadeOut();
+                    $message.fadeOut();
+                    $numResultsMsg.html(dataset.length + ' Results');
                 });
             }, 0);
         }

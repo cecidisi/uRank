@@ -221,7 +221,7 @@ var ContentList = (function(){
 
 
     var animateAccordionEffect = function() {
-        var timeLapse = 50;
+        var timeLapse = 80;
         var easing = 'swing';
 
         _this.data.forEach(function(d, i){
@@ -247,7 +247,7 @@ var ContentList = (function(){
 
 
     var animateResortEffect = function() {
-        var duration = 1500;
+        var duration = 2000;
         var easing = 'swing';
 
         var acumHeight = 0;

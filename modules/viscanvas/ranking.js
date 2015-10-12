@@ -87,8 +87,10 @@ var Ranking = (function(){
             });
             return a;
         },
-        getXUpperLimit: function(rMode) {
-            if(rMode === window.RANKING_MODE.overall.attr) return 1; return 2;
+        getXUpperLimit: function(rMode, opt) {
+            if(rMode === window.RANKING_MODE.overall.attr) return 1;
+            if(opt.ranking.content && opt.ranking.social) return 2;
+            return 1;
         }
     };
 
@@ -134,7 +136,7 @@ var Ranking = (function(){
             margin = { top: 0, bottom: 0, left: 0, right: 0 };
             width = $root.width() - margin.left - margin.right;
             height = opt.listHeight;
-            xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode());
+            xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode(), opt);
 
             // Define scales
 		    x = d3.scale.linear()
@@ -181,6 +183,7 @@ var Ranking = (function(){
 
             //// Create drop shadow to use as filter when a bar is hovered or selected
             RANKING.Render.createShadow();
+            RANKING.Render.createBarHoverGradient();
             //// Add stacked bars
             RANKING.Render.drawStackedBars();
             if(opt.ranking.social)
@@ -203,7 +206,7 @@ var Ranking = (function(){
             d3.select(s.root).select('.'+svgClass).attr("width", width)
             svg.attr("width", width);
 
-            xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode());
+            xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode(), opt);
             x.rangeRound( [0, width] )
              .domain([0, xUpperLimit]).copy();
 
@@ -251,7 +254,7 @@ var Ranking = (function(){
                     .on('mouseout', RANKING.Evt.itemMouseLeft);
 
                 stackedBars.append('rect')
-                    .attr('class', function(d, i){ if(i%2) return darkBackgroundClass; return lightBackgroundClass; })
+                    .attr('class', function(d, i){ return (i%2) ? backgroundClass+' '+darkBackgroundClass : backgroundClass+' '+lightBackgroundClass; })
                     .attr('x', 0)
                     .attr('width', width)
                     .attr('height', y.rangeBand())
@@ -277,7 +280,7 @@ var Ranking = (function(){
                 var bars = stackedBars.selectAll('.'+barClass);
 
                 var t0 = bars.transition()
-                    .duration(500)
+                    .duration(800)
                     .attr({ "width": function(d) { return x(d.x1) - x(d.x0); } });
 
             }, 800);
@@ -401,6 +404,20 @@ var Ranking = (function(){
             feMerge.append("feMergeNode").attr("in", "SourceGraphic");
         },
 
+        /******************************************************************************************************************
+        *
+        *	Create drop shadow for click effect on bars
+        *
+        * ***************************************************************************************************************/
+        createBarHoverGradient: function(){
+            var defs = svg.append("defs");
+            var linearGradient = defs.append('linearGradient').attr('id', 'bar-shadow').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%');
+            linearGradient.append('stop').attr('offset', '0%').style('stop-color', 'rgba(150,150,150,0.3)');
+            linearGradient.append('stop').attr('offset', '75%').style('stop-color', 'rgba(150,150,150,0.6)');
+            linearGradient.append('stop').attr('offset', '100%').style('stop-color', 'rgba(150,150,150,0.3)');
+
+        },
+
         /*****************************************************************************************************************
         *
         *	Adjust height of svg and other elements when the ranking changes
@@ -465,6 +482,80 @@ var Ranking = (function(){
 
     var _build = function(data, containerHeight) {
         $root = $(s.root);
+        _this.originalData = data;
+        _this.originalHeight = containerHeight;
+
+        margin = { top: 0, bottom: 0, left: 0, right: 0 };
+        width = $root.width() - margin.left - margin.right;
+        height = containerHeight;
+        xUpperLimit = 1;
+
+        // Define scales
+        x = d3.scale.linear()
+            .domain([0, xUpperLimit])
+            .rangeRound( [0, width] );
+
+        y = d3.scale.ordinal()
+            .domain(data.map(function(d){ return d.id; }))
+            .rangeBands( [0, height]);
+
+        // Define axis' function
+        xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .tickValues('');
+
+        yAxis = d3.svg.axis()
+            .scale(y)
+            .orient("left")
+            .tickValues("");
+
+        // Draw chart main components
+        //// Add svg main components
+        svg = d3.select(s.root).append("svg")
+            .attr("class", svgClass)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        svg.append("g")
+            .attr("class", xClass + ' ' + axisClass)
+            .attr("transform", "translate(0," + (height) + ")")
+            .call(xAxis)
+            .selectAll('text');
+
+        svg.append("g")
+            .attr("class", yClass +' '+axisClass)
+            .call(yAxis)
+            .selectAll("text");
+
+        var stackedBars = svg.selectAll('.'+stackedbarClass)
+        .data(data).enter()
+        .append("g")
+        .attr("class", stackedbarClass)
+        .attr("id", function(d){ return "urank-ranking-stackedbar-" + d.id; })
+        .attr( "transform", function(d) {return "translate(0, " + y(d.id) + ")"; })
+        .on('click', RANKING.Evt.itemClicked)
+        .on('mouseover', RANKING.Evt.itemMouseEntered)
+        .on('mouseout', RANKING.Evt.itemMouseLeft);
+
+        stackedBars.append('rect')
+            .attr('class', function(d, i){ return (i%2) ? backgroundClass+' '+darkBackgroundClass : backgroundClass+' '+lightBackgroundClass; })
+            .attr('x', 0)
+            .attr('width', width)
+            .attr('height', y.rangeBand())
+            .style('fill', function(d, i){
+            if(s.lightBackgroundColor != '' && s.darkBackgroundColor != '') {
+                if(i%2) return s.darkBackgroundColor;
+                return s.lightBackgroundColor;
+            }
+            return  '';
+        });
+
+        RANKING.Render.createBarHoverGradient();
         return this;
     }
 
@@ -487,7 +578,8 @@ var Ranking = (function(){
 
 
     var _reset = function() {
-        this.clear();
+//        this.clear();
+        _this.build(_this.originalData, _this.originalHeight);
         return this;
     };
 
@@ -511,6 +603,7 @@ var Ranking = (function(){
 
 
     var _hoverItem = function(id, index) {
+        svg.select(stackedbarPrefix +''+ id).selectAll('.'+backgroundClass).style('fill', 'url(#bar-shadow)')
         if(this.isRankingDrawn) {
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0)')
@@ -522,6 +615,7 @@ var Ranking = (function(){
 
 
     var _unhoverItem = function(id, index) {
+        svg.select(stackedbarPrefix +''+ id).selectAll('.'+backgroundClass).style('fill', '')
         if(this.isRankingDrawn) {
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')

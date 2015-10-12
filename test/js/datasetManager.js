@@ -7,11 +7,17 @@ function datasetManager(){
             file: 'recommender_systems.json',
             parse: true
         },
+        DS_VA: {
+            description: 'Visual Analytics',
+            file: 'visual-analytics.json',
+            parse: true
+        },
         DS_SRV: {
             description: 'Search Result Visualization',
             file: 'search_result_visualization.json',
             parse: true
         },
+
         DS_Ro: {
             description: 'Robots',
             file: 'dataset_Ro.json'
@@ -44,13 +50,13 @@ function datasetManager(){
 //            console.log('*************   ' + i + '   ************');
 //            console.log(d);
             data.push({
-                id: d.isbn ? (d.isbn + '-doc-' + i) : 'doc-' + i,
+                id: /*d.isbn ? (d.isbn + '-doc-' + i) :*/ 'doc-' + i,
                 title: d.titles.title,
                 creator: getCreators(d.contributors),
                 description: d.abstract || '',
                 uri: (d.urls && d.urls['web-urls'] && d.urls['web-urls'].url) ? d.urls['web-urls'].url : '',
                 facets: {
-                    year: d.dates.year
+                    year: (d.dates && d.dates.year) ? d.dates.year : ''
                 },
             });
         });
