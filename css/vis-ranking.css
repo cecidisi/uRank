@@ -40,6 +40,14 @@
     fill: #f0f0f0;
 }
 
+.urank-ranking-stackedbar rect.urank-ranking-background.selected {
+    fill: rgba(150,150,150,0.5) !important;
+}
+
+.urank-ranking-stackedbar rect.urank-ranking-background.dimmed {
+    opacity: 0.3;
+}
+
 .urank-ranking-user-hint > text {
     fill: dimgrey;
     font-size: .8em;

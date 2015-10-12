@@ -18,6 +18,8 @@ var Ranking = (function(){
         backgroundClass = 'urank-ranking-background',
         lightBackgroundClass = 'urank-ranking-light-background',
         darkBackgroundClass = 'urank-ranking-dark-background',
+        selectedClass = 'selected',
+        dimmedClass = 'dimmed',
         barClass = 'urank-ranking-bar',
         tuSectionClass = 'urank-tag-user-section';
 
@@ -36,6 +38,7 @@ var Ranking = (function(){
         }, arguments);
         this.opt = {};
         this.isRankingDrawn = false;
+        this.selectedItem = undefined;
     }
 
     RANKING.Settings = {
@@ -371,16 +374,13 @@ var Ranking = (function(){
         *
         * ***************************************************************************************************************/
         createShadow: function(){
-
             // filters go in defs element
             var defs = svg.append("defs");
-
             // create filter with id #drop-shadow
             // height=130% so that the shadow is not clipped
             var filter = defs.append("filter")
             .attr("id", "drop-shadow")
             .attr("height", "130%");
-
             // SourceAlpha refers to opacity of graphic that this filter will be applied to
             // convolve that with a Gaussian with standard deviation 3 and store result
             // in blur
@@ -388,7 +388,6 @@ var Ranking = (function(){
                 .attr("in", "SourceAlpha")
                 .attr("stdDeviation", 2)
                 .attr("result", "blur");
-
             // translate output of Gaussian blur to the right and downwards with 2px
             // store result in offsetBlur
             filter.append("feOffset")
@@ -396,7 +395,6 @@ var Ranking = (function(){
                 .attr("dx", 0)
                 .attr("dy", 2)
                 .attr("result", "offsetBlur");
-
             // overlay original SourceGraphic over translated blurred opacity by using
             // feMerge filter. Order of specifying inputs is important!
             var feMerge = filter.append("feMerge");
@@ -415,7 +413,6 @@ var Ranking = (function(){
             linearGradient.append('stop').attr('offset', '0%').style('stop-color', 'rgba(150,150,150,0.3)');
             linearGradient.append('stop').attr('offset', '75%').style('stop-color', 'rgba(150,150,150,0.6)');
             linearGradient.append('stop').attr('offset', '100%').style('stop-color', 'rgba(150,150,150,0.3)');
-
         },
 
         /*****************************************************************************************************************
@@ -562,10 +559,10 @@ var Ranking = (function(){
 
     var _update = function(rankingModel, opt){
         var updateFunc = {};
-        updateFunc[RANKING_STATUS.new] = RANKING.Render.drawNew;
+        updateFunc[RANKING_STATUS.new] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
         updateFunc[RANKING_STATUS.unchanged] = RANKING.Render.redrawUpdated;
-        updateFunc[RANKING_STATUS.no_ranking] = _this.clear;
+        updateFunc[RANKING_STATUS.no_ranking] = _this.reset;
         updateFunc[rankingModel.getStatus()].call(this, rankingModel, opt);
         return this;
     };
@@ -584,51 +581,44 @@ var Ranking = (function(){
     };
 
     var _selectItem = function(id, index){
-        if(this.isRankingDrawn) {
-            id = _.isArray(id) ? id : [id];
-            svg.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });
-/*            svgTagged.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (id.indexOf(d.id) > -1) ? 1 : 0.3 });*/
-        }
+        _this.selectedItem = id;
+        svg.selectAll('.'+stackedbarClass).style('opacity', 0.3);
+        svg.select(stackedbarPrefix + '' + id).style('opacity', 1).select('.'+backgroundClass).style('fill', 'rgba(150,150,150,.5)');
+        return this;
+    };
+
+    var _highlightItems = function(ids) {
+        svg.selectAll('.'+stackedbarClass).style('opacity', function(d){ return (ids.indexOf(d.id) > -1) ? 1 : 0.3 });
         return this;
     };
 
 
     var _deSelectAllItems = function(){
-        if(this.isRankingDrawn) {
-            svg.selectAll('.'+stackedbarClass).style('opacity', 1);
-/*            svgTagged.selectAll('.'+stackedbarClass).style('opacity', 1);*/
-        }
+        _this.selectedItem = undefined;
+        svg.selectAll('.'+stackedbarClass).style('opacity', '')
+            .select('.'+backgroundClass).style('fill', '');
         return this;
     };
 
 
     var _hoverItem = function(id, index) {
         svg.select(stackedbarPrefix +''+ id).selectAll('.'+backgroundClass).style('fill', 'url(#bar-shadow)')
-        if(this.isRankingDrawn) {
-            svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
-                .attr('transform', 'translate(0, 0)')
-                .style('filter', 'url(#drop-shadow)')
-                .text(function(d){ return d.score });
-        }
+        svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
+            .attr('transform', 'translate(0, 0)')
+           // .style('filter', 'url(#drop-shadow)')
+            .text(function(d){ return d.score });
         return this;
     };
 
 
     var _unhoverItem = function(id, index) {
-        svg.select(stackedbarPrefix +''+ id).selectAll('.'+backgroundClass).style('fill', '')
-        if(this.isRankingDrawn) {
+        if(!_this.selectedItem) {
+            svg.select(stackedbarPrefix +''+ id).selectAll('.'+backgroundClass).style('fill', '')
             svg.select(stackedbarPrefix +''+ id).selectAll('.'+barClass)
                 .attr('transform', 'translate(0, 0.2)')
                 .style('filter', '')
                 .text('');
-
         }
-        return this;
-    };
-
-
-    var _highlightItems = function(idsArray) {
-        this.selectItem(idsArray);
         return this;
     };
 

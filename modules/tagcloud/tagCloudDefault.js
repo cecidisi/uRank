@@ -210,6 +210,7 @@ var TagCloudDefault = (function(){
 
     var pinTagHints = function($tag) {
         $tag.find('.'+documentHintClass).css('visibility', 'visible').pin(tagHintPinOptions.document);
+        $tag.find('.doc-hint').pin(tagHintPinOptions.document);
     };
 
 
@@ -280,10 +281,17 @@ var TagCloudDefault = (function(){
                 .hide()
                 .fadeIn((i+1)*20);
             // Pie chart section for document hint
-            var $docHint = $('<div/>', { class: tagHintClass+' '+documentHintClass, id: 'urank-tag-pie-' + i }).appendTo($tag);
-            pieOptions.data.content[0].value = k.inDocument.length;
-            pieOptions.data.content[1].value = _this.data.length - k.inDocument.length || 0.1;
-            var tagPie = new d3pie(tagPiePrefix+''+i, pieOptions);
+            var docPctg = parseInt((k.inDocument.length * 100) / _this.data.length);
+            if(docPctg > 0 && docPctg < 5) { docPctg = 5; }
+            else {
+                if(docPctg%5 < 3) docPctg = docPctg - docPctg%5;
+                else docPctg = docPctg + 5 - docPctg%5;
+            }
+            var $docHint = $('<a/>', { class: 'doc-hint doc-hint-'+docPctg, href: '#' }).appendTo($tag);
+//            var $docHint = $('<div/>', { class: tagHintClass+' '+documentHintClass, id: 'urank-tag-pie-' + i }).appendTo($tag);
+//            pieOptions.data.content[0].value = k.inDocument.length;
+//            pieOptions.data.content[1].value = _this.data.length - k.inDocument.length || 0.1;
+//            var tagPie = new d3pie(tagPiePrefix+''+i, pieOptions);
             // Red circle for keywords in proximity hint
             if(k.keywordsInProximity.length > 0)
                 $('<a/>', { class: keywordHintClass, 'data-content': k.keywordsInProximity.length, href: '#' }).appendTo($tag);

@@ -367,6 +367,57 @@ div.urank-tagcloud-tag-tooltip p strong[name="tag"] {
 }
 
 
+/* Document hint */
+
+.doc-hint {
+    display: none;
+    width: 0px;
+    height: 0px;
+    cursor: inherit;
+}
+
+.urank-tagcloud-tag.hovered .doc-hint,
+.urank-tagcloud-tag.selected .doc-hint,
+.urank-tagcloud-tag.dropped:hover .doc-hint {
+    display: inline-block;
+}
+
+.urank-tagcloud-tag.dragging .doc-hint {
+    display: none !important;
+}
+
+.doc-hint:before {
+    position: relative;
+    top: -2px;
+    right: 0px;
+    text-decoration: none;
+    text-shadow: none;
+}
+
+.doc-hint.doc-hint-0:before { content: url('../media/pie-charts/pie-chart-0.png'); }
+.doc-hint.doc-hint-5:before { content: url('../media/pie-charts/pie-chart-5.png'); }
+.doc-hint.doc-hint-10:before { content: url('../media/pie-charts/pie-chart-10.png'); }
+.doc-hint.doc-hint-15:before { content: url('../media/pie-charts/pie-chart-15.png'); }
+.doc-hint.doc-hint-20:before { content: url('../media/pie-charts/pie-chart-20.png'); }
+.doc-hint.doc-hint-25:before { content: url('../media/pie-charts/pie-chart-25.png'); }
+.doc-hint.doc-hint-30:before { content: url('../media/pie-charts/pie-chart-30.png'); }
+.doc-hint.doc-hint-35:before { content: url('../media/pie-charts/pie-chart-35.png'); }
+.doc-hint.doc-hint-40:before { content: url('../media/pie-charts/pie-chart-40.png'); }
+.doc-hint.doc-hint-45:before { content: url('../media/pie-charts/pie-chart-45.png'); }
+.doc-hint.doc-hint-50:before { content: url('../media/pie-charts/pie-chart-50.png'); }
+.doc-hint.doc-hint-55:before { content: url('../media/pie-charts/pie-chart-55.png'); }
+.doc-hint.doc-hint-60:before { content: url('../media/pie-charts/pie-chart-60.png'); }
+.doc-hint.doc-hint-65:before { content: url('../media/pie-charts/pie-chart-65.png'); }
+.doc-hint.doc-hint-70:before { content: url('../media/pie-charts/pie-chart-70.png'); }
+.doc-hint.doc-hint-75:before { content: url('../media/pie-charts/pie-chart-75.png'); }
+.doc-hint.doc-hint-80:before { content: url('../media/pie-charts/pie-chart-80.png'); }
+.doc-hint.doc-hint-85:before { content: url('../media/pie-charts/pie-chart-85.png'); }
+.doc-hint.doc-hint-90:before { content: url('../media/pie-charts/pie-chart-90.png'); }
+.doc-hint.doc-hint-95:before { content: url('../media/pie-charts/pie-chart-95.png'); }
+.doc-hint.doc-hint-100:before { content: url('../media/pie-charts/pie-chart-100.png'); }
+
+/******************************************/
+
 .urank-tagcloud-tag .urank-tagcloud-tag-hint {
     visibility: hidden;
     z-index: 999;

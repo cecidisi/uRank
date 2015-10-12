@@ -47,8 +47,8 @@ function datasetManager(){
                     return Array.isArray(contributors['secondary-authors'].author) ? contributors['secondary-authors'].author.join('; ') : contributors['secondary-authors'].author;
                 return '';
             }
-            console.log('*************   ' + i + '   ************');
-            console.log(d);
+//            console.log('*************   ' + i + '   ************');
+//            console.log(d);
             data.push({
                 id: /*d.isbn ? (d.isbn + '-doc-' + i) :*/ 'doc-' + i,
                 title: d.titles.title,
