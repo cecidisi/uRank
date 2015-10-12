@@ -1,8 +1,14 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 
-$dir = './logs/';
-$files = glob($dir.'*'); // get all file names
+$dir = './logs';
+
+if(!file_exists($dir)) {
+    return_error('ERROR directory does not exist', 404);
+    exit;
+}
+
+$files = glob($dir.'/*'); // get all file names
 $zipname = 'urank-test-logs.zip';
 $zip = new ZipArchive;
 
