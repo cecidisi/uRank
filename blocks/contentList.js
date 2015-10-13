@@ -482,15 +482,15 @@ var ContentList = (function(){
 
 
     var _reset = function() {
-//        _this.build(_this.originalData, _this.opt);
-        this.data = _this.originalData.slice();
+        _this.build(_this.originalData, _this.opt);
+/*        this.data = _this.originalData.slice();
         this.selectedKeywords = [];
         updateLiBackground();
         sort();
         formatTitles();
         $('.'+liClass).show().find('.'+liRankingContainerClass).css('visibility', 'hidden');
 
-        $ul.removeClass(ulPaddingBottomclass);
+        $ul.removeClass(ulPaddingBottomclass);*/
     };
 
 
