@@ -192,6 +192,22 @@ var Urank = (function(){
             //  Custom callback
             s.onLoad.call(this, _this.keywords);
         },
+        
+        init : function(elemNum) {
+       		selectedKeywords = []; 
+       		for(i = 0; i <elemNum; i++) {
+       			if(i < _this.keywords.length) {
+       				var keywordObj = {}
+	       			keywordObj.stem = _this.keywords[i].stem; 
+	            	keywordObj.term = _this.keywords[i].term;
+	            	keywordObj.weight = 1; 
+	            	EVTHANDLER.onTagDropped(i);
+	            	selectedKeywords.push(keywordObj); 
+	          
+	           	}
+       		}
+       		EVTHANDLER.onChange(selectedKeywords); 
+        },
 
         onChange: function(selectedKeywords) {
 
@@ -484,6 +500,7 @@ var Urank = (function(){
 
     Urank.prototype = {
         loadData: EVTHANDLER.onLoad,
+        init : EVTHANDLER.init,
         reset: EVTHANDLER.onReset,
         rankByOverallScore: EVTHANDLER.onRankByOverallScore,
         rankByMaximumScore: EVTHANDLER.onRankByMaximumScore,
