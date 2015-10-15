@@ -293,7 +293,7 @@ var TagCloudDefault = (function(){
                 tooltipMsg = k.keywordsInProximity.length + " other keywords frequently found close to " + termUpperCase + "\n Click to lock view";
                 var $proyKeywordsIndicator = $('<div></div>', { class: keywordHintClass+' hint--right hint--info hint--rounded', 'data-hint': tooltipMsg, text: k.keywordsInProximity.length}).appendTo($tag);
             }
-
+			$tag.attr("colorCategory", k.colorCategory); 
             $tag.data({ 'originalColor': _this.colorScale(k.colorCategory) });
             setTagProperties($tag);
         });
