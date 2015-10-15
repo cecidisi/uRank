@@ -308,12 +308,12 @@ var LandscapeController = (function(){
 				});
 				var datasetList = me.dataProcessor.getDatasetByIds(documentIds); 
 				
-				if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+				/*if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
 					FilterHandler.clearList();
 					for(var i=0; i < datasetList.length; i++ ) {
 						FilterHandler.singleItemSelected(datasetList[i], true); 
 					}
-				}
+				}*/ 
 				
 
 				var tagCloundData =  me.dataProcessor.getTagCloudData(documentIds);
