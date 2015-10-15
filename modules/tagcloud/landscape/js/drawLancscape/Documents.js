@@ -104,6 +104,35 @@ function Documents(documents, outsideDocuments) {
 		this.drawDocuments(this.documents, docPoints)
 
 	}
+	
+	// draw all documents of the landscape/state
+	// -----------------------------------------------------------------------
+	Documents.prototype.drawHoveredDocuments = function() {
+		svgcanvas.selectAll("#docPoints").remove();
+		var docPoints = svgcanvas.append("g")
+			.attr("id", "docHoveredPoints")
+
+		if(Object.keys(this.documents).length > 0)  {
+				$.each(documents, function(documentId, docData) {
+					var x = docData['x'] * landscapeConfig.getWidth();
+					var y = docData['y'] * landscapeConfig.getHeight();
+					var x = docData['x'] * landscapeConfig.getWidth();
+					var y = docData['y'] * landscapeConfig.getHeight();
+					docPoints.append("circle")//
+					.attr("class", "landscapeDocPoint")//
+					.attr("id", documentId+"_hover")
+					.attr("cx", x)
+					.attr("cy", y)
+					.attr("r", 6)//
+					.attr("index", docData.metadata.index)
+					.attr("color", "black")//
+					.style("fill", "black") 
+				})
+		}
+				
+
+	}
+
 
 
 
@@ -119,6 +148,7 @@ function Documents(documents, outsideDocuments) {
 		for(var i=0; i < docsLength ; i++) {
 			var docId = "doc_" + i;
             svgcanvas.select("#"+docId).attr("r", 4).style("opacity", opacity);
+            svgcanvas.select("#" + docId + "_hover").attr("r", 6).style("opacity", opacity);
 		}
         if(documentIds == "") {
             return;
@@ -127,6 +157,7 @@ function Documents(documents, outsideDocuments) {
             if(i <  docsLength) {
                 var docId = "doc_" + documentIds[i];
                 svgcanvas.select("#" + docId).attr("r", 6).style("opacity", 1);
+                svgcanvas.select("#" + docId + "_hover").attr("r", 8).style("opacity", 1);
             }
 		}
 	}
@@ -138,6 +169,7 @@ function Documents(documents, outsideDocuments) {
 		for(key in idsMap) {
 			var docId = idsMap[key];
 			svgcanvas.select("#"+docId).attr("r", 4).style("opacity", 1);
+			svgcanvas.select("#" + docId + "_hover").attr("r", 6).style("opacity", 1);
 		}
 	}
 

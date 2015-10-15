@@ -153,8 +153,11 @@ var LandscapeController = (function(){
 			.attr("overflow", "hidden")
 			.style("background-color", "#f1f1f1")
 			.style("float","left")
-			.call(landscapeZoom);
-		svgcanvas = landscapeCanvas.append("g").attr("id", "kdApp_landscape").attr("scale", 0);
+			.call(landscapeZoom)
+			.on("click", function(d) {
+										
+			})
+		svgcanvas = landscapeCanvas.append("g").attr("id", "kdApp_landscape").attr("scale", 0)
 
 
 	if(landscapeConfig.getLandscapeType() == "urankLandscape") {
@@ -198,7 +201,7 @@ var LandscapeController = (function(){
 		.attr("class", "landscapeBrush")//
 		.attr("id", "landscapeBrush")
 		.call(landscapeBrush);
-
+		me.stateCurrent.drawHoveredDocuments();
 		me.stateCurrent.drawAllDocuments();
 		me.stateCurrent.drawLabels();
 		if(prevVisConfig != "" && prevVisConfig != null) {
@@ -312,7 +315,7 @@ var LandscapeController = (function(){
 					}
 				}
 				
-				
+
 				var tagCloundData =  me.dataProcessor.getTagCloudData(documentIds);
 				var keywordsData =  me.dataProcessor.getTagCloudKeywordsAndData(documentIds);
 				
@@ -325,6 +328,10 @@ var LandscapeController = (function(){
 				}
 				else {
 					me.stateCurrent.drawTagsCloud(keywordsData);
+				}
+				if(documentIds.length == 0) {
+					var tagCloudObj = {"keywords": me.receivedData.keywords.slice(0, 50),  "data" :  me.receivedData}
+					landscapeController.stateCurrent.drawTagsCloud(tagCloudObj);
 				}
 	 
 				landscapeZoom.on("zoom",zoomLandscape);

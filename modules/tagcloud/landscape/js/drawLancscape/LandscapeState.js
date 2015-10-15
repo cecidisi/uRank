@@ -127,6 +127,14 @@ function LandscapeState() {
 	LandscapeState.prototype.drawAllDocuments= function() {
 		me.documents.drawAllDocuments();
 	}
+	
+	// -----------------------------------------------------------------------
+	LandscapeState.prototype.drawHoveredDocuments= function() {
+		me.documents.drawHoveredDocuments();
+	}
+	
+	
+	
 
 	// -----------------------------------------------------------------------
 	LandscapeState.prototype.drawDocumentsWithinBrush = function() {

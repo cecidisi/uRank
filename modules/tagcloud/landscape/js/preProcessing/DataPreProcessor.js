@@ -171,6 +171,25 @@ var DataPreProcessor = (function(){
         return {"indices": docIndices, "dataList":docData } ;
 	}
 	
+	DataPreProcessor.prototype.getObjectsBasedOnTagList = function(tagList) {
+
+		var docIndices = [];
+		var docData = []
+		dataset.forEach(function(d,index){
+			 var source = Object.keys(d.keywords); 
+			 var result = source.filter(function(tag){ return tagList.indexOf(tag) > -1});
+			if(result.length > 0) {
+				var docObject = d; 
+				docIndices.push(index);
+				var tempId = docObject.idOrig ? docObject.idOrig : docObject.id; 
+				docObject.id = tempId; 
+				docData.push(docObject);
+			}
+        });
+        
+        return {"indices": docIndices, "dataList":docData } ;
+	}
+	
 	DataPreProcessor.prototype.getDatasetByIds = function (documentsIds){
 
 		var documentDataset = [];
@@ -350,6 +369,7 @@ var DataPreProcessor = (function(){
 
         keywordExtractorNew.processCollection();
         datasetNew.keywords = keywordExtractorNew.getCollectionKeywords();
+        datasetNew.keywords = extendKeywordsWithColorCategory(datasetNew.keywords);
         if(datasetNew.keywords != null && datasetNew.keywords.length > 0) {
         	for(var i=0; i < datasetNew.keywords.length; i++) {
         		if(datasetNew.keywords[i].term == "ERROR") {
@@ -360,6 +380,18 @@ var DataPreProcessor = (function(){
         return  datasetNew.keywords;    
              
 	};
+	
+   var extendKeywordsWithColorCategory = function(keywords){
+
+        var extent = d3.extent(keywords, function(k){ return k['repeated']; });
+        var range = (extent[1] - 1) * 0.1;   // / TAG_CATEGORIES;
+
+        keywords.forEach(function(k){
+            var colorCategory = parseInt((k['repeated'] - 1/*extent[0]*/) / range);
+            k['colorCategory'] = (colorCategory < TAG_CATEGORIES) ? colorCategory : TAG_CATEGORIES - 1;
+        });
+        return keywords;
+    };
 	
 
 	// -----------------------------------------------------------------------
