@@ -18,7 +18,7 @@ window.ScoreExtractor = (function(){
             return this;
         },
 
-        run: function(){
+        process: function(){
             // extarct score set
             this.scoreSet = [];
             this.scoreSetDict = {};
@@ -42,9 +42,13 @@ window.ScoreExtractor = (function(){
             });
 
             // get normalized scores
+            var scoreKeys = Object.keys(this.scoreSetDict);
             this.normalizedScores = [];
+            this.items.forEach(function(item){
+                item.normalizedScores = {};
+                scoreKeys.forEach(fucn);
 
-            this.items.forEach(function(item){});
+            });
 
         },
 
