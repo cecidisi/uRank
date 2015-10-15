@@ -171,5 +171,7 @@
         actionLogger.log(actionLogger.action.ipLogged, response);
     }, "jsonp");
 
+    actionLogger.getActionCount();
+
 })();
 
