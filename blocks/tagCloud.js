@@ -37,7 +37,7 @@ var TagCloud = (function(){
         //  Create tagcloud controls
         var $tagcloudControls = $('<div/>').appendTo($root).addClass(tagcloudControlsClass);
         $tagFreqLabel = $('<label/>').appendTo($tagcloudControls).addClass('tag-freq');
-        $tagFreqSlider = $('<div/>').appendTo($tagcloudControls);
+//        $tagFreqSlider = $('<div/>').appendTo($tagcloudControls);
 
         // Notfound message label
         $notFoundLabel = $('<a/>').appendTo($tagcloudControls);
@@ -162,7 +162,7 @@ var TagCloud = (function(){
     var _clear = function() {
 
         if(this.tagcloud) {
-            $tagFreqSlider.slider('destroy');
+//            $tagFreqSlider.slider('destroy');
             $tagInput.val('').autocomplete('destroy');
             $notFoundLabel.removeClass(notFoundClass);
             $outerTagContainer.empty();

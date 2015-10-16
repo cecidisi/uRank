@@ -32,8 +32,7 @@
 
     // Event handler for dataset-select change
     var selectDatasetChanged = function(){
-        var datasetId = $("#select-dataset").val(),
-            topic= dsm.getDescription(datasetId);
+        var datasetId = $("#select-dataset").val();
 
         if(datasetId !== 'null') {
             $message.show();
