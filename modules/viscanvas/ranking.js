@@ -244,7 +244,7 @@ var Ranking = (function(){
             svg.selectAll('.'+stackedbarClass).data([]).exit();
             svg.selectAll('.'+stackedbarClass).remove();
             //svg.selectAll('.'+stackedbarClass).data(data).enter();
-
+            console.log(' Ranking --> start drawing');
             setTimeout(function(){
 
                 var stackedBars = svg.selectAll('.'+stackedbarClass)

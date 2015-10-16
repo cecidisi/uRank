@@ -136,14 +136,6 @@
     // uRank initialization function to be passed as callback
     var init = function(urank){
         _this.urank = urank;
-
-        dsm.getDataset('DS_Uni', function(dataset){
-            _this.data = dataset;
-            testOptionsDef.keywordExtractor.minRepetitions = (parseInt(_this.data.length * 0.05) >= 5) ? parseInt(_this.data.length * 0.05) : 5
-            _this.urank.loadData(dataset, testOptionsDef);
-            $message.fadeOut();
-            $numResultsMsg.html(dataset.length + ' Results');
-        });
     };
 
     //  Calling Urank
@@ -158,7 +150,7 @@
 
 
 //    // Bind event handlers for dataset select
-//    $("#select-dataset").change(selectDatasetChanged);
+    $("#select-dataset").change(selectDatasetChanged);
 //    // Bind event handlers for urank specific buttons
 //    $('#btn-action-logs').click(function(){
 //        console.log(actionLogger.getFullLogs());

@@ -170,6 +170,7 @@ header select{
     float: left;
     height: 23px;
     margin: 4px 14px;
+    min-width: 165px;
 }
 
 header .num-results-msg {

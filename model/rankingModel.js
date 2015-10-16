@@ -15,11 +15,12 @@ var RankingModel = (function(){
     /*******************************************
     * Functions
     *******************************************/
-    var assignRankingPositions = function(_data, _score){
+    var assignRankingPositionsAndShift = function(_data, _score){
         var currentScore = Number.MAX_VALUE;
         var currentPos = 1;
         var itemsInCurrentPos = 0;
         _data.forEach(function(d, i){
+            // position
             if(d.ranking[_score] > 0){
                 if( d.ranking[_score] < currentScore ){
                     currentPos = currentPos + itemsInCurrentPos;
@@ -32,15 +33,7 @@ var RankingModel = (function(){
             } else{
                 d.ranking.pos = 0;
             }
-        });
-        return _data;
-    };
-
-
-    //  Calculates the number of positions changed by each recommendations, basing on the array "previousRanking"
-    //  If there doesn't exist a previous ranking or a recommendation wasn't previously ranked, then the value 1000 is assigned
-    var addPositionsChanged = function(_data){
-        _data.forEach(function(d, i){
+            // shift computation
             if(_this.previousRanking.length == 0){
                 d.ranking.posChanged = 1000;
                 d.ranking.lastIndex = i;
@@ -86,6 +79,7 @@ var RankingModel = (function(){
         if(opt.mode === RANKING_MODE.by_CB.attr && RANKING_MODE.by_TU.active) secScore = RANKING_MODE.by_TU.attr;
         else if(opt.mode == RANKING_MODE.by_TU.attr && RANKING_MODE.by_CB.active) secScore = RANKING_MODE.by_CB.attr;
         //var secScore = opt.mode == RANKING_MODE.by_CB.attr ? RANKING_MODE.by_TU.attr : (opt.mode == RANKING_MODE.by_TU ? RANKING_MODE.by_CB : undefined)
+
         ranking = ranking.sort(function(d1, d2){
             if(d1.ranking[score] > d2.ranking[score]) return -1;
             if(d1.ranking[score] < d2.ranking[score]) return 1;
@@ -93,8 +87,7 @@ var RankingModel = (function(){
             if(d1.ranking[secScore] && d1.ranking[secScore] < d2.ranking[secScore]) return 1;
             return 0;
         });
-        ranking = assignRankingPositions(ranking, score);
-        ranking = addPositionsChanged(ranking);
+        ranking = assignRankingPositionsAndShift(ranking, score);
         return ranking;
     };
 
