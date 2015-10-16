@@ -4,7 +4,7 @@
     this.data = [];
 
     var dsm = new datasetManager();
-    var actionLogger = new ActionLogger();
+//    var actionLogger = new ActionLogger();
 
     var $message = $('.processing-message'),
         $numResultsMsg = $('.num-results-msg'),
@@ -37,7 +37,7 @@
 
         if(datasetId !== 'null') {
             $message.show();
-            actionLogger.log(actionLogger.action.topicSelected, { datasetId: datasetId, topic: topic })
+//            actionLogger.log(actionLogger.action.topicSelected, { datasetId: datasetId, topic: topic })
             setTimeout(function(){
                 dsm.getDataset(datasetId, function(dataset){
                     _this.data = dataset;
@@ -54,7 +54,7 @@
     var removeBookmark = function(document){
         $('#bookmark-' + document.id).slideUp().remove();
         _this.data[document.index].bookmarked = false;
-        actionLogger.log(actionLogger.action.documentUnbookmarked, document);
+//        actionLogger.log(actionLogger.action.documentUnbookmarked, document);
     };
 
     var addBookmark = function(document){
@@ -67,7 +67,7 @@
         });
 
         _this.data[document.index].bookmarked = true;
-        actionLogger.log(actionLogger.action.documentBookmarked, { document: document, keywords: _this.urank.getSelectedKeywords() });
+//        actionLogger.log(actionLogger.action.documentBookmarked, { document: document, keywords: _this.urank.getSelectedKeywords() });
     };
 
 
@@ -81,62 +81,69 @@
         tagCloudRoot: '#tagcloud',
         tagBoxRoot: '#tagbox',
         contentListRoot: '#contentlist',
-        visCanvasRoot: '#viscanvas',
+        visCanvasRoot: '#viscanvas'
         // tag actions -> exploration/control
-        onTagInCloudMouseEnter: function(tag){
-            actionLogger.log(actionLogger.action.tagHovered, tag);
-        },
-        onTagInCloudClick: function(tag){
-            actionLogger.log(actionLogger.action.tagClicked, tag);
-        },
-        onTagDropped: function(droppedTags, dropMode){
-            if(dropMode === 'single')
-                actionLogger.log(actionLogger.action.tagDropped, droppedTags[0]);
-            else
-                actionLogger.log(actionLogger.action.multipleTagsDropped, droppedTags);
-        },
-        onTagDeleted: function(tag){
-            actionLogger.log(actionLogger.action.tagDeleted, tag);
-        },
-        onTagWeightChanged: function(tag){
-            actionLogger.log(actionLogger.action.tagWeightChanged, tag);
-        },
-        onReset: function(){
-            actionLogger.log(actionLogger.action.reset);
-        },
-        // document actions
-        onItemClicked: function(document){
-            actionLogger.log(actionLogger.action.documentClicked, document);
-        },
-        onFaviconClicked: function(document){
-            if(_this.data[document.index].bookmarked)
-                removeBookmark(document);
-            else
-                addBookmark(document);
-        },
-        onWatchiconClicked: function(document){
-            if(_this.data[document.index].watched) {
-                actionLogger.log(actionLogger.action.documentUnwatched, document);
-                _this.data[document.index].watched = false;
-            }
-            else {
-                actionLogger.log(actionLogger.action.documentWatched, document);
-                _this.data[document.index].watched = true;
-            }
-        },
-        // misc
-        onTagFrequencyChanged: function(min, max){
-            actionLogger.log(actionLogger.action.frequencyChanged, { min: min, max: max });
-        },
-        onKeywordEntered: function(term){
-            actionLogger.log(actionLogger.action.wordSearched, { term: term.term});
-        }
+//        onTagInCloudMouseEnter: function(tag){
+//            actionLogger.log(actionLogger.action.tagHovered, tag);
+//        },
+//        onTagInCloudClick: function(tag){
+//            actionLogger.log(actionLogger.action.tagClicked, tag);
+//        },
+//        onTagDropped: function(droppedTags, dropMode){
+//            if(dropMode === 'single')
+//                actionLogger.log(actionLogger.action.tagDropped, droppedTags[0]);
+//            else
+//                actionLogger.log(actionLogger.action.multipleTagsDropped, droppedTags);
+//        },
+//        onTagDeleted: function(tag){
+//            actionLogger.log(actionLogger.action.tagDeleted, tag);
+//        },
+//        onTagWeightChanged: function(tag){
+//            actionLogger.log(actionLogger.action.tagWeightChanged, tag);
+//        },
+//        onReset: function(){
+//            actionLogger.log(actionLogger.action.reset);
+//        },
+//        // document actions
+//        onItemClicked: function(document){
+//            actionLogger.log(actionLogger.action.documentClicked, document);
+//        },
+//        onFaviconClicked: function(document){
+//            if(_this.data[document.index].bookmarked)
+//                removeBookmark(document);
+//            else
+//                addBookmark(document);
+//        },
+//        onWatchiconClicked: function(document){
+//            if(_this.data[document.index].watched) {
+//                actionLogger.log(actionLogger.action.documentUnwatched, document);
+//                _this.data[document.index].watched = false;
+//            }
+//            else {
+//                actionLogger.log(actionLogger.action.documentWatched, document);
+//                _this.data[document.index].watched = true;
+//            }
+//        },
+//        // misc
+//        onTagFrequencyChanged: function(min, max){
+//            actionLogger.log(actionLogger.action.frequencyChanged, { min: min, max: max });
+//        },
+//        onKeywordEntered: function(term){
+//            actionLogger.log(actionLogger.action.wordSearched, { term: term.term});
+//        }
     };
 
     // uRank initialization function to be passed as callback
     var init = function(urank){
         _this.urank = urank;
-        //$('#select-dataset').trigger('change');
+
+        dsm.getDataset('DS_Uni', function(dataset){
+            _this.data = dataset;
+            testOptionsDef.keywordExtractor.minRepetitions = (parseInt(_this.data.length * 0.05) >= 5) ? parseInt(_this.data.length * 0.05) : 5
+            _this.urank.loadData(dataset, testOptionsDef);
+            $message.fadeOut();
+            $numResultsMsg.html(dataset.length + ' Results');
+        });
     };
 
     //  Calling Urank
@@ -146,32 +153,36 @@
     /******************************************* End uRank **************************************************/
     /********************************************************************************************************/
 
-    // Bind event handlers for dataset select
-    $("#select-dataset").change(selectDatasetChanged);
-    // Bind event handlers for urank specific buttons
-    $('#btn-action-logs').click(function(){
-        console.log(actionLogger.getFullLogs());
-    })
-
-    $('#btn-finish').click(function(){
-        var host = './server/save-log.php';
-        $.post(host, { data: actionLogger.getFullLogs() })
-            .done(function(response){
-            console.log(response);
-            window.location.href = 'test-finished.html';
-        })
-            .fail(function(jqXHR){
-            console.log('post failed');
-            console.log(jqXHR);
-        });
-    });
 
 
-    $.get("http://ipinfo.io", function(response) {
-        actionLogger.log(actionLogger.action.ipLogged, response);
-    }, "jsonp");
 
-    actionLogger.getActionCount();
+
+//    // Bind event handlers for dataset select
+//    $("#select-dataset").change(selectDatasetChanged);
+//    // Bind event handlers for urank specific buttons
+//    $('#btn-action-logs').click(function(){
+//        console.log(actionLogger.getFullLogs());
+//    })
+//
+//    $('#btn-finish').click(function(){
+//        var host = './server/save-log.php';
+//        $.post(host, { data: actionLogger.getFullLogs() })
+//            .done(function(response){
+//            console.log(response);
+//            window.location.href = 'test-finished.html';
+//        })
+//            .fail(function(jqXHR){
+//            console.log('post failed');
+//            console.log(jqXHR);
+//        });
+//    });
+
+
+//    $.get("http://ipinfo.io", function(response) {
+//        actionLogger.log(actionLogger.action.ipLogged, response);
+//    }, "jsonp");
+//
+//    actionLogger.getActionCount();
 
 })();
 

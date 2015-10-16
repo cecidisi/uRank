@@ -42,7 +42,7 @@ var TagCloud = (function(){
         // Notfound message label
         $notFoundLabel = $('<a/>').appendTo($tagcloudControls);
         // Keyword search input
-        $tagInput = $('<input>', { type: 'text', placeholder: 'Enter keyword' }).appendTo($tagcloudControls);
+        $tagInput = $('<input>', { type: 'text', placeholder: 'Search' }).appendTo($tagcloudControls);
         // Search icon in text input
         $('<a/>').appendTo($tagcloudControls).addClass('search-icon');
 
@@ -70,24 +70,24 @@ var TagCloud = (function(){
         _this.keywords = keywords;
         _this.keywordsDict = keywordsDict;
 
-        minFreq = _this.keywords[_this.keywords.length - 1].repeated;
-        maxFreq = _this.keywords[0].repeated;
-        $tagFreqLabel.html('Keyword frequency: <strong>' + minFreq + '</strong> - <strong>' + maxFreq + '</strong>');
-
-        $tagFreqSlider.slider({
-            range: true,
-            animate: true,
-            min: minFreq,
-            max: maxFreq,
-            values: [minFreq, maxFreq],
-            slide: function(event, ui) {
-                $tagFreqLabel.html('Keyword frequency: <strong>' + ui.values[0] + '</strong> - <strong>' + ui.values[1] + '</strong>');
-                s.onTagFrequencyChanged.call(this, ui.values[0], ui.values[1]);
-            },
-            stop: function(event, ui) {
+//        minFreq = _this.keywords[_this.keywords.length - 1].repeated;
+//        maxFreq = _this.keywords[0].repeated;
+//        $tagFreqLabel.html('Keyword frequency: <strong>' + minFreq + '</strong> - <strong>' + maxFreq + '</strong>');
+//
+//        $tagFreqSlider.slider({
+//            range: true,
+//            animate: true,
+//            min: minFreq,
+//            max: maxFreq,
+//            values: [minFreq, maxFreq],
+//            slide: function(event, ui) {
+//                $tagFreqLabel.html('Keyword frequency: <strong>' + ui.values[0] + '</strong> - <strong>' + ui.values[1] + '</strong>');
 //                s.onTagFrequencyChanged.call(this, ui.values[0], ui.values[1]);
-            }
-        });
+//            },
+//            stop: function(event, ui) {
+////                s.onTagFrequencyChanged.call(this, ui.values[0], ui.values[1]);
+//            }
+//        });
 
         // Keyword search input
         $tagInput.autocomplete({

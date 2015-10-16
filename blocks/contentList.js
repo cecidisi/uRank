@@ -399,7 +399,8 @@ var ContentList = (function(){
         $('<div/>', { text: 'Shift'}).appendTo($headerShift).addClass('label-container');
 
         var $headerTitle = $('<div/>').appendTo($header).addClass(headerTitleClass + ' ' + headerStyleClass);
-        $('<p/>', { text: 'Document Titles'}).appendTo($headerTitle);
+//        $('<p/>', { text: 'Document Titles'}).appendTo($headerTitle);
+        $('<p/>', { text: 'Universities'}).appendTo($headerTitle);
     };
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

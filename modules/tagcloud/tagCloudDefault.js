@@ -65,8 +65,8 @@ var TagCloudDefault = (function(){
     /// Tag Cloud root and container event handlers
     var onRootScrolled = function(event) {
         event.stopPropagation();
-        if(_this.tagHintMode)
-            pinTagHints($('.'+tagClass+'.'+selectedClass));
+//        if(_this.tagHintMode)
+//            pinTagHints($('.'+tagClass+'.'+selectedClass));
     };
 
     // Draggable event handlers
@@ -220,9 +220,9 @@ var TagCloudDefault = (function(){
         $tag.off().on({
             mousedown : function(event){ if(event.which == 1/* && !$(this).hasClass(disabledClass)*/) event.stopPropagation(); },
             mouseenter: function(event){ s.onTagInCloudMouseEnter.call(this, $(this).attr(tagPosAttr)) },
-            mouseleave: function(event){ s.onTagInCloudMouseLeave.call(this, $(this).attr(tagPosAttr)) },
+            mouseleave: function(event){ s.onTagInCloudMouseLeave.call(this, $(this).attr(tagPosAttr)) }
 //            click: function(event){ event.stopPropagation(); s.onTagInCloudClick.call(this, $(this).attr(tagPosAttr)) }
-            click: _tagClicked
+//            click: _tagClicked
         });
 
         // Reset hints visibility
@@ -260,11 +260,11 @@ var TagCloudDefault = (function(){
         // Empty tag container and add appropriate class/es
         $root = $(s.root).empty().addClass(tagcloudDefaultClass);
 
-        $tooltip = $('<div/>').appendTo($root).addClass(tooltipClass).width($root.width() - 10);
-        $("<p><strong name='num-docs'></strong> (<strong name='pctg-docs'></strong>) documents contain</p>").appendTo($tooltip);
-        $("<p><strong name='tag'></strong></p>").appendTo($tooltip);
-        $("<p><strong name='num-kw'></strong> other keywords in proximity</p>").appendTo($tooltip);
-        $tooltip.css('top', $root.position().top - $tooltip.fullHeight()).hide();
+//        $tooltip = $('<div/>').appendTo($root).addClass(tooltipClass).width($root.width() - 10);
+//        $("<p><strong name='num-docs'></strong> (<strong name='pctg-docs'></strong>) documents contain</p>").appendTo($tooltip);
+//        $("<p><strong name='tag'></strong></p>").appendTo($tooltip);
+//        $("<p><strong name='num-kw'></strong> other keywords in proximity</p>").appendTo($tooltip);
+//        $tooltip.css('top', $root.position().top - $tooltip.fullHeight()).hide();
 
         $('<div/>').appendTo($root).addClass(hiddenScrollbarClass);
 
@@ -274,29 +274,25 @@ var TagCloudDefault = (function(){
 
         this.keywords.forEach(function(k, i){
             // Append tag
-            var $tag = $('<div/>', { id: 'urank-tag-' + i, 'tag-pos': i, stem: k.stem, term: k.term }).appendTo($tagContainer)
+            var $tag = $('<div/>', { id: 'urank-tag-' + i, 'tag-pos': i, stem: k.sore, term: k.score }).appendTo($tagContainer)
                 .addClass(tagClass + ' ' + activeClass/* + ' hint--info hint--left'*/)
                 .data({ 'originalColor': _this.colorScale(k.colorCategory) })
                 .html(k.term)
                 .hide()
                 .fadeIn((i+1)*20);
             // Pie chart section for document hint
-            var docPctg = parseInt((k.inDocument.length * 100) / _this.data.length);
-            if(docPctg > 0 && docPctg < 5) { docPctg = 5; }
-            else {
-                if(docPctg%5 < 3) docPctg = docPctg - docPctg%5;
-                else docPctg = docPctg + 5 - docPctg%5;
-            }
-            var $docHint = $('<a/>', { class: 'doc-hint doc-hint-'+docPctg, href: '#' }).appendTo($tag);
-//            var $docHint = $('<div/>', { class: tagHintClass+' '+documentHintClass, id: 'urank-tag-pie-' + i }).appendTo($tag);
-//            pieOptions.data.content[0].value = k.inDocument.length;
-//            pieOptions.data.content[1].value = _this.data.length - k.inDocument.length || 0.1;
-//            var tagPie = new d3pie(tagPiePrefix+''+i, pieOptions);
-            // Red circle for keywords in proximity hint
-            if(k.keywordsInProximity.length > 0)
-                $('<a/>', { class: keywordHintClass, 'data-content': k.keywordsInProximity.length, href: '#' }).appendTo($tag);
-            // Add/remove icon
-            $('<a/>', { href: '#' }).appendTo($tag).addClass(addIconClass);
+//            var docPctg = parseInt((k.inDocument.length * 100) / _this.data.length);
+//            if(docPctg > 0 && docPctg < 5) { docPctg = 5; }
+//            else {
+//                if(docPctg%5 < 3) docPctg = docPctg - docPctg%5;
+//                else docPctg = docPctg + 5 - docPctg%5;
+//            }
+//            var $docHint = $('<a/>', { class: 'doc-hint doc-hint-'+docPctg, href: '#' }).appendTo($tag);
+//            // Red circle for keywords in proximity hint
+//            if(k.keywordsInProximity.length > 0)
+//                $('<a/>', { class: keywordHintClass, 'data-content': k.keywordsInProximity.length, href: '#' }).appendTo($tag);
+//            // Add/remove icon
+//            $('<a/>', { href: '#' }).appendTo($tag).addClass(addIconClass);
             setTagProperties($tag);
         });
         return this;
@@ -315,17 +311,17 @@ var TagCloudDefault = (function(){
             if(!$tag.hasClass(droppedClass))
                 $tag.addClass(hoveredClass).setTagStyle();
                     //.css(tagStyle.hover);
-            pinTagHints($tag);
-            tooltipTimeOut = setTimeout(function(){
-                $tooltip.find("[name='num-docs']").html(_this.keywords[index].inDocument.length);
-                $tooltip.find("[name='pctg-docs']").html(Math.floor(_this.keywords[index].inDocument.length/_this.data.length * 100) + '%');
-                $tooltip.find("[name='tag']").html(_this.keywords[index].term.toUpperCase());
-                $tooltip.find("[name='num-kw']").html(_this.keywords[index].keywordsInProximity.length);
-                $tooltip.fadeIn();
-                fadeOutTimeOut = setTimeout(function(){
-                    $tooltip.fadeOut();
-                }, 4000);
-            }, 500);
+//            pinTagHints($tag);
+//            tooltipTimeOut = setTimeout(function(){
+//                $tooltip.find("[name='num-docs']").html(_this.keywords[index].inDocument.length);
+//                $tooltip.find("[name='pctg-docs']").html(Math.floor(_this.keywords[index].inDocument.length/_this.data.length * 100) + '%');
+//                $tooltip.find("[name='tag']").html(_this.keywords[index].term.toUpperCase());
+//                $tooltip.find("[name='num-kw']").html(_this.keywords[index].keywordsInProximity.length);
+//                $tooltip.fadeIn();
+//                fadeOutTimeOut = setTimeout(function(){
+//                    $tooltip.fadeOut();
+//                }, 4000);
+//            }, 500);
         }
     };
 
@@ -338,9 +334,9 @@ var TagCloudDefault = (function(){
             //if(!$tag.hasClass(droppedClass)) {
                 $tag.removeClass(hoveredClass).setTagStyle();
             //}
-            clearTimeout(tooltipTimeOut);
-            clearTimeout(fadeOutTimeOut);
-            $tooltip.hide();
+//            clearTimeout(tooltipTimeOut);
+//            clearTimeout(fadeOutTimeOut);
+//            $tooltip.hide();
         }
     };
 

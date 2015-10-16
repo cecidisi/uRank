@@ -42,7 +42,8 @@
 
         if($tag.hasClass('active')/* || $tag.hasClass('addable')*/)
             return $tag.css({
-                background: function() { return getGradientString($tag.data('originalColor')) },
+//                background: function() { return getGradientString($tag.data('originalColor')) },
+                background: '#555',
                 border: '',
             });
         return $tag;

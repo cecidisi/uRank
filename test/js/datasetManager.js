@@ -2,37 +2,10 @@ function datasetManager(){
 
     var datasetMappings = {
 
-        DS_RS: {
-            description: 'Recommender Systems',
-            file: 'recommender_systems.json',
-            parse: true
-        },
-        DS_VA: {
-            description: 'Visual Analytics',
-            file: 'visual-analytics.json',
-            parse: true
-        },
-        DS_SRV: {
-            description: 'Search Result Visualization',
-            file: 'search_result_visualization.json',
-            parse: true
-        },
-
-        DS_Ro: {
-            description: 'Robots',
-            file: 'dataset_Ro.json'
-        },
-        DS_AR: {
-            description: 'Augmented Reality',
-            file: 'dataset_AR.json'
-        },
-        DS_WW: {
-            description: 'Women in Workforce',
-            file: 'dataset_WW.json'
-        },
-        DS_CE: {
-            description: 'Circular Economy',
-            file: 'dataset_CE.json'
+        DS_Uni: {
+            description: 'Universities',
+            file: 'universities.json',
+            changeId: true
         }
     };
 
@@ -79,6 +52,11 @@ function datasetManager(){
             $.getJSON('datasets/'+datasetMappings[datasetId].file, function(data){
                 if(datasetMappings[datasetId].parse) {
                     data = adaptJSON(data);
+                }
+                if(datasetMappings[datasetId].changeId) {
+                    data.forEach(function(d, i){
+                        d.id = 'item-'+i;
+                    });
                 }
                 console.log('Dataset '+ datasetId +' retrieved --> (' + data.length + ' documents)');
                 callback.call(this, data);

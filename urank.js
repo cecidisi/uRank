@@ -132,29 +132,35 @@ var Urank = (function(){
             _this.queryTermColorScale = d3.scale.ordinal().range(_this.loadOpt.queryTermColorArray);
 
             //  Initialize keyword extractor
-            var keywordExtractor = new KeywordExtractor(_this.loadOpt.keywordExtractor);
+            //var keywordExtractor = new KeywordExtractor(_this.loadOpt.keywordExtractor);
+            var scoreExtractor = new ScoreExtractor();
 
             //  Clean documents and add them to the keyword extractor
             _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
 
             _this.data.forEach(function(d, i){
                 d.index = i;
-                d.title = d.title.clean();
-                d.description = d.description.clean();
-                var document = (d.description) ? d.title +'. '+ d.description : d.title;
-                keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id);
+                scoreExtractor.addItem(d);
+//                d.title = d.title.clean();
+//                d.description = d.description.clean();
+//                var document = (d.description) ? d.title +'. '+ d.description : d.title;
+//                keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id);
             });
 
             //  Extract collection and document keywords
-            keywordExtractor.processCollection();
+//            keywordExtractor.processCollection();
+            scoreExtractor.process();
             //  Assign document keywords
             _this.data.forEach(function(d, i){
-                d.keywords = keywordExtractor.listDocumentKeywords(i);
+//                d.keywords = keywordExtractor.listDocumentKeywords(i);
+                d.normScores = scoreExtractor.getNormalizedItemScores(i);
             });
 
             //  Assign collection keywords and set other necessary variables
-            _this.keywords = keywordExtractor.getCollectionKeywords();
-            _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
+//            _this.keywords = keywordExtractor.getCollectionKeywords();
+//            _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
+            _this.keywords = scoreExtractor.getScoreSet().array;
+            _this.keywordsDict = scoreExtractor.getScoreSet().dict;
             _this.rMode = RANKING_MODE.by_CB.attr;
             _this.rWeight = 0.5;
             _this.rankingModel.clear().setData(_this.data);
@@ -234,20 +240,20 @@ var Urank = (function(){
         },
 
         onTagWeightChanged: function(index, weight){
-            var tag = { index: index, stem: _this.keywords[index].stem, term: _this.keywords[index].term, weight: weight };
-            s.onTagWeightChanged.call(this, tag);
+//            var tag = { index: index, stem: _this.keywords[index].stem, term: _this.keywords[index].term, weight: weight };
+//            s.onTagWeightChanged.call(this, tag);
         },
 
         onTagInCloudMouseEnter: function(index) {
             tagCloud.hoverTag(index);
-            var tag = { index: index, term: _this.keywords[index].term }
-            s.onTagInCloudMouseEnter.call(this, tag);
+//            var tag = { index: index, term: _this.keywords[index].term }
+//            s.onTagInCloudMouseEnter.call(this, tag);
         },
 
         onTagInCloudMouseLeave: function(index) {
             tagCloud.unhoverTag(index);
-            var tag = { index: index, term: _this.keywords[index].term }
-            s.onTagInCloudMouseLeave.call(this, tag);
+//            var tag = { index: index, term: _this.keywords[index].term }
+//            s.onTagInCloudMouseLeave.call(this, tag);
         },
 
         onTagInCloudClick: function(index) {
@@ -255,18 +261,18 @@ var Urank = (function(){
             var idsArray = _this.keywords[index].inDocument;
             contentList.highlightListItems(idsArray);
             visCanvas.highlightItems(idsArray).resize(contentList.getListHeight());
-            var tag = { index: index, term: _this.keywords[index].term }
-            s.onTagInCloudClick.call(this, tag);
+//            var tag = { index: index, term: _this.keywords[index].term }
+//            s.onTagInCloudClick.call(this, tag);
         },
 
         onKeywordEntered: function(keyword){
             tagCloud.focusTag(keyword);
-            s.onKeywordEntered.call(this, keyword);
+//            s.onKeywordEntered.call(this, keyword);
         },
 
         onTagFrequencyChanged: function(min, max){
             tagCloud.showTagsWithinRange(min, max)
-            s.onTagFrequencyChanged.call(this, min, max);
+//            s.onTagFrequencyChanged.call(this, min, max);
         },
 
         onTagInBoxMouseEnter: function(index) {
@@ -291,7 +297,7 @@ var Urank = (function(){
             visCanvas.selectItem(documentId, index);
             docViewer.showDocument(_this.rankingModel.getDocumentById(documentId), _this.selectedKeywords.map(function(k){return k.stem}), _this.queryTermColorScale);
             tagCloud.clearEffects();
-            s.onItemClicked.call(this, { index: index, id: documentId, title: _this.data[index].title });
+//            s.onItemClicked.call(this, { index: index, id: documentId, title: _this.data[index].title });
         },
 
         onItemMouseEnter: function(documentId, index) {

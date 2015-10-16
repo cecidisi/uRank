@@ -54,6 +54,7 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'libs/pos/pos.js',
                     pathToUrank + 'libs/pos/POSTagger.js',
                     pathToUrank + 'model/keywordExtractor.js',
+                    pathToUrank + 'model/scoreExtractor.js',
                     pathToUrank + 'model/RSContent.js',
                     pathToUrank + 'model/RSTagUser.js',
                     pathToUrank + 'model/rankingModel.js',
