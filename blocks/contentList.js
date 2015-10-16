@@ -230,7 +230,9 @@ var ContentList = (function(){
             var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
             if(d.ranking.pos > 0) {
                 var shift = (i+1) * 5;
+                shift = shift <= 400 ? shift : 400;
                 var duration = timeLapse * (i+1);
+                duration = duration <= 1000 ? duration : 1000;
 
                 $item.animate({ top: shift }, 0, easing)
                 .queue(function(){
@@ -248,7 +250,7 @@ var ContentList = (function(){
 
 
     var animateResortEffect = function() {
-        var duration = 2000;
+        var duration = 1500;
         var easing = 'swing';
 
         var acumHeight = 0;
@@ -263,7 +265,13 @@ var ContentList = (function(){
                 var movingClass = (d.ranking.posChanged > 0) ? liMovingUpClass : ((d.ranking.posChanged < 0) ? liMovingDownClass : '');
 
                 $item.addClass(movingClass);
-                $item.animate({"top": '+=' + shift+'px'}, duration, easing);
+                if(i<=50)
+                    setTimeout(function(){
+                        console.log('Animating --> '+ i);
+                        $item.animate({"top": '+=' + shift+'px'}, duration, easing);
+                    }, 0);
+                else
+                    $item.css({ top: '+='+shift+'px' });
 
                 acumHeight += $item.fullHeight();
             }
@@ -444,11 +452,15 @@ var ContentList = (function(){
             unchangedDuration = 1000,
             unchangedEasing = 'linear',
             removeDelay = 3000;
-
+        console.log('Stop Animation');
         stopAnimation();
+        console.log('Deselect items');
         this.deselectAllListItems();
+        console.log('Format titles');
         formatTitles(colorScale);
+        console.log('Show positions');
         showRankingPositions();
+        console.log('Hide unranked');
         hideUnrankedListItems();
 
         $ul.addClass(ulPaddingBottomclass);
@@ -460,7 +472,9 @@ var ContentList = (function(){
         };
 
         var updateUpdated = function(){
+            console.log('Update background');
             updateLiBackground();
+            console.log('Animate');
             animateResortEffect();
             return setTimeout(sort, resortDelay);
         };
@@ -470,7 +484,7 @@ var ContentList = (function(){
         };
 
         var updateFunc = {};
-        updateFunc[RANKING_STATUS.new] = updateNew;
+        updateFunc[RANKING_STATUS.new] = updateUpdated;// updateNew;
         updateFunc[RANKING_STATUS.update] = updateUpdated;
         updateFunc[RANKING_STATUS.unchanged] = updateUnchanged;
         updateFunc[RANKING_STATUS.no_ranking] = _this.reset;
@@ -504,7 +518,8 @@ var ContentList = (function(){
 
 
     var _deselectAllListItems = function() {
-        $('.'+liClass).removeClass(selectedClass, 1200, 'easeOutCirc').removeClass(dimmedClass);
+        //$('.'+liClass).removeClass(selectedClass, 1200, 'easeOutCirc').removeClass(dimmedClass);
+        $('.'+liClass).removeClass(selectedClass).removeClass(dimmedClass);
     };
 
 
