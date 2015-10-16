@@ -153,7 +153,7 @@ var Urank = (function(){
             //  Assign document keywords
             _this.data.forEach(function(d, i){
 //                d.keywords = keywordExtractor.listDocumentKeywords(i);
-                d.normScores = scoreExtractor.getNormalizedItemScores(i);
+                d.keywords = scoreExtractor.getNormalizedItemScores(i);
             });
 
             //  Assign collection keywords and set other necessary variables

@@ -43,7 +43,8 @@ window.RSContent = (function(){
                     var max = 0;
                     opt.keywords.forEach(function(q) {
                     // termScore = tf-idf(d, t) * unitQueryVector(t) * weight(query term) / |d|   ---    |d| = euclidenNormalization(d)
-                        var termScore = (d.keywords[q.stem]) ? ((parseFloat(d.keywords[q.stem]) / docNorm) * unitQueryVectorDot * parseFloat(q.weight * opt.options.rWeight)).round(3) :  0;
+//                        var termScore = (d.keywords[q.stem]) ? ((parseFloat(d.keywords[q.stem]) / docNorm) * unitQueryVectorDot * parseFloat(q.weight * opt.options.rWeight)).round(3) :  0;
+                        var termScore = d.keywords[q.stem] ? (parseFloat(d.keywords[q.stem]) * parseFloat(q.weight)).round(3) :  0;
                         // if item doesn't contain query term => maxScore and overallScore are not changed
                         d.ranking.cbScore += termScore;
                         d.ranking.cbMaxScore = termScore > d.ranking.cbMaxScore ? termScore : d.ranking.cbMaxScore;

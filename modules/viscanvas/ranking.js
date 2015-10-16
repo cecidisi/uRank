@@ -208,7 +208,9 @@ var Ranking = (function(){
             d3.select(s.root).select('.'+svgClass).attr("width", width)
             svg.attr("width", width);
 
-            xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode(), opt);
+//            xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode(), opt);
+            xUpperLimit = rankingModel.getQuery().length;
+
             x.rangeRound( [0, width] )
              .domain([0, xUpperLimit]).copy();
 
