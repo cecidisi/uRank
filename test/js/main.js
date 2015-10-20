@@ -54,7 +54,6 @@
     var removeBookmark = function(document){
         $('#bookmark-' + document.id).slideUp().remove();
         _this.data[document.index].bookmarked = false;
-        actionLogger.log(actionLogger.action.documentUnbookmarked, document);
     };
 
     var addBookmark = function(document){
@@ -67,7 +66,6 @@
         });
 
         _this.data[document.index].bookmarked = true;
-        actionLogger.log(actionLogger.action.documentBookmarked, { document: document, keywords: _this.urank.getSelectedKeywords() });
     };
 
 
@@ -109,10 +107,14 @@
             actionLogger.log(actionLogger.action.documentClicked, document);
         },
         onFaviconClicked: function(document){
-            if(_this.data[document.index].bookmarked)
+            if(_this.data[document.index].bookmarked) {
                 removeBookmark(document);
-            else
+                actionLogger.log(actionLogger.action.documentUnbookmarked, document);
+            }
+            else {
                 addBookmark(document);
+                actionLogger.log(actionLogger.action.documentBookmarked, { document: document, keywords: _this.urank.getSelectedKeywords() });
+            }
         },
         onWatchiconClicked: function(document){
             if(_this.data[document.index].watched) {
