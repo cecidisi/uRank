@@ -211,7 +211,6 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 			d.title = d.title.clean();
 			d.description = d.description.clean();
 		    var document = (d.description) ? d.title +'. '+ d.description : d.title;
-		    console.log("i: " + i + " " + document + "\n"); 
 		    d.facets.language = d.facets.language ? d.facets.language : "en"
 		    keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id, d.facets.language );
         });
@@ -253,13 +252,13 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 			 .attr("dy", ".35em")
 			 .style("text-anchor", "end")
 			 .text(function(d) { return d.item; });
-			$("#loadingLandscape").remove();
 			var keywordsData = keywordExtractor.getCollectionKeywords();
 			var numOfTags = data.keywords.length > 50  ? 50 : data.keywords.length;  
 			var tagCloudObj = {"keywords": data.keywords.slice(0, tagCloudObj),  "data" : data}
+			
 			landscapeController.stateCurrent.drawTagsCloud(tagCloudObj);
-			$("#loadingLandscape").remove();
-		}, 100); 
+		     $("#loadingLandscape").remove();
+		}, 200); 
 	};
 	
 	

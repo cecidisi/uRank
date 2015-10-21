@@ -60,12 +60,16 @@ function Documents(documents, outsideDocuments) {
 					var y = docData['y'] * landscapeConfig.getHeight();
 					var x = docData['x'] * landscapeConfig.getWidth();
 					var y = docData['y'] * landscapeConfig.getHeight();
+					var uri = docData.metadata.uri; 
+					var title = docData.metadata.title; 
 					docPoints.append("circle")//
 					.attr("class", "landscapeDocPoint")//
 					.attr("id", documentId)
 					.attr("cx", x)
 					.attr("cy", y)
 					.attr("r", 4)//
+					.attr("uri", uri)//
+					.attr("title", title)
 					.attr("index", docData.metadata.index)
 					.attr("color", "red")//
 					.style("fill", "red")
@@ -79,10 +83,13 @@ function Documents(documents, outsideDocuments) {
 						d3.select(this).attr("r", 4);
 						d3.select(this).style("fill", color);
 					}).on("click", function(d) {
-						var i = d3.select(this).attr("index"); 
-						landscapeController.stateCurrent.heighlightDocumentsByIds([i]);
-						var datasetList = landscapeController.dataProcessor.getDatasetByIds([i]); 
-						FilterHandler.singleItemSelected(datasetList[0], false); 
+						var uri = d3.select(this).attr("uri"); 
+						var id = d3.select(this).attr("id");
+						var title = d3.select(this).attr("title");
+						LoggingHandler.documentWindowOpened();
+						LoggingHandler.log({ action: "Item opened", source:"landscape", itemId: "id", itemTitle : "title"  }); 
+						var win =window.open(uri, '_blank');
+						win.focus();
 					}).append("title").text(function(d, i) {
 						return docData.metadata.title;
 					})

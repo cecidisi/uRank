@@ -8,7 +8,7 @@ var WordsCloud = (function(){
 	var tagPrefix = "#urank-tag-"; 
 	var documentIndices = []; 
 	var _this, $root = $('');
-	
+	 
 	
 	function WordsCloud(arguments) {
 		_this = this;
@@ -20,6 +20,7 @@ var WordsCloud = (function(){
     var EVTHANDLER = {
 
         onTagInCloudMouseEnter: function(index, labelObj) {
+            _this.timestamp = $.now(); 
         	var $tag = $(tagPrefix+index);  
         	var stem = $tag.attr("stem");
         	var keyword = 	$tag.clone().children().remove().end().text();
@@ -88,6 +89,15 @@ var WordsCloud = (function(){
 					_this.tagcloud.unhoverTag(index);
 				}
 			}
+			 var timestamp =  $.now()-_this.timestamp;
+			 if(timestamp > 1000 ) {
+			     var component = "tagCloud"
+			     if(labelObj) {
+			         component = "landscape";
+			     }
+			     LoggingHandler.log({ action: "Keyword inspect", source: "landscape", component: component, value : keyword}); 
+			 }            
+            
 			var selctedTags = $("#landscapeLabel").find("text");
 			selctedTags.each(function(index, tag) {
 				var label = $(tag).html();
@@ -118,12 +128,18 @@ var WordsCloud = (function(){
         	}
 			 
         	if($tag.hasClass("isSelected")) {
+        	    if(!labelObj) {
+        	        LoggingHandler.log({ action: "Keyword removed", source: "landscape", component: "tagCloud", value : keyword});  
+        	    }
         		$tag.removeClass("isSelected"); 
         		_this.tagcloud.unhoverTag(index);
         	}
         	else {
         		$tag.addClass("isSelected");
-        		$tag.css(getTagHoverStyle());         		
+        		$tag.css(getTagHoverStyle());  
+        		if(!labelObj) {
+        		   LoggingHandler.log({ action: "Keyword added", source: "landscape", component: "tagCloud",  value : keyword}); // click on keyword 
+        		}       		
         	}
         	var selctedTags = $("#eexcess_landscape_tag_cloud").find("div.isSelected");
         	var values = []
@@ -219,6 +235,7 @@ var WordsCloud = (function(){
 		tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(tagColorRange);
         this.tagcloud = new TagCloudDefault(arguments);
        	this.tagcloud.clear();
+       	this.timestamp = 0; 
        	if(keywordsDict) {}
        	var misc = { customScrollBars: false, defaultBlockStyle: false, draggableClass: "urank-tagcloud-tag"}
        	

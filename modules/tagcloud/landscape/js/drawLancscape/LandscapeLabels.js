@@ -399,7 +399,12 @@ function LandscapeLabels() {
 								}
 								
 							});	
-					
+							if(d3.select(this).classed("isSelected")) {
+							    LoggingHandler.log({ action: "Keyword removed", source: "landscape", component: "landscape", value : label}); 
+					        }
+					        else {
+					            LoggingHandler.log({ action: "Keyword added", source: "landscape", component: "landscape", value : label}); 
+					        }
 							//landscapeController.stateCurrent.onTagInCloudMouseEnter(pos, colorCategory); 
 							//landscapeController.stateCurrent.onTagInCloudClick(pos, colorCategory); 
 							landscapeController.stateCurrent.wordsCloud.onTagInCloudClick(pos, {"stem": stem, "label": label, "colorCategory": colorCategory}); 

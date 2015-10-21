@@ -261,11 +261,15 @@ var LandscapeController = (function(){
 
 	//------------------------------------------------------------------------
 	var initLandscapeBrush = function(brushExtent) {
-			var tagClass = 'urank-tagcloud-tag';
+	    var tagClass = 'urank-tagcloud-tag';
+	    var itemCountOld = 0; 
+	    var 
 		landscapeBrush = d3.svg.brush()
 		.x(d3.scale.linear().range([0, landscapeConfig.getWidth()]))
 		.y(d3.scale.linear().range([0, landscapeConfig.getHeight()]))
-		.extent(brushExtent).on("brushstart", function() {	
+		.extent(brushExtent)
+		.on("brushstart", function() {	
+		    console.log("brushstart");
 			if(d3.event.sourceEvent.ctrlKey) {
 				return; 
 			}
@@ -279,6 +283,7 @@ var LandscapeController = (function(){
 			
 		})
 		.on("brush", function() { 
+		    console.log("brush")
 			if(d3.event.sourceEvent.ctrlKey) {
 				return; 
 			}
@@ -329,16 +334,20 @@ var LandscapeController = (function(){
 				else {
 					me.stateCurrent.drawTagsCloud(keywordsData);
 				}
-				if(documentIds.length == 0) {
-					var tagCloudObj = {"keywords": me.receivedData.keywords.slice(0, 50),  "data" :  me.receivedData}
-					landscapeController.stateCurrent.drawTagsCloud(tagCloudObj);
-				}
-	 
+				var itemCountNew = documentIds.length;
+				if(itemCountNew > 0) {
+	               LoggingHandler.log({ action: "Brush created", source: "landscape", value: "", itemCountOld: itemCountOld, itemCountNew: itemCountNew});
+			         itemCountOld = itemCountNew;
+			     }
 				landscapeZoom.on("zoom",zoomLandscape);
 				landscapeZoom.translate(landscapeTranslate)
 				landscapeZoom.scale(landscapeScale)		
 				//me.stateCurrent.resetZoom(translate, scale);
 	
+			}
+			else {
+			    var tagCloudObj = {"keywords": me.receivedData.keywords.slice(0, 50),  "data" :  me.receivedData}
+                landscapeController.stateCurrent.drawTagsCloud(tagCloudObj);
 			}
 			
 	
