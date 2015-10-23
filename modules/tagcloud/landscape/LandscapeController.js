@@ -180,7 +180,6 @@ var LandscapeController = (function(){
 		strTreeJSTSOld = new STRTreeJSTS();
 		strTreeJSTSCurrent = strTreeJSTSOld;
 		strTreeJSTSOldOld = strTreeJSTSOld;
-		$("#loadingLandscape").remove();
 
 
 
@@ -263,7 +262,6 @@ var LandscapeController = (function(){
 	var initLandscapeBrush = function(brushExtent) {
 	    var tagClass = 'urank-tagcloud-tag';
 	    var itemCountOld = 0; 
-	    var 
 		landscapeBrush = d3.svg.brush()
 		.x(d3.scale.linear().range([0, landscapeConfig.getWidth()]))
 		.y(d3.scale.linear().range([0, landscapeConfig.getHeight()]))
