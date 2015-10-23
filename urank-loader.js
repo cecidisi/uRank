@@ -97,9 +97,11 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'urank.js'
                 ],
                 complete: function(){
-                    console.log('urank loaded');
-                    var urank = new Urank(args);
-                    callback.call(this, urank); // call entry point
+                     setTimeout(function(){
+                        console.log('urank loaded');
+                        var urank = new Urank(args);
+                        callback.call(this, urank); // call entry point
+                    }, 0);
                 }
             }
         ]);
