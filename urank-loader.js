@@ -101,7 +101,7 @@ function UrankLoader(callback, args) {
                         console.log('urank loaded');
                         var urank = new Urank(args);
                         callback.call(this, urank); // call entry point
-                    }, 0);
+                    }, 500);
                 }
             }
         ]);
