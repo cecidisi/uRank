@@ -185,7 +185,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
       	var loadingLandscape = "<div id=\"loadingLandscape\" style=\"margin-top: "+ (height/2)+"px;\"></br><img src=\"uRank/modules/tagcloud/landscape/images/ajax-loader.gif\"/></div>";
         var landscapeDiv = loadingLandscape + landscapeBoxDiv + landscapeLabelsDragableDiv +  closeDiv + landscapeHeader + closeDiv +  landscapeMainVis + closeDiv + landscapeTagCloudVis + closeDiv + closeDiv; 
 		
-		var legendWrapper = d3.select(domRoot).append("div").attr("id", "div-landscape-wrap-legends").style("width", "6.2em"); 
+		var legendWrapper = d3.select(domRoot).append("div").attr("id", "div-landscape-wrap-legends"); 
 		$(domRoot).append(landscapeDiv); 
 		
 		
