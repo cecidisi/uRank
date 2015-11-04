@@ -326,8 +326,27 @@ var LandscapeController = (function(){
 	
 			}
 			else {
+		
 			    var tagCloudObj = {"keywords": me.receivedData.keywords.slice(0, 50),  "data" :  me.receivedData}
                 landscapeController.stateCurrent.drawTagsCloud(tagCloudObj);
+				var selectedLabelsElems= $("#landscapeLabel").find("text.isSelected");
+				var labels = []; 
+				selectedLabelsElems.each(function(index, label) {
+					labels.push($(label).html());
+				})
+				var cloudTags = $("#eexcess_landscape_tag_cloud").find(".urank-tagcloud-tag");
+				var tagsPositions = []; 
+				cloudTags.each(function(index, tag) {
+					var keyword = $(tag).clone().children().remove().end().text();
+					if (labels.indexOf(keyword) > -1) {
+						var pos = $(tag).attr("tag-pos");
+						tagsPositions.push(pos); 
+					}
+
+				});
+				for(var i=0; i < tagsPositions.length; i++) {
+					landscapeController.stateCurrent.wordsCloud.onTagInCloudClick(tagsPositions[i]);
+				}; 
 			}
 			landscapeZoom.on("zoom",zoomLandscape);
 			landscapeZoom.translate(landscapeTranslate)

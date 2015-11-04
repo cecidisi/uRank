@@ -169,7 +169,7 @@ var WordsCloud = (function(){
 				var k = $(tag).html();
 				if($(tag).html() == keyword) {
 					var stem = $(tag).attr("stem");
-					if(d3.select(this).classed("isSelected")) {
+					if(d3.select(this).classed("isSelected") && !$tag.hasClass("isSelected")) {
 						d3.select(this).classed("isSelected", false)
 						var color = d3.select(tag).attr("color")
 						d3.select(tag).style("fill", color)

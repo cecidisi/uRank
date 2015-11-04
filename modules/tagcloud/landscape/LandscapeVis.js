@@ -254,7 +254,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 			 .text(function(d) { return d.item; });
 			var keywordsData = keywordExtractor.getCollectionKeywords();
 			var numOfTags = data.keywords.length > 50  ? 50 : data.keywords.length;  
-			var tagCloudObj = {"keywords": data.keywords.slice(0, tagCloudObj),  "data" : data}
+			var tagCloudObj = {"keywords": data.keywords.slice(0, numOfTags),  "data" : data}
 			
 			landscapeController.stateCurrent.drawTagsCloud(tagCloudObj);
 		     $("#loadingLandscape").remove();

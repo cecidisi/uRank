@@ -126,7 +126,7 @@ function LandscapeLabels() {
 				landscapeZoom.on("zoom",null);
 	       	})
 	       	.on("dragend", function(d,i) {
-	       		landscapeZoom.on("zoom", function() {console.log("tesssss"); landscapeController.stateCurrent.zoom()});
+	       		landscapeZoom.on("zoom", function() {landscapeController.stateCurrent.zoom()});
 				landscapeZoom.translate(landscapeTranslate)
 				landscapeZoom.scale(landscapeScale)		
 	       	})
@@ -289,7 +289,7 @@ function LandscapeLabels() {
 				var padding = (textBoxWidth+15-dummyTextWidth)/2;
 					svgcanvas.selectAll("#dummyLandscapeLabel2").remove();
 					landscapeLabels.append("svg:text")
-					.attr("id", "landscapeLabel_" + labelIndex)
+					.attr("id", "landscapeLabel_" + labelCounter)
 					.attr("dx", textBoxPosX  +  padding)
 					.attr("dy", (textBoxPosY + (labelCounter * textBoxHeight))+15)//
 					.attr("depth", labelDepth)
