@@ -266,30 +266,30 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 	 *	Legend events' handlers
 	 * */
 	LANDSCAPE.Evt.legendClicked = function( legendDatum, legendIndex ){
-		LANDSCAPE.Render.HighlightFilteredFacet( legendDatum.item, legendIndex, legendDatum.selected );
+		// LANDSCAPE.Render.HighlightFilteredFacet( legendDatum.item, legendIndex, legendDatum.selected );
 		
 	};
 	
 	
 	LANDSCAPE.Evt.legendMouseOvered = function(d){
-		d3.select(this).select("div")
+		/*d3.select(this).select("div")
 			.style("border", "0.1em yellow solid")
 			.style("width", "1.4em")
 			.style("height", "1.4em");
 
 		d3.select(this).select("text")
-			.style("font-size", "0.9em");
+			.style("font-size", "0.9em"); */
 	};
 	
 	
 	LANDSCAPE.Evt.legendMouseOuted = function(d){
-		d3.select(this).select("div")
+		/*d3.select(this).select("div")
 			.style("border", function(){ if(d.selected) return "0.1em lime solid"; return "none"; })
 			.style("width",  function(){ if(d.selected) return "1.4em"; return "1.5em"; })
 			.style("height", function(){ if(d.selected) return "1.4em"; return "1.5em"; });
 
 		d3.select(this).select("text")
-			.style("font-size", "0.85em");
+			.style("font-size", "0.85em"); */
 		
 	};
 	
