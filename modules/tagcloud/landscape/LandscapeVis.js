@@ -120,7 +120,7 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 		var color = d3.scale.category10();		
 		LANDSCAPE.Ext.colorScale = color;
 		
-        $("#eexcess_landscape_box").remove(); 
+        $("#eexcess_landscape_box").empty(); 
         LANDSCAPE.Dimensions = LANDSCAPE.Settings.getDimensions(domRoot, iWidth, iHeight);
         var landscapeWidth = LANDSCAPE.Dimensions.landscape.width-30; 
         var landscapeHeight = LANDSCAPE.Dimensions.landscape.height; 
@@ -223,11 +223,14 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 	    });
 
 	    data.keywords = LANDSCAPE.Internal.extendKeywordsWithColorCategory(keywordExtractor.getCollectionKeywords()); 
-	    data.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary(); 
+		data.keywords = _(data.keywords).filter(function(item) {
+		     return item.term !== "ERROR"; 
+		});
+		data.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary(); 
 		landscapeController = new LandscapeController(data, keywordExtractor);
         landscapeConfig = new LandscapeConfig();
 	  
-		setTimeout(function() {
+		//setTimeout(function() {
 			landscapeConfig = new LandscapeConfig();
 			landscapeConfig.setLandscapeType("standaloneLandscape");
 			landscapeController.drawLandscape(data);
@@ -245,20 +248,29 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 				.on( "mouseout", LANDSCAPE.Evt.legendMouseOuted );
 		    legend.append("div")
 			 .attr("x", width + 126)
+			 .attr("title", function(d){ return d.item; })
 			 .style("background", function(d, i){ return color(d.item); });
 		    legend.append("text")
 			 .attr("x", width +120)
 			 .attr("y", 9)
 			 .attr("dy", ".35em")
 			 .style("text-anchor", "end")
-			 .text(function(d) { return d.item; });
+			 .text(function(d) {  
+				var threshold = 10; 
+				var item = d.item; 
+				if(item.length > threshold) {
+					return item.substr(0, threshold-3) + "..."; 
+				}
+				return item; 
+			}).attr("title", function(d){ return d.item; });
+			
 			var keywordsData = keywordExtractor.getCollectionKeywords();
 			var numOfTags = data.keywords.length > 50  ? 50 : data.keywords.length;  
 			var tagCloudObj = {"keywords": data.keywords.slice(0, numOfTags),  "data" : data}
 			
 			landscapeController.stateCurrent.drawTagsCloud(tagCloudObj);
 		     $("#loadingLandscape").remove();
-		}, 200); 
+		//}, 200); 
 	};
 	
 	
