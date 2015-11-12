@@ -49,7 +49,7 @@ var WordsCloud = (function(){
 			
 			var selctedTags = $("#landscapeLabel").find("text");
 			selctedTags.each(function(index, tag) {
-				var label = $(tag).html();
+				var label = $(tag).text();
 				if(label == keyword) { 
 					if(!$tag.hasClass("isSelected")) {
 						d3.select(tag).style("fill", "#94BFFF")
@@ -100,7 +100,7 @@ var WordsCloud = (function(){
             
 			var selctedTags = $("#landscapeLabel").find("text");
 			selctedTags.each(function(index, tag) {
-				var label = $(tag).html();
+				var label = $(tag).text();
 				if(label == keyword) { 
 					if (!d3.select(tag).classed("isSelected") ) {
 						var color = d3.select(tag).attr("color")
@@ -166,8 +166,8 @@ var WordsCloud = (function(){
 
 			var selctedTags = $("#landscapeLabel").find("text");
 			selctedTags.each(function(index, tag) {
-				var k = $(tag).html();
-				if($(tag).html() == keyword) {
+				var k = $(tag).text();
+				if($(tag).text() == keyword) {
 					var stem = $(tag).attr("stem");
 					if(d3.select(this).classed("isSelected") && !$tag.hasClass("isSelected")) {
 						d3.select(this).classed("isSelected", false)
@@ -395,7 +395,7 @@ var WordsCloud = (function(){
 		      }).text(function(d) {
 		    	  return d.text; 
 		      }).on("click", function(d, i) {
-		    	  	var tag = $( this ).html();
+		    	  	var tag = $( this ).text();
 		    	  	var stem = d3.select(this).attr("stem"); 
 					if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
 						var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 				
@@ -598,7 +598,7 @@ function WordsCloudLandscape() {
 		      }).text(function(d) {
 		    	  return d.text; 
 		      }).on("click", function(d, i) {
-		    	  	var tag = $( this ).html();
+		    	  	var tag = $( this ).text();
 		    	  	var stem = d3.select(this).attr("stem"); 
 					if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
 						var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 				

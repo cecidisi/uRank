@@ -306,7 +306,7 @@ function LandscapeLabels() {
 					.on("mouseover",function(d, i) {
 						d3.select(this).style("cursor", "pointer")
 						if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
-							var label = $(this).html(); 
+							var label = $(this).text(); 
 							var stem = d3.select(this).attr("stem");
 							var colorCategory =  d3.select(this).attr("colorCategory");
 							var selctedTags = $("#eexcess_landscape_tag_cloud").find(".urank-tagcloud-tag");
@@ -346,7 +346,7 @@ function LandscapeLabels() {
 						}
 					})
 					.on("mouseout", function(d, i) {		
-							var label = $(this).html(); 
+							var label = $(this).text(); 
 							var stem = d3.select(this).attr("stem");
 							var colorCategory =  d3.select(this).attr("colorCategory");
 							var selctedTags = $("#eexcess_landscape_tag_cloud").find(".urank-tagcloud-tag");
@@ -380,7 +380,7 @@ function LandscapeLabels() {
 				        		d3.select(this).classed("isSelected", true);     		
 				        	}
 							*/
-							var label = $(this).html(); 
+							var label = $(this).text(); 
 							var stem = d3.select(this).attr("stem");
 							var colorCategory =  d3.select(this).attr("colorCategory");
 							var selctedTags = $("#eexcess_landscape_tag_cloud").find(".urank-tagcloud-tag");

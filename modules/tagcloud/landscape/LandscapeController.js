@@ -332,7 +332,7 @@ var LandscapeController = (function(){
 				var selectedLabelsElems= $("#landscapeLabel").find("text.isSelected");
 				var labels = []; 
 				selectedLabelsElems.each(function(index, label) {
-					labels.push($(label).html());
+					labels.push($(label).text());
 				})
 				var cloudTags = $("#eexcess_landscape_tag_cloud").find(".urank-tagcloud-tag");
 				var tagsPositions = []; 
