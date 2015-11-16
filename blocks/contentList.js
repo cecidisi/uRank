@@ -79,7 +79,8 @@ var ContentList = (function(){
 
         var onLiClick = function(event){
             event.stopPropagation();
-            hideUnrankedListItems();
+            if(_this.opt.customOptions.misc.hideUrankedItems)
+            	hideUnrankedListItems();
             if(!$(this).hasClass(liUnrankedClass))
                 s.onItemClicked.call(this, id, event);
         };

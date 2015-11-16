@@ -67,7 +67,8 @@ var Urank = (function(){
                     liDarkBackgroundClass: ''
                 },
                 misc: {
-                    hideScrollbar: false
+                    hideScrollbar: false, 
+                    hideUrankedItems : true,
                 }
             },
         },
