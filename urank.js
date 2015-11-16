@@ -203,13 +203,16 @@ var Urank = (function(){
                 ranking: _this.loadOpt.model
             };
 
+            var tsmp = $.now();
             var rankingData = _this.rankingModel.update(updateOpt).getRanking();
             var status = _this.rankingModel.getStatus();
             console.log(status);
             console.log(_this.rankingModel);
             setTimeout(function(){
+//                console.log('Elapsed time = '+ ($.now() - tsmp));
                 console.log('Content List --> update');
                 contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
+//                console.log('Elapsed time = '+ ($.now() - tsmp));
             }, 0);
             setTimeout(function(){
                 console.log('Ranking --> update');

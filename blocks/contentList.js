@@ -149,6 +149,20 @@ var ContentList = (function(){
     };
 
 
+    var getColor = function(d) {
+        if(d.ranking.posChanged > 0) return "rgba(0, 200, 0, 0.8)";
+        if(d.ranking.posChanged < 0) return "rgba(250, 0, 0, 0.8)";
+        return "rgba(128, 128, 128, 0.8)";
+    };
+
+    var getPosMoved = function(d) {
+        if(d.ranking.posChanged == 1000) return STR_JUST_RANKED;
+        if(d.ranking.posChanged > 0) return "+" + d.ranking.posChanged;
+        if(d.ranking.posChanged < 0) return d.ranking.posChanged;
+        return "=";
+    };
+
+
     var showRankingPositions = function() {
 
         var color = function(d) {
@@ -225,26 +239,39 @@ var ContentList = (function(){
         var timeLapse = 80;
         var easing = 'swing';
 
-        _this.data.forEach(function(d, i){
+        for(var i=0; i<50; ++i) {
+            var $item = $('.'+liClass+'['+urankIdAttr+'="'+_this.data[i].id+'"]');
+            var shift = (i+1) * 5;
+            var duration = timeLapse * (i+1);
 
-            var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
-            if(d.ranking.pos > 0) {
-                var shift = (i+1) * 5;
-                shift = shift <= 400 ? shift : 400;
-                var duration = timeLapse * (i+1);
-                duration = duration <= 1000 ? duration : 1000;
+            $item.animate({ top: shift }, 0, easing).queue(function(){
+                $(this).animate({ top: 0 }, duration, easing)
+            }).queue(function(){
+                $(this).css('top', '');
+                bindEventHandlers($item, d.id, i);
+            }).dequeue();
+        }
 
-                $item.animate({ top: shift }, 0, easing)
-                .queue(function(){
-                    $(this).animate({ top: 0 }, duration, easing)
-                })
-                .queue(function(){
-                    $(this).css('top', '');
-                    bindEventHandlers($item, d.id, i);
-                })
-                .dequeue();
-            }
-        });
+//        _this.data.forEach(function(d, i){
+//
+//            var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
+//            if(d.ranking.pos > 0) {
+//                var shift = (i+1) * 5;
+//                shift = shift <= 400 ? shift : 400;
+//                var duration = timeLapse * (i+1);
+//                duration = duration <= 1000 ? duration : 1000;
+//
+//                $item.animate({ top: shift }, 0, easing)
+//                .queue(function(){
+//                    $(this).animate({ top: 0 }, duration, easing)
+//                })
+//                .queue(function(){
+//                    $(this).css('top', '');
+//                    bindEventHandlers($item, d.id, i);
+//                })
+//                .dequeue();
+//            }
+//        });
     };
 
 
@@ -256,26 +283,69 @@ var ContentList = (function(){
         var acumHeight = 0;
         var listTop = $ul.position().top;
 
-        _this.data.forEach(function(d, i){
-            if(d.ranking.pos > 0) {
-                //var $item = $(liItem +''+ d.id);
-                var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
-                var itemTop = $item.position().top;
-                var shift = listTop +  acumHeight - itemTop;
-                var movingClass = (d.ranking.posChanged > 0) ? liMovingUpClass : ((d.ranking.posChanged < 0) ? liMovingDownClass : '');
+        var animateItem = function(index, acumHeight){
+            var d = _this.data[index];
+            var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
 
-                $item.addClass(movingClass);
-                if(i<=50)
-                    setTimeout(function(){
-                        console.log('Animating --> '+ i);
-                        $item.animate({"top": '+=' + shift+'px'}, duration, easing);
-                    }, 0);
-                else
-                    $item.css({ top: '+='+shift+'px' });
+            var itemTop = $item.position().top;
+            var shift = listTop +  acumHeight - itemTop;
+            var movingClass = (d.ranking.posChanged > 0) ? liMovingUpClass : ((d.ranking.posChanged < 0) ? liMovingDownClass : '');
 
-                acumHeight += $item.fullHeight();
+            var backgroundClass = (index % 2 === 0) ? liLightBackgroundClass : liDarkBackgroundClass;
+            $item.addClass(movingClass).removeClass(liDarkBackgroundClass).removeClass(liLightBackgroundClass).addClass(backgroundClass);
+
+            var rankingDiv = $item.find('.'+liRankingContainerClass);
+            rankingDiv.css('visibility', 'visible');
+            rankingDiv.find('.'+rankingPosClass).text(d.ranking.pos);
+            rankingDiv.find('.'+rankingPosMovedClass).css('color', getColor(d)).text(getPosMoved(d));
+
+            if((d.ranking.pos <= 30 && d.ranking.pos > 0) || (d.ranking.prevPos <= 30 && d.ranking.prevPos > 0)) {
+                setTimeout(function(){
+                    console.log('Animating --> '+ index + ' ***  ' + ($.now() - timestamp));
+                    $item.animate({"top": '+=' + shift+'px'}, {
+                        duration: duration,
+                        easing: easing,
+                        queue: false
+//                        complete: function(){
+//                            console.log('Animating --> '+ index + ' ***  ' + ($.now() - timestamp));
+//                        }
+                    });
+                }, 0);
             }
-        });
+            else {
+                $item.css({ top: '+='+shift+'px' });
+            }
+
+            acumHeight += $item.fullHeight();
+            if(++index < _this.data.length)
+                animateItem(index, acumHeight);
+        };
+        var timestamp = $.now();
+        console.log('start animating');
+        animateItem(0, 0);
+
+
+//        _this.data.forEach(function(d, i){
+//            if(d.ranking.pos > 0) {
+//                //var $item = $(liItem +''+ d.id);
+//                var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
+//                var itemTop = $item.position().top;
+//                var shift = listTop +  acumHeight - itemTop;
+//                var movingClass = (d.ranking.posChanged > 0) ? liMovingUpClass : ((d.ranking.posChanged < 0) ? liMovingDownClass : '');
+//
+//                $item.addClass(movingClass);
+//                if(i<=50)
+//                    setTimeout(function(){
+//                        console.log('Animating --> '+ i);
+//                        $item.animate({"top": '+=' + shift+'px'}, duration, easing);
+//                    }, 0);
+//                else
+//                    $item.css({ top: '+='+shift+'px' });
+//
+//                acumHeight += $item.fullHeight();
+//            }
+//        });
+
     };
 
 
@@ -452,16 +522,21 @@ var ContentList = (function(){
             unchangedDuration = 1000,
             unchangedEasing = 'linear',
             removeDelay = 3000;
-        console.log('Stop Animation');
-        stopAnimation();
-        console.log('Deselect items');
-        this.deselectAllListItems();
+
+        $('.'+liClass).stop(true, true)
+            .removeClass(liMovingUpClass).removeClass(liMovingDownClass).removeClass(liNotMovingClass)  //stop animation
+            .removeClass(selectedClass).removeClass(dimmedClass)                                        // deselect all classes
+        ;
+
+//        console.log('Stop Animation');
+//        stopAnimation();
+//        console.log('Deselect items');
+//        this.deselectAllListItems();
         console.log('Format titles');
         formatTitles(colorScale);
-        console.log('Show positions');
-        showRankingPositions();
-        console.log('Hide unranked');
-        hideUnrankedListItems();
+
+//        console.log('Hide unranked');
+//        hideUnrankedListItems();
 
         $ul.addClass(ulPaddingBottomclass);
 
@@ -472,8 +547,8 @@ var ContentList = (function(){
         };
 
         var updateUpdated = function(){
-            console.log('Update background');
-            updateLiBackground();
+//            console.log('Update background');
+//            updateLiBackground();
             console.log('Animate');
             animateResortEffect();
             return setTimeout(sort, resortDelay);
@@ -484,7 +559,7 @@ var ContentList = (function(){
         };
 
         var updateFunc = {};
-        updateFunc[RANKING_STATUS.new] = updateUpdated;// updateNew;
+        updateFunc[RANKING_STATUS.new] = updateNew; //updateUpdated;
         updateFunc[RANKING_STATUS.update] = updateUpdated;
         updateFunc[RANKING_STATUS.unchanged] = updateUnchanged;
         updateFunc[RANKING_STATUS.no_ranking] = _this.reset;

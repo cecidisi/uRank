@@ -34,19 +34,21 @@ var RankingModel = (function(){
                 d.ranking.pos = 0;
             }
             // shift computation
-            if(_this.previousRanking.length == 0){
-                d.ranking.posChanged = 1000;
-                d.ranking.lastIndex = i;
-            }
-            else{
-                var j = _.findIndex(_this.previousRanking, function(oldItem){ return oldItem.id == d.id; });
+            d.ranking.posChanged = d.ranking.prevPos > 0 ? d.ranking.prevPos - d.ranking.pos : 1000;
 
-                d.lastIndex = j;
-                if(_this.previousRanking[j].ranking.pos === 0)
-                    d.ranking.posChanged = 1000;
-                else
-                    d.ranking.posChanged = _this.previousRanking[j].ranking.pos - d.ranking.pos;
-            }
+//            if(_this.previousRanking.length == 0){
+//                d.ranking.posChanged = 1000;
+//                d.ranking.lastIndex = i;
+//            }
+//            else{
+//                var j = _.findIndex(_this.previousRanking, function(oldItem){ return oldItem.id == d.id; });
+//
+//                d.lastIndex = j;
+//                if(_this.previousRanking[j].ranking.pos === 0)
+//                    d.ranking.posChanged = 1000;
+//                else
+//                    d.ranking.posChanged = _this.previousRanking[j].ranking.pos - d.ranking.pos;
+//            }
         });
         return _data;
     };
@@ -61,8 +63,10 @@ var RankingModel = (function(){
         var cbWeight = (score == RANKING_MODE.overall.attr) ? opt.rWeight : 1;
         var tuWeight = (score == RANKING_MODE.overall.attr) ? (1- opt.rWeight) : 1;
 
-        var ranking = _this.data.slice();
-        ranking.forEach(function(d){ d.ranking = {}; });
+//        var ranking = _this.data.slice();
+//        ranking.forEach(function(d){ d.ranking = {}; });
+        var ranking = _this.ranking.slice();
+        ranking.forEach(function(d){ d.ranking.prevPos = d.ranking.pos; });
         if(opt.ranking.content)
             ranking = _this.cbRS.getCBScores({ data: ranking, keywords: opt.query, options: { rWeight: cbWeight } });
         if(opt.ranking.social)
@@ -119,12 +123,20 @@ var RankingModel = (function(){
 
         setData: function(data) {
             this.data = data.slice() || [];
-            return this;
-        },
-
-        addData: function(_data) {
-
-            this.data = $.merge(this.data, _data)
+            this.ranking = this.data.slice();
+            this.ranking.forEach(function(d){
+                d.ranking = {
+                    pos: 0,
+                    posChanged: 0,
+                    prevPos: 0,
+                    overallScore: 0,
+                    cbScore: 0,
+                    cbMaxScore: 0,
+                    cbKeywords: [],
+                    tuScore: 0,
+                    tuMisc: {}
+                };
+            });
             return this;
         },
 
