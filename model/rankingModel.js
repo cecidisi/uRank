@@ -11,7 +11,6 @@ var RankingModel = (function(){
         this.clear();
     }
 
-
     /*******************************************
     * Functions
     *******************************************/
@@ -35,20 +34,6 @@ var RankingModel = (function(){
             }
             // shift computation
             d.ranking.posChanged = d.ranking.prevPos > 0 ? d.ranking.prevPos - d.ranking.pos : 1000;
-
-//            if(_this.previousRanking.length == 0){
-//                d.ranking.posChanged = 1000;
-//                d.ranking.lastIndex = i;
-//            }
-//            else{
-//                var j = _.findIndex(_this.previousRanking, function(oldItem){ return oldItem.id == d.id; });
-//
-//                d.lastIndex = j;
-//                if(_this.previousRanking[j].ranking.pos === 0)
-//                    d.ranking.posChanged = 1000;
-//                else
-//                    d.ranking.posChanged = _this.previousRanking[j].ranking.pos - d.ranking.pos;
-//            }
         });
         return _data;
     };
@@ -63,8 +48,6 @@ var RankingModel = (function(){
         var cbWeight = (score == RANKING_MODE.overall.attr) ? opt.rWeight : 1;
         var tuWeight = (score == RANKING_MODE.overall.attr) ? (1- opt.rWeight) : 1;
 
-//        var ranking = _this.data.slice();
-//        ranking.forEach(function(d){ d.ranking = {}; });
         var ranking = _this.ranking.slice();
         ranking.forEach(function(d){ d.ranking.prevPos = d.ranking.pos; });
         if(opt.ranking.content)
@@ -99,10 +82,10 @@ var RankingModel = (function(){
 
     var updateStatus =  function() {
 
-        if(_this.ranking.length == 0)
+        if(_this.ranking.length === 0)
             return RANKING_STATUS.no_ranking;
 
-        if(_this.previousRanking.length == 0)
+        if(_this.status === RANKING_STATUS.no_ranking)
             return RANKING_STATUS.new;
 
         for(var i in _this.ranking) {
@@ -122,6 +105,7 @@ var RankingModel = (function(){
     RankingModel.prototype = {
 
         setData: function(data) {
+            this.status = RANKING_STATUS.no_ranking;
             this.data = data.slice() || [];
             this.ranking = this.data.slice();
             this.ranking.forEach(function(d){
@@ -149,16 +133,14 @@ var RankingModel = (function(){
                 ranking: { content: true, social: false }
             }, options);
             this.query = opt.query;
-            this.mode = options.mode;
-            this.rWeight = options.rWeight;
-            this.previousRanking = this.ranking.slice();
+            this.mode = opt.mode;
+            this.rWeight = opt.rWeight;
             this.ranking = this.query.length > 0 ? updateRanking(opt) : [];
             this.status = updateStatus();
             return this;
         },
 
         reset: function() {
-            this.previousRanking = [];
             this.ranking = [];
             this.status = updateStatus();
             this.query = [];
@@ -167,7 +149,6 @@ var RankingModel = (function(){
 
         clear: function() {
             this.ranking = [];
-            this.previousRanking = [];
             this.data = [];
             this.query = [];
             this.status = RANKING_STATUS.no_ranking;
@@ -181,6 +162,12 @@ var RankingModel = (function(){
 
         getStatus: function() {
             return this.status;
+        },
+
+        getRankingDict: function(){
+            var dict = {};
+            this.ranking.forEach(function(d){ dict[d.id] = d; });
+            return dict;
         },
 
         getOriginalData: function() {

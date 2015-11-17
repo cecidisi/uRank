@@ -803,7 +803,7 @@ a.urank-tagbox-clear-btn:before {
 /* <li> items */
 .urank-list-li-default {
     position: relative;
-    height: 30px;
+    height: 28px;
     vertical-align: top;
     cursor: pointer;
     border: 1px solid transparent;

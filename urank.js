@@ -208,20 +208,21 @@ var Urank = (function(){
             var status = _this.rankingModel.getStatus();
             console.log(status);
             console.log(_this.rankingModel);
-            setTimeout(function(){
+//            setTimeout(function(){
 //                console.log('Elapsed time = '+ ($.now() - tsmp));
                 console.log('Content List --> update');
-                contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
+//                contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
+                contentList.update(_this.rankingModel, { colorScale: _this.queryTermColorScale });
 //                console.log('Elapsed time = '+ ($.now() - tsmp));
-            }, 0);
-            setTimeout(function(){
+//            }, 0);
+//            setTimeout(function(){
                 console.log('Ranking --> update');
                 visCanvas.update(_this.rankingModel, {
                     colorScale: _this.queryTermColorScale,
                     listHeight: contentList.getListHeight(),
                     ranking: _this.loadOpt.model
                 });
-            });
+//            }, 0);
             docViewer.clear();
             tagCloud.clearEffects();
 
