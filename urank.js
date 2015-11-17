@@ -69,6 +69,7 @@ var Urank = (function(){
                 misc: {
                     hideScrollbar: false, 
                     hideUrankedItems : true,
+                    stopPropagation : true
                 }
             },
         },
@@ -76,10 +77,11 @@ var Urank = (function(){
             module: 'ranking',
             customOptions: {               // use only if contentList.custom = true and background in the ranking should match different light and dark background colors
                 lightBackgroundColor: '',
-                darkBackgroundColor: ''
+                darkBackgroundColor: '',
+                stopPropagation : true
             },
             misc: {
-                hideScrollbar: true
+                hideScrollbar: true,             
             }
         },
         tagBox: {

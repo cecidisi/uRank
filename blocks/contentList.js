@@ -85,16 +85,24 @@ var ContentList = (function(){
                 s.onItemClicked.call(this, id, event);
         };
         var onLiMouseEnter = function(event){
-            event.stopPropagation(); s.onItemMouseEnter.call(this, id);
+        	if(_this.opt.customOptions.misc.stopPropagation)
+            	event.stopPropagation();
+             s.onItemMouseEnter.call(this, id);
         };
         var onLiMouseLeave = function(event){
-            event.stopPropagation(); s.onItemMouseLeave.call(this, id);
+        	if(_this.opt.customOptions.misc.stopPropagation)
+            	event.stopPropagation();
+             s.onItemMouseLeave.call(this, id);
         };
         var onWatchiconClick = function(event){
-            event.stopPropagation(); s.onWatchiconClicked.call(this, event.data);
+        	if(_this.opt.customOptions.misc.stopPropagation)
+            	event.stopPropagation();
+			s.onWatchiconClicked.call(this, event.data);
         };
         var onFaviconClick = function(event){
-            event.stopPropagation(); s.onFaviconClicked.call(this, event.data, event);
+        	if(_this.opt.customOptions.misc.stopPropagation)
+            	event.stopPropagation();
+			s.onFaviconClicked.call(this, event.data, event);
         };
 
         $li.off({
