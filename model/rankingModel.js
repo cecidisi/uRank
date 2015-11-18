@@ -15,7 +15,7 @@ var RankingModel = (function(){
     /*******************************************
     * Functions
     *******************************************/
-    var assignRankingPositions = function(_data, _score){
+    var assignRankingPositionsAndShift = function(_data, _score){
         var currentScore = Number.MAX_VALUE;
         var currentPos = 1;
         var itemsInCurrentPos = 0;
@@ -32,32 +32,11 @@ var RankingModel = (function(){
             } else{
                 d.ranking.pos = 0;
             }
+            // shift computation
+            d.ranking.posChanged = d.ranking.prevPos > 0 ? d.ranking.prevPos - d.ranking.pos : 1000;
         });
         return _data;
     };
-
-
-    //  Calculates the number of positions changed by each recommendations, basing on the array "previousRanking"
-    //  If there doesn't exist a previous ranking or a recommendation wasn't previously ranked, then the value 1000 is assigned
-    var addPositionsChanged = function(_data){
-        _data.forEach(function(d, i){
-            if(_this.previousRanking.length == 0){
-                d.ranking.posChanged = 1000;
-                d.ranking.lastIndex = i;
-            }
-            else{
-                var j = _.findIndex(_this.previousRanking, function(oldItem){ return oldItem.id == d.id; });
-
-                d.lastIndex = j;
-                if(_this.previousRanking[j].ranking.pos === 0)
-                    d.ranking.posChanged = 1000;
-                else
-                    d.ranking.posChanged = _this.previousRanking[j].ranking.pos - d.ranking.pos;
-            }
-        });
-        return _data;
-    };
-
 
 
     /**
@@ -68,8 +47,8 @@ var RankingModel = (function(){
         var cbWeight = (score == RANKING_MODE.overall.attr) ? opt.rWeight : 1;
         var tuWeight = (score == RANKING_MODE.overall.attr) ? (1- opt.rWeight) : 1;
 
-        var ranking = _this.data.slice();
-        ranking.forEach(function(d){ d.ranking = {}; });
+        var ranking = _this.ranking.slice();
+        ranking.forEach(function(d){ d.ranking.prevPos = d.ranking.pos; });
         if(opt.ranking.content)
             ranking = _this.cbRS.getCBScores({ data: ranking, keywords: opt.query, options: { rWeight: cbWeight } });
         if(opt.ranking.social)
@@ -93,8 +72,7 @@ var RankingModel = (function(){
             if(d1.ranking[secScore] && d1.ranking[secScore] < d2.ranking[secScore]) return 1;
             return 0;
         });
-        ranking = assignRankingPositions(ranking, score);
-        ranking = addPositionsChanged(ranking);
+        ranking = assignRankingPositionsAndShift(ranking, score);
         return ranking;
     };
 
@@ -102,10 +80,10 @@ var RankingModel = (function(){
 
     var updateStatus =  function() {
 
-        if(_this.ranking.length == 0)
+        if(_this.ranking.length === 0)
             return RANKING_STATUS.no_ranking;
 
-        if(_this.previousRanking.length == 0)
+        if(_this.status === RANKING_STATUS.no_ranking)
             return RANKING_STATUS.new;
 
         for(var i in _this.ranking) {
@@ -125,13 +103,22 @@ var RankingModel = (function(){
     RankingModel.prototype = {
 
         setData: function(data) {
+            this.status = RANKING_STATUS.no_ranking;
             this.data = data.slice() || [];
-            return this;
-        },
-
-        addData: function(_data) {
-
-            this.data = $.merge(this.data, _data)
+            this.ranking = this.data.slice();
+            this.ranking.forEach(function(d){
+                d.ranking = {
+                    pos: 0,
+                    posChanged: 0,
+                    prevPos: 0,
+                    overallScore: 0,
+                    cbScore: 0,
+                    cbMaxScore: 0,
+                    cbKeywords: [],
+                    tuScore: 0,
+                    tuMisc: {}
+                };
+            });
             return this;
         },
 
@@ -146,7 +133,6 @@ var RankingModel = (function(){
             this.query = opt.query;
             this.mode = options.mode;
             this.rWeight = options.rWeight;
-            this.previousRanking = this.ranking.slice();
             this.ranking = this.query.length > 0 ? updateRanking(opt) : [];
             this.status = updateStatus();
             return this;
@@ -162,7 +148,6 @@ var RankingModel = (function(){
 
         clear: function() {
             this.ranking = [];
-            this.previousRanking = [];
             this.data = [];
             this.query = [];
             this.status = RANKING_STATUS.no_ranking;
@@ -188,6 +173,12 @@ var RankingModel = (function(){
 
         getQuery: function() {
             return this.query;
+        },
+
+        getRankingDict: function(){
+            var dict = {};
+            this.ranking.forEach(function(d){ dict[d.id] = d; });
+            return dict;
         },
 
         getMaxTagFrequency: function(){

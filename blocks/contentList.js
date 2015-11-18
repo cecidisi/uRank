@@ -259,28 +259,6 @@ var ContentList = (function(){
 
 
     var animateResortEffect = function() {
-/*        var duration = 2000;
-        var easing = 'swing';
-
-        var acumHeight = 0;
-        var listTop = $ul.position().top;
-
-        _this.data.forEach(function(d, i){
-            if(d.ranking.pos > 0) {
-                //var $item = $(liItem +''+ d.id);
-                var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
-                var itemTop = $item.position().top;
-                var shift = listTop +  acumHeight - itemTop;
-                var movingClass = (d.ranking.posChanged > 0) ? liMovingUpClass : ((d.ranking.posChanged < 0) ? liMovingDownClass : '');
-
-                $item.addClass(movingClass);
-                $item.animate({"top": '+=' + shift+'px'}, duration, easing);
-
-                acumHeight += $item.fullHeight();
-            }
-        });
-        */
-
         var duration = 2000;
         var easing = 'swing';
         var acumHeight = 0;
@@ -300,37 +278,21 @@ var ContentList = (function(){
             ((d.ranking.pos > 0 && d.ranking.pos < 30) || (d.ranking.prevPos > 0 && d.ranking.prevPos < 30)) ? listTop + (d.ranking.prevPos * itemHeight) - itemTop: 0
             options.push({
                 shift: shift,
-                movingClass: (d.ranking.posChanged > 0) ? liMovingUpClass : ((d.ranking.posChanged < 0) ? liMovingDownClass : ''),
-                pos: d.ranking.pos,
-                color: getColor(d),
-                posMoved: getPosMoved(d)
+                movingClass: (d.ranking.posChanged > 0) ? liMovingUpClass : ((d.ranking.posChanged < 0) ? liMovingDownClass : '')
             });
         });
 
         $('.'+liClass).each(function(i, item){
             var $item = $(item);
-
-            //            var rankingDiv = $item.find('.'+liRankingContainerClass);
-            //            rankingDiv.css('visibility', 'visible');
-            //            rankingDiv.find('.'+rankingPosClass).text(options[i].pos);
-            //            rankingDiv.find('.'+rankingPosMovedClass).css('color', options[i].color).text(options[i].posMoved);
-
             $item.addClass(options[i].movingClass);
             if(options[i].shift !== 0) {
-//                $item.animate({ top: '+=' + options[i].shift +'px' }, {duration: 0, complete: function(){
-//                    $(this).animate({ top: '0px' }, { duration: duration, easing: easing });
-//                    console.log($.now() - _this.timestamp);
-//                } });
-                console.log(options[i].shift);
                 $item.animate({ top: '+=' + options[i].shift +'px' }, 0).queue(function(){
                     $(this).animate({ top: '0px' }, { duration: duration, easing: easing });
                 }).queue(function(){
                     $(this).css('top', '');
-                    console.log($.now() - _this.timestamp);
                 }).dequeue();
             }
         });
-
     };
 
 
