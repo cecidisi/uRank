@@ -201,7 +201,7 @@ var Urank = (function(){
             var status = _this.rankingModel.getStatus();
             console.log(status);
             console.log(_this.rankingModel);
-            contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
+            contentList.update(_this.rankingModel, { colorScale: _this.queryTermColorScale });
             visCanvas.update(_this.rankingModel, {
                 colorScale: _this.queryTermColorScale,
                 listHeight: contentList.getListHeight(),

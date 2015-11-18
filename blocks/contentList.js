@@ -149,6 +149,21 @@ var ContentList = (function(){
     };
 
 
+    var getColor = function(d) {
+        if(d.ranking.posChanged > 0) return "rgba(0, 200, 0, 0.8)";
+        if(d.ranking.posChanged < 0) return "rgba(250, 0, 0, 0.8)";
+        return "rgba(128, 128, 128, 0.8)";
+    };
+
+    var getPosMoved = function(d) {
+        if(d.ranking.posChanged == 1000) return STR_JUST_RANKED;
+        if(d.ranking.posChanged > 0) return "+" + d.ranking.posChanged;
+        if(d.ranking.posChanged < 0) return d.ranking.posChanged;
+        return "=";
+    };
+
+
+
     var showRankingPositions = function() {
 
         var color = function(d) {
@@ -198,7 +213,7 @@ var ContentList = (function(){
     var stopAnimation = function(){
         $('.'+liClass).stop(true, true);
         removeMovingStyle();
-        if(_this.animationTimeout) clearTimeout(_this.animationTimeout);
+        //if(_this.animationTimeout) clearTimeout(_this.animationTimeout);
     };
 
 
@@ -222,25 +237,21 @@ var ContentList = (function(){
 
 
     var animateAccordionEffect = function() {
-        var timeLapse = 80;
+        var timeLapse = 50;
         var easing = 'swing';
 
-        _this.data.forEach(function(d, i){
+        $('.'+liClass).each(function(i, item){
+            var $item = $(item);
+            var shift = (i+1) * 5;
+            var duration = timeLapse * (i+1);
 
-            var $item = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]');
-            if(d.ranking.pos > 0) {
-                var shift = (i+1) * 5;
-                var duration = timeLapse * (i+1);
-
-                $item.animate({ top: shift }, 0, easing)
-                .queue(function(){
+            $item.addClass(liMovingUpClass);
+            if(i < 40) {
+                $item.animate({ top: shift }, 0, easing).queue(function(){
                     $(this).animate({ top: 0 }, duration, easing)
-                })
-                .queue(function(){
+                }).queue(function(){
                     $(this).css('top', '');
-                    bindEventHandlers($item, d.id, i);
-                })
-                .dequeue();
+                }).dequeue();
             }
         });
     };
@@ -248,7 +259,7 @@ var ContentList = (function(){
 
 
     var animateResortEffect = function() {
-        var duration = 2000;
+/*        var duration = 2000;
         var easing = 'swing';
 
         var acumHeight = 0;
@@ -268,6 +279,58 @@ var ContentList = (function(){
                 acumHeight += $item.fullHeight();
             }
         });
+        */
+
+        var duration = 2000;
+        var easing = 'swing';
+        var acumHeight = 0;
+        var listTop = $ul.position().top;
+        var itemHeight = $('.'+liClass+'['+urankIdAttr+'="' + _this.data[0].id + '"]').fullHeight();
+        var options = [];
+
+        _this.data.forEach(function(d, i){
+            var itemTop = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').position().top;
+            var shift = 0;
+            if((_this.status === RANKING_STATUS.new && d.ranking.pos > 0 && d.ranking.pos < 40) ||
+               (d.ranking.pos > 0 && d.ranking.pos < 30) ||
+               (d.ranking.prevPos > 0 && d.ranking.prevPos < 30)) {
+                shift = listTop + (d.ranking.prevPos * itemHeight) - itemTop;
+            }
+
+            ((d.ranking.pos > 0 && d.ranking.pos < 30) || (d.ranking.prevPos > 0 && d.ranking.prevPos < 30)) ? listTop + (d.ranking.prevPos * itemHeight) - itemTop: 0
+            options.push({
+                shift: shift,
+                movingClass: (d.ranking.posChanged > 0) ? liMovingUpClass : ((d.ranking.posChanged < 0) ? liMovingDownClass : ''),
+                pos: d.ranking.pos,
+                color: getColor(d),
+                posMoved: getPosMoved(d)
+            });
+        });
+
+        $('.'+liClass).each(function(i, item){
+            var $item = $(item);
+
+            //            var rankingDiv = $item.find('.'+liRankingContainerClass);
+            //            rankingDiv.css('visibility', 'visible');
+            //            rankingDiv.find('.'+rankingPosClass).text(options[i].pos);
+            //            rankingDiv.find('.'+rankingPosMovedClass).css('color', options[i].color).text(options[i].posMoved);
+
+            $item.addClass(options[i].movingClass);
+            if(options[i].shift !== 0) {
+//                $item.animate({ top: '+=' + options[i].shift +'px' }, {duration: 0, complete: function(){
+//                    $(this).animate({ top: '0px' }, { duration: duration, easing: easing });
+//                    console.log($.now() - _this.timestamp);
+//                } });
+                console.log(options[i].shift);
+                $item.animate({ top: '+=' + options[i].shift +'px' }, 0).queue(function(){
+                    $(this).animate({ top: '0px' }, { duration: duration, easing: easing });
+                }).queue(function(){
+                    $(this).css('top', '');
+                    console.log($.now() - _this.timestamp);
+                }).dequeue();
+            }
+        });
+
     };
 
 
@@ -286,8 +349,6 @@ var ContentList = (function(){
             }, startDelay);
         });
     };
-
-
 
 
 
@@ -322,7 +383,6 @@ var ContentList = (function(){
         else {
             $scrollable = $root;
         }
-
 
         $(c.liClass).each(function(i, li){
             var $li = $(li),
@@ -433,50 +493,38 @@ var ContentList = (function(){
     * @param {type} data : current ranking
     * @param {type} status Description
     */
-    var _update = function(data, status, selectedKeywords, colorScale) {
+    var _update = function(rankingModel, options) {
 
-        this.data = (status != RANKING_STATUS.no_ranking) ? data.slice() : this.data;
-        this.selectedKeywords = selectedKeywords.map(function(k){ return k.stem });
-        this.status = status;
+        this.status = rankingModel.getStatus();
+        this.data = (this.status != RANKING_STATUS.no_ranking) ? rankingModel.getRanking().slice() : this.data;
+        this.selectedKeywords = rankingModel.getQuery().map(function(k){ return k.stem });
 
-        var resortDelay = 1500,
-            unchangedDuration = 1000,
-            unchangedEasing = 'linear',
-            removeDelay = 3000;
+        _this.timestamp = $.now();
+        $('.'+liClass).stop(true, true)
+            .removeClass(liMovingUpClass).removeClass(liMovingDownClass).removeClass(liNotMovingClass)  //stop animation
+            .removeClass(selectedClass).removeClass(dimmedClass);                                        // deselect all classes
 
-        stopAnimation();
-        this.deselectAllListItems();
-        formatTitles(colorScale);
-        showRankingPositions();
-        hideUnrankedListItems();
+        //        console.log('Stop Animation');
+        //        stopAnimation();
+        //        console.log('Deselect items');
+        //        this.deselectAllListItems();
+        //        formatTitles(options.colorScale);
 
-        $ul.addClass(ulPaddingBottomclass);
-
-        var updateNew = function(){
-            updateLiBackground();
-            sort();
-            animateAccordionEffect();
-        };
-
-        var updateUpdated = function(){
-            updateLiBackground();
-            animateResortEffect();
-            return setTimeout(sort, resortDelay);
-        };
-
-        var updateUnchanged = function(){
-            animateUnchangedEffect(unchangedDuration, unchangedEasing);
-        };
-
+        //        console.log('Hide unranked');
+        //        hideUnrankedListItems();
         var updateFunc = {};
-        updateFunc[RANKING_STATUS.new] = updateNew;
-        updateFunc[RANKING_STATUS.update] = updateUpdated;
-        updateFunc[RANKING_STATUS.unchanged] = updateUnchanged;
+        updateFunc[RANKING_STATUS.new] = animateAccordionEffect; //animateResortEffect;
+        updateFunc[RANKING_STATUS.update] = animateResortEffect;
+        updateFunc[RANKING_STATUS.unchanged] = animateUnchangedEffect;
         updateFunc[RANKING_STATUS.no_ranking] = _this.reset;
+
+        updateLiBackground();
+        sort();
+        updateFunc[this.status]();
+        showRankingPositions();
+        setTimeout(removeMovingStyle, 3000);
         //  When animations are triggered too fast and they can't finished in order, older timeouts are canceled and only the last one is executed
         //  (list is resorted according to last ranking state)
-        this.animationTimeout = updateFunc[this.status]();
-        setTimeout(removeMovingStyle, removeDelay);
     };
 
 
