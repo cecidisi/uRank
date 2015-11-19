@@ -45,7 +45,7 @@ var Urank = (function(){
         model: {
         //    'content-based-only': true
             content: true,
-            social: false
+            social: true
         },
         tagCloud : {
             module: 'default'      // default || landscape

@@ -8,7 +8,8 @@
 
     var $message = $('.processing-message'),
         $numResultsMsg = $('.num-results-msg'),
-        $bookmarks = $('.control-panel .container .bookmark-area');
+        $bookmarks = $('.control-panel .container .bookmark-area'),
+        $bookmarkTitle = $('.control-panel h4');
 
     var testOptionsDef = {
         docViewer : {
@@ -21,6 +22,8 @@
             minRepetitionsProxKeywords: 5
         }
     };
+
+    var bookmarks = [];
 
 
     // Fill dataset select options and bind event handler
@@ -52,20 +55,25 @@
 
 
     var removeBookmark = function(document){
-        $('#bookmark-' + document.id).slideUp().remove();
         _this.data[document.index].bookmarked = false;
+        bookmarks.splice($('#bookmark-' + document.id).attr('b-index'), 1);
+        $('#bookmark-' + document.id).slideUp().remove();
+        $bookmarkTitle.html('Bookmarked Documents (' + bookmarks.length + ')');
+        console.log(bookmarks);
     };
 
     var addBookmark = function(document){
-        var $item = $('<div/>', { id: 'bookmark-' + document.id }).appendTo($bookmarks).addClass('item');
+        var $item = $('<div/>', { id: 'bookmark-' + document.id, 'b-index': bookmarks.length }).appendTo($bookmarks).addClass('item');
         $('<a/>', { class: 'doc-icon', href: '#' }).appendTo($item);
         $('<span/>').appendTo($item).html(document.title.substr(0, 35) + ' ...');
         $('<a/>', { class: 'remove-icon', href: '#'}).appendTo($item).on('click', function(event){
             removeBookmark(document);
             _this.urank.unbookmarkItem(document.id, document.index);
         });
-
         _this.data[document.index].bookmarked = true;
+        bookmarks.push(_this.data[document.index]);
+        $bookmarkTitle.html('Bookmarked Documents (' + bookmarks.length + ')');
+        console.log(bookmarks);
     };
 
 
@@ -173,7 +181,7 @@
         actionLogger.log(actionLogger.action.ipLogged, response);
     }, "jsonp");
 
-    actionLogger.getActionCount();
+    //actionLogger.getActionCount();
 
 })();
 
