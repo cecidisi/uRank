@@ -8,6 +8,7 @@ var TagBox = (function(){
         tagboxContainerClass = 'urank-tagbox-container',
         clearBtnClass = 'urank-tagbox-clear-btn',
         tagInBoxClass = 'urank-tagbox-tag',
+        tagControls = 'urank-tagbox-tag-controls',
         tagDeleteButtonClass = 'urank-tagbox-tag-delete-button',
         tagWeightsliderClass = 'urank-tagbox-tag-weight-slider',
         weightSliderRangeClass = 'urank-tagbox-tag-weight-slider-range',
@@ -170,9 +171,9 @@ var TagBox = (function(){
 
         this.selectedKeywords = [];
         this.destroy();
-        $root = $(s.root).addClass(tagboxClass);
+        $root = $(s.root).addClass(tagboxClass+' '+headerStyleClass);
 
-        var tagboxContainerClasses = (opt.misc.defaultBlockStyle) ? tagboxContainerClass +' '+ headerStyleClass : tagboxContainerClass;
+        var tagboxContainerClasses = tagboxContainerClass;
         $tagContainer = $('<div/>').appendTo($root).addClass(tagboxContainerClasses)
             .off(tagBoxChangeEvent, onTagboxChanged)
             .on(tagBoxChangeEvent, onTagboxChanged)
@@ -209,24 +210,25 @@ var TagBox = (function(){
     var _dropTag = function(tag){
         var $tag = $(tagIdPrefix + '' + tag.index);
         if ($tag.hasClass(s.droppableClass)) {
-
             // Append dragged tag to tag box
             $tagContainer.append($tag);
             // Change tag's class
             $tag.removeClass().addClass(tagInBoxClass);
             // Append "delete" button
-            $('<span></span>').appendTo($tag).addClass(tagDeleteButtonClass);
+            //$('<span></span>').appendTo($tag).addClass(tagDeleteButtonClass);
+            $('<div/>').insertBefore($tag.find('label')).addClass(tagControls);
+
             // Add new div to make it a slider
-            var weightSlider = $("<div class='" + tagWeightsliderClass + "'></div>").appendTo($tag).slider(this.sliderOptions);
+/*            var weightSlider = $("<div class='" + tagWeightsliderClass + "'></div>").appendTo($tag).slider(this.sliderOptions);
             weightSlider.find('.ui-slider-range').addClass(weightSliderRangeClass).css('background', tag.color);
-            weightSlider.find('.ui-slider-handle').addClass(weightSliderHandleClass);
+            weightSlider.find('.ui-slider-handle').addClass(weightSliderHandleClass);*/
             // Retrieve color in weightColorScale for the corresponding label
             var rgbSequence = hexToR(tag.color) + ', ' + hexToG(tag.color) + ', ' + hexToB(tag.color);
             // Set tag's style
             $tag.data('queryTermColor', tag.color).css({
-                background: 'rgba(' + rgbSequence + ', 1)',
-                color: '',
-                border: 'solid 2px ' + tag.color
+                background: 'rgba(' + rgbSequence + ', 0.8)'
+                //color: '',
+                //border: 'solid 2px ' + tag.color
             }).off().on({
                 mouseenter: s.onTagInBoxMouseEnter($tag.attr(tagPosAttr)),
                 mouseleave: s.onTagInBoxMouseLeave($tag.attr(tagPosAttr)),

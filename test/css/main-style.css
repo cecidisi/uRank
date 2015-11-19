@@ -200,8 +200,6 @@ header input[type="button"] {
 
 
 .main-panel {
-	display: inline-flex;
-    justify-content: space-between;
     width: 100%;
 	height: calc(100% - 40px);
     text-align: center;
@@ -230,7 +228,7 @@ header input[type="button"] {
 .left-panel {
     display: inline-block;
     float:  left;
-    width: 30%;
+    width: 35%;
     height: 100%;
 }
 
@@ -238,14 +236,14 @@ header input[type="button"] {
 .central-panel {
     display: inline-block;
     float:  left;
-    width: 40%;
+    width: 45%;
     /*    width: 31%;*/
     height: 100%;
 }
 
 /*    RIGHT */
 .right-panel {
-    float: right;
+    float: left;
     width: 20%;
     height: 100%;
 }

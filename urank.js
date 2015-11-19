@@ -20,7 +20,7 @@ var Urank = (function(){
         visCanvasRoot: '',
         docViewerRoot: '',
         onLoad: function(keywords){},
-        onChange: function(rankingData, selectedKeywords){},
+        onChange: function(rankingData, selectedFeatures){},
         onItemClicked: function(document){},
         onItemMouseEnter: function(document){},
         onItemMouseLeave: function(document){},
@@ -120,9 +120,7 @@ var Urank = (function(){
         onLoad: function(data, options) {
 
             _this.clear();
-        //    var o = $.extend(true, defaultLoadOptions, options || {});
             _this.loadOpt = $.extend(true, defaultLoadOptions, options || {});
-
             //  Set color scales (need to be reset every time a new dataset is loaded)
             _this.loadOpt.tagColorArray = _this.loadOpt.misc.tagColorArray.length >= TAG_CATEGORIES ? _this.loadOpt.misc.tagColorArray : tagColorRange;
             _this.loadOpt.queryTermColorArray = _this.loadOpt.misc.queryTermColorArray.length >= TAG_CATEGORIES ? _this.loadOpt.misc.queryTermColorArray : queryTermColorRange;
@@ -130,48 +128,36 @@ var Urank = (function(){
             _this.tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(_this.loadOpt.tagColorArray);
             _this.queryTermColorScale = null;
             _this.queryTermColorScale = d3.scale.ordinal().range(_this.loadOpt.queryTermColorArray);
-
+            _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
             //  Initialize keyword extractor
             //var keywordExtractor = new KeywordExtractor(_this.loadOpt.keywordExtractor);
             var scoreExtractor = new ScoreExtractor();
-
-            //  Clean documents and add them to the keyword extractor
-            _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
-
             _this.data.forEach(function(d, i){
                 d.index = i;
                 scoreExtractor.addItem(d);
-//                d.title = d.title.clean();
-//                d.description = d.description.clean();
-//                var document = (d.description) ? d.title +'. '+ d.description : d.title;
-//                keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id);
             });
 
             //  Extract collection and document keywords
-//            keywordExtractor.processCollection();
             scoreExtractor.process();
             //  Assign document keywords
             _this.data.forEach(function(d, i){
-//                d.keywords = keywordExtractor.listDocumentKeywords(i);
-                d.keywords = scoreExtractor.getNormalizedItemScores(i);
+                d.features = scoreExtractor.getNormalizedItemScores(i);
             });
 
             //  Assign collection keywords and set other necessary variables
-//            _this.keywords = keywordExtractor.getCollectionKeywords();
-//            _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
-            _this.keywords = scoreExtractor.getScoreSet().array;
-            _this.keywordsDict = scoreExtractor.getScoreSet().dict;
+            _this.features = scoreExtractor.getScoreSet().array;
+            _this.featuresDict = scoreExtractor.getScoreSet().dict;
             _this.rMode = RANKING_MODE.by_CB.attr;
             _this.rWeight = 0.5;
             _this.rankingModel.clear().setData(_this.data);
-            _this.selectedKeywords = [];
+            _this.selectedFeatures = [];
             _this.selectedId = undefined;
             RANKING_MODE.by_CB.active = _this.loadOpt.model.content;
             RANKING_MODE.by_TU.active = _this.loadOpt.model.social;
 
             _this.loadOpt.tagBox.ranking = _this.loadOpt.model;
             tagBox.build(_this.loadOpt.tagBox);
-            tagCloud.build(_this.keywords, _this.data, _this.tagColorScale, _this.loadOpt.tagCloud, _this.keywordsDict);
+            tagCloud.build(_this.features, _this.data, _this.tagColorScale, _this.loadOpt.tagCloud, _this.featuresDict);
             contentList.build(_this.data, _this.loadOpt.contentList, tagBox.getHeight());
             visCanvas.build(_this.data, contentList.getListHeight(), _this.loadOpt.visCanvas);
             docViewer.build(_this.loadOpt.docViewer);
@@ -187,54 +173,62 @@ var Urank = (function(){
                 'click': EVTHANDLER.onRootClick
             });
             //  Custom callback
-            s.onLoad.call(this, _this.keywords);
+            s.onLoad.call(this, _this.features);
         },
 
-        onChange: function(selectedKeywords) {
+        onChange: function(selectedFeatures) {
 
-            _this.selectedKeywords = selectedKeywords || _this.selectedKeywords;
+            _this.selectedFeatures = selectedFeatures || _this.selectedFeatures;
             _this.selectedId = undefined;
 
             var updateOpt = {
                 user: 'NN',
-                query: _this.selectedKeywords,
+                query: _this.selectedFeatures,
                 mode: _this.rMode,
                 rWeight: _this.rMode === RANKING_MODE.overall.attr ? _this.rWeight : 1,
                 ranking: _this.loadOpt.model
             };
 
             var tsmp = $.now();
-            var rankingData = _this.rankingModel.update(updateOpt).getRanking();
-            var status = _this.rankingModel.getStatus();
-            console.log(status);
+//            var rankingData = _this.rankingModel.update(updateOpt).getRanking();
+//            var status = _this.rankingModel.getStatus();
+//            console.log(status);
             console.log(_this.rankingModel);
 //            setTimeout(function(){
 //                console.log('Elapsed time = '+ ($.now() - tsmp));
                 console.log('Content List --> update');
-//                contentList.update(rankingData, status, _this.selectedKeywords, _this.queryTermColorScale);
-                contentList.update(_this.rankingModel, { colorScale: _this.queryTermColorScale });
+//                contentList.update(rankingData, status, _this.selectedFeatures, _this.queryTermColorScale);
+
+/*            contentList.update(_this.rankingModel, { colorScale: _this.queryTermColorScale });*/
 //                console.log('Elapsed time = '+ ($.now() - tsmp));
 //            }, 0);
 //            setTimeout(function(){
                 console.log('Ranking --> update');
-                visCanvas.update(_this.rankingModel, {
+/*                visCanvas.update(_this.rankingModel, {
                     colorScale: _this.queryTermColorScale,
                     listHeight: contentList.getListHeight(),
                     ranking: _this.loadOpt.model
-                });
+                });*/
+            visCanvas.update({
+                selectedFeatures: _this.selectedFeatures,
+                colorScale: _this.queryTermColorScale,
+                score: 'normScore'
+            });
+
+
 //            }, 0);
             docViewer.clear();
             tagCloud.clearEffects();
 
-            s.onChange.call(this, rankingData, _this.selectedKeywords, status);
+//            s.onChange.call(this, rankingData, _this.selectedFeatures, status);
         },
 
         onTagDropped: function(tagIndices) {
             var droppedTags = [];
             var dropMode = tagIndices.length > 1 ? 'multiple' : 'single';
             tagIndices.forEach(function(index){
-                var queryTermColor = _this.queryTermColorScale(_this.keywords[index].stem);
-                var tag = { index: index, stem: _this.keywords[index].stem, term: _this.keywords[index].term, color: queryTermColor, weight: 1 };
+                var queryTermColor = _this.queryTermColorScale(_this.features[index].stem);
+                var tag = { index: index, stem: _this.features[index].stem, term: _this.features[index].term, score: _this.features[index].score, color: queryTermColor, weight: 1 };
                 tagBox.dropTag(tag);
                 tagCloud.updateClonOfDroppedTag(index, queryTermColor);
                 droppedTags.push(tag);
@@ -245,33 +239,33 @@ var Urank = (function(){
         onTagDeleted: function(index) {
             tagBox.deleteTag(index);
             tagCloud.restoreTag(index);
-            var tag = { index: index, stem: _this.keywords[index].stem, term: _this.keywords[index].term };
+            var tag = { index: index, stem: _this.features[index].stem, term: _this.features[index].term };
             s.onTagDeleted.call(this, tag);
         },
 
         onTagWeightChanged: function(index, weight){
-//            var tag = { index: index, stem: _this.keywords[index].stem, term: _this.keywords[index].term, weight: weight };
+//            var tag = { index: index, stem: _this.features[index].stem, term: _this.features[index].term, weight: weight };
 //            s.onTagWeightChanged.call(this, tag);
         },
 
         onTagInCloudMouseEnter: function(index) {
             tagCloud.hoverTag(index);
-//            var tag = { index: index, term: _this.keywords[index].term }
+//            var tag = { index: index, term: _this.features[index].term }
 //            s.onTagInCloudMouseEnter.call(this, tag);
         },
 
         onTagInCloudMouseLeave: function(index) {
             tagCloud.unhoverTag(index);
-//            var tag = { index: index, term: _this.keywords[index].term }
+//            var tag = { index: index, term: _this.features[index].term }
 //            s.onTagInCloudMouseLeave.call(this, tag);
         },
 
         onTagInCloudClick: function(index) {
             //tagCloud.tagClicked(index);
-            var idsArray = _this.keywords[index].inDocument;
+            var idsArray = _this.features[index].inDocument;
             contentList.highlightListItems(idsArray);
             visCanvas.highlightItems(idsArray).resize(contentList.getListHeight());
-//            var tag = { index: index, term: _this.keywords[index].term }
+//            var tag = { index: index, term: _this.features[index].term }
 //            s.onTagInCloudClick.call(this, tag);
         },
 
@@ -305,7 +299,7 @@ var Urank = (function(){
             _this.selectedId = documentId;
             contentList.selectListItem(documentId, index);
             visCanvas.selectItem(documentId, index);
-            docViewer.showDocument(_this.rankingModel.getDocumentById(documentId), _this.selectedKeywords.map(function(k){return k.stem}), _this.queryTermColorScale);
+            docViewer.showDocument(_this.rankingModel.getDocumentById(documentId), _this.selectedFeatures.map(function(k){return k.stem}), _this.queryTermColorScale);
             tagCloud.clearEffects();
 //            s.onItemClicked.call(this, { index: index, id: documentId, title: _this.data[index].title });
         },
@@ -377,7 +371,7 @@ var Urank = (function(){
                 if(_this.rMode !== mode) {
                     _this.rMode = mode;
                     tagBox.updateRankingMode(_this.rMode);
-                    if(_this.selectedKeywords.length > 0)
+                    if(_this.selectedFeatures.length > 0)
                         EVTHANDLER.onChange();
                 }
             }, 0);
@@ -386,7 +380,7 @@ var Urank = (function(){
         onRankingWeightChange: function(rWeight) {
             setTimeout(function(){
                 _this.rWeight = rWeight;
-                if(_this.selectedKeywords.length > 0)
+                if(_this.selectedFeatures.length > 0)
                     EVTHANDLER.onChange();
             }, 0);
         },
@@ -398,12 +392,12 @@ var Urank = (function(){
             //tagCloud.reset();
             visCanvas.reset();
             docViewer.clear();
-            _this.selectedKeywords.forEach(function(kw, i){
+            _this.selectedFeatures.forEach(function(kw, i){
                 setTimeout(function(){
                     tagCloud.restoreTag(kw.index);
                 }, (i+1)*50);
             });
-            _this.selectedKeywords = [];
+            _this.selectedFeatures = [];
             s.onReset.call(this);
         },
 
@@ -492,8 +486,8 @@ var Urank = (function(){
         };
 
         this.data = [];
-        this.keywords = [];
-        this.keywordsDict = {};
+        this.features = [];
+        this.featuresDict = {};
         this.rankingModel = new RankingModel();
 
         contentList = new ContentList(options.contentList);
@@ -513,7 +507,7 @@ var Urank = (function(){
             return {
                 mode: _this.rMode,
                 status: _this.rankingModel.getStatus(),
-                selectedKeywords: _this.selectedKeywords.map(function(sk){ return { term: sk.term, weight: sk.weight } }),
+                selectedFeatures: _this.selectedFeatures.map(function(sk){ return { term: sk.term, weight: sk.weight } }),
                 ranking: _this.rankingModel.getRanking().map(function(d){
                     return {
                         id: d.id,
@@ -527,7 +521,7 @@ var Urank = (function(){
                 })
             };
         },
-        getSelectedKeywords: function(){ return _this.selectedKeywords }
+        getSelectedFeatures: function(){ return _this.selectedFeatures }
 
     };
 
@@ -543,7 +537,7 @@ var Urank = (function(){
         bookmarkItem: EVTHANDLER.bookmarkItem,
         unbookmarkItem: EVTHANDLER.unbookmarkItem,
         getCurrentState: MISC.getCurrentState,
-        getSelectedKeywords: MISC.getSelectedKeywords
+        getSelectedFeatures: MISC.getSelectedFeatures
     };
 
     return Urank;

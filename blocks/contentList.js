@@ -294,7 +294,7 @@ var ContentList = (function(){
             if(options[i].shift !== 0) {
                 $item.animate({ top: '+=' + options[i].shift +'px'}, {duration: 0, complete: function(){
                     $(this).animate({ top: '0px' }, { duration: duration, easing: easing });
-                    console.log($.now() - _this.timestamp);
+//                    console.log($.now() - _this.timestamp);
                 } });
             }
         });
@@ -422,14 +422,14 @@ var ContentList = (function(){
     var buildHeader = function(height){
 
         $('.'+headerClass).remove();
-        $header = $('<div/>').appendTo($root).addClass(headerClass).css('height', height);
-        var $headerPos = $('<div/>').appendTo($header).addClass(headerPosAndshiftClass + ' ' + headerStyleClass);
+        $header = $('<div/>').appendTo($root).addClass(headerClass+' '+headerStyleClass).css('height', height);
+        var $headerPos = $('<div/>').appendTo($header).addClass(headerPosAndshiftClass);
         $('<div/>', { text: 'Position'}).appendTo($headerPos).addClass('label-container');
 
-        var $headerShift = $('<div/>').appendTo($header).addClass(headerPosAndshiftClass + ' ' + headerStyleClass);
-        $('<div/>', { text: 'Shift'}).appendTo($headerShift).addClass('label-container');
+        var $headerShift = $('<div/>').appendTo($header).addClass(headerPosAndshiftClass);
+        $('<div/>', { text: 'Country'}).appendTo($headerShift).addClass('label-container');
 
-        var $headerTitle = $('<div/>').appendTo($header).addClass(headerTitleClass + ' ' + headerStyleClass);
+        var $headerTitle = $('<div/>').appendTo($header).addClass(headerTitleClass);
 //        $('<p/>', { text: 'Document Titles'}).appendTo($headerTitle);
         $('<p/>', { text: 'Universities'}).appendTo($headerTitle);
     };

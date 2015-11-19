@@ -6,9 +6,10 @@
     background: -o-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
     background: -moz-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
     background: -ms-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));
-    /* background: linear-gradient(to top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1)); */
-/*    box-shadow: inset .1em .1em .5em #ccc, inset -.1em -.1em .5em #ccc;*/
-    box-shadow: inset .1em .1em .2em #ccc, inset -.1em -.1em .2em #ccc;
+/*    box-shadow: inset .1em .1em .2em #ccc, inset -.1em -.1em .2em #ccc;*/
+    border: 1px solid #aaa;
+    box-shadow: 0px 1px 1px #aaa;
+    margin-bottom: 1px;
 }
 
 
@@ -585,9 +586,8 @@ div.urank-tagbox-ranking-weight-bar {
     overflow-x: hidden;
     overflow-y: auto;
     align-items: center;
-    width: calc(100% - 6px);
+    width: 100%;
     height: calc(100% - 25px);
-    padding: 0px 3px;
     list-style-type: none;
     text-align: left;
 }
@@ -640,23 +640,26 @@ a.urank-tagbox-clear-btn:before {
     cursor: default;
     display: inline-block;
     text-align: left;
-    min-width: 65px;
-    height: 23px;
-    margin: 16px 3px 0px 3px;
+    /* min-width: 65px; */
+    width: calc(20% - 6px);
+    height: calc(100% - 6px);
+    /* margin: 16px 3px 0px 3px; */
     padding: .2em;
     font-size: .9em;
     font-weight: 600;
     white-space: nowrap;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
+    /* -webkit-border-radius: 6px; */
+    /* border-radius: 6px; */
     -webkit-box-shadow: 0em 7px 6px -6px #333;
     box-shadow: 0em 7px 6px -6px #333;
-/*
-    color: #222;
-    text-shadow: 0px 1px 5px #eee, 0px -1px 5px #eee;
-*/
     color: #fff;
+    border: 1px solid #888;
+    border-right: none;
     text-shadow: 0px 1px 2px #555, 0px -1px 2px #555;
+}
+
+.urank-tagbox-tag:last-of-type {
+    border-right: 1px solid #888;
 }
 
 .urank-tagbox-tag:hover {
@@ -664,8 +667,18 @@ a.urank-tagbox-clear-btn:before {
 }
 
 
-.urank-tagbox-tag > text {
-    opacity: 0.5;
+.urank-tagbox-tag-controls {
+    height: 20px;
+    width: 100%;
+}
+
+.urank-tagbox-tag-controls .control {
+    display: none;
+}
+
+.urank-tagbox-tag-controls:hover .control {
+    display: inline-block;
+    transition: all .2s ease-in-out;
 }
 
 
@@ -741,6 +754,8 @@ a.urank-tagbox-clear-btn:before {
 
 .urank-list-header {
     width: 100%;
+    font-size: 1em;
+    font-weight: 600;
 }
 
 .urank-list-header-pos-and-shift, .urank-list-header-title {
@@ -750,8 +765,10 @@ a.urank-tagbox-clear-btn:before {
 }
 
 .urank-list-header-pos-and-shift {
-    width: 27px;
+    width: 30px;
+    border-right: 1px solid #888
 }
+
 
 .urank-list-header-pos-and-shift .label-container {
 
@@ -760,12 +777,12 @@ a.urank-tagbox-clear-btn:before {
     -ms-transform: rotate(-90deg);
     -o-transform: rotate(-90deg);
     transform: rotate(-90deg);
-    transform-origin: 145% 214% 0;
+    transform-origin: 132% 214% 0;
     color: #888;
 }
 
 .urank-list-header-title {
-    width: calc(100% - 54px);
+    width: calc(100% - 63px);
     height: calc(100% - 15px);
     padding-top: 15px;
 }
@@ -806,12 +823,17 @@ a.urank-tagbox-clear-btn:before {
     height: 28px;
     vertical-align: top;
     cursor: pointer;
-    border: 1px solid transparent;
+/*    border: 1px solid transparent;*/
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
     -webkit-transition: box-shadow 4s ease-in;
     -moz-transition: box-shadow 4s ease-in;
     -o-transition: box-shadow 4s ease-in;
     transition: box-shadow 4s ease-in;
 }
+
 
 
 /***************	<li> background style (the first 3 can be overwritteny)  **************/
@@ -866,7 +888,7 @@ a.urank-tagbox-clear-btn:before {
     display: inline-block;
     float: left;
     height: 100%;
-	min-width: 51px;
+	min-width: 60px;
     padding-left: 1px;
 }
 

@@ -53,7 +53,10 @@ window.ScoreExtractor = (function(){
             this.items.forEach(function(item, i){
                 _this.normalizedScores.push({});
                 scoreKeys.forEach(function(score){
-                    _this.normalizedScores[i][score] = item.scores[score] / _this.scoreSetDict[score].max;
+                    _this.normalizedScores[i][score] = {
+                        normScore: Math.roundTo(item.scores[score] / _this.scoreSetDict[score].max, 2),
+                        score: item.scores[score]
+                    }
                 });
             });
         },

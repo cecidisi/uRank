@@ -7,7 +7,6 @@ var RankingModel = (function(){
     function RankingModel() {
         _this = this;
         this.cbRS = new RSContent();
-        this.tuRS = new RSTagUser();
         this.clear();
     }
 
@@ -49,11 +48,11 @@ var RankingModel = (function(){
         var tuWeight = (score == RANKING_MODE.overall.attr) ? (1- opt.rWeight) : 1;
 
         var ranking = _this.ranking.slice();
+
         ranking.forEach(function(d){ d.ranking.prevPos = d.ranking.pos; });
         if(opt.ranking.content)
             ranking = _this.cbRS.getCBScores({ data: ranking, keywords: opt.query, options: { rWeight: cbWeight } });
-        if(opt.ranking.social)
-            ranking = _this.tuRS.getTagUserScores({ user: opt.user, keywords: opt.query, data: ranking, options: { rWeight: tuWeight } });
+
         ranking.forEach(function(d){
             d.ranking.overallScore = 0;
             if(opt.ranking.content)
@@ -197,6 +196,12 @@ var RankingModel = (function(){
         },
         getDocumentByIndex: function(index) {
             return this.status === RANKING_STATUS.no_ranking ? this.data[index] : this.ranking[index];
+        },
+        STATUS: {
+            no_ranking: 'no_ranking',
+            new: 'new',
+            update: 'update',
+            unchanged: 'unchanged'
         }
     };
 

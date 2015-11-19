@@ -56,7 +56,7 @@ function UrankLoader(callback, args) {
                     pathToUrank + 'model/keywordExtractor.js',
                     pathToUrank + 'model/scoreExtractor.js',
                     pathToUrank + 'model/RSContent.js',
-                    pathToUrank + 'model/RSTagUser.js',
+//                    pathToUrank + 'model/RSTagUser.js',
                     pathToUrank + 'model/rankingModel.js',
                     pathToUrank + 'blocks/contentList.js',
                     pathToUrank + 'blocks/docViewer.js',

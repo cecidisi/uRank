@@ -277,7 +277,7 @@ var TagCloudDefault = (function(){
             var $tag = $('<div/>', { id: 'urank-tag-' + i, 'tag-pos': i, stem: k.sore, term: k.score }).appendTo($tagContainer)
                 .addClass(tagClass + ' ' + activeClass/* + ' hint--info hint--left'*/)
                 .data({ 'originalColor': _this.colorScale(k.colorCategory) })
-                .html(k.term)
+                .html('<label>'+k.term+'</label>')
                 .hide()
                 .fadeIn((i+1)*20);
             // Pie chart section for document hint

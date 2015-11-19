@@ -42,57 +42,27 @@ var Ranking = (function(){
     }
 
     RANKING.Settings = {
-        getInitData: function(rankingModel, opt){
-            var a = [];
-            var rankingData = rankingModel.getRanking().slice();
-            var score = rankingModel.getMode();
-            color = opt.colorScale;
+        getInitData: function(options){
+            var a = _this.originalData.slice();
+            var score = options.score;
+            color = options.colorScale;
 
-            rankingData.forEach(function(d, i){
-   //             if(d.ranking.overallScore > 0) {
-                    // Tag information
-                    d.bars = [];
-                    var x0 = 0;
-                    if(score === RANKING_MODE.by_CB.attr || opt.ranking.content) {
-                        // keyword bars
-                        d.ranking.cbKeywords.forEach(function(k, i){
-                            d.bars.push({
-                                desc: k.stem,
-                                x0: x0,
-                                x1: x0 + k.weightedScore,
-                                color: color(k.stem)
-                            });
-                            x0 = d.bars[i].x1;
-                        });
-                        x0 = (score == window.RANKING_MODE.overall.attr) ? x0 :1;
-                    }
-                    if(score === RANKING_MODE.by_TU.attr || opt.ranking.social) {
-                        //x0 = (score !== window.RANKING_MODE.overall.attr || score == window.RANKING_MODE.by_TU) ? 1 : x0;
-                        d.bars.push({
-                            desc: 'TU',
-                            x0: x0,
-                            x1: x0 + d.ranking.tuScore,
-                            color: 'rgb(140, 140, 140)'
-                        });
-
-                        // Tag information
-                        d.tags = [];
-                        var tagsObj = d.ranking.tuMisc.tags;
-                        Object.keys(tagsObj).forEach(function(tk, j){
-                            d.tags.push(tagsObj[tk]);
-                            d.tags[j].term = tk;
-                            d.tags[j].color = color(d.tags[j].stem);
-                        });
-                    }
-                    a.push(d);
- //               }
+            a.forEach(function(d, i){
+                d.bars = [];
+                options.selectedFeatures.forEach(function(f, i){
+                    d.bars.push({
+                        desc: f.score,
+                        x0: i,
+                        x1: i + d.features[f.score].normScore,
+                        color: color(f.score)
+                    });
+                });
             });
             return a;
         },
-        getXUpperLimit: function(rMode, opt) {
-            if(rMode === window.RANKING_MODE.overall.attr) return 1;
-            if(opt.ranking.content && opt.ranking.social) return 2;
-            return 1;
+
+        getXUpperLimit: function(options) {
+            return options.selectedFeatures.length;
         }
     };
 
@@ -197,19 +167,20 @@ var Ranking = (function(){
         *	Redraw updated ranking and animate with transitions to depict changes
         *
         * ***************************************************************************************************************/
-        redrawUpdated: function(rankingModel, opt){
+        redrawUpdated: function(options){
 
             // Define input variables
-            data = RANKING.Settings.getInitData(rankingModel, opt);
+            data = RANKING.Settings.getInitData(options);
 //            width = $root.width();
-            RANKING.Render.updateCanvasDimensions(opt.listHeight);
+//            RANKING.Render.updateCanvasDimensions(opt.listHeight);
 
             // Redefine x & y scales' domain
             d3.select(s.root).select('.'+svgClass).attr("width", width)
             svg.attr("width", width);
 
 //            xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode(), opt);
-            xUpperLimit = rankingModel.getQuery().length;
+            //xUpperLimit = options.selectedFeatures.length;
+            xUpperLimit = 5;
 
             x.rangeRound( [0, width] )
              .domain([0, xUpperLimit]).copy();
@@ -218,19 +189,19 @@ var Ranking = (function(){
             y.rangeBands( [0, height]);
             y.domain(data.map(function(d){ return d.id })).copy();
 
+//            var transition = svg.transition().duration(750),
+//                delay = function(d, i) { return i * 50; };
+//
+//            transition.select('.'+xClass+'.'+axisClass).call(xAxis)
+//                .selectAll("g").delay(delay);
+//
+//            transition.select('.'+yClass+'.'+axisClass).call(yAxis)
+//                .selectAll("g").delay(delay);
 
-            var transition = svg.transition().duration(750),
-                delay = function(d, i) { return i * 50; };
-
-            transition.select('.'+xClass+'.'+axisClass).call(xAxis)
-                .selectAll("g").delay(delay);
-
-            transition.select('.'+yClass+'.'+axisClass).call(yAxis)
-                .selectAll("g").delay(delay);
+            svg.select('.'+xClass+'.'+axisClass).call(xAxis);
+            svg.select('.'+yClass+'.'+axisClass).call(yAxis);
 
             RANKING.Render.drawStackedBars();
-            if(opt.ranking.social)
-                RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery(), rankingModel.getMaxTagFrequency());
         },
 
 
@@ -245,7 +216,7 @@ var Ranking = (function(){
             svg.selectAll('.'+stackedbarClass).remove();
             //svg.selectAll('.'+stackedbarClass).data(data).enter();
             console.log(' Ranking --> start drawing');
-            setTimeout(function(){
+//            setTimeout(function(){
 
                 var stackedBars = svg.selectAll('.'+stackedbarClass)
                     .data(data).enter()
@@ -287,7 +258,7 @@ var Ranking = (function(){
                     .duration(800)
                     .attr({ "width": function(d) { return x(d.x1) - x(d.x0); } });
 
-            }, 800);
+//            }, 800);
         },
 
         /******************************************************************************************************************
@@ -558,13 +529,15 @@ var Ranking = (function(){
     }
 
 
-    var _update = function(rankingModel, opt){
-        var updateFunc = {};
-        updateFunc[RANKING_STATUS.new] = RANKING.Render.redrawUpdated;
-        updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
-        updateFunc[RANKING_STATUS.unchanged] = RANKING.Render.redrawUpdated;
-        updateFunc[RANKING_STATUS.no_ranking] = _this.reset;
-        updateFunc[rankingModel.getStatus()].call(this, rankingModel, opt);
+    var _update = function(options){
+        RANKING.Render.redrawUpdated(options);
+
+//        var updateFunc = {};
+//        updateFunc[RANKING_STATUS.new] = RANKING.Render.redrawUpdated;
+//        updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
+//        updateFunc[RANKING_STATUS.unchanged] = RANKING.Render.redrawUpdated;
+//        updateFunc[RANKING_STATUS.no_ranking] = _this.reset;
+//        updateFunc[rankingModel.getStatus()].call(this, rankingModel, opt);
         return this;
     };
 

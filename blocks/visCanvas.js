@@ -60,10 +60,15 @@ var VisCanvas = (function(){
     };
 
 
-    var _update = function(rankingModel, opt) {
+    var _update = function(options) {
         $scrollable.scrollTo('top');
-        this.vis.update(rankingModel, opt);
-        $visContainer.height(this.vis.getHeight());
+//        this.vis.update(rankingModel, opt);
+        this.vis.update($.extend({
+            selectedFeatures: [],
+            colorScale: [],
+            score: 'normScore'
+        },options));
+        //$visContainer.height(this.vis.getHeight());
         return this;
     };
 
