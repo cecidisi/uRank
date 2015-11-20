@@ -191,6 +191,13 @@ var TagBox = (function(){
     };
 
 
+    var _preSelectTags = function(tagIndices) {
+        s.onTagDropped.call(this, tagIndices);
+        $tagContainer.trigger(tagBoxChangeEvent);
+        return this;
+    }
+
+
     var _clear = function() {
         this.selectedKeywords = [];
         if($tagContainer) {
@@ -246,8 +253,9 @@ var TagBox = (function(){
     var _deleteTag = function(index) {
         var $tag = $(tagIdPrefix + '' + index),
             term = $tag.getText();
-        $tag.find('.'+tagDeleteButtonClass).remove();
-        $tag.find('.'+tagWeightsliderClass).remove();
+//        $tag.find('.'+tagDeleteButtonClass).remove();
+//        $tag.find('.'+tagWeightsliderClass).remove();
+        $tag.find('.'+tagControls).remove();
 
         var indexToDelete = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
         _this.selectedKeywords.splice(indexToDelete, 1);
@@ -313,6 +321,7 @@ var TagBox = (function(){
         build: _build,
         reset: _reset,
         clear: _clear,
+        preSelectTags: _preSelectTags,
         dropTag: _dropTag,
         deleteTag: _deleteTag,
         updateRankingMode: _updateRankingMode,

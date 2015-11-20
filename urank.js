@@ -172,6 +172,10 @@ var Urank = (function(){
                 'mousedown': EVTHANDLER.onRootMouseDown,
                 'click': EVTHANDLER.onRootClick
             });
+
+            var preselectedFeatures = _this.features.slice(0,5).map(function(f, i){ return i });
+            tagCloud.preselectTags(preselectedFeatures);
+            tagBox.preSelectTags(preselectedFeatures);
             //  Custom callback
             s.onLoad.call(this, _this.features);
         },
@@ -193,7 +197,7 @@ var Urank = (function(){
 //            var rankingData = _this.rankingModel.update(updateOpt).getRanking();
 //            var status = _this.rankingModel.getStatus();
 //            console.log(status);
-            console.log(_this.rankingModel);
+//            console.log(_this.rankingModel);
 //            setTimeout(function(){
 //                console.log('Elapsed time = '+ ($.now() - tsmp));
                 console.log('Content List --> update');
@@ -202,13 +206,7 @@ var Urank = (function(){
 /*            contentList.update(_this.rankingModel, { colorScale: _this.queryTermColorScale });*/
 //                console.log('Elapsed time = '+ ($.now() - tsmp));
 //            }, 0);
-//            setTimeout(function(){
-                console.log('Ranking --> update');
-/*                visCanvas.update(_this.rankingModel, {
-                    colorScale: _this.queryTermColorScale,
-                    listHeight: contentList.getListHeight(),
-                    ranking: _this.loadOpt.model
-                });*/
+
             visCanvas.update({
                 selectedFeatures: _this.selectedFeatures,
                 colorScale: _this.queryTermColorScale,

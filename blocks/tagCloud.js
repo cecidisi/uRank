@@ -121,6 +121,10 @@ var TagCloud = (function(){
         return this;
     };
 
+    var _preselectTags = function(tagIndices){
+        if(this.tagcloud) this.tagcloud.preselectTags(tagIndices);
+        return this;
+    };
 
     var _hoverTag = function(index) {
         if(this.tagcloud) this.tagcloud.hoverTag(index);
@@ -183,6 +187,7 @@ var TagCloud = (function(){
         build: _build,
         reset: _reset,
         restoreTag: _restoreTag,
+        preselectTags: _preselectTags,
         hoverTag: _hoverTag,
         tagClicked:_tagClicked,
         unhoverTag: _unhoverTag,

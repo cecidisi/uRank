@@ -79,11 +79,7 @@ var TagCloudDefault = (function(){
         clearTimeout(tooltipTimeOut);
         clearTimeout(fadeOutTimeOut);
 
-        $(this).data('dropped', false).data('addedTags', _this.addedTags)
-        //.removeClass(hoveredClass)
-        //.setTagStyle()
-        ;
-
+        $(this).data('dropped', false).data('addedTags', _this.addedTags);
         $(ui.helper).addClass('dragging');
 
         $draggedTag = $(this).clone()
@@ -304,6 +300,22 @@ var TagCloudDefault = (function(){
         return this.build(this.keywords, this.data, this.colorScale, this.opt);
     };
 
+    var _preselectTags = function(tagIndices){
+
+        tagIndices.forEach(function(index){
+            var $tag = $(tagIdPrefix+''+index);
+            var $clonTag = $tag.clone()
+                .attr('id', $tag.attr('id') + '-clon')
+                .data('originalColor', $(this).data('originalColor'))
+                .removeClass('ui-draggable').removeClass('ui-draggable-handle')
+                .setTagStyle().css('opacity', '')
+                .show();
+
+            $tag.after($clonTag);
+            $tag.detach().appendTo('body');
+        });
+    };
+
 
     var _hoverTag = function(index) {
         var $tag = $('.'+tagClass + '[tag-pos=' + index + ']');
@@ -444,7 +456,7 @@ var TagCloudDefault = (function(){
 
 
     var _updateClonOfDroppedTag = function(index, queryColor) {
-
+        console.log(index + ' --- ' + queryColor);
         var $tag = $(tagIdPrefix + '' + index + '-clon')
             .data('queryColor', queryColor)
             .removeClass(activeClass).removeClass(disabledClass).removeClass(selectedClass)
@@ -500,6 +512,7 @@ var TagCloudDefault = (function(){
     TagCloudDefault.prototype = {
         build: _build,
         reset: _reset,
+        preselectTags: _preselectTags,
         restoreTag: _restoreTag,
         hoverTag: _hoverTag,
         tagClicked:_tagClicked,
