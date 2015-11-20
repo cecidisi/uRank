@@ -206,7 +206,6 @@ var TagBox = (function(){
             $message.show();
             $resetBtn.hide();
         }
-        //$root.find('.'+tagboxContainerClass).empty().append('<p>' + STR_DROP_TAGS_HERE + '</p>');
         return this;
     };
 
