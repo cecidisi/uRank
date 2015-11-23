@@ -456,7 +456,6 @@ var TagCloudDefault = (function(){
 
 
     var _updateClonOfDroppedTag = function(index, queryColor) {
-        console.log(index + ' --- ' + queryColor);
         var $tag = $(tagIdPrefix + '' + index + '-clon')
             .data('queryColor', queryColor)
             .removeClass(activeClass).removeClass(disabledClass).removeClass(selectedClass)

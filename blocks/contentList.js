@@ -466,12 +466,15 @@ var ContentList = (function(){
     * @param {type} status Description
     */
 //    var _update = function(data, status, selectedKeywords, colorScale) {
-    var _update = function(rankingModel, options) {
+    var _update = function(options) {
 
-        this.status = rankingModel.getStatus();
-        this.data = (this.status != RANKING_STATUS.no_ranking) ? rankingModel.getRanking().slice() : this.data;
-        this.dataDict = rankingModel.getRankingDict();
-        this.selectedKeywords = rankingModel.getQuery().map(function(k){ return k.stem });
+//        this.status = rankingModel.getStatus();
+//        this.data = (this.status != RANKING_STATUS.no_ranking) ? rankingModel.getRanking().slice() : this.data;
+//        this.dataDict = rankingModel.getRankingDict();
+//        this.selectedKeywords = rankingModel.getQuery().map(function(k){ return k.stem });
+
+        this.data = options.data;
+        this.selectedKeywords = options.selectedFeatures;
 
         _this.timestamp = $.now();
         $('.'+liClass).stop(true, true)
@@ -486,15 +489,16 @@ var ContentList = (function(){
 
 //        console.log('Hide unranked');
 //        hideUnrankedListItems();
-        var updateFunc = {};
-        updateFunc[RANKING_STATUS.new] = animateAccordionEffect; //animateResortEffect;
-        updateFunc[RANKING_STATUS.update] = animateResortEffect;
-        updateFunc[RANKING_STATUS.unchanged] = animateUnchangedEffect;
-        updateFunc[RANKING_STATUS.no_ranking] = _this.reset;
+//        var updateFunc = {};
+//        updateFunc[RANKING_STATUS.new] = animateAccordionEffect;
+//        updateFunc[RANKING_STATUS.update] = animateResortEffect;
+//        updateFunc[RANKING_STATUS.unchanged] = animateUnchangedEffect;
+//        updateFunc[RANKING_STATUS.no_ranking] = _this.reset;
 
         updateLiBackground();
         sort();
-        updateFunc[this.status]();
+//        updateFunc[this.status]();
+        animateResortEffect();
         showRankingPositions();
         setTimeout(removeMovingStyle, 3000);
         //  When animations are triggered too fast and they can't finished in order, older timeouts are canceled and only the last one is executed

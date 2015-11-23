@@ -167,8 +167,9 @@ var TagBox = (function(){
 
 
 
-    var _build = function(opt) {
+    var _build = function(features, opt) {
 
+        this.features = features;
         this.selectedKeywords = [];
         this.destroy();
         $root = $(s.root).addClass(tagboxClass+' '+headerStyleClass);
@@ -222,7 +223,27 @@ var TagBox = (function(){
             $tag.removeClass().addClass(tagInBoxClass);
             // Append "delete" button
             //$('<span></span>').appendTo($tag).addClass(tagDeleteButtonClass);
-            $('<div/>').insertBefore($tag.find('label')).addClass(tagControls);
+            var $controls = $('<div/>').insertBefore($tag.find('label')).addClass(tagControls);
+            var $select = $('<div/>', { class: 'control' }).insertAfter($tag.find('label'));
+            $('<a/>', { class: 'select', href: '#' }).appendTo($select);
+
+            var $tagListContainer = $('<div/>', { class: 'tag-list-container' }).appendTo($tag);
+            $tagListContainer.css({ top: $tag.position().top - 10, left: $tag.position().left, width: $tag.width() });
+
+            _this.features.forEach(function(f, i){
+                $('<label/>', { pos: i, text: f.name }).appendTo($tagListContainer).click(function(evt){
+                    evt.stopPropagation();
+                    var tagIndex = $(this).attr('pos');
+                    console.log(tagIndex);
+                });
+            });
+
+
+            $select.click(function(evt){
+                evt.stopPropagation();
+                $(this).parent().find('.tag-list-container').toggleClass('active');
+            });
+
 
             // Add new div to make it a slider
 /*            var weightSlider = $("<div class='" + tagWeightsliderClass + "'></div>").appendTo($tag).slider(this.sliderOptions);
@@ -238,7 +259,10 @@ var TagBox = (function(){
             }).off().on({
                 mouseenter: s.onTagInBoxMouseEnter($tag.attr(tagPosAttr)),
                 mouseleave: s.onTagInBoxMouseLeave($tag.attr(tagPosAttr)),
-                click: s.onTagInBoxClick($tag.attr(tagPosAttr))
+                click: function(event){
+                    event.stopPropagation();
+                    s.onTagInBoxClick.call(this, $tag.attr(tagPosAttr))
+                }
             }).on('click', '.'+tagDeleteButtonClass, $tag.attr(tagPosAttr), function(event){  //  Event handler for delete button
                 event.stopPropagation(); s.onTagDeleted.call(this, event.data);
             });

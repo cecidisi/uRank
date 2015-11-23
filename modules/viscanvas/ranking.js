@@ -43,18 +43,17 @@ var Ranking = (function(){
 
     RANKING.Settings = {
         getInitData: function(options){
-            var a = _this.originalData.slice();
-            var score = options.score;
+            var a = options.data;
             color = options.colorScale;
 
             a.forEach(function(d, i){
                 d.bars = [];
                 options.selectedFeatures.forEach(function(f, i){
                     d.bars.push({
-                        desc: f.score,
+                        desc: f.name,
                         x0: i,
-                        x1: i + d.features[f.score].normScore,
-                        color: color(f.score)
+                        x1: i + d.selectedFeatures[f.name],
+                        color: color(f.name)
                     });
                 });
             });
@@ -94,72 +93,39 @@ var Ranking = (function(){
 
     RANKING.Render = {
 
-        /******************************************************************************************************************
-        *
-        *	Draw ranking at first instance
-        *
-        * ***************************************************************************************************************/
-        drawNew: function(rankingModel, opt){
-            _this.clear();
-            _this.isRankingDrawn = true;
-            // Define input variables
-            data = RANKING.Settings.getInitData(rankingModel, opt);
-            // Define canvas dimensions
-            margin = { top: 0, bottom: 0, left: 0, right: 0 };
-            width = $root.width() - margin.left - margin.right;
-            height = opt.listHeight;
-            xUpperLimit = RANKING.Settings.getXUpperLimit(rankingModel.getMode(), opt);
+        resort: function(options){
+            data = RANKING.Settings.getInitData(options);
 
-            // Define scales
-		    x = d3.scale.linear()
-                .domain([0, xUpperLimit])
-                .rangeRound( [0, width] );
+            x.domain([0, xUpperLimit]);
+            y.domain(data.map(function(d){ return d.id }));//.copy();
+//            svg.select('.'+yClass+'.'+axisClass).call(yAxis);
 
-            y = d3.scale.ordinal()
-                .domain(data.map(function(d){ return d.id; }))
-//                .rangeBands( [0, height], .02);
-                .rangeBands( [0, height]);
+//            svg.selectAll('.'+stackedbarClass).data([]).exit();
 
-            // Define axis' function
-            xAxis = d3.svg.axis()
-                .scale(x)
-                .orient("bottom")
-                .tickValues('');
+            var s = d3.select('urank-ranking-svg').select('g');
 
-            yAxis = d3.svg.axis()
-                .scale(y)
-                .orient("left")
-                .tickValues("");
+            s.select('.'+xClass+'.'+axisClass).duration(0).call(xAxis);
+            s.select('.'+yClass+'.'+axisClass).duration(0).call(yAxis);
+            var stackedBars = s.selectAll('.'+stackedbarClass).data()
 
-            // Draw chart main components
-            //// Add svg main components
-            svg = d3.select(s.root).append("svg")
-                .attr("class", svgClass)
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-                .append("g")
-                    .attr("width", width)
-                    .attr("height", height)
-                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            svg.append("g")
-                .attr("class", xClass + ' ' + axisClass)
-                .attr("transform", "translate(0," + (height) + ")")
-                .call(xAxis)
-                .selectAll('text');
+            var stackedBars = svg.selectAll('.'+stackedbarClass)
+                .data(data).enter();
+            console.log(stackedBars);
+            stackedBars[0].update
+//                .append("g")
+//                .attr("class", stackedbarClass)
+//                .attr("id", function(d){ return "urank-ranking-stackedbar-" + d.id; })
+                .attr( "transform", function(d) {return "translate(0, " + (d.ranking.prevPos * y.rangeBand()) + ")"; })
+//                .on('click', RANKING.Evt.itemClicked)
+//                .on('mouseover', RANKING.Evt.itemMouseEntered)
+//                .on('mouseout', RANKING.Evt.itemMouseLeft);
 
-            svg.append("g")
-                .attr("class", yClass +' '+axisClass)
-                .call(yAxis)
-                .selectAll("text");
+                var transition = svg.transition().duration(750);
 
-            //// Create drop shadow to use as filter when a bar is hovered or selected
-            RANKING.Render.createShadow();
-            RANKING.Render.createBarHoverGradient();
-            //// Add stacked bars
-            RANKING.Render.drawStackedBars();
-            if(opt.ranking.social)
-                RANKING.Render.drawTagsAndUsersHints(rankingModel.getQuery(), rankingModel.getMaxTagFrequency());
+            transition.selectAll('.'+stackedbarClass).attr('transform', function(d, i){'translate(0,' + y(d.i) + ')'});
+
+
         },
 
         /******************************************************************************************************************
@@ -167,7 +133,7 @@ var Ranking = (function(){
         *	Redraw updated ranking and animate with transitions to depict changes
         *
         * ***************************************************************************************************************/
-        redrawUpdated: function(options){
+        draw: function(options){
 
             // Define input variables
             data = RANKING.Settings.getInitData(options);
@@ -529,15 +495,19 @@ var Ranking = (function(){
 
 
     var _update = function(options){
-        RANKING.Render.redrawUpdated(options);
+        RANKING.Render.draw(options);
 
 //        var updateFunc = {};
-//        updateFunc[RANKING_STATUS.new] = RANKING.Render.redrawUpdated;
-//        updateFunc[RANKING_STATUS.update] = RANKING.Render.redrawUpdated;
-//        updateFunc[RANKING_STATUS.unchanged] = RANKING.Render.redrawUpdated;
+//        updateFunc[RANKING_STATUS.new] = RANKING.Render.draw;
+//        updateFunc[RANKING_STATUS.update] = RANKING.Render.draw;
+//        updateFunc[RANKING_STATUS.unchanged] = RANKING.Render.draw;
 //        updateFunc[RANKING_STATUS.no_ranking] = _this.reset;
 //        updateFunc[rankingModel.getStatus()].call(this, rankingModel, opt);
         return this;
+    };
+
+    var _resort = function(options){
+        RANKING.Render.resort(options);
     };
 
     var _clear = function(){
@@ -620,6 +590,7 @@ var Ranking = (function(){
         update: _update,
         clear: _clear,
         reset: _reset,
+        resort: _resort,
         selectItem: _selectItem,
         deselectAllItems : _deSelectAllItems,
         hoverItem: _hoverItem,

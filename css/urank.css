@@ -644,24 +644,18 @@ a.urank-tagbox-clear-btn:before {
     width: calc(20% - 6px);
     height: calc(100% - 6px);
     /* margin: 16px 3px 0px 3px; */
-    padding: .2em;
+    padding: 2px;
     font-size: .9em;
     font-weight: 600;
     white-space: nowrap;
-    /* -webkit-border-radius: 6px; */
-    /* border-radius: 6px; */
     -webkit-box-shadow: 0em 7px 6px -6px #333;
     box-shadow: 0em 7px 6px -6px #333;
     color: #fff;
     border: 1px solid #888;
-    border-right: none;
     text-shadow: 0px 1px 2px #555, 0px -1px 2px #555;
     cursor: pointer;
 }
 
-.urank-tagbox-tag:last-of-type {
-    border-right: 1px solid #888;
-}
 
 .urank-tagbox-tag:hover {
     box-shadow: 2px 2px 5px #555, -2px -2px 5px #555;
@@ -677,9 +671,71 @@ a.urank-tagbox-clear-btn:before {
     display: none;
 }
 
+
 .urank-tagbox-tag-controls:hover .control {
     display: inline-block;
+    width: 14px;
+    height: 100%;
     transition: all .2s ease-in-out;
+}
+
+.urank-tagbox-tag .control {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    float: right;
+}
+
+
+.urank-tagbox-tag .control a.select {
+    width: 100%;
+    height: 100%;
+}
+
+
+.urank-tagbox-tag .control a.select:before {
+    content: '';
+    position: relative;
+    background: transparent;
+    border: 8px solid transparent;
+    border-top-color: rgb(255,255,255);
+    margin-right: -8px;
+    margin-bottom: -8px;
+    margin-left: -8px;
+    z-index: 9999;
+    top: 11px;
+    height: 16px;
+}
+
+
+.urank-tagbox-tag .tag-list-container {
+    display: none;
+    position: absolute;
+    height: 250px;
+    background: rgba(250,250,250,.9);
+    box-shadow: 0px 2px 4px #888;
+    padding: 3px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.urank-tagbox-tag .tag-list-container.active {
+    display: inline-block;
+}
+
+.urank-tagbox-tag .tag-list-container label {
+    display: block;
+    color: #555;
+    font-weight: normal;
+    text-shadow: none;
+}
+
+.urank-tagbox-tag .tag-list-container label:hover {
+    color: dodgerblue;
+}
+
+.urank-tagbox-tag .tag-list-container label:selected {
+    font-weight: bold;
 }
 
 

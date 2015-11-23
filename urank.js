@@ -43,9 +43,8 @@ var Urank = (function(){
 
     var defaultLoadOptions = {
         model: {
-        //    'content-based-only': true
-            content: true,
-            social: false
+            scoreType: 'normScore',
+            preselectedFeatures: ['rating-30', 'rating-31', 'rating-16', 'rating-19', 'rating-11']
         },
         tagCloud : {
             module: 'default'      // default || landscape
@@ -131,32 +130,33 @@ var Urank = (function(){
             _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
             //  Initialize keyword extractor
             //var keywordExtractor = new KeywordExtractor(_this.loadOpt.keywordExtractor);
-            var scoreExtractor = new ScoreExtractor();
+            _this.scoreExtractor = new ScoreExtractor();
             _this.data.forEach(function(d, i){
                 d.index = i;
-                scoreExtractor.addItem(d);
+                _this.scoreExtractor.addItem(d);
             });
 
             //  Extract collection and document keywords
-            scoreExtractor.process();
+            _this.scoreExtractor.process();
             //  Assign document keywords
             _this.data.forEach(function(d, i){
-                d.features = scoreExtractor.getNormalizedItemScores(i);
+                d.features = _this.scoreExtractor.getNormalizedItemScores(i);
             });
 
             //  Assign collection keywords and set other necessary variables
-            _this.features = scoreExtractor.getScoreSet().array;
-            _this.featuresDict = scoreExtractor.getScoreSet().dict;
-            _this.rMode = RANKING_MODE.by_CB.attr;
+            _this.features = _this.scoreExtractor.getScoreSet().array;
+            _this.featuresDict = _this.scoreExtractor.getScoreSet().dict;
+            _this.scoreType = _this.loadOpt.model.scoreType;
             _this.rWeight = 0.5;
             _this.rankingModel.clear().setData(_this.data);
+            _this.rankingModel.setScoreType(_this.scoreType);
             _this.selectedFeatures = [];
             _this.selectedId = undefined;
-            RANKING_MODE.by_CB.active = _this.loadOpt.model.content;
-            RANKING_MODE.by_TU.active = _this.loadOpt.model.social;
+            console.log(_this.data[0]);
+            console.log(_this.features[0]);
 
             _this.loadOpt.tagBox.ranking = _this.loadOpt.model;
-            tagBox.build(_this.loadOpt.tagBox);
+            tagBox.build(_this.features, _this.loadOpt.tagBox);
             tagCloud.build(_this.features, _this.data, _this.tagColorScale, _this.loadOpt.tagCloud, _this.featuresDict);
             contentList.build(_this.data, _this.loadOpt.contentList, tagBox.getHeight());
             visCanvas.build(_this.data, contentList.getListHeight(), _this.loadOpt.visCanvas);
@@ -173,7 +173,7 @@ var Urank = (function(){
                 'click': EVTHANDLER.onRootClick
             });
 
-            var preselectedFeatures = _this.features.slice(0,5).map(function(f, i){ return i });
+            var preselectedFeatures = _this.loadOpt.model.preselectedFeatures.map(function(pf){ return _this.featuresDict[pf].index });
             tagCloud.preselectTags(preselectedFeatures);
             tagBox.preSelectTags(preselectedFeatures);
             //  Custom callback
@@ -185,22 +185,21 @@ var Urank = (function(){
             _this.selectedFeatures = selectedFeatures || _this.selectedFeatures;
             _this.selectedId = undefined;
 
-            var updateOpt = {
-                user: 'NN',
-                query: _this.selectedFeatures,
-                mode: _this.rMode,
-                rWeight: _this.rMode === RANKING_MODE.overall.attr ? _this.rWeight : 1,
-                ranking: _this.loadOpt.model
-            };
+//            var updateOpt = {
+//                user: 'NN',
+//                query: _this.selectedFeatures,
+//                mode: _this.rMode,
+//                rWeight: _this.rMode === RANKING_MODE.overall.attr ? _this.rWeight : 1,
+//                ranking: _this.loadOpt.model
+//            };
 
             var tsmp = $.now();
-//            var rankingData = _this.rankingModel.update(updateOpt).getRanking();
+            _this.rankedData = _this.rankingModel.selectFeatures(_this.selectedFeatures.map(function(f){ return f.name; }));
 //            var status = _this.rankingModel.getStatus();
 //            console.log(status);
 //            console.log(_this.rankingModel);
 //            setTimeout(function(){
 //                console.log('Elapsed time = '+ ($.now() - tsmp));
-                console.log('Content List --> update');
 //                contentList.update(rankingData, status, _this.selectedFeatures, _this.queryTermColorScale);
 
 /*            contentList.update(_this.rankingModel, { colorScale: _this.queryTermColorScale });*/
@@ -208,11 +207,10 @@ var Urank = (function(){
 //            }, 0);
 
             visCanvas.update({
+                data: _this.rankedData,
                 selectedFeatures: _this.selectedFeatures,
-                colorScale: _this.queryTermColorScale,
-                score: 'normScore'
+                colorScale: _this.queryTermColorScale
             });
-
 
 //            }, 0);
             docViewer.clear();
@@ -221,12 +219,36 @@ var Urank = (function(){
 //            s.onChange.call(this, rankingData, _this.selectedFeatures, status);
         },
 
+        onTagInBoxClick: function(index) {
+            var feature = _this.features[index].name;
+            _this.rankedData = _this.rankingModel.sortByFeature(feature);
+            contentList.update({ data: _this.rankedData, selectedFeatures: _this.selectedFeatures });
+            visCanvas.update({
+                data: _this.rankedData,
+                selectedFeatures: _this.selectedFeatures,
+                colorScale: _this.queryTermColorScale
+            });
+
+            s.onTagInBoxClick.call(this, index);
+        },
+
+
+        onFeatureTagChanged: function(tagIndex){
+            var feature = _this.features[tagIndex];
+
+
+
+        },
+
+
+
+
         onTagDropped: function(tagIndices) {
             var droppedTags = [];
             var dropMode = tagIndices.length > 1 ? 'multiple' : 'single';
             tagIndices.forEach(function(index){
                 var queryTermColor = _this.queryTermColorScale(_this.features[index].stem);
-                var tag = { index: index, stem: _this.features[index].stem, term: _this.features[index].term, score: _this.features[index].score, color: queryTermColor, weight: 1 };
+                var tag = { index: index, stem: _this.features[index].stem, term: _this.features[index].term, name: _this.features[index].name, color: queryTermColor, weight: 1 };
                 tagBox.dropTag(tag);
                 tagCloud.updateClonOfDroppedTag(index, queryTermColor);
                 droppedTags.push(tag);
@@ -285,11 +307,6 @@ var Urank = (function(){
         onTagInBoxMouseLeave: function(index) {
             // TODO
             s.onTagInBoxMouseLeave.call(this, index);
-        },
-
-        onTagInBoxClick: function(index) {
-            // TODO
-            s.onTagInBoxClick.call(this, index);
         },
 
         onItemClicked : function(documentId, index) {
@@ -484,10 +501,11 @@ var Urank = (function(){
         };
 
         this.data = [];
+        this.rankedData = [];
         this.features = [];
         this.featuresDict = {};
         this.rankingModel = new RankingModel();
-
+        this.scoreExtractor = new ScoreExtractor();
         contentList = new ContentList(options.contentList);
         tagCloud = new TagCloud(options.tagCloud);
         tagBox = new TagBox(options.tagBox);

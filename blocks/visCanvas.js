@@ -64,9 +64,9 @@ var VisCanvas = (function(){
         $scrollable.scrollTo('top');
 //        this.vis.update(rankingModel, opt);
         this.vis.update($.extend({
+            data: [],
             selectedFeatures: [],
-            colorScale: [],
-            score: 'normScore'
+            colorScale: []
         },options));
         //$visContainer.height(this.vis.getHeight());
         return this;
@@ -86,6 +86,11 @@ var VisCanvas = (function(){
     var _reset = function() {
         if(this.vis) this.vis.reset();
         $visContainer.height(this.height);
+        return this;
+    };
+
+    var _resort = function(options){
+        if(this.vis) this.vis.resort(options);
         return this;
     };
 
@@ -139,6 +144,7 @@ var VisCanvas = (function(){
         clear: _clear,
         reset: _reset,
         resize: _resize,
+        resort: _resort,
         selectItem: _selectItem,
         deselectAllItems: _deselectAllItems,
         hoverItem: _hoverItem,

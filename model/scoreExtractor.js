@@ -28,9 +28,9 @@ window.ScoreExtractor = (function(){
                     d.scores.forEach(function(s){});
                 }
                 else {
-                    Object.keys(d.scores).forEach(function(score){
+                    Object.keys(d.scores).forEach(function(score, i){
                         if(!_this.scoreSetDict[score])
-                            _this.scoreSetDict[score] = { repeated: 0, max: 0 };
+                            _this.scoreSetDict[score] = { index: i, repeated: 0, max: 0 };
                         _this.scoreSetDict[score].repeated++;
                         _this.scoreSetDict[score].max = d.scores[score] > _this.scoreSetDict[score].max ? d.scores[score]: _this.scoreSetDict[score].max;
                     });
@@ -39,7 +39,7 @@ window.ScoreExtractor = (function(){
 
             Object.keys(_this.scoreSetDict).forEach(function(score){
                 _this.scoreSet.push({
-                    score: score,
+                    name: score,
                     stem: score,
                     term: score,
                     repeated: _this.scoreSetDict[score].repeated,
