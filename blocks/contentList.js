@@ -52,6 +52,7 @@ var ContentList = (function(){
         originalIndex = 'original-index';
     // Helper
     var $root = $(''), $header = $(''), $listContainer = $(''), $scrollable = $(''), $ul = $('');
+    var pathToFlagFolder = '../media/flags/';
 
     var onScroll = function(event){
         event.stopPropagation();
@@ -177,13 +178,13 @@ var ContentList = (function(){
         };
 
         _this.data.forEach(function(d, i){
-            if(d.ranking.overallScore > 0){
+//            if(d.ranking.overallScore > 0){
                 //var rankingDiv = $(liItem + '' + d.id).find('.'+liRankingContainerClass);
                 var rankingDiv = $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').find('.'+liRankingContainerClass);
-                rankingDiv.css('visibility', 'visible');
+//                rankingDiv.css('visibility', 'visible');
                 rankingDiv.find('.'+rankingPosClass).text(d.ranking.pos);
-                rankingDiv.find('.'+rankingPosMovedClass).css('color', color(d)).text(posMoved(d));
-            }
+//                rankingDiv.find('.'+rankingPosMovedClass).css('color', color(d)).text(posMoved(d));
+//            }
         });
     };
 
@@ -394,9 +395,14 @@ var ContentList = (function(){
             // li element
             var $li = $('<li></li>', { 'urank-id': d.id, 'original-index': i }).appendTo($ul).addClass(liClass +' '+ liClassDefault);
             // ranking section
-            var $rankingDiv = $("<div></div>").appendTo($li).addClass(liRankingContainerClass).css('visibility', 'hidden');
-            $("<div></div>").appendTo($rankingDiv).addClass(rankingPosClass);
-            $("<div></div>").appendTo($rankingDiv).addClass(rankingPosMovedClass);
+            var $rankingDiv = $("<div></div>").appendTo($li).addClass(liRankingContainerClass);//.css('visibility', 'hidden');
+            $('<div/>', { html: i+1 }).appendTo($rankingDiv).addClass(rankingPosClass);
+//            $('<div/>').appendTo($rankingDiv).addClass(rankingPosMovedClass);
+
+            var flagPath = (d.facets && d.facets.Country_short) ? (pathToFlagFolder + '' + d.facets.Country_short.toLowerCase() + '.png') : '';
+            var flagTitle = (d.facets && d.facets.Country_short) ? d.facets.Country_short : (d.facets && d.facets.Country_long ? d.facets.Country_long : '');
+            $('<span/>', { title: flagTitle }).appendTo($rankingDiv).addClass('urank-list-item-flag').css('backgroundImage', 'url('+flagPath+')');
+
             // title section
             var $titleDiv = $("<div></div>").appendTo($li).addClass(liTitleContainerClass);
             $('<h3></h3>', { id: 'urank-list-li-title-' + i, class: liTitleClass +' '+ liTitleClassDefault, html: d.title/*, title: d.title + '\n' + d.description*/ }).appendTo($titleDiv);

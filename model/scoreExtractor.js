@@ -18,21 +18,21 @@ window.ScoreExtractor = (function(){
             return this;
         },
 
-        process: function(){
+        process: function(featureField){
             // extarct score set
             this.scoreSet = [];
             this.scoreSetDict = {};
 
             this.items.forEach(function(d, i){
                 if(Array.isArray(d.scores)) {
-                    d.scores.forEach(function(s){});
+                    d[featureField].forEach(function(s){});
                 }
                 else {
-                    Object.keys(d.scores).forEach(function(score, i){
-                        if(!_this.scoreSetDict[score])
-                            _this.scoreSetDict[score] = { index: i, repeated: 0, max: 0 };
-                        _this.scoreSetDict[score].repeated++;
-                        _this.scoreSetDict[score].max = d.scores[score] > _this.scoreSetDict[score].max ? d.scores[score]: _this.scoreSetDict[score].max;
+                    Object.keys(d[featureField]).forEach(function(feature, i){
+                        if(!_this.scoreSetDict[feature])
+                            _this.scoreSetDict[feature] = { index: i, repeated: 0, max: 0 };
+                        _this.scoreSetDict[feature].repeated++;
+                        _this.scoreSetDict[feature].max = d.scores[feature] > _this.scoreSetDict[feature].max ? d.scores[feature]: _this.scoreSetDict[feature].max;
                     });
                 }
             });
@@ -42,6 +42,7 @@ window.ScoreExtractor = (function(){
                     name: score,
                     stem: score,
                     term: score,
+                    index: _this.scoreSetDict[score].index,
                     repeated: _this.scoreSetDict[score].repeated,
                     max: _this.scoreSetDict[score].max
                 });

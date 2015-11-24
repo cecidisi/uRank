@@ -43,8 +43,9 @@ var Urank = (function(){
 
     var defaultLoadOptions = {
         model: {
-            scoreType: 'normScore',
-            preselectedFeatures: ['rating-30', 'rating-31', 'rating-16', 'rating-19', 'rating-11']
+            normalize: true,
+            featureField: 'ranks',
+            defaultFeatures: []
         },
         tagCloud : {
             module: 'default'      // default || landscape
@@ -127,31 +128,37 @@ var Urank = (function(){
             _this.tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(_this.loadOpt.tagColorArray);
             _this.queryTermColorScale = null;
             _this.queryTermColorScale = d3.scale.ordinal().range(_this.loadOpt.queryTermColorArray);
+
+
             _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
             //  Initialize keyword extractor
             //var keywordExtractor = new KeywordExtractor(_this.loadOpt.keywordExtractor);
+
+            //  Assign collection keywords and set other necessary variables
+
+            _this.scoreType = _this.loadOpt.model.normalize ? 'normScore' : 'score';
+            _this.featureField = _this.loadOpt.model.featureField;
+            _this.rWeight = 0.5;
+
+            // Feature extraction
             _this.scoreExtractor = new ScoreExtractor();
             _this.data.forEach(function(d, i){
                 d.index = i;
                 _this.scoreExtractor.addItem(d);
             });
-
-            //  Extract collection and document keywords
-            _this.scoreExtractor.process();
+            _this.scoreExtractor.process(_this.featureField);
             //  Assign document keywords
             _this.data.forEach(function(d, i){
                 d.features = _this.scoreExtractor.getNormalizedItemScores(i);
             });
-
-            //  Assign collection keywords and set other necessary variables
             _this.features = _this.scoreExtractor.getScoreSet().array;
             _this.featuresDict = _this.scoreExtractor.getScoreSet().dict;
-            _this.scoreType = _this.loadOpt.model.scoreType;
-            _this.rWeight = 0.5;
-            _this.rankingModel.clear().setData(_this.data);
-            _this.rankingModel.setScoreType(_this.scoreType);
+
             _this.selectedFeatures = [];
             _this.selectedId = undefined;
+            _this.rankingModel.clear().setData(_this.data);
+            _this.rankingModel.setScoreType(_this.scoreType);
+
             console.log(_this.data[0]);
             console.log(_this.features[0]);
 
@@ -173,9 +180,9 @@ var Urank = (function(){
                 'click': EVTHANDLER.onRootClick
             });
 
-            var preselectedFeatures = _this.loadOpt.model.preselectedFeatures.map(function(pf){ return _this.featuresDict[pf].index });
+            var preselectedFeatures = _this.loadOpt.model.defaultFeatures.map(function(pf){ return _this.featuresDict[pf].index });
             tagCloud.preselectTags(preselectedFeatures);
-            tagBox.preSelectTags(preselectedFeatures);
+            tagBox.preselectTags(preselectedFeatures);
             //  Custom callback
             s.onLoad.call(this, _this.features);
         },
@@ -213,6 +220,7 @@ var Urank = (function(){
             });
 
 //            }, 0);
+            tagBox.updateSelectableFeatures();
             docViewer.clear();
             tagCloud.clearEffects();
 
@@ -233,14 +241,16 @@ var Urank = (function(){
         },
 
 
-        onFeatureTagChanged: function(tagIndex){
-            var feature = _this.features[tagIndex];
+        onFeatureTagChanged: function(oldTagIndex, newTagIndex){
+            var queryTermColor = _this.queryTermColorScale(_this.features[newTagIndex].stem);
+            var tag = $.extend(true, { color: queryTermColor, weight: 1 }, _this.features[newTagIndex]);
 
-
-
+            tagCloud.preselectTags(newTagIndex);
+            tagBox.dropTag(tag, oldTagIndex);
+            tagCloud.updateClonOfDroppedTag(newTagIndex, queryTermColor);
+            tagBox.removeTag(oldTagIndex);
+            tagCloud.restoreTag(oldTagIndex);
         },
-
-
 
 
         onTagDropped: function(tagIndices) {
@@ -248,7 +258,8 @@ var Urank = (function(){
             var dropMode = tagIndices.length > 1 ? 'multiple' : 'single';
             tagIndices.forEach(function(index){
                 var queryTermColor = _this.queryTermColorScale(_this.features[index].stem);
-                var tag = { index: index, stem: _this.features[index].stem, term: _this.features[index].term, name: _this.features[index].name, color: queryTermColor, weight: 1 };
+                var tag = $.extend(true, { color: queryTermColor, weight: 1 }, _this.features[index]);
+//                var tag = { index: index, stem: _this.features[index].stem, term: _this.features[index].term, name: _this.features[index].name, color: queryTermColor, weight: 1 };
                 tagBox.dropTag(tag);
                 tagCloud.updateClonOfDroppedTag(index, queryTermColor);
                 droppedTags.push(tag);
@@ -257,7 +268,7 @@ var Urank = (function(){
         },
 
         onTagDeleted: function(index) {
-            tagBox.deleteTag(index);
+            tagBox.removeTag(index);
             tagCloud.restoreTag(index);
             var tag = { index: index, stem: _this.features[index].stem, term: _this.features[index].term };
             s.onTagDeleted.call(this, tag);
@@ -483,6 +494,7 @@ var Urank = (function(){
                 onTagInBoxMouseEnter: EVTHANDLER.onTagInBoxMouseEnter,
                 onTagInBoxMouseLeave: EVTHANDLER.onTagInBoxMouseLeave,
                 onTagInBoxClick: EVTHANDLER.onTagInBoxClick,
+                onFeatureTagChanged: EVTHANDLER.onFeatureTagChanged,
                 onReset: EVTHANDLER.onReset
             },
 

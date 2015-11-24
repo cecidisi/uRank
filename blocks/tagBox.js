@@ -9,6 +9,8 @@ var TagBox = (function(){
         clearBtnClass = 'urank-tagbox-clear-btn',
         tagInBoxClass = 'urank-tagbox-tag',
         tagControls = 'urank-tagbox-tag-controls',
+        tagNameClass = 'urank-tag-name',
+        listContainerClass = 'urank-tag-list-container',
         tagDeleteButtonClass = 'urank-tagbox-tag-delete-button',
         tagWeightsliderClass = 'urank-tagbox-tag-weight-slider',
         weightSliderRangeClass = 'urank-tagbox-tag-weight-slider-range',
@@ -31,7 +33,7 @@ var TagBox = (function(){
     var $root, $tagContainer, $rankingModeHeader, $splitRankings, $sumRankings, $contentHeader, $socialHeader, $resetBtn, $message;
 
     var onTagboxChanged = function(){
-        if(_this.selectedKeywords.length == 0) {
+        if(_this.selectedFeatures.length == 0) {
             setTimeout(function(){
                 $message.show();
                 $resetBtn.hide();
@@ -42,7 +44,7 @@ var TagBox = (function(){
             $message.hide();
         }
         setTimeout(function(){
-            s.onChange.call(this, _this.selectedKeywords)   // Bind onChange event handler for custom event
+            s.onChange.call(this, _this.selectedFeatures)   // Bind onChange event handler for custom event
         }, 0);
     };
 
@@ -52,7 +54,7 @@ var TagBox = (function(){
         s = $.extend({
             root: '',
             droppableClass: 'urank-tagcloud-tag',
-            onChange: function(selectedKeywords){},
+            onChange: function(selectedFeatures){},
             onModeChanged: function(mode){},
             onRankingWeightChanged: function(rWeight) {},
             onTagDropped: function(tagIndices){},
@@ -61,11 +63,12 @@ var TagBox = (function(){
             onTagInBoxMouseEnter: function(index){},
             onTagInBoxMouseLeave: function(index){},
             onTagInBoxClick: function(index){},
+            onFeatureTagChanged: function(oldIndex, newIndex){},
             onReset: function(){},
             defaultBlockStyle: true
         }, arguments);
 
-        this.selectedKeywords = [];
+        this.selectedFeatures = [];
         this.actionLog = {};  // fields: action, keyword, color, oldWeight, newWeight, timestamp -- not all of them used for every case
 
         this.droppableOptions = {
@@ -73,8 +76,10 @@ var TagBox = (function(){
             drop: function(event, ui){
                 ui.draggable.data('dropped', true);
                 var tagIndices = [$(ui.draggable).attr(tagPosAttr)];
+                this.selectedFeatures.push(_this.features[$(ui.draggable).attr(tagPosAttr)]);
                 ui.draggable.data('addedTags').forEach(function(index){
                     tagIndices.push(index);
+                    this.selectedFeatures.push(_this.features[index]);
                 });
                 s.onTagDropped.call(this, tagIndices);
                 $tagContainer.trigger(tagBoxChangeEvent);
@@ -97,8 +102,8 @@ var TagBox = (function(){
             },
             stop: function(event, ui) {
                 var term = $(this.parentNode).getText(),
-                    indexToChange = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
-                _this.selectedKeywords[indexToChange].weight = ui.value;
+                    indexToChange = _.findIndex(_this.selectedFeatures, function(sk){ return sk.term == term });
+                _this.selectedFeatures[indexToChange].weight = ui.value;
                 s.onTagWeightChanged.call(this, $(this.parentNode).attr(tagPosAttr), ui.value);
                 $tagContainer.trigger(tagBoxChangeEvent);
             }
@@ -170,7 +175,7 @@ var TagBox = (function(){
     var _build = function(features, opt) {
 
         this.features = features;
-        this.selectedKeywords = [];
+        this.selectedFeatures = [];
         this.destroy();
         $root = $(s.root).addClass(tagboxClass+' '+headerStyleClass);
 
@@ -182,25 +187,31 @@ var TagBox = (function(){
         $message = $('<p>' + STR_DROP_TAGS_HERE + '</p>').appendTo($tagContainer);
         $resetBtn = $('<a/>', { href: '#' }).appendTo($tagContainer).addClass(clearBtnClass).on('click', function(){ s.onReset.call(this); }).hide();
 
-        if(!opt.ranking.content || !opt.ranking.social ) {
+        //if(!opt.ranking.content || !opt.ranking.social ) {
             $tagContainer.addClass('large');
-        }
-        else {
-            buildRankingModeHeader();
-        }
+//        }
+//        else {
+//            buildRankingModeHeader();
+//        }
+
+        $('body').on('click', function(){ $('.tag-list-container').removeClass('active') });
         return this;
     };
 
 
-    var _preSelectTags = function(tagIndices) {
-        s.onTagDropped.call(this, tagIndices);
+    var _preselectTags = function(tagIndices) {
+        tagIndices = Array.isArray(tagIndices) ? tagIndices: [tagIndices];
+        tagIndices.forEach(function(index){
+            _this.selectedFeatures.push(_this.features[index]);
+        });
         $tagContainer.trigger(tagBoxChangeEvent);
+        s.onTagDropped.call(this, tagIndices);
         return this;
     }
 
 
     var _clear = function() {
-        this.selectedKeywords = [];
+        this.selectedFeatures = [];
         if($tagContainer) {
             $tagContainer.find('.'+tagInBoxClass).remove();
             //$tagContainer.append('<p>' + STR_DROP_TAGS_HERE + '</p>');
@@ -214,36 +225,20 @@ var TagBox = (function(){
 /*
     tag = { index, stem, term, color }
 */
-    var _dropTag = function(tag){
+    var _dropTag = function(tag, posToReplace){
         var $tag = $(tagIdPrefix + '' + tag.index);
         if ($tag.hasClass(s.droppableClass)) {
             // Append dragged tag to tag box
-            $tagContainer.append($tag);
+            if(posToReplace !== undefined) {
+                $(tagIdPrefix + '' + posToReplace).after($tag);
+            }
+            else {
+                $tagContainer.append($tag);
+            }
             // Change tag's class
             $tag.removeClass().addClass(tagInBoxClass);
             // Append "delete" button
             //$('<span></span>').appendTo($tag).addClass(tagDeleteButtonClass);
-            var $controls = $('<div/>').insertBefore($tag.find('label')).addClass(tagControls);
-            var $select = $('<div/>', { class: 'control' }).insertAfter($tag.find('label'));
-            $('<a/>', { class: 'select', href: '#' }).appendTo($select);
-
-            var $tagListContainer = $('<div/>', { class: 'tag-list-container' }).appendTo($tag);
-            $tagListContainer.css({ top: $tag.position().top - 10, left: $tag.position().left, width: $tag.width() });
-
-            _this.features.forEach(function(f, i){
-                $('<label/>', { pos: i, text: f.name }).appendTo($tagListContainer).click(function(evt){
-                    evt.stopPropagation();
-                    var tagIndex = $(this).attr('pos');
-                    console.log(tagIndex);
-                });
-            });
-
-
-            $select.click(function(evt){
-                evt.stopPropagation();
-                $(this).parent().find('.tag-list-container').toggleClass('active');
-            });
-
 
             // Add new div to make it a slider
 /*            var weightSlider = $("<div class='" + tagWeightsliderClass + "'></div>").appendTo($tag).slider(this.sliderOptions);
@@ -260,40 +255,88 @@ var TagBox = (function(){
                 mouseenter: s.onTagInBoxMouseEnter($tag.attr(tagPosAttr)),
                 mouseleave: s.onTagInBoxMouseLeave($tag.attr(tagPosAttr)),
                 click: function(event){
-                    event.stopPropagation();
+                    //event.stopPropagation();
                     s.onTagInBoxClick.call(this, $tag.attr(tagPosAttr))
                 }
             }).on('click', '.'+tagDeleteButtonClass, $tag.attr(tagPosAttr), function(event){  //  Event handler for delete button
-                event.stopPropagation(); s.onTagDeleted.call(this, event.data);
+                event.stopPropagation();
+                var deletedTagIndex = event.data;
+                _this.selectedFeatures.splice(deletedTagIndex, 1);
+                $tagContainer.trigger(tagBoxChangeEvent);
+                s.onTagDeleted.call(this, deletedTagIndex);
             });
 
-            _this.selectedKeywords.push(tag);
+            var $controls = $('<div/>').insertBefore($tag.find('label')).addClass(tagControls);
+            var $select = $('<div/>', { class: 'control' }).insertAfter($tag.find('label'));
+            $('<a/>', { class: 'select', href: '#' }).appendTo($select);
+
+            var $tagListContainer = $('<div/>', { class: listContainerClass }).appendTo($tag);
+
+            _this.features.forEach(function(f, i){
+                $('<label/>', { pos: i, text: f.name }).appendTo($tagListContainer).click(function(evt){
+                    evt.stopPropagation();
+                    if(!$(this).hasClass('disabled')) {
+                        var oldIndex = tag.index,
+                            newIndex = $(this).attr('pos');
+                        var indexToChange = _.findIndex(_this.selectedFeatures, function(sf){ return sf.name == tag.name });
+                        _this.selectedFeatures[indexToChange] = _this.features[newIndex];
+                        $tagContainer.trigger(tagBoxChangeEvent);
+
+                        $('.'+listContainerClass).removeClass('active');
+                        s.onFeatureTagChanged.call(this, oldIndex, newIndex );
+                    }
+                });
+            });
+
+            $tag.find('.'+listContainerClass + ' label[pos="' + tag.index + '"]').addClass('selected');
+            $select.click(function(evt){
+                evt.stopPropagation();
+                var css = {
+                    top: ($tag.find('.'+tagNameClass).position().top + 16) + 'px',
+                    left: ($tag.find('.'+tagNameClass).fullOffset().left) + 'px',
+                    width: ($tag.width() - 6) +'px'
+                };
+                $(this).parent().find('.'+listContainerClass).toggleClass('active').css(css);
+            });
+
+//            _this.selectedFeatures.push(tag);
         }
         return this;
     };
 
 
-    var _deleteTag = function(index) {
+    var _updateSelectableFeatures = function(){
+
+        $('.'+listContainerClass).find('label').removeClass('disabled').removeClass('selected');
+        _this.selectedFeatures.forEach(function(tag){
+            $('.'+listContainerClass).find('label[pos="' + tag.index + '"]').addClass('disabled');
+            $(tagIdPrefix +''+ tag.index).find('label[pos="' + tag.index + '"]').addClass('selected');
+        });
+    };
+
+    var _removeTag = function(index) {
         var $tag = $(tagIdPrefix + '' + index),
-            term = $tag.getText();
+            name = $tag.getText();
 //        $tag.find('.'+tagDeleteButtonClass).remove();
 //        $tag.find('.'+tagWeightsliderClass).remove();
         $tag.find('.'+tagControls).remove();
+        $tag.find('.'+listContainerClass).remove();
+        $tag.find('.control').remove();
 
-        var indexToDelete = _.findIndex(_this.selectedKeywords, function(sk){ return sk.term == term });
-        _this.selectedKeywords.splice(indexToDelete, 1);
-        $tagContainer.trigger(tagBoxChangeEvent);
+//        var indexToDelete = _.findIndex(_this.selectedFeatures, function(sk){ return sk.name == name });
+//        _this.selectedFeatures.splice(indexToDelete, 1);
+//        $tagContainer.trigger(tagBoxChangeEvent);
 
         return this;
     };
 
     var _reset = function() {
-        _this.selectedKeywords.forEach(function(kw){
+        _this.selectedFeatures.forEach(function(kw){
             $('.'+tagInBoxClass).find('.'+tagDeleteButtonClass).remove();
             $('.'+tagInBoxClass).find('.'+tagWeightsliderClass).remove();
         });
 
-        _this.selectedKeywords = [];
+        _this.selectedFeatures = [];
         $tagContainer.trigger(tagBoxChangeEvent);
     };
 
@@ -344,12 +387,13 @@ var TagBox = (function(){
         build: _build,
         reset: _reset,
         clear: _clear,
-        preSelectTags: _preSelectTags,
+        preselectTags: _preselectTags,
         dropTag: _dropTag,
-        deleteTag: _deleteTag,
+        removeTag: _removeTag,
         updateRankingMode: _updateRankingMode,
         destroy: _destroy,
-        getHeight: _getHeight
+        getHeight: _getHeight,
+        updateSelectableFeatures: _updateSelectableFeatures
     };
 
     return Tagbox;

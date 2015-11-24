@@ -5,7 +5,16 @@ function datasetManager(){
         DS_Uni: {
             description: 'Universities',
             file: 'universities.json',
-            changeId: true
+            changeId: true,
+            defaultFeatureField: 'scores',
+            defaultFeatures: ['rating-30', 'rating-31', 'rating-10', 'rating-32', 'rating-19']
+        },
+        DS_Uni2: {
+            description: 'Universities II',
+            file: 'universities-new.json',
+            defaultFeatureField: 'ranks',
+            defaultFeatures: ['P', 'P_top10', 'P_collab', 'PP_industry_collab', 'P_UI_collab']
+//            defaultFeatures: ['P', 'P_top10', 'P_int_collab', 'PP_industry_collab', 'P_UI_collab']
         }
     };
 
@@ -59,7 +68,7 @@ function datasetManager(){
                     });
                 }
                 console.log('Dataset '+ datasetId +' retrieved --> (' + data.length + ' documents)');
-                callback.call(this, data);
+                callback.call(this, data, datasetMappings[datasetId]);
             })
             .fail(function(jqXHR, textStatus, errorThrown) { console.log('getJSON request failed! ' + textStatus + ' --- ' + errorThrown.message);
                                                            console.log(jqXHR);

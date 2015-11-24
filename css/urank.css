@@ -583,8 +583,7 @@ div.urank-tagbox-ranking-weight-bar {
 /*****/
 
 .urank-tagbox-container {
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden;
     align-items: center;
     width: 100%;
     height: calc(100% - 25px);
@@ -658,7 +657,8 @@ a.urank-tagbox-clear-btn:before {
 
 
 .urank-tagbox-tag:hover {
-    box-shadow: 2px 2px 5px #555, -2px -2px 5px #555;
+    box-shadow: 2px 2px 5px #555, -2px 2px 5px #555;
+    z-index: 99;
 }
 
 
@@ -666,6 +666,12 @@ a.urank-tagbox-clear-btn:before {
     height: 20px;
     width: 100%;
 }
+
+.urank-tagbox-tag .urank-tag-name {
+    float: left;
+    width: calc(100% - 20px);
+}
+
 
 .urank-tagbox-tag-controls .control {
     display: none;
@@ -684,6 +690,7 @@ a.urank-tagbox-clear-btn:before {
     width: 16px;
     height: 16px;
     float: right;
+    margin-right: 1px;
 }
 
 
@@ -701,41 +708,51 @@ a.urank-tagbox-clear-btn:before {
     border-top-color: rgb(255,255,255);
     margin-right: -8px;
     margin-bottom: -8px;
-    margin-left: -8px;
-    z-index: 9999;
+/*    margin-left: -8px;*/
+    z-index: 99;
     top: 11px;
     height: 16px;
 }
 
 
-.urank-tagbox-tag .tag-list-container {
+.urank-tagbox-tag .urank-tag-list-container {
     display: none;
     position: absolute;
-    height: 250px;
-    background: rgba(250,250,250,.9);
-    box-shadow: 0px 2px 4px #888;
+    max-height: 250px;
     padding: 3px;
+    background: rgba(250,250,250,.9);
+    box-shadow: 3px 3px 6px #888, -3px 3px 6px #888;
+    border: 1px solid #ddd;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-.urank-tagbox-tag .tag-list-container.active {
+.urank-tagbox-tag .urank-tag-list-container.active {
     display: inline-block;
 }
 
-.urank-tagbox-tag .tag-list-container label {
+.urank-tagbox-tag .urank-tag-list-container label {
     display: block;
+    width: 100%;
     color: #555;
     font-weight: normal;
     text-shadow: none;
 }
 
-.urank-tagbox-tag .tag-list-container label:hover {
+.urank-tagbox-tag .urank-tag-list-container label:hover {
     color: dodgerblue;
+    cursor: pointer;
 }
 
-.urank-tagbox-tag .tag-list-container label:selected {
+.urank-tagbox-tag .urank-tag-list-container label.selected {
     font-weight: bold;
+}
+
+.urank-tagbox-tag .urank-tag-list-container label.disabled,
+.urank-tagbox-tag .urank-tag-list-container label.disabled:hover{
+    color: #bbb !important;
+    cursor: default;
+/*    display: none;*/
 }
 
 
@@ -904,8 +921,10 @@ a.urank-tagbox-clear-btn:before {
     background: -moz-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
     background: -ms-linear-gradient(top, rgb(230, 230, 230) 75%, #ccc);
 */
-    background: -webkit-linear-gradient(top, rgba(150, 150, 150,0.3) 25%, rgba(150, 150, 150,0.6) 75%, rgba(150, 150, 150, 0.3));
+/*    background: -webkit-linear-gradient(top, rgba(150, 150, 150,0.3) 25%, rgba(150, 150, 150,0.6) 75%, rgba(150, 150, 150, 0.3));*/
+    background: -webkit-linear-gradient(top, rgba(150, 150, 150,0.3) 25%, rgba(150, 150, 150,0.6));
 /*    border: 1px solid rgba(150,150,150,.3);*/
+    border: 1px solid transparent;
     -webkit-transition: background 0s;
     -moz-transition: background 0s;
     -o-transition: background 0s;
@@ -952,22 +971,24 @@ a.urank-tagbox-clear-btn:before {
 .urank-list-li-ranking-pos {
     display: inline-block;
     float: left;
-    width: 18px;
+    width: 24px;
     height: 18px;
-    margin: 5px 2px;
-    /*background: -webkit-linear-gradient(top, rgba(255, 175, 0, 0.8) 75%, rgba(235, 155, 0, 0.8));*/
+    margin: 5px 3px;
+/*
     background: -webkit-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
 	background: -o-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
 	background: -moz-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
 	background: -ms-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
-	/*background: linear-gradient(to top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));*/    
+	background: linear-gradient(to top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
     -webkit-border-radius: 1em;
     box-shadow: 0.05em 0.15em 0.3em #888;
+    color: #fff;
+*/
     line-height: 1.8em;
-    font-size: 0.8em;
+    font-size: 0.9em;
     vertical-align: middle;
     text-align: center;
-    color: #fff;
+    color: rgba(100,100,100,.9);
     text-shadow: 0em 0.1em #888;
 }
 
@@ -984,6 +1005,18 @@ a.urank-tagbox-clear-btn:before {
     text-align: center;
     color: #222;
     text-shadow: 0em 0.1em 0 rgba(136, 136, 136, 0.5);
+}
+
+span.urank-list-item-flag {
+    display: inline-block;
+    float: left;
+    width: 16px;
+    height: 16px;
+    margin: 9px 2px 4px 7px;
+    vertical-align: middle;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
 }
 
 /***************    title section   **************/

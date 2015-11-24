@@ -18,6 +18,7 @@ var TagCloudDefault = (function(){
         hiddenClass = 'hidden',
         addableClass = 'addable',
         addedClass = 'added',
+        tagNameClass = 'urank-tag-name',
         tagHintClass = 'urank-tagcloud-tag-hint',
         keywordHintClass = 'urank-tagcloud-tag-cooccurence-hint',
         documentHintClass = 'urank-tagcloud-tag-document-hint',
@@ -273,7 +274,7 @@ var TagCloudDefault = (function(){
             var $tag = $('<div/>', { id: 'urank-tag-' + i, 'tag-pos': i, stem: k.sore, term: k.score }).appendTo($tagContainer)
                 .addClass(tagClass + ' ' + activeClass/* + ' hint--info hint--left'*/)
                 .data({ 'originalColor': _this.colorScale(k.colorCategory) })
-                .html('<label>'+k.term+'</label>')
+                .html('<label class="' + tagNameClass + '">'+k.term+'</label>')
                 .hide()
                 .fadeIn((i+1)*20);
             // Pie chart section for document hint
@@ -301,7 +302,7 @@ var TagCloudDefault = (function(){
     };
 
     var _preselectTags = function(tagIndices){
-
+        tagIndices = Array.isArray(tagIndices)? tagIndices : [tagIndices];
         tagIndices.forEach(function(index){
             var $tag = $(tagIdPrefix+''+index);
             var $clonTag = $tag.clone()
@@ -426,11 +427,21 @@ var TagCloudDefault = (function(){
         var oldOffset = $tag.offset();
         var newOffset = $clonedTag.offset();
 
+        $tag = $tag.detach();
+        $tag.insertAfter($clonedTag).setTagStyle();
+        $clonedTag.after($tag);
+        $clonedTag.remove();
+        setTagProperties($tag);
+
+        /////  ANIMATION
         // Detach tag from tag cloud, attach temporarily to body and place it in old position (in tagBox)
+/*
         $tag = $tag.detach().appendTo('body')
             .css({ position: 'absolute', top: oldOffset.top, left: oldOffset.left, 'z-index': 9999 });
+*/
 
         // Animate tag moving from tag box to tag cloud
+/*
         $tag.animate({ top: newOffset.top, left: newOffset.left }, 1500, 'swing', function(){
             //  Detach from body after motion animation is complete and append to tag container again
             $tag = $tag.detach();
@@ -439,6 +450,7 @@ var TagCloudDefault = (function(){
             $tag.css({ position: '', top: '', left: '', 'z-index': '' }).setTagStyle();
             setTagProperties($tag);
         });
+*/
     };
 
 

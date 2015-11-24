@@ -9,7 +9,8 @@ var TagCloud = (function(){
         notFoundClass = 'not-found',
         tagFreqSliderClass = 'urank-tagcloud-freq-slider',
         tagContainerOuterClass = 'urank-tagcloud-tag-container-outer',
-        tagClass = 'urank-tagcloud-tag';
+        tagClass = 'urank-tagcloud-tag',
+        tagNameClass = 'urank-tag-name';
 
     var $tagInput = $(''), $notFoundLabel = $(''), $tagFreqLabel = $(''), $tagFreqSlider = $(''), $outerTagContainer = $(''), minFreq = 0, maxFreq = 0;
 

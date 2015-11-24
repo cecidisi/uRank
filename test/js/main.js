@@ -11,20 +11,21 @@
         $bookmarks = $('.control-panel .container .bookmark-area');
 
     var testOptionsDef = {
+        model: {
+            featureField: 'ranks',
+            normalize: true,
+            defaultFeatures: []
+        },
         docViewer : {
             misc: {
                 facetsToShow: ['year']
             }
-        },
-        keywordExtractor :{
-            maxKeywordDistance: 2,
-            minRepetitionsProxKeywords: 5
         }
     };
 
 
     // Fill dataset select options and bind event handler
-    var datasetOptions = "<option value='null'>Select topic</option>";
+    var datasetOptions = "<option value='null'>Select data set</option>";
     dsm.getIDsAndDescriptions().forEach(function(ds){
         datasetOptions += "<option value='" + ds.id + "'>" + ds.description + "</option>";
     });
@@ -38,9 +39,12 @@
             $message.show();
 //            actionLogger.log(actionLogger.action.topicSelected, { datasetId: datasetId, topic: topic })
             setTimeout(function(){
-                dsm.getDataset(datasetId, function(dataset){
+                dsm.getDataset(datasetId, function(dataset, options){
                     _this.data = dataset;
-                    testOptionsDef.keywordExtractor.minRepetitions = (parseInt(_this.data.length * 0.05) >= 5) ? parseInt(_this.data.length * 0.05) : 5
+                    var opt = $.extend(true, { defaultFeatureField: 'scores', defaultFeatures: [] }, options);
+//                    testOptionsDef.keywordExtractor.minRepetitions = (parseInt(_this.data.length * 0.05) >= 5) ? parseInt(_this.data.length * 0.05) : 5
+                    testOptionsDef.model.featureField = opt.defaultFeatureField;
+                    testOptionsDef.model.defaultFeatures = opt.defaultFeatures;
                     _this.urank.loadData(dataset, testOptionsDef);
                     $message.fadeOut();
                     $numResultsMsg.html(dataset.length + ' Results');

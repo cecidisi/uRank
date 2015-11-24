@@ -348,8 +348,9 @@ var Ranking = (function(){
             var defs = svg.append("defs");
             var linearGradient = defs.append('linearGradient').attr('id', 'bar-shadow').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%');
             linearGradient.append('stop').attr('offset', '25%').style('stop-color', 'rgba(150,150,150,0.3)');
-            linearGradient.append('stop').attr('offset', '75%').style('stop-color', 'rgba(150,150,150,0.6)');
-            linearGradient.append('stop').attr('offset', '100%').style('stop-color', 'rgba(150,150,150,0.3)');
+            linearGradient.append('stop').attr('offset', '100%').style('stop-color', 'rgba(150,150,150,0.6)');
+//            linearGradient.append('stop').attr('offset', '75%').style('stop-color', 'rgba(150,150,150,0.6)');
+//            linearGradient.append('stop').attr('offset', '100%').style('stop-color', 'rgba(150,150,150,0.3)');
         },
 
         /*****************************************************************************************************************
