@@ -353,6 +353,40 @@ var Ranking = (function(){
 //            linearGradient.append('stop').attr('offset', '100%').style('stop-color', 'rgba(150,150,150,0.3)');
         },
 
+        /******************************************************************************************************************
+        *
+        *	Create focus effect
+        *
+        * ***************************************************************************************************************/
+        createFocusEffect: function(){
+
+            var linearGradient = svg.append("defs")
+                .append('svg:linearGradient')
+                    .attr('id', 'bar-focus')
+                    .attr('x1', '0%')
+                    .attr('y1', '0%')
+                    .attr('x2', '0%')
+                    .attr('y2', '100%');
+
+            linearGradient.append('svg:stop').attr('offset', '25%').attr('stop-color', 'rgba(150,150,0,0.3)');
+            linearGradient.append('svg:stop').attr('offset', '100%').attr('stop-color', 'rgba(150,150,0,0.6)');
+        },
+
+        /******************************************************************************************************************
+        *
+        *	Create focus effect
+        *
+        * ***************************************************************************************************************/
+        createBackgrounds: function(){
+
+            svg.append("defs").append('svg:linearGradient').attr('id', 'bg-light').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%')
+                .append('svg:stop').attr('offset', '100%').attr('stop-color', 'rgba(250,250,250,1)');
+
+            svg.append("defs").append('svg:linearGradient').attr('id', 'bg-dark').attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%')
+                .append('svg:stop').attr('offset', '100%').attr('stop-color', 'rgba(240,240,240,1)');
+
+        },
+
         /*****************************************************************************************************************
         *
         *	Adjust height of svg and other elements when the ranking changes
@@ -491,6 +525,8 @@ var Ranking = (function(){
         });
 
         RANKING.Render.createBarHoverGradient();
+        RANKING.Render.createFocusEffect();
+        RANKING.Render.createBackgrounds();
         return this;
     }
 

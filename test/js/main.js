@@ -8,6 +8,7 @@
 
     var $message = $('.processing-message'),
         $numResultsMsg = $('.num-results-msg'),
+        $search = $('#input-search'),
         $bookmarks = $('.control-panel .container .bookmark-area');
 
     var testOptionsDef = {
@@ -48,6 +49,18 @@
                     _this.urank.loadData(dataset, testOptionsDef);
                     $message.fadeOut();
                     $numResultsMsg.html(dataset.length + ' Results');
+
+                    $search.autocomplete({
+                        source: dataset.map(function(d){ return { label: d.title, value: d.id } }),
+                        focus: function( event, ui ) {
+                            event.preventDefault();
+                            $(this).val(ui.item.label);
+                        },
+                        select: function(event, ui){
+                            event.preventDefault();
+                            _this.urank.focusOnItem(ui.item.value);
+                        }
+                    })
                 });
             }, 0);
         }

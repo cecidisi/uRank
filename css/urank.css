@@ -649,9 +649,11 @@ a.urank-tagbox-clear-btn:before {
     white-space: nowrap;
     -webkit-box-shadow: 0em 7px 6px -6px #333;
     box-shadow: 0em 7px 6px -6px #333;
-    color: #fff;
     border: 1px solid #888;
-    text-shadow: 0px 1px 2px #555, 0px -1px 2px #555;
+/*    color: #fff;*/
+/*    text-shadow: 0px 1px 2px #555, 0px -1px 2px #555;*/
+    color: #555;
+    text-shadow: 0px 1px 2px #eee, 0px -1px 2px #eee;
     cursor: pointer;
 }
 
@@ -663,7 +665,7 @@ a.urank-tagbox-clear-btn:before {
 
 
 .urank-tagbox-tag-controls {
-    height: 20px;
+    height: 29px;
     width: 100%;
 }
 
@@ -705,7 +707,8 @@ a.urank-tagbox-clear-btn:before {
     position: relative;
     background: transparent;
     border: 8px solid transparent;
-    border-top-color: rgb(255,255,255);
+/*    border-top-color: rgb(255,255,255);*/
+    border-top-color: #555;
     margin-right: -8px;
     margin-bottom: -8px;
 /*    margin-left: -8px;*/
@@ -923,8 +926,11 @@ a.urank-tagbox-clear-btn:before {
 */
 /*    background: -webkit-linear-gradient(top, rgba(150, 150, 150,0.3) 25%, rgba(150, 150, 150,0.6) 75%, rgba(150, 150, 150, 0.3));*/
     background: -webkit-linear-gradient(top, rgba(150, 150, 150,0.3) 25%, rgba(150, 150, 150,0.6));
+    background: -moz-linear-gradient(top, rgba(150, 150, 150,0.3) 25%, rgba(150, 150, 150,0.6));
+    background: -o-linear-gradient(top, rgba(150, 150, 150,0.3) 25%, rgba(150, 150, 150,0.6));
+    background: -ms-linear-gradient(top, rgba(150, 150, 150,0.3) 25%, rgba(150, 150, 150,0.6));
 /*    border: 1px solid rgba(150,150,150,.3);*/
-    border: 1px solid transparent;
+    border-top: 1px solid rgba(150,150,150,.3);
     -webkit-transition: background 0s;
     -moz-transition: background 0s;
     -o-transition: background 0s;
@@ -1038,6 +1044,21 @@ span.urank-list-item-flag {
 }
 
 
+.urank-list-li h3.urank-list-li-title {
+    font-weight: normal;
+    text-shadow: none;
+    transition: all .3s ease-in-out;
+}
+
+/***************	Focus effect   **************/
+
+.urank-list-li.focus h3.urank-list-li-title {
+/*    font-weight: bold;*/
+    text-shadow: 2px 2px yellow, -2px -2px yellow;
+}
+
+
+
 /***************	Watch icon and fav icon section   **************/
 
 .urank-list-li-buttons-container {
@@ -1109,7 +1130,6 @@ span.urank-list-item-flag {
 .urank-list-li-button-favicon-on:hover, .urank-list-li-button-watchicon-on:hover {
     transform: scale(1.1);
 }
-
 
 /***************	Watched effect   **************/
 

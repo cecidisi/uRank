@@ -451,6 +451,10 @@ var Urank = (function(){
         unbookmarkItem: function(documentId, index){
             _this.data[index].bookmarked = false;
             contentList.toggleFavicon(documentId);
+        },
+
+        focusOnItem: function(itemId){
+            contentList.focusOnItem(itemId);
         }
     };
 
@@ -562,6 +566,7 @@ var Urank = (function(){
         loadData: EVTHANDLER.onLoad,
         clear: EVTHANDLER.onClear,
         destroy: EVTHANDLER.onDestroy,
+        focusOnItem: EVTHANDLER.focusOnItem,
         bookmarkItem: EVTHANDLER.bookmarkItem,
         unbookmarkItem: EVTHANDLER.unbookmarkItem,
         getCurrentState: MISC.getCurrentState,

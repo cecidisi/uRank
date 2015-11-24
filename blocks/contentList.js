@@ -35,6 +35,7 @@ var ContentList = (function(){
         dimmedClass = 'dimmed',
         hoveredClass = 'hovered',
         watchedClass = 'watched',
+        focusClass = 'focus',
         // default-style classes
         ulClassDefault = ulClass + '-default',
         liClassDefault = liClass + '-default',
@@ -66,11 +67,11 @@ var ContentList = (function(){
         _this = this;
         s = $.extend({
             root: '',
-            onItemClicked: function(documentId, index){},
-            onItemMouseEnter: function(documentId, index){},
-            onItemMouseLeave: function(documentId, index){},
-            onFaviconClicked: function(documentId, indext){},
-            onWatchiconClicked: function(documentId, index){},
+            onItemClicked: function(id, index){},
+            onItemMouseEnter: function(id, index){},
+            onItemMouseLeave: function(id, index){},
+            onFaviconClicked: function(id, indext){},
+            onWatchiconClicked: function(id, index){},
             defaultStyle: true
         }, arguments);
 
@@ -642,6 +643,14 @@ var ContentList = (function(){
         return $ul.fullHeight();
     };
 
+    var _focusOnItem = function(id){
+        var $item = $('.'+liClass+'['+urankIdAttr+'="'+id+'"]').addClass(focusClass);
+        setTimeout(function(){
+            $item.removeClass(focusClass, 2000);
+        }, 4000);
+        $scrollable.scrollTo($item);
+    };
+
     // Prototype
     ContentList.prototype = {
         build: _build,
@@ -659,7 +668,8 @@ var ContentList = (function(){
         clear: _clear,
         destroy: _destroy,
         scrollTo: _scrollTo,
-        getListHeight: _getListHeight
+        getListHeight: _getListHeight,
+        focusOnItem: _focusOnItem
     };
 
     return ContentList;
