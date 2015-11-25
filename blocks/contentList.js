@@ -271,7 +271,7 @@ var ContentList = (function(){
             if((_this.status === RANKING_STATUS.new && d.ranking.pos > 0 && d.ranking.pos < 40) ||
                (d.ranking.pos > 0 && d.ranking.pos < 30) ||
                (d.ranking.prevPos > 0 && d.ranking.prevPos < 30)) {
-                shift = listTop + (d.ranking.prevPos * itemHeight) - itemTop;
+                shift = listTop + (d.ranking.prevIndex * itemHeight) - itemTop;
             }
 
             ((d.ranking.pos > 0 && d.ranking.pos < 30) || (d.ranking.prevPos > 0 && d.ranking.prevPos < 30)) ? listTop + (d.ranking.prevPos * itemHeight) - itemTop: 0
@@ -412,16 +412,10 @@ var ContentList = (function(){
             $("<span>").appendTo($buttonsDiv).addClass(watchiconClass+' '+watchiconDefaultClass+' '+watchiconOffClass);
             var favIconStateClass = d.bookmarked ? faviconOnClass : faviconOffClass;
             $("<span>").appendTo($buttonsDiv).addClass(faviconClass+' '+faviconDefaultClass+' '+favIconStateClass);
-            // Subtle animation
-//            $li.animate({ opacity: 0 }, 0)
-//                .queue(function(){
-//                $(this).animate({ opacity: 1 }, (i+1)*100, 'swing')
-//            }).queue(function(){
-//                $(this).css('opacity', '');
-//                bindEventHandlers($li, d.id, i);
-//            }).dequeue();
-            $li.hide().fadeIn((i+1)*100);
+
             bindEventHandlers($li, d.id, i);
+            if(i < 40) $li.hide().fadeIn((i+1)*200);
+
         });
     };
 

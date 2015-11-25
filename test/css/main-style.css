@@ -192,7 +192,7 @@ header .num-results-msg {
     display: inline-block;
     float: right;
     width: 100px;
-    height: 20px;
+    height: 19px;
     margin: 4px 10px;
     border-radius: 4px;
     text-align: center;
@@ -244,7 +244,7 @@ header input[type="button"] {
     display: inline-block;
     float:  left;
 /*    width: 35%;*/
-    width: 40%;
+    width: 35%;
     height: 100%;
 }
 
@@ -253,7 +253,7 @@ header input[type="button"] {
     display: inline-block;
     float:  left;
 /*    width: 45%;*/
-    width: 60%;
+    width: 65%;
     height: 100%;
 }
 

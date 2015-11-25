@@ -14,7 +14,6 @@ function datasetManager(){
             file: 'universities-new.json',
             defaultFeatureField: 'ranks',
             defaultFeatures: ['P', 'P_top10', 'P_collab', 'PP_industry_collab', 'P_UI_collab']
-//            defaultFeatures: ['P', 'P_top10', 'P_int_collab', 'PP_industry_collab', 'P_UI_collab']
         }
     };
 

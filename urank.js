@@ -45,7 +45,7 @@ var Urank = (function(){
         model: {
             normalize: true,
             featureField: 'ranks',
-            defaultFeatures: []
+            defaultFeatures: [],
         },
         tagCloud : {
             module: 'default'      // default || landscape
@@ -85,6 +85,7 @@ var Urank = (function(){
             }
         },
         tagBox: {
+            maxNumberTags: 5,
             ranking: {},
             misc: {
                 defaultBlockStyle: true
@@ -180,11 +181,16 @@ var Urank = (function(){
                 'click': EVTHANDLER.onRootClick
             });
 
+            console.log(_this.loadOpt.model.defaultFeatures);
             var preselectedFeatures = _this.loadOpt.model.defaultFeatures.map(function(pf){ return _this.featuresDict[pf].index });
-            tagCloud.preselectTags(preselectedFeatures);
-            tagBox.preselectTags(preselectedFeatures);
+            EVTHANDLER.onAutomaticTagSelected(preselectedFeatures);
             //  Custom callback
             s.onLoad.call(this, _this.features);
+        },
+
+        onAutomaticTagSelected: function(featureIndices){
+            tagCloud.preselectTags(featureIndices);
+            tagBox.preselectTags(featureIndices);
         },
 
         onChange: function(selectedFeatures) {
@@ -419,9 +425,9 @@ var Urank = (function(){
             visCanvas.reset();
             docViewer.clear();
             _this.selectedFeatures.forEach(function(kw, i){
-                setTimeout(function(){
+//                setTimeout(function(){
                     tagCloud.restoreTag(kw.index);
-                }, (i+1)*50);
+//                }, (i+1)*50);
             });
             _this.selectedFeatures = [];
             s.onReset.call(this);
@@ -498,6 +504,7 @@ var Urank = (function(){
                 onTagInBoxMouseEnter: EVTHANDLER.onTagInBoxMouseEnter,
                 onTagInBoxMouseLeave: EVTHANDLER.onTagInBoxMouseLeave,
                 onTagInBoxClick: EVTHANDLER.onTagInBoxClick,
+                onAutomaticTagSelected: EVTHANDLER.onAutomaticTagSelected,
                 onFeatureTagChanged: EVTHANDLER.onFeatureTagChanged,
                 onReset: EVTHANDLER.onReset
             },

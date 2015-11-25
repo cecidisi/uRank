@@ -244,6 +244,13 @@
     opacity: 0.8;
 }
 
+
+.urank-tag-name {
+    margin: 0px;
+    font-size: 1em;
+
+}
+
 /*** tooltip ***/
 
 div.urank-tagcloud-tag-tooltip {
@@ -580,12 +587,55 @@ div.urank-tagbox-ranking-weight-bar {
 }
 
 
-/*****/
+/***********    tagbox controls on right band   ***************/
+
+.urank-tagbox-controls {
+    float: right;
+    display: inline-block;
+    width: 15px;
+    height: 100%;
+    border-left: 1px solid #aaa;
+}
+
+i.urank-tagbox-btn {
+    display: inline-block;
+    float: right;
+    margin: 3px 1px;
+    height: 16px;
+    width: 16px;
+    color: #444;
+    text-decoration: none;
+    cursor: pointer;
+    visibility: hidden;
+}
+
+i.urank-tagbox-btn.active {
+    visibility: visible;
+}
+
+i.urank-tagbox-btn:before {
+    display: inline-block;
+    position: relative;
+    left: 1px;
+    top: 2px;
+    font-size: 1.3em;
+}
+
+
+.urank-tagbox-controls .urank-tag-list-container {
+    right: 8px;
+    min-width: 150px;
+}
+
+
+/**************************/
 
 .urank-tagbox-container {
+    float: left;
+    display: inline-block;
     overflow: hidden;
     align-items: center;
-    width: 100%;
+    width: calc(100% - 16px);
     height: calc(100% - 25px);
     list-style-type: none;
     text-align: left;
@@ -594,29 +644,6 @@ div.urank-tagbox-ranking-weight-bar {
 /* for content-based ranking only */
 .urank-tagbox-container.large {
     height: 100%;
-}
-
-a.urank-tagbox-clear-btn {
-    display: inline-block;
-    float: right;
-    height: 0px;
-    width: 0px;
-}
-
-a.urank-tagbox-clear-btn:before {
-    display: none;
-    content: '\f1f8';
-    font-family: FontAwesome;
-    position: relative;
-    top: 2px;
-    right: 14px;
-    font-size: 1.3em;
-    color: black;
-    text-decoration: none;
-}
-
-.urank-tagbox-container:hover a.urank-tagbox-clear-btn:before {
-    display: inline-block;
 }
 
 
@@ -636,7 +663,7 @@ a.urank-tagbox-clear-btn:before {
 }
 
 .urank-tagbox-tag {
-    cursor: default;
+    float: left;
     display: inline-block;
     text-align: left;
     /* min-width: 65px; */
@@ -653,7 +680,7 @@ a.urank-tagbox-clear-btn:before {
 /*    color: #fff;*/
 /*    text-shadow: 0px 1px 2px #555, 0px -1px 2px #555;*/
     color: #555;
-    text-shadow: 0px 1px 2px #eee, 0px -1px 2px #eee;
+    text-shadow: 1px 1px 2px #eee, -1px -1px 2px #eee, 1px -1px 2px #eee, -1px 1px 2px #eee;
     cursor: pointer;
 }
 
@@ -665,9 +692,35 @@ a.urank-tagbox-clear-btn:before {
 
 
 .urank-tagbox-tag-controls {
-    height: 29px;
+    height: 24px;
+    margin-bottom: 5px;
     width: 100%;
+    text-align: right;
+    z-index: 99;
 }
+
+.urank-tagbox-tag .urank-tagbox-tag-controls .control {
+    display: none;
+    margin: 0px 4px;
+    color: #555;
+    font-size: 18px;
+    text-shadow: none;
+    position: relative;
+    top: -6px;
+}
+
+.urank-tagbox-tag .urank-tagbox-tag-controls .control.small {
+    font-size: 26px;
+    top: -4px;
+}
+
+
+.urank-tagbox-tag:hover .control {
+    display: inline-block;
+}
+
+
+
 
 .urank-tagbox-tag .urank-tag-name {
     float: left;
@@ -675,50 +728,7 @@ a.urank-tagbox-clear-btn:before {
 }
 
 
-.urank-tagbox-tag-controls .control {
-    display: none;
-}
-
-
-.urank-tagbox-tag-controls:hover .control {
-    display: inline-block;
-    width: 14px;
-    height: 100%;
-    transition: all .2s ease-in-out;
-}
-
-.urank-tagbox-tag .control {
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    float: right;
-    margin-right: 1px;
-}
-
-
-.urank-tagbox-tag .control a.select {
-    width: 100%;
-    height: 100%;
-}
-
-
-.urank-tagbox-tag .control a.select:before {
-    content: '';
-    position: relative;
-    background: transparent;
-    border: 8px solid transparent;
-/*    border-top-color: rgb(255,255,255);*/
-    border-top-color: #555;
-    margin-right: -8px;
-    margin-bottom: -8px;
-/*    margin-left: -8px;*/
-    z-index: 99;
-    top: 11px;
-    height: 16px;
-}
-
-
-.urank-tagbox-tag .urank-tag-list-container {
+.urank-tag-list-container {
     display: none;
     position: absolute;
     max-height: 250px;
@@ -728,13 +738,15 @@ a.urank-tagbox-clear-btn:before {
     border: 1px solid #ddd;
     overflow-y: auto;
     overflow-x: hidden;
+    text-align: left;
 }
 
-.urank-tagbox-tag .urank-tag-list-container.active {
+.urank-tagbox-tag .urank-tag-list-container.active,
+.urank-tagbox-controls .urank-tag-list-container.active {
     display: inline-block;
 }
 
-.urank-tagbox-tag .urank-tag-list-container label {
+.urank-tag-list-container label {
     display: block;
     width: 100%;
     color: #555;
@@ -742,17 +754,17 @@ a.urank-tagbox-clear-btn:before {
     text-shadow: none;
 }
 
-.urank-tagbox-tag .urank-tag-list-container label:hover {
+.urank-tag-list-container label:hover {
     color: dodgerblue;
     cursor: pointer;
 }
 
-.urank-tagbox-tag .urank-tag-list-container label.selected {
+.urank-tag-list-container label.selected {
     font-weight: bold;
 }
 
-.urank-tagbox-tag .urank-tag-list-container label.disabled,
-.urank-tagbox-tag .urank-tag-list-container label.disabled:hover{
+.urank-tag-list-container label.disabled,
+.urank-tag-list-container label.disabled:hover{
     color: #bbb !important;
     cursor: default;
 /*    display: none;*/

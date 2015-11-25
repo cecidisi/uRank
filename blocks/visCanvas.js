@@ -35,13 +35,13 @@ var VisCanvas = (function(){
         $root = $(s.root).empty().addClass(viscanvasClass);
 
         //  Set scrolling
-        if(opt.misc.hideScrollbar) {
-            $root.addClass(hiddenScrollbarClass);
-            $scrollable = $('<div/>').appendTo($root).addClass(hiddenScrollbarInnerClass);
-        }
-        else {
+//        if(opt.misc.hideScrollbar) {
+//            $root.addClass(hiddenScrollbarClass);
+//            $scrollable = $('<div/>').appendTo($root).addClass(hiddenScrollbarInnerClass);
+//        }
+//        else {
             $scrollable = $root;
-        }
+//        }
         $scrollable.on('scroll', onScroll);
         $visContainer = $('<div/>').appendTo($scrollable).addClass(viscanvasContainerClass).height(this.height);
 

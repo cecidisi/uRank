@@ -114,6 +114,7 @@ var RankingModel = (function(){
                     pos: i,
                     posChanged: 0,
                     prevPos: 0,
+                    prevIndex: -1,
                     overallScore: 0
                 };
             });
@@ -216,7 +217,7 @@ var RankingModel = (function(){
         sortByFeature : function(feature, invert){
             feature = feature || 'normScore';
             invert = invert || false;
-            _this.ranking.forEach(function(d){ d.ranking.prevPos = d.ranking.pos; });
+            _this.ranking.forEach(function(d, i){ d.ranking.prevPos = d.ranking.pos; d.ranking.prevIndex = i; });
             _this.ranking = _this.ranking.sort(function(d1, d2){
                 if(d1.selectedFeatures[feature] > d2.selectedFeatures[feature]) return -1;
                 if(d1.selectedFeatures[feature] < d2.selectedFeatures[feature]) return 1;
