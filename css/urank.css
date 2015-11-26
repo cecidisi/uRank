@@ -1147,9 +1147,14 @@ span.urank-list-item-flag {
 /***************	Watched effect   **************/
 
 .urank-list-li.watched {
-    box-shadow: inset 1px 1px 2px rgba(128, 128, 128, 0.6), inset -1px -1px 2px rgba(128, 128, 128, 0.6);
-    -webkit-transition: box-shadow 0s linear;
+/*    box-shadow: inset 1px 1px 2px rgba(128, 128, 128, 0.6), inset -1px -1px 2px rgba(128, 128, 128, 0.6);*/
     z-index: 99;
+    border: 1px solid #999;
+    background: #ddd;
+    -webkit-transition: box-shadow 0s linear;
+    -moz-transition: box-shadow 0s linear;
+    -o-transition: box-shadow 0s linear;
+    -ms-transition: box-shadow 0s linear;
 }
 
 .urank-list-li.watched .urank-list-li-title {
