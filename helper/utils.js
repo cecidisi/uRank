@@ -63,6 +63,11 @@ String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 };
 
+String.prototype.capitalizeAll = function() {
+    var str = this;
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
 String.prototype.isAllUpperCase = function() {
     return this.valueOf().toUpperCase() === this.valueOf();
 };

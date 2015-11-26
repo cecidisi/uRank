@@ -35,12 +35,17 @@ var TagBox = (function(){
     var eventTrigger = {};
 
     var onTagboxChanged = function(){
+
+        //        setTimeout(function(){
+        s.onChange.call(this, _this.selectedFeatures)   // Bind onChange event handler for custom event
+        //        }, 0);
+
         if(_this.selectedFeatures.length == 0) {
-            setTimeout(function(){
+//            setTimeout(function(){
   //              $message.show();
                 $resetBtn.removeClass('active');
                 $addTagBtn.addClass('active')
-            }, 1);
+//            }, 1);
         }
         else {
             $resetBtn.addClass('active');
@@ -52,9 +57,6 @@ var TagBox = (function(){
                 $addTagBtn.removeClass('active');
             }
         }
-        setTimeout(function(){
-            s.onChange.call(this, _this.selectedFeatures)   // Bind onChange event handler for custom event
-        }, 0);
     };
 
     function Tagbox(arguments) {

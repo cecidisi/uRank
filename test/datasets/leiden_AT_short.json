@@ -1,0 +1,221 @@
+
+
+[
+  {
+    "id": "Obs_67",
+    "title": "University of Natural Resources and Life Sciences  BOKU",
+    "facets": {
+      "University": "University of Natural Resources and Life Sciences  BOKU",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "University of Natural Resources and Life Sciences  BOKU"
+    },
+    "scores": {
+      "P_top10": 127,
+      "P_collab": 1856,
+      "P_int_collab": 1389,
+      "P_UI_collab": 208
+    },
+    "ranks": {
+      "P_top10": 171,
+      "P_collab": 102,
+      "P_int_collab": 254,
+      "P_UI_collab": 313
+    }
+  },
+  {
+    "id": "Obs_283",
+    "title": "University of Innsbruck",
+    "facets": {
+      "University": "University of Innsbruck",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "University of Innsbruck"
+    },
+    "scores": {
+      "P_top10": 159,
+      "P_collab": 2944,
+      "P_int_collab": 2535,
+      "P_UI_collab": 309
+    },
+    "ranks": {
+      "P_top10": 260,
+      "P_collab": 281,
+      "P_int_collab": 450,
+      "P_UI_collab": 444
+    }
+  },
+  {
+    "id": "Obs_410",
+    "title": "Medical University of Graz",
+    "facets": {
+      "University": "Medical University of Graz",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "Medical University of Graz"
+    },
+    "scores": {
+      "P_top10": 132,
+      "P_collab": 2468,
+      "P_int_collab": 1898,
+      "P_UI_collab": 248
+    },
+    "ranks": {
+      "P_top10": 187,
+      "P_collab": 218,
+      "P_int_collab": 352,
+      "P_UI_collab": 370
+    }
+  },
+  {
+    "id": "Obs_411",
+    "title": "Medical University of Innsbruck",
+    "facets": {
+      "University": "Medical University of Innsbruck",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "Medical University of Innsbruck"
+    },
+    "scores": {
+      "P_top10": 150,
+      "P_collab": 2647,
+      "P_int_collab": 2117,
+      "P_UI_collab": 268
+    },
+    "ranks": {
+      "P_top10": 241,
+      "P_collab": 245,
+      "P_int_collab": 391,
+      "P_UI_collab": 405
+    }
+  },
+  {
+    "id": "Obs_413",
+    "title": "Medical University of Vienna",
+    "facets": {
+      "University": "Medical University of Vienna",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "Medical University of Vienna"
+    },
+    "scores": {
+      "P_top10": 417,
+      "P_collab": 5722,
+      "P_int_collab": 4253,
+      "P_UI_collab": 666
+    },
+    "ranks": {
+      "P_top10": 531,
+      "P_collab": 508,
+      "P_int_collab": 583,
+      "P_UI_collab": 619
+    }
+  },
+  {
+    "id": "Obs_663",
+    "title": "Graz University of Technology",
+    "facets": {
+      "University": "Graz University of Technology",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "Graz University of Technology"
+    },
+    "scores": {
+      "P_top10": 121,
+      "P_collab": 1852,
+      "P_int_collab": 1320,
+      "P_UI_collab": 227
+    },
+    "ranks": {
+      "P_top10": 155,
+      "P_collab": 101,
+      "P_int_collab": 237,
+      "P_UI_collab": 340
+    }
+  },
+  {
+    "id": "Obs_680",
+    "title": "University of Graz",
+    "facets": {
+      "University": "University of Graz",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "University of Graz"
+    },
+    "scores": {
+      "P_top10": 148,
+      "P_collab": 2042,
+      "P_int_collab": 1610,
+      "P_UI_collab": 139
+    },
+    "ranks": {
+      "P_top10": 235,
+      "P_collab": 133,
+      "P_int_collab": 298,
+      "P_UI_collab": 207
+    }
+  },
+  {
+    "id": "Obs_699",
+    "title": "University of Vienna",
+    "facets": {
+      "University": "University of Vienna",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "University of Vienna"
+    },
+    "scores": {
+      "P_top10": 392,
+      "P_collab": 6194,
+      "P_int_collab": 5266,
+      "P_UI_collab": 381
+    },
+    "ranks": {
+      "P_top10": 513,
+      "P_collab": 532,
+      "P_int_collab": 627,
+      "P_UI_collab": 503
+    }
+  },
+  {
+    "id": "Obs_700",
+    "title": "Vienna University of Technology",
+    "facets": {
+      "University": "Vienna University of Technology",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "Vienna University of Technology"
+    },
+    "scores": {
+      "P_top10": 251,
+      "P_collab": 3454,
+      "P_int_collab": 2786,
+      "P_UI_collab": 378
+    },
+    "ranks": {
+      "P_top10": 399,
+      "P_collab": 344,
+      "P_int_collab": 486,
+      "P_UI_collab": 500
+    }
+  }
+]
+

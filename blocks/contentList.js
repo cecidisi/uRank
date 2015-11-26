@@ -401,12 +401,13 @@ var ContentList = (function(){
 //            $('<div/>').appendTo($rankingDiv).addClass(rankingPosMovedClass);
 
             var flagPath = (d.facets && d.facets.Country_short) ? (pathToFlagFolder + '' + d.facets.Country_short.toLowerCase() + '.png') : '';
+
             var flagTitle = (d.facets && d.facets.Country_short) ? d.facets.Country_short : (d.facets && d.facets.Country_long ? d.facets.Country_long : '');
             $('<span/>', { title: flagTitle }).appendTo($rankingDiv).addClass('urank-list-item-flag').css('backgroundImage', 'url('+flagPath+')');
 
             // title section
             var $titleDiv = $("<div></div>").appendTo($li).addClass(liTitleContainerClass);
-            $('<h3></h3>', { id: 'urank-list-li-title-' + i, class: liTitleClass +' '+ liTitleClassDefault, html: d.title/*, title: d.title + '\n' + d.description*/ }).appendTo($titleDiv);
+            $('<h3></h3>', { id: 'urank-list-li-title-' + i, class: liTitleClass +' '+ liTitleClassDefault, html: d.title }).appendTo($titleDiv);
             // buttons section
             var $buttonsDiv = $("<div></div>").appendTo($li).addClass(liButtonsContainerClass);
             $("<span>").appendTo($buttonsDiv).addClass(watchiconClass+' '+watchiconDefaultClass+' '+watchiconOffClass);

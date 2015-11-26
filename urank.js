@@ -121,7 +121,9 @@ var Urank = (function(){
         onLoad: function(data, options) {
 
             _this.clear();
-            _this.loadOpt = $.extend(true, defaultLoadOptions, options || {});
+            // Clear following array to avoid problems on merging
+            if(_this.loadOpt) _this.loadOpt.model.defaultFeatures = [];
+            _this.loadOpt = $.extend(true, {}, defaultLoadOptions, options || {});
             //  Set color scales (need to be reset every time a new dataset is loaded)
             _this.loadOpt.tagColorArray = _this.loadOpt.misc.tagColorArray.length >= TAG_CATEGORIES ? _this.loadOpt.misc.tagColorArray : tagColorRange;
             _this.loadOpt.queryTermColorArray = _this.loadOpt.misc.queryTermColorArray.length >= TAG_CATEGORIES ? _this.loadOpt.misc.queryTermColorArray : queryTermColorRange;
@@ -145,6 +147,7 @@ var Urank = (function(){
             _this.scoreExtractor = new ScoreExtractor();
             _this.data.forEach(function(d, i){
                 d.index = i;
+                d.title = d.title.capitalizeAll();
                 _this.scoreExtractor.addItem(d);
             });
             _this.scoreExtractor.process(_this.featureField);
@@ -160,8 +163,8 @@ var Urank = (function(){
             _this.rankingModel.clear().setData(_this.data);
             _this.rankingModel.setScoreType(_this.scoreType);
 
-            console.log(_this.data[0]);
-            console.log(_this.features[0]);
+//            console.log(_this.data[0]);
+//            console.log(_this.features[0]);
 
             _this.loadOpt.tagBox.ranking = _this.loadOpt.model;
             tagBox.build(_this.features, _this.loadOpt.tagBox);
@@ -181,8 +184,7 @@ var Urank = (function(){
                 'click': EVTHANDLER.onRootClick
             });
 
-            console.log(_this.loadOpt.model.defaultFeatures);
-            var preselectedFeatures = _this.loadOpt.model.defaultFeatures.map(function(pf){ return _this.featuresDict[pf].index });
+            var preselectedFeatures = _this.loadOpt.model.defaultFeatures.map(function(pf){ console.log(pf); return _this.featuresDict[pf].index });
             EVTHANDLER.onAutomaticTagSelected(preselectedFeatures);
             //  Custom callback
             s.onLoad.call(this, _this.features);

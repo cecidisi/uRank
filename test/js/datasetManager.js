@@ -2,19 +2,50 @@ function datasetManager(){
 
     var datasetMappings = {
 
-        DS_Uni: {
-            description: 'Universities',
-            file: 'universities.json',
-            changeId: true,
-            defaultFeatureField: 'scores',
-            defaultFeatures: ['rating-30', 'rating-31', 'rating-10', 'rating-32', 'rating-19']
+        DS_uni_leiden_all_pretty: {
+            description: 'Leiden Ranking - All (pretty)',
+            file: 'leiden_all_pretty.json',
+            featureField: 'ranks',
+            invert: true,
+            defaultFeatures: ['Collaboration', 'Top_10Perc_Cited', 'Industry', 'International']
         },
-        DS_Uni2: {
-            description: 'Universities II',
-            file: 'universities-new.json',
-            defaultFeatureField: 'ranks',
-            defaultFeatures: ['P', 'P_top10', 'P_collab', 'PP_industry_collab', 'P_UI_collab']
+        DS_uni_leiden_AT_pretty: {
+            description: 'Leiden Ranking - Austria (pretty)',
+            file: 'leiden_AT_pretty.json',
+            featureField: 'ranks',
+            invert: true,
+            defaultFeatures: ['Collaboration', 'Top_10Perc_Cited', 'Industry', 'International']
+        },
+        DS_uni_leiden_all_short: {
+            description: 'Leiden Ranking - All (original)',
+            file: 'leiden_all_short.json',
+            featureField: 'ranks',
+            invert: true,
+            defaultFeatures: ['P_top10', 'P_collab', 'P_int_collab', 'P_UI_collab']
+        },
+        DS_uni_leiden_AT_short: {
+            description: 'Leiden Ranking - Austria (original)',
+            file: 'leiden_AT_short.json',
+            featureField: 'ranks',
+            invert: true,
+            defaultFeatures: ['P_top10', 'P_collab', 'P_int_collab', 'P_UI_collab']
+        },
+        DS_uni_qs_all: {
+            description: 'QS Ranking - All (pretty)',
+            file: 'qs_red500_zeros_pretty.json',
+            featureField: 'ranks',
+            invert: true,
+            defaultFeatures: ['Overall', 'International_Faculty', 'International_Students', 'Citations_per_Facutly', 'Academic']
+//            defaultFeatures: ['Faculty', 'International_Faculty', 'International_Students', 'Overall', 'Citations_per_Facutly', 'Employer', 'Academic']
         }
+
+//        DS_Uni2: {
+//            description: 'Universities II',
+//            file: 'universities-new.json',
+//            featureField: 'ranks',
+//            invert: true,
+//            defaultFeatures: ['P', 'P_top10', 'P_collab', 'PP_industry_collab', 'P_UI_collab']
+//        }
     };
 
     function adaptJSON(_data) {

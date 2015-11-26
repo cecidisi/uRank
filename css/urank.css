@@ -1059,6 +1059,7 @@ span.urank-list-item-flag {
 .urank-list-li h3.urank-list-li-title {
     font-weight: normal;
     text-shadow: none;
+    text-transform: capitalize;
     transition: all .3s ease-in-out;
 }
 
@@ -1190,7 +1191,7 @@ Canvas section (right-center) - displays ranking vis
 .urank-viscanvas {
     text-align: center;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 .urank-viscanvas-container {

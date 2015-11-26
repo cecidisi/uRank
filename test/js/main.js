@@ -13,8 +13,9 @@
 
     var testOptionsDef = {
         model: {
-            featureField: 'ranks',
+            featureField: 'scores',
             normalize: true,
+            invert: false,
             defaultFeatures: []
         },
         docViewer : {
@@ -42,19 +43,15 @@
             setTimeout(function(){
                 dsm.getDataset(datasetId, function(dataset, options){
 
-                    if(dataset[0].facets && dataset[0].facets.Country_short) {
-                        dataset = dataset.sort(function(d1, d2){
+                    _this.data = (dataset[0].facets && dataset[0].facets.Country_short) ? (
+                        dataset.sort(function(d1, d2){
                             if(d1.facets.Country_short === 'AT' && d2.facets.Country_short !== 'AT') return -1;
                             if(d1.facets.Country_short !== 'AT' && d2.facets.Country_short === 'AT') return 1;
                             return 0;
-                        });
-                    }
+                        })) : dataset;
 
-                    _this.data = dataset;
-                    var opt = $.extend(true, { defaultFeatureField: 'scores', defaultFeatures: [] }, options);
 //                    testOptionsDef.keywordExtractor.minRepetitions = (parseInt(_this.data.length * 0.05) >= 5) ? parseInt(_this.data.length * 0.05) : 5
-                    testOptionsDef.model.featureField = opt.defaultFeatureField;
-                    testOptionsDef.model.defaultFeatures = opt.defaultFeatures;
+                    $.extend(true, {}, testOptionsDef.model, options);
                     _this.urank.loadData(dataset, testOptionsDef);
                     $message.fadeOut();
                     $numResultsMsg.html(dataset.length + ' Results');

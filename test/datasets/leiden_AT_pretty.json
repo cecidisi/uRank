@@ -1,0 +1,221 @@
+
+
+[
+  {
+    "id": "Obs_67",
+    "title": "University of Natural Resources and Life Sciences  BOKU",
+    "facets": {
+      "University": "University of Natural Resources and Life Sciences  BOKU",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "University of Natural Resources and Life Sciences  BOKU"
+    },
+    "scores": {
+      "Top_10Perc_Cited": 127,
+      "Collaboration": 1856,
+      "International": 1389,
+      "Industry": 208
+    },
+    "ranks": {
+      "Top_10Perc_Cited": 171,
+      "Collaboration": 102,
+      "International": 254,
+      "Industry": 313
+    }
+  },
+  {
+    "id": "Obs_283",
+    "title": "University of Innsbruck",
+    "facets": {
+      "University": "University of Innsbruck",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "University of Innsbruck"
+    },
+    "scores": {
+      "Top_10Perc_Cited": 159,
+      "Collaboration": 2944,
+      "International": 2535,
+      "Industry": 309
+    },
+    "ranks": {
+      "Top_10Perc_Cited": 260,
+      "Collaboration": 281,
+      "International": 450,
+      "Industry": 444
+    }
+  },
+  {
+    "id": "Obs_410",
+    "title": "Medical University of Graz",
+    "facets": {
+      "University": "Medical University of Graz",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "Medical University of Graz"
+    },
+    "scores": {
+      "Top_10Perc_Cited": 132,
+      "Collaboration": 2468,
+      "International": 1898,
+      "Industry": 248
+    },
+    "ranks": {
+      "Top_10Perc_Cited": 187,
+      "Collaboration": 218,
+      "International": 352,
+      "Industry": 370
+    }
+  },
+  {
+    "id": "Obs_411",
+    "title": "Medical University of Innsbruck",
+    "facets": {
+      "University": "Medical University of Innsbruck",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "Medical University of Innsbruck"
+    },
+    "scores": {
+      "Top_10Perc_Cited": 150,
+      "Collaboration": 2647,
+      "International": 2117,
+      "Industry": 268
+    },
+    "ranks": {
+      "Top_10Perc_Cited": 241,
+      "Collaboration": 245,
+      "International": 391,
+      "Industry": 405
+    }
+  },
+  {
+    "id": "Obs_413",
+    "title": "Medical University of Vienna",
+    "facets": {
+      "University": "Medical University of Vienna",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "Medical University of Vienna"
+    },
+    "scores": {
+      "Top_10Perc_Cited": 417,
+      "Collaboration": 5722,
+      "International": 4253,
+      "Industry": 666
+    },
+    "ranks": {
+      "Top_10Perc_Cited": 531,
+      "Collaboration": 508,
+      "International": 583,
+      "Industry": 619
+    }
+  },
+  {
+    "id": "Obs_663",
+    "title": "Graz University of Technology",
+    "facets": {
+      "University": "Graz University of Technology",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "Graz University of Technology"
+    },
+    "scores": {
+      "Top_10Perc_Cited": 121,
+      "Collaboration": 1852,
+      "International": 1320,
+      "Industry": 227
+    },
+    "ranks": {
+      "Top_10Perc_Cited": 155,
+      "Collaboration": 101,
+      "International": 237,
+      "Industry": 340
+    }
+  },
+  {
+    "id": "Obs_680",
+    "title": "University of Graz",
+    "facets": {
+      "University": "University of Graz",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "University of Graz"
+    },
+    "scores": {
+      "Top_10Perc_Cited": 148,
+      "Collaboration": 2042,
+      "International": 1610,
+      "Industry": 139
+    },
+    "ranks": {
+      "Top_10Perc_Cited": 235,
+      "Collaboration": 133,
+      "International": 298,
+      "Industry": 207
+    }
+  },
+  {
+    "id": "Obs_699",
+    "title": "University of Vienna",
+    "facets": {
+      "University": "University of Vienna",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "University of Vienna"
+    },
+    "scores": {
+      "Top_10Perc_Cited": 392,
+      "Collaboration": 6194,
+      "International": 5266,
+      "Industry": 381
+    },
+    "ranks": {
+      "Top_10Perc_Cited": 513,
+      "Collaboration": 532,
+      "International": 627,
+      "Industry": 503
+    }
+  },
+  {
+    "id": "Obs_700",
+    "title": "Vienna University of Technology",
+    "facets": {
+      "University": "Vienna University of Technology",
+      "Country_short": "AT"
+    },
+    "descriptions": {
+      "Country_short": "AT",
+      "University": "Vienna University of Technology"
+    },
+    "scores": {
+      "Top_10Perc_Cited": 251,
+      "Collaboration": 3454,
+      "International": 2786,
+      "Industry": 378
+    },
+    "ranks": {
+      "Top_10Perc_Cited": 399,
+      "Collaboration": 344,
+      "International": 486,
+      "Industry": 500
+    }
+  }
+]
+
