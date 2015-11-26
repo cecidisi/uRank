@@ -184,7 +184,7 @@ var Urank = (function(){
                 'click': EVTHANDLER.onRootClick
             });
 
-            var preselectedFeatures = _this.loadOpt.model.defaultFeatures.map(function(pf){ console.log(pf); return _this.featuresDict[pf].index });
+            var preselectedFeatures = _this.loadOpt.model.defaultFeatures.map(function(pf){ return _this.featuresDict[pf].index });
             EVTHANDLER.onAutomaticTagSelected(preselectedFeatures);
             //  Custom callback
             s.onLoad.call(this, _this.features);

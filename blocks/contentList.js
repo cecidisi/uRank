@@ -44,7 +44,10 @@ var ContentList = (function(){
         headerClass = 'urank-list-header',
         headerPosAndshiftClass = 'urank-list-header-pos-and-shift',
         headerTitleClass = 'urank-list-header-title',
-        headerStyleClass = 'urank-header-style';
+        headerStyleClass = 'urank-header-style',
+        // tag dropdown
+        tagDropdownContainerClass = 'urank-tag-list-container',
+        activeClass = 'active';
 
     // Ids
     var liItem = '#urank-list-li-';
@@ -430,6 +433,29 @@ var ContentList = (function(){
 
         var $headerShift = $('<div/>').appendTo($header).addClass(headerPosAndshiftClass);
         $('<div/>', { text: 'Country'}).appendTo($headerShift).addClass('label-container');
+ /*       $('<i/>', { class: 'fa fa-caret-down select' }).appendTo($headerShift).click(function(evt){
+            evt.stopPropagation();
+            $(this).parent().find('.'+tagDropdownContainerClass).toggleClass(activeClass);
+        });
+
+        var $dropdownContainer = $('<div/>', { class: listContainerClass }).appendTo($headerShift).css({
+            top: ($headerShift.position().top + 20) + 'px'
+        });
+
+        _this.originalData.map(function(d){ return { value: d.facets.Country_short, label: d.facets.country ? d.facets.country : d.facets.Country_short } }).forEach(function);
+
+        this.features.forEach(function(f, i){
+            $('<label/>', { pos: i, text: f.name }).appendTo($dropdownContainer).click(function(evt){
+                evt.stopPropagation();
+                if(!$(this).hasClass('disabled')) {
+                    $('.'+listContainerClass).removeClass('active');
+                    var index = $(this).attr('pos');
+
+                }
+            });
+        });
+        */
+
 
         var $headerTitle = $('<div/>').appendTo($header).addClass(headerTitleClass);
 //        $('<p/>', { text: 'Document Titles'}).appendTo($headerTitle);

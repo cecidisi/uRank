@@ -11,18 +11,20 @@
         $search = $('#input-search'),
         $bookmarks = $('.control-panel .container .bookmark-area');
 
-    var testOptionsDef = {
-        model: {
+    var modelDefault= {
             featureField: 'scores',
             normalize: true,
             invert: false,
             defaultFeatures: []
         },
-        docViewer : {
-            misc: {
-                facetsToShow: ['year']
+
+        testOptionsDef = {
+            model: modelDefault,
+            docViewer : {
+                misc: {
+                    facetsToShow: ['year']
+                }
             }
-        }
     };
 
 
@@ -50,9 +52,9 @@
                             return 0;
                         })) : dataset;
 
-//                    testOptionsDef.keywordExtractor.minRepetitions = (parseInt(_this.data.length * 0.05) >= 5) ? parseInt(_this.data.length * 0.05) : 5
-                    $.extend(true, {}, testOptionsDef.model, options);
+                    testOptionsDef.model = $.extend(true, {}, modelDefault, options);
                     _this.urank.loadData(dataset, testOptionsDef);
+
                     $message.fadeOut();
                     $numResultsMsg.html(dataset.length + ' Results');
 
