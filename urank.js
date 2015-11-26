@@ -193,6 +193,19 @@ var Urank = (function(){
         onAutomaticTagSelected: function(featureIndices){
             tagCloud.preselectTags(featureIndices);
             tagBox.preselectTags(featureIndices);
+            tagBox.updateSelectableFeatures();
+        },
+
+        onFeatureTagChanged: function(oldTagIndex, newTagIndex){
+            var queryTermColor = _this.queryTermColorScale(_this.features[newTagIndex].stem);
+            var tag = $.extend(true, { color: queryTermColor, weight: 1 }, _this.features[newTagIndex]);
+
+            tagCloud.preselectTags(newTagIndex);
+            tagBox.dropTag(tag, oldTagIndex);
+            tagCloud.updateClonOfDroppedTag(newTagIndex, queryTermColor);
+            tagBox.removeTag(oldTagIndex)
+            tagCloud.restoreTag(oldTagIndex);
+            tagBox.updateSelectableFeatures();
         },
 
         onChange: function(selectedFeatures) {
@@ -247,19 +260,6 @@ var Urank = (function(){
 
             s.onTagInBoxClick.call(this, index);
         },
-
-
-        onFeatureTagChanged: function(oldTagIndex, newTagIndex){
-            var queryTermColor = _this.queryTermColorScale(_this.features[newTagIndex].stem);
-            var tag = $.extend(true, { color: queryTermColor, weight: 1 }, _this.features[newTagIndex]);
-
-            tagCloud.preselectTags(newTagIndex);
-            tagBox.dropTag(tag, oldTagIndex);
-            tagCloud.updateClonOfDroppedTag(newTagIndex, queryTermColor);
-            tagBox.removeTag(oldTagIndex);
-            tagCloud.restoreTag(oldTagIndex);
-        },
-
 
         onTagDropped: function(tagIndices) {
             var droppedTags = [];
