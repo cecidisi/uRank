@@ -131,6 +131,7 @@ var RankingModel = (function(){
                 ranking: { content: true, social: false }
             }, options);
             this.query = opt.query;
+            console.log(this.query);
             this.mode = options.mode;
             this.rWeight = options.rWeight;
             this.ranking = this.query.length > 0 ? updateRanking(opt) : [];
