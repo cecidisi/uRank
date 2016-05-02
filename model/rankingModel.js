@@ -47,7 +47,7 @@ var RankingModel = (function(){
         var cbWeight = (score == RANKING_MODE.overall.attr) ? opt.rWeight : 1;
         var tuWeight = (score == RANKING_MODE.overall.attr) ? (1- opt.rWeight) : 1;
 
-        var ranking = _this.ranking.slice();
+        var ranking = (_this.ranking.length > 0) ? _this.ranking.slice() : _this.data.slice();
         ranking.forEach(function(d){ d.ranking.prevPos = d.ranking.pos; });
         if(opt.ranking.content)
             ranking = _this.cbRS.getCBScores({ data: ranking, keywords: opt.query, options: { rWeight: cbWeight } });
@@ -131,11 +131,11 @@ var RankingModel = (function(){
                 ranking: { content: true, social: false }
             }, options);
             this.query = opt.query;
-            console.log(this.query);
             this.mode = options.mode;
             this.rWeight = options.rWeight;
             this.ranking = this.query.length > 0 ? updateRanking(opt) : [];
             this.status = updateStatus();
+//            console.log(this);
             return this;
         },
 
