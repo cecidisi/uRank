@@ -1,7 +1,7 @@
 function LandscapeVis(root, visTemplate, EEXCESSobj) {
 
 	var LANDSCAPE = {};
-	LANDSCAPE.Settings = new Settings('landscape');
+    LANDSCAPE.Settings = VisSettings ? new VisSettings('landscape') : new Settings('landscape');
 	var EEXCESS = EEXCESSobj || {};
 	var domRoot = root; 
 	var Vis = visTemplate;
