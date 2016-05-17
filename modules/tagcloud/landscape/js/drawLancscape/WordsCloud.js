@@ -2,11 +2,13 @@ var WordsCloud = (function(){
 	this.tagsList = []
 	this.urankPrefix = ""; 
 	this.landscapeTagCloudPrefix = "landscapeTagCloud_";
+	tagColorScale = {}; 
+	
 	var me = this; 
 	var tagPrefix = "#urank-tag-"; 
 	var documentIndices = []; 
 	var _this, $root = $('');
-	
+	 
 	
 	function WordsCloud(arguments) {
 		_this = this;
@@ -17,35 +19,176 @@ var WordsCloud = (function(){
 	
     var EVTHANDLER = {
 
-        onTagInCloudMouseEnter: function(index) {
+        onTagInCloudMouseEnter: function(index, labelObj) {
+            _this.timestamp = $.now(); 
         	var $tag = $(tagPrefix+index);  
         	var stem = $tag.attr("stem");
+        	var keyword = 	$tag.clone().children().remove().end().text();
+        	if(index == -1 ) {
+        		stem = labelObj.stem;
+        		keyword = labelObj.label;
+        	}
+
         	var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 
 			if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
-				landscapeController.stateCurrent.heighlightDocumentsByIds(tagDataset.indices);
-				_this.tagcloud.hoverTag(index);	
+				landscapeController.stateCurrent.heighlightDocumentsByIds([]);
+				var selctedTags = $("#eexcess_landscape_tag_cloud").find("div.isSelected");
+				var stemList = []
+				if(stem) {
+					stemList.push(stem);
+					var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTagList(stemList); 
+				
+					landscapeController.stateCurrent.heighlightDocumentsByIds(tagDataset.indices);
+					if(!$tag.hasClass("isSelected")) {
+						if(index >= 0) {
+					 		_this.tagcloud.hoverTag(index);	
+					 	}
+					}
+				}
 			}
+			
+			var selctedTags = $("#landscapeLabel").find("text");
+			selctedTags.each(function(index, tag) {
+				var label = $(tag).text();
+				if(label == keyword) { 
+					if(!$tag.hasClass("isSelected")) {
+						d3.select(tag).style("fill", "#94BFFF")
+						d3.select(tag).style("font-weight", "bold");
+		
+						return; 
+					}
+		
+				}
+			});		
 		
         },
 
-        onTagInCloudMouseLeave: function(index) {
-           if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
-				landscapeController.stateCurrent.heighlightDocumentsByIds([]);
+        onTagInCloudMouseLeave: function(index, labelObj) {
+        	var $tag = $(tagPrefix+index);  
+        	var stem = $tag.attr("stem");
+        	var keyword = 	$tag.clone().children().remove().end().text();
+        	if(index == -1 ) {
+        		stem = labelObj.stem;
+        		keyword = labelObj.label;
+        	}
+			if (landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+				var selctedTags = $("#eexcess_landscape_tag_cloud").find("div.isSelected");
+				var stemList = []
+				selctedTags.each(function(index, tag) {
+					var stem = $(tag).attr("stem");
+					stemList.push(stem);
+				});
+				var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTagList(stemList);
+				landscapeController.stateCurrent.heighlightDocumentsByIds(tagDataset.indices);
+
 			}
-		  _this.tagcloud.unhoverTag(index);
+        	
+
+			if (!$tag.hasClass("isSelected")) {
+				if(index >= 0) {
+					_this.tagcloud.unhoverTag(index);
+				}
+			}
+			 var timestamp =  $.now()-_this.timestamp;
+			 if(timestamp > 1000 ) {
+			     var component = "tagCloud"
+			     if(labelObj) {
+			         component = "landscape";
+			     }
+			     LoggingHandler.log({ action: "Keyword inspect", source: "landscape", component: component, value : keyword}); 
+			 }            
+            
+			var selctedTags = $("#landscapeLabel").find("text");
+			selctedTags.each(function(index, tag) {
+				var label = $(tag).text();
+				if(label == keyword) { 
+					if (!d3.select(tag).classed("isSelected") ) {
+						var color = d3.select(tag).attr("color")
+						d3.select(tag).style("fill", color)
+						d3.select(tag).style("font-weight", "");
+						
+					}
+
+				}
+			});
+
+
         },
 
-        onTagInCloudClick: function(index) {
-        	var $tag = $(tagPrefix+index);  
-
+        onTagInCloudClick: function(index, labelObj) {
+        	var greyScales = ["#000000", "#333333", "#707070","#AAAAAA","#C0C0C0"].reverse(); 
+         	var $tag = $(tagPrefix+index);  
         	var stem = $tag.attr("stem");
-        	var tagLabel = $tag.html(); 
-        	var tagLabel = tagLabel.substring(0, tagLabel.indexOf('<div'))
-        	var first = $tag.first().text();
-        	if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
-				var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 				
-				FilterHandler.setCurrentFilterCategories('category', tagDataset.dataList, "tag", [tagLabel]);
-			}		
+        	var keyword = 	$tag.clone().children().remove().end().text();
+        	var colorCategory = 0; 
+        	if(index == -1 ) {
+        		stem = labelObj.stem;
+        		keyword = labelObj.label;
+        		colorCategory = labelObj.colorCategory; 
+        	}
+			 
+        	if($tag.hasClass("isSelected")) {
+        	    if(!labelObj) {
+        	        LoggingHandler.log({ action: "Keyword removed", source: "landscape", component: "tagCloud", value : keyword});  
+        	    }
+        		$tag.removeClass("isSelected"); 
+        		_this.tagcloud.unhoverTag(index);
+        	}
+        	else {
+        		$tag.addClass("isSelected");
+        		$tag.css(getTagHoverStyle());  
+        		if(!labelObj) {
+        		   LoggingHandler.log({ action: "Keyword added", source: "landscape", component: "tagCloud",  value : keyword}); // click on keyword 
+        		}       		
+        	}
+        	var selctedTags = $("#eexcess_landscape_tag_cloud").find("div.isSelected");
+        	var values = []
+			var colorList = []
+			var stemList = []
+			selctedTags.each(function(index, tag){        
+				var keyword = 	$(tag).clone().children().remove().end().text();
+				var stem = $(tag).attr("stem");
+				stemList.push(stem);
+				var colorCategory =   $(tag).attr("colorCategory");
+				$(tag).css(getTagHoverStyle()); 
+				values.push(keyword)
+				colorList.push(greyScales[colorCategory]); 
+			}); 
+			if(index == -1 ) {
+				stemList.push(stem); 
+				values.push(keyword)
+				colorList.push(greyScales[colorCategory]); 
+			}
+			
+			var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTagList(stemList); 
+			landscapeController.stateCurrent.heighlightDocumentsByIds(tagDataset.indices);
+	
+
+			var selctedTags = $("#landscapeLabel").find("text");
+			selctedTags.each(function(index, tag) {
+				var k = $(tag).text();
+				if($(tag).text() == keyword) {
+					var stem = $(tag).attr("stem");
+					if(d3.select(this).classed("isSelected") && !$tag.hasClass("isSelected")) {
+						d3.select(this).classed("isSelected", false)
+						var color = d3.select(tag).attr("color")
+						d3.select(tag).style("fill", color)
+						d3.select(tag).style("font-weight", "");
+					}
+					else {
+				    	d3.select(this).classed("isSelected", true)
+				    	d3.select(tag).style("fill", "#94BFFF")
+						d3.select(tag).style("font-weight", "bold")
+				   }
+					
+				}
+			});	
+			if(values.length == 0) {
+				values = null; 
+			}	
+			
+			FilterHandler.setInputData('keyword', {"colors" : colorList}); //Also OBJECT z.B.: ['red', 'blue', ...]
+			FilterHandler.setCurrentFilterKeywords(tagDataset.dataList, values);	
         },
 
         onKeywordHintEnter: function(index) {
@@ -66,12 +209,13 @@ var WordsCloud = (function(){
 
         }
     };
-
-	
+	WordsCloud.prototype.onTagInCloudMouseLeave = EVTHANDLER.onTagInCloudMouseLeave;
+	WordsCloud.prototype.onTagInCloudMouseEnter = EVTHANDLER.onTagInCloudMouseEnter;
+	WordsCloud.prototype.onTagInCloudClick = EVTHANDLER.onTagInCloudClick;
 	
 	
 	// -----------------------------------------------------------------------
-	WordsCloud.prototype.draw = function(tagCloudObj, indices ) {
+	WordsCloud.prototype.draw = function(tagCloudObj, indices, keywordsDict ) {
 		var arguments =  {
  			    root: "#eexcess_landscape_tag_cloud",
                 onTagInCloudMouseEnter: EVTHANDLER.onTagInCloudMouseEnter,
@@ -82,13 +226,17 @@ var WordsCloud = (function(){
                 onKeywordHintMouseLeave : EVTHANDLER.onKeywordHintLeave,
                 onKeywordHintClick : EVTHANDLER.onKeywordHintClick
         }
+           
+        
         documentIndices = documentIndices; 
         var tagcloudClass = 'urank-tagcloud'; 
         var tagClass = 'urank-tagcloud-tag';
 		var tagColorRange = colorbrewer.Blues[TAG_CATEGORIES + 1].slice(1, TAG_CATEGORIES+1);
-		var tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(tagColorRange);
+		tagColorScale = d3.scale.ordinal().domain(d3.range(0, TAG_CATEGORIES, 1)).range(tagColorRange);
         this.tagcloud = new TagCloudDefault(arguments);
        	this.tagcloud.clear();
+       	this.timestamp = 0; 
+       	if(keywordsDict) {}
        	var misc = { customScrollBars: false, defaultBlockStyle: false, draggableClass: "urank-tagcloud-tag"}
        	
         var options = $.extend(misc, { draggableClass: tagClass })
@@ -102,6 +250,11 @@ var WordsCloud = (function(){
           
 	}
 	
+	// -----------------------------------------------------------------------
+	WordsCloud.prototype.unHoverAllTags = function(index){
+		return this.tagsList; 		
+	}
+	
 	// -----------------------------------------------------------------------	
 	WordsCloud.prototype.clearTagCloud = function(){
 		if(!landscapeConfig.getLandscapeType() == "standaloneLandscape") {
@@ -112,6 +265,11 @@ var WordsCloud = (function(){
 
 	// -----------------------------------------------------------------------
 	WordsCloud.prototype.getTagsList = function(index){
+		return this.tagsList; 		
+	}
+	
+	// -----------------------------------------------------------------------
+	WordsCloud.prototype.redraw = function(){
 		return this.tagsList; 		
 	}
 		
@@ -139,6 +297,30 @@ var WordsCloud = (function(){
 			$tag.style("font-weight", null);
 
 		}
+	}
+	
+	function getTagHoverStyle() {
+		var backgroudGradient = "top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255)";
+		tagHoverStyle = {
+			background : function() {
+				var hoverBackground = '-webkit-linear-gradient(' + backgroudGradient + ')';
+
+				if (navigator.userAgent.match(/(MSIE |Trident.*rv[ :])([0-9]+)/) != null) {
+					return '-ms-linear-gradient(' + backgroudGradient + ')';
+				} else if (navigator.userAgent.search("Chrome") >= 0) {
+					return '-webkit-linear-gradient(' + backgroudGradient + ')';
+				} else if (navigator.userAgent.search("Firefox") >= 0) {
+					return '-moz-linear-gradient(' + backgroudGradient + ')';
+				} else if (navigator.userAgent.search("Safari") >= 0 && navigator.userAgent.search("Chrome") < 0) {
+					return '-webkit-linear-gradient(' + backgroudGradient + ')';
+				} else if (navigator.userAgent.search("Opera") >= 0) {
+					return '-o-linear-gradient(' + backgroudGradient + ')';
+				}
+				return hoverBackground;
+			}
+		}
+		return tagHoverStyle; 
+
 	}
 	
 
@@ -213,7 +395,7 @@ var WordsCloud = (function(){
 		      }).text(function(d) {
 		    	  return d.text; 
 		      }).on("click", function(d, i) {
-		    	  	var tag = $( this ).html();
+		    	  	var tag = $( this ).text();
 		    	  	var stem = d3.select(this).attr("stem"); 
 					if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
 						var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 				
@@ -416,7 +598,7 @@ function WordsCloudLandscape() {
 		      }).text(function(d) {
 		    	  return d.text; 
 		      }).on("click", function(d, i) {
-		    	  	var tag = $( this ).html();
+		    	  	var tag = $( this ).text();
 		    	  	var stem = d3.select(this).attr("stem"); 
 					if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
 						var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 				
@@ -463,9 +645,4 @@ function WordsCloudLandscape() {
 
 			});
 	}
-	
-
 }
-  	
-
-  	

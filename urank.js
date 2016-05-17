@@ -19,10 +19,10 @@ var Urank = (function(){
         docViewerRoot: '',
         onLoad: function(keywords){},
         onChange: function(rankingData, selecedKeywords){},
-        onItemClicked: function(documentId){},
+        onItemClicked: function(documentId, event){},
         onItemMouseEnter: function(documentId){},
         onItemMouseLeave: function(documentId){},
-        onFaviconClicked: function(documentId){},
+        onFaviconClicked: function(documentId, event){},
         onWatchiconClicked: function(documentId){},
         onTagInCloudMouseEnter: function(index){},
         onTagInCloudMouseLeave: function(index){},
@@ -67,7 +67,9 @@ var Urank = (function(){
                     liDarkBackgroundClass: ''
                 },
                 misc: {
-                    hideScrollbar: false
+                    hideScrollbar: false, 
+                    hideUrankedItems : true,
+                    stopPropagation : true
                 }
             },
         },
@@ -75,10 +77,11 @@ var Urank = (function(){
             module: 'ranking',
             customOptions: {               // use only if contentList.custom = true and background in the ranking should match different light and dark background colors
                 lightBackgroundColor: '',
-                darkBackgroundColor: ''
+                darkBackgroundColor: '',
+                stopPropagation : true
             },
             misc: {
-                hideScrollbar: true
+                hideScrollbar: true,             
             }
         },
         tagBox: {
@@ -96,7 +99,15 @@ var Urank = (function(){
         misc: {
             tagColorArray: tagColorRange,
             queryTermColorArray: queryTermColorRange,
+        },      
+        keywordExtractor: {
+	        extractedData : {
+	        	keywords : {},
+	        	keywordsDict: {}
+	        }, 
+	        extractionEnabled : true
         }
+        
     };
 
 
@@ -120,32 +131,40 @@ var Urank = (function(){
             _this.queryTermColorScale = null;
             _this.queryTermColorScale = d3.scale.ordinal().range(o.queryTermColorArray);
 
-            //  Initialize keyword extractor
-            var keywordExtractorOptions = { minRepetitions: (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5 };
-            var keywordExtractor = new KeywordExtractor(keywordExtractorOptions);
-
-            //  Clean documents and add them to the keyword extractor
-            _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
-
-            _this.data.forEach(function(d, i){
-                d.index = i;
-                d.title = d.title.clean();
-                d.description = d.description.clean();
-                var document = (d.description) ? d.title +'. '+ d.description : d.title;
-                keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id);
-            });
-
-            //  Extract collection and document keywords
-            keywordExtractor.processCollection();
-
-            //  Assign document keywords
-            _this.data.forEach(function(d, i){
-                d.keywords = keywordExtractor.listDocumentKeywords(i);
-            });
+			//  Clean documents and add them to the keyword extractor
+	        _this.data = typeof data == 'string' ? JSON.parse(data) : data.slice();
+			
+			if(o.keywordExtractor.extractionEnabled) {
+	            //  Initialize keyword extractor
+	            var keywordExtractorOptions = { minRepetitions: (parseInt(data.length * 0.05) >= 5) ? parseInt(data.length * 0.05) : 5 };
+	            var keywordExtractor = new KeywordExtractor(keywordExtractorOptions);
+	            	
+	            _this.data.forEach(function(d, i){
+	                d.index = i;
+	                d.title = d.title.clean();
+	                d.description = d.description.clean();
+	                var document = (d.description) ? d.title +'. '+ d.description : d.title;
+	               	d.facets.language = d.facets.language ? d.facets.language : "en"
+	                keywordExtractor.addDocument(document.removeUnnecessaryChars(), d.id, d.facets.language );
+	            });
+	
+	            //  Extract collection and document keywords
+	            keywordExtractor.processCollection();
+	
+	            //  Assign document keywords
+	            _this.data.forEach(function(d, i){
+	                d.keywords = keywordExtractor.listDocumentKeywords(i);
+	            });
+	            o.keywordExtractor.extractedData.keywords = keywordExtractor.getCollectionKeywords();
+	        	o.keywordExtractor.extractedData.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
+	        }
+	        else {
+	        	 o.keywordExtractor = options.keywordExtractor; 
+	        }
 
             //  Assign collection keywords and set other necessary variables
-            _this.keywords = keywordExtractor.getCollectionKeywords();
-            _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
+            _this.keywords =  o.keywordExtractor.extractedData.keywords; 
+            _this.keywordsDict = o.keywordExtractor.extractedData.keywordsDict; 
             _this.rankingMode = RANKING_MODE.overall_score;
             _this.rankingModel.clear().setData(_this.data);
             _this.selectedKeywords = [];
@@ -178,6 +197,22 @@ var Urank = (function(){
 
             //  Custom callback
             s.onLoad.call(this, _this.keywords);
+        },
+        
+        init : function(elemNum) {
+       		selectedKeywords = []; 
+       		for(i = 0; i <elemNum; i++) {
+       			if(i < _this.keywords.length) {
+       				var keywordObj = {}
+	       			keywordObj.stem = _this.keywords[i].stem; 
+	            	keywordObj.term = _this.keywords[i].term;
+	            	keywordObj.weight = 1; 
+	            	EVTHANDLER.onTagDropped(i);
+	            	selectedKeywords.push(keywordObj); 
+	          
+	           	}
+       		}
+       		EVTHANDLER.onChange(selectedKeywords); 
         },
 
         onChange: function(selectedKeywords) {
@@ -262,7 +297,7 @@ var Urank = (function(){
             s.onTagInBoxClick.call(this, index);
         },
 
-        onItemClicked : function(documentId) {
+        onItemClicked : function(documentId, event) {
             _this.selectedId = _this.selectedId === documentId ? STR_UNDEFINED : documentId;
 
             if(_this.selectedId !== STR_UNDEFINED) {    // select
@@ -276,7 +311,7 @@ var Urank = (function(){
                 docViewer.clear();
             }
             tagCloud.clearEffects();
-            s.onItemClicked.call(this, documentId);
+            s.onItemClicked.call(this, documentId, event);
         },
 
         onItemMouseEnter: function(documentId) {
@@ -291,9 +326,9 @@ var Urank = (function(){
             s.onItemMouseLeave.call(this, documentId);
         },
 
-        onFaviconClicked: function(documentId){
+        onFaviconClicked: function(documentId, event){
             contentList.toggleFavicon(documentId);
-            s.onFaviconClicked.call(this, documentId);
+            s.onFaviconClicked.call(this, documentId, event);
         },
 
         onWatchiconClicked: function(documentId) {
@@ -471,6 +506,7 @@ var Urank = (function(){
 
     Urank.prototype = {
         loadData: EVTHANDLER.onLoad,
+        init : EVTHANDLER.init,
         reset: EVTHANDLER.onReset,
         rankByOverallScore: EVTHANDLER.onRankByOverallScore,
         rankByMaximumScore: EVTHANDLER.onRankByMaximumScore,

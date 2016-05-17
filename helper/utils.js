@@ -155,7 +155,7 @@ function getGradientString(color, shadeDiff) {
     var original = 'rgb('+r+','+g+','+b+')';
     var lighter = 'rgb('+(r+shadeDiff)+','+(g+shadeDiff)+','+(b+shadeDiff)+')';
 
-    if (navigator.userAgent.search("MSIE") >= 0) {
+    if (navigator.userAgent.match( /(MSIE |Trident.*rv[ :])([0-9]+)/ ) != null) {
 		return '-ms-linear-gradient(top, ' + original + ', ' + lighter + ', ' + original + ')';
 	}
 	else if (navigator.userAgent.search("Chrome") >= 0) {

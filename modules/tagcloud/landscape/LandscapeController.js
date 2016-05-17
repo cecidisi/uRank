@@ -8,8 +8,6 @@ var LandscapeController = (function(){
  	this.dataProcessor = "";
  	this.receivedData = {}
  	this.landscapeTagCloudBuilder = "";
- 	var prevLandscapeScale = -1; 
- 	var landscapeInitialScaleCounter= 0; 
  	var me = this;
 
 
@@ -153,8 +151,11 @@ var LandscapeController = (function(){
 			.attr("overflow", "hidden")
 			.style("background-color", "#f1f1f1")
 			.style("float","left")
-			.call(landscapeZoom);
-		svgcanvas = landscapeCanvas.append("g").attr("id", "kdApp_landscape").attr("scale", 0);
+			.call(landscapeZoom)
+			.on("click", function(d) {
+										
+			})
+		svgcanvas = landscapeCanvas.append("g").attr("id", "kdApp_landscape").attr("scale", 0)
 
 
 	if(landscapeConfig.getLandscapeType() == "urankLandscape") {
@@ -177,7 +178,6 @@ var LandscapeController = (function(){
 		strTreeJSTSOld = new STRTreeJSTS();
 		strTreeJSTSCurrent = strTreeJSTSOld;
 		strTreeJSTSOldOld = strTreeJSTSOld;
-		$("#loadingLandscape").remove();
 
 
 
@@ -198,7 +198,7 @@ var LandscapeController = (function(){
 		.attr("class", "landscapeBrush")//
 		.attr("id", "landscapeBrush")
 		.call(landscapeBrush);
-
+		me.stateCurrent.drawHoveredDocuments();
 		me.stateCurrent.drawAllDocuments();
 		me.stateCurrent.drawLabels();
 		if(prevVisConfig != "" && prevVisConfig != null) {
@@ -235,22 +235,10 @@ var LandscapeController = (function(){
 
 	//------------------------------------------------------------------------
 	var zoomLandscape =  function() {
-		var landscapeScale = 	d3.select("#kdApp_landscape").attr("scale"); 
-		var scale = landscapeZoom.scale(); 
-
-		if(scale == 1 && prevLandscapeScale == 1 && landscapeInitialScaleCounter > 0) {
+		if(landscapeZoom.scale() == 1 && !d3.event.sourceEvent.ctrlKey) {
 			landscapeZoom.translate([0,0])
 		}
-		if(scale == 1) {
-			prevLandscapeScale = -1; 
-			landscapeInitialScaleCounter = landscapeInitialScaleCounter > 7 ? 8: landscapeInitialScaleCounter+1; 
-		}
-		else {
-			landscapeInitialScaleCounter = 0; 
-			prevLandscapeScale = scale; 
-		}
-
-	
+		console.log("scale", landscapeZoom.scale())
 	
 		d3.select("#kdApp_landscape").attr("transform", "translate(" +  landscapeZoom.translate() + ")" + " scale(" + landscapeZoom.scale() + ")");
 	
@@ -258,11 +246,13 @@ var LandscapeController = (function(){
 
 	//------------------------------------------------------------------------
 	var initLandscapeBrush = function(brushExtent) {
-			var tagClass = 'urank-tagcloud-tag';
+	    var tagClass = 'urank-tagcloud-tag';
+	    var itemCountOld = 0; 
 		landscapeBrush = d3.svg.brush()
 		.x(d3.scale.linear().range([0, landscapeConfig.getWidth()]))
 		.y(d3.scale.linear().range([0, landscapeConfig.getHeight()]))
-		.extent(brushExtent).on("brushstart", function() {	
+		.extent(brushExtent)
+		.on("brushstart", function() {	
 			if(d3.event.sourceEvent.ctrlKey) {
 				return; 
 			}
@@ -304,6 +294,15 @@ var LandscapeController = (function(){
 					documentIds.push(id);
 				});
 				var datasetList = me.dataProcessor.getDatasetByIds(documentIds); 
+				
+				/*if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
+					FilterHandler.clearList();
+					for(var i=0; i < datasetList.length; i++ ) {
+						FilterHandler.singleItemSelected(datasetList[i], true); 
+					}
+				}*/ 
+				
+
 				var tagCloundData =  me.dataProcessor.getTagCloudData(documentIds);
 				var keywordsData =  me.dataProcessor.getTagCloudKeywordsAndData(documentIds);
 				
@@ -317,22 +316,41 @@ var LandscapeController = (function(){
 				else {
 					me.stateCurrent.drawTagsCloud(keywordsData);
 				}
-				// 
-				
-		
-				if(landscapeConfig.getLandscapeType() != "urankLandscape") {
-					FilterHandler.clearList();
-					for(var i=0; i < datasetList.length; i++ ) {
-						FilterHandler.singleItemSelected(datasetList[i], true); 
-					}
-				}
-				landscapeZoom.on("zoom",zoomLandscape);
-				landscapeZoom.translate(landscapeTranslate)
-				landscapeZoom.scale(landscapeScale)		
+				var itemCountNew = documentIds.length;
+				if(itemCountNew > 0) {
+	               LoggingHandler.log({ action: "Brush created", source: "landscape", value: "", itemCountOld: itemCountOld, itemCountNew: itemCountNew});
+			         itemCountOld = itemCountNew;
+			     }
+
 				//me.stateCurrent.resetZoom(translate, scale);
 	
 			}
-			
+			else {
+		
+			    var tagCloudObj = {"keywords": me.receivedData.keywords.slice(0, 50),  "data" :  me.receivedData}
+                landscapeController.stateCurrent.drawTagsCloud(tagCloudObj);
+				var selectedLabelsElems= $("#landscapeLabel").find("text.isSelected");
+				var labels = []; 
+				selectedLabelsElems.each(function(index, label) {
+					labels.push($(label).text());
+				})
+				var cloudTags = $("#eexcess_landscape_tag_cloud").find(".urank-tagcloud-tag");
+				var tagsPositions = []; 
+				cloudTags.each(function(index, tag) {
+					var keyword = $(tag).clone().children().remove().end().text();
+					if (labels.indexOf(keyword) > -1) {
+						var pos = $(tag).attr("tag-pos");
+						tagsPositions.push(pos); 
+					}
+
+				});
+				for(var i=0; i < tagsPositions.length; i++) {
+					landscapeController.stateCurrent.wordsCloud.onTagInCloudClick(tagsPositions[i]);
+				}; 
+			}
+			landscapeZoom.on("zoom",zoomLandscape);
+			landscapeZoom.translate(landscapeTranslate)
+			landscapeZoom.scale(landscapeScale)		
 	
 		});
 	}; 

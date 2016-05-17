@@ -57,10 +57,10 @@ var ContentList = (function(){
         _this = this;
         s = $.extend({
             root: '',
-            onItemClicked: function(document){},
+            onItemClicked: function(document, event){},
             onItemMouseEnter: function(document){},
             onItemMouseLeave: function(document){},
-            onFaviconClicked: function(document){},
+            onFaviconClicked: function(document, event){},
             onWatchiconClicked: function(document){},
             defaultStyle: true
         }, arguments);
@@ -79,21 +79,30 @@ var ContentList = (function(){
 
         var onLiClick = function(event){
             event.stopPropagation();
-            hideUnrankedListItems();
+            if(_this.opt.customOptions.misc.hideUrankedItems)
+            	hideUnrankedListItems();
             if(!$(this).hasClass(liUnrankedClass))
-                s.onItemClicked.call(this, id);
+                s.onItemClicked.call(this, id, event);
         };
         var onLiMouseEnter = function(event){
-            event.stopPropagation(); s.onItemMouseEnter.call(this, id);
+        	if(_this.opt.customOptions.misc.stopPropagation)
+            	event.stopPropagation();
+             s.onItemMouseEnter.call(this, id);
         };
         var onLiMouseLeave = function(event){
-            event.stopPropagation(); s.onItemMouseLeave.call(this, id);
+        	if(_this.opt.customOptions.misc.stopPropagation)
+            	event.stopPropagation();
+             s.onItemMouseLeave.call(this, id);
         };
         var onWatchiconClick = function(event){
-            event.stopPropagation(); s.onWatchiconClicked.call(this, event.data);
+        	if(_this.opt.customOptions.misc.stopPropagation)
+            	event.stopPropagation();
+			s.onWatchiconClicked.call(this, event.data);
         };
         var onFaviconClick = function(event){
-            event.stopPropagation(); s.onFaviconClicked.call(this, event.data);
+        	if(_this.opt.customOptions.misc.stopPropagation)
+            	event.stopPropagation();
+			s.onFaviconClicked.call(this, event.data, event);
         };
 
         $li.off({

@@ -27,11 +27,12 @@ var Ranking = (function(){
         _this = this;
         s = $.extend({
             root: '.urank-viscanvas-container',
-            onItemClicked: function(document){},
+            onItemClicked: function(document, event){},
             onItemMouseEnter: function(document){},
             onItemMouseLeave: function(document){},
             lightBackgroundColor: '',
-            darkBackgroundColor: ''
+            darkBackgroundColor: '',
+            stopPropagation : true
         }, arguments);
 
         this.isRankingDrawn = false;
@@ -87,16 +88,18 @@ var Ranking = (function(){
 
     RANKING.Evt.itemClicked = function(d, i){
         d3.event.stopPropagation();
-        s.onItemClicked.call(this, d.id);
+        s.onItemClicked.call(this, d.id, d3.event);
     };
 
     RANKING.Evt.itemMouseEntered = function(d, i){
-        d3.event.stopPropagation();
+		if(s.stopPropagation)
+        	d3.event.stopPropagation();
         s.onItemMouseEnter.call(this, d.id);
     };
 
     RANKING.Evt.itemMouseLeft = function(d, i){
-        d3.event.stopPropagation();
+		if(s.stopPropagation)
+        	d3.event.stopPropagation();
         s.onItemMouseLeave.call(this, d.id);
     };
 

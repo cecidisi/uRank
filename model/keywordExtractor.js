@@ -3,7 +3,7 @@ var KeywordExtractor = (function(){
 
     var _this,
         s = {},
-        stemmer, tokenizer, nounInflector, tfidf, stopWords, pos, lexer, tagger,
+        multiLingualService, stemmer, tokenizer, nounInflector, tfidf, stopWords, pos, lexer, tagger,
         POS = {
             NN: 'NN',           // singular noun
             NNS: 'NNS',         // plural noun
@@ -17,7 +17,8 @@ var KeywordExtractor = (function(){
             minDocFrequency: 2,
             minRepetitionsInDocument: 1,
             maxKeywordDistance: 5,
-            minRepetitionsProxKeywords: 4
+            minRepetitionsProxKeywords: 4, 
+            multiLingualEnabled : false
         }, arguments);
 
         _this = this;
@@ -26,6 +27,7 @@ var KeywordExtractor = (function(){
         this.collectionKeywords = [];
         this.collectionKeywordsDict = {};
 
+		multiLingualService = new natural.MultiLingualService;
         stemmer = natural.PorterStemmer; //natural.LancasterStemmer;
         stemmer.attach();
         tokenizer = new natural.WordTokenizer;
@@ -59,8 +61,16 @@ var KeywordExtractor = (function(){
 
         // Create each item's document to be processed by tf*idf
         collection.forEach(function(d) {
-            d.tokens = getFilteredTokens(d.taggedWords, keyAdjectives);                                       // d.tokens contains raw nouns and important adjectives
-            tfidf.addDocument(d.tokens.map(function(term){ return term.stem(); }).join(' '));                 // argument = string of stemmed terms in document array
+            d.language = s.multiLingualEnabled ? multiLingualService.getTextLanguage(d.text, d.language) : "en";
+        	if(!s.multiLingualEnabled || d.language == "en" ) {
+           		d.tokens = getFilteredTokens(d.taggedWords, keyAdjectives);                                       // d.tokens contains raw nouns and important adjectives
+            	d.tokens = s.multiLingualEnabled ? multiLingualService.tokenize(d.tokens.join(' '), d.language) : d.tokens;  
+            	tfidf.addDocument(d.tokens.map(function(term){ return term.stem(); }).join(' '));                 // argument = string of stemmed terms in document array
+        	}
+        	else {
+        		d.tokens = multiLingualService.tokenize(d.text, d.language);        
+        		tfidf.addDocumentML(d.tokens.map(function(term){ return  multiLingualService.stem(term, d.language);}));
+        	}
         });
 
         // Save keywords for each document
@@ -146,8 +156,9 @@ var KeywordExtractor = (function(){
         // get keyword variations (actual terms that match the same stem)
         collection.forEach(function(d){
             d.tokens.forEach(function(token){
-                var stem = token.stem();
-                if(keywordDict[stem] && stopWords.indexOf(token.toLowerCase()) == -1)
+                // var stem = token.stem();
+                var stem = multiLingualService.stem(token, d.language);
+                if(keywordDict[stem] && !multiLingualService.isTokenStopword(token, d.language) /*stopWords.indexOf(token.toLowerCase()) == -1*/)
                     keywordDict[stem].variations[token] =
                         keywordDict[stem].variations[token] ? keywordDict[stem].variations[token] + 1 : 1;
             });
@@ -241,11 +252,13 @@ var KeywordExtractor = (function(){
         _collection.forEach(function(d){
             d.tokens.forEach(function(token, i, tokens){
 
-                var current = token.stem();
+                // var current = token.stem();
+                var current = multiLingualService.stem(token, d.language);
                 if(_keywordDict[current]) {   // current word is keyword
 
                     for(var j=i-s.maxKeywordDistance; j <= i+s.maxKeywordDistance; j++){
-                        var prox = tokens[j] ? tokens[j].stem() : STR_UNDEFINED;
+                        // var prox = tokens[j] ? tokens[j].stem() : STR_UNDEFINED;
+						var prox = tokens[j] ? multiLingualService.stem(tokens[j], d.language) : STR_UNDEFINED;
 
                         if(_keywordDict[prox] && current != prox) {
                             //var proxStem = prox.stem();
@@ -311,10 +324,11 @@ var KeywordExtractor = (function(){
 *********************************************************************************************************************************************/
 
     KeywordExtractor.prototype = {
-        addDocument: function(document, id) {
+        addDocument: function(document, id, language) {
             document = (!Array.isArray(document)) ? document : document.join(' ');
             id = id || this.collection.length;
-            this.collection.push({ id: id, text: document });
+			language = language || "en";
+            this.collection.push({ id: id, text: document, language: language });
         },
         processCollection: function() {
             tfidf = new natural.TfIdf();

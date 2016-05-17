@@ -62,6 +62,24 @@ function LandscapeLabels() {
 
 
 	}
+	
+	
+	LandscapeLabels.prototype.onMouseOverByKeyword = function(keyword) {
+
+
+	}
+	
+	LandscapeLabels.prototype.onMouseOutByKeyword = function(keyword) {
+
+
+	}
+	
+	LandscapeLabels.prototype.onMouseClickByKeyword = function(keyword) {
+
+
+	}
+	
+	
 
 	// -----------------------------------------------------------------------
 	LandscapeLabels.prototype.drawLabels = function() {
@@ -108,7 +126,7 @@ function LandscapeLabels() {
 				landscapeZoom.on("zoom",null);
 	       	})
 	       	.on("dragend", function(d,i) {
-	       		landscapeZoom.on("zoom", function() {console.log("tesssss"); landscapeController.stateCurrent.zoom()});
+	       		landscapeZoom.on("zoom", function() {landscapeController.stateCurrent.zoom()});
 				landscapeZoom.translate(landscapeTranslate)
 				landscapeZoom.scale(landscapeScale)		
 	       	})
@@ -247,12 +265,12 @@ function LandscapeLabels() {
 			$.each(labelsText, function(index, text) {
 				var stem = text;
 				var labelIndex = totalLabelCounter;
-				if(landscapeConfig.getLandscapeType() == "urankLandscape") {
-					for(var j=0; j < keywordsObj.length; j++) {
-						if(keywordsObj[j].term == text) {
-							stem = keywordsObj[j].stem;
-							labelIndex = keywordsObj[j].index;
-						}
+				var colorCategory = 0; 
+				for(var j=0; j < keywordsObj.length; j++) {
+					if(keywordsObj[j].term == text) {
+						stem = keywordsObj[j].stem;
+						colorCategory = keywordsObj[j].colorCategory; 
+						labelIndex = keywordsObj[j].index;
 					}
 				}
 
@@ -271,12 +289,13 @@ function LandscapeLabels() {
 				var padding = (textBoxWidth+15-dummyTextWidth)/2;
 					svgcanvas.selectAll("#dummyLandscapeLabel2").remove();
 					landscapeLabels.append("svg:text")
-					.attr("id", "landscapeLabel_" + labelIndex)
+					.attr("id", "landscapeLabel_" + labelCounter)
 					.attr("dx", textBoxPosX  +  padding)
 					.attr("dy", (textBoxPosY + (labelCounter * textBoxHeight))+15)//
 					.attr("depth", labelDepth)
 					.attr("color", labelColor)
 					.attr("stem", stem)
+					.attr("colorCategory", colorCategory)
 					.style("font-size", (fontSize+labelWeight))
 					.style("fill", labelColor)
 					.style("font-weight", fontWeight)
@@ -285,16 +304,32 @@ function LandscapeLabels() {
 						.attr("isLabelInTagBox", 0)
 					.attr("labelID", labelindex).attr("text", text)
 					.on("mouseover",function(d, i) {
-						var color = d3.select(this).style("fill")
-						d3.select(this).attr("color", color);
 						d3.select(this).style("cursor", "pointer")
-						d3.select(this).style("font-size", (fontSize+labelWeight))
-						d3.select(this).style("fill", "#FFBE3B")
-						d3.select(this).style("font-weight", "bold")
-						var stem = d3.select(this).attr("stem"); 
-						var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 
 						if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
-							landscapeController.stateCurrent.heighlightDocumentsByIds(tagDataset.indices);
+							var label = $(this).text(); 
+							var stem = d3.select(this).attr("stem");
+							var colorCategory =  d3.select(this).attr("colorCategory");
+							var selctedTags = $("#eexcess_landscape_tag_cloud").find(".urank-tagcloud-tag");
+							var pos = -1; 
+							
+							d3.select(this).style("font-size", (fontSize+labelWeight))
+							d3.select(this).style("fill", "#94BFFF")
+							d3.select(this).style("font-weight", "bold")
+							
+							
+							selctedTags.each(function(index, tag) {
+								var keyword = $(tag).clone().children().remove().end().text();
+								if(keyword == label) {
+									pos =  $(tag).attr("tag-pos"); 
+									
+								}
+								
+							});	
+					
+							//landscapeController.stateCurrent.onTagInCloudMouseEnter(pos, colorCategory); 
+							//landscapeController.stateCurrent.onTagInCloudClick(pos, colorCategory); 
+							landscapeController.stateCurrent.wordsCloud.onTagInCloudMouseEnter(pos, {"stem": stem, "label": label, "colorCategory": colorCategory}); 
+							// 					
 						}		
 						else if(landscapeConfig.getLandscapeType() == "urankLandscape") {
 							var i = parseInt(d3.select(this).attr("labelCounter"));
@@ -310,25 +345,76 @@ function LandscapeLabels() {
    							 $('#'+tagId).show();
 						}
 					})
-					.on("mouseout", function(d, i) {
-						var color = d3.select(this).attr("color")
-						d3.select(this).style("fill", color);
-						d3.select(this).style("font-weight", null)
-						if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
-							landscapeController.stateCurrent.heighlightDocumentsByIds([]);
-						}
+					.on("mouseout", function(d, i) {		
+							var label = $(this).text(); 
+							var stem = d3.select(this).attr("stem");
+							var colorCategory =  d3.select(this).attr("colorCategory");
+							var selctedTags = $("#eexcess_landscape_tag_cloud").find(".urank-tagcloud-tag");
+							var pos = -1; 
+							selctedTags.each(function(index, tag) {
+								var keyword = $(tag).clone().children().remove().end().text();
+								if(keyword == label) {
+									pos =  $(tag).attr("tag-pos"); 
+								}
+								
+							});	
+			
+							/*if(!d3.select(this).classed("isSelected")) {
+								var color = d3.select(this).attr("color")
+								d3.select(this).style("fill", color)
+								d3.select(this).style("font-weight", "");
+							}*/
+							landscapeController.stateCurrent.wordsCloud.onTagInCloudMouseLeave(pos,  {"stem": stem, "label": label, "colorCategory": colorCategory}); 
+						
 
-					}).on("click", function(d, i) {
-						var tag = $( this ).html();
-						var stem = d3.select(this).attr("stem"); 
+					}).on("click", function(d, i) {		
 						if(landscapeConfig.getLandscapeType() == "standaloneLandscape") {
-							var tagDataset = landscapeController.dataProcessor.getObjectsBasedOnTag(stem); 				
-							FilterHandler.setCurrentFilterCategories('category', tagDataset.dataList, "tag", [tag]);
+							
+							/*if(d3.select(this).classed("isSelected")) {
+				        		d3.select(this).classed("isSelected", false)
+				        		var color = d3.select(this).attr("color")
+								d3.select(this).style("fill", color)
+								d3.select(this).style("font-weight", "");			        		
+				        	}
+				        	else {
+				        		d3.select(this).classed("isSelected", true);     		
+				        	}
+							*/
+							var label = $(this).text(); 
+							var stem = d3.select(this).attr("stem");
+							var colorCategory =  d3.select(this).attr("colorCategory");
+							var selctedTags = $("#eexcess_landscape_tag_cloud").find(".urank-tagcloud-tag");
+							var pos = -1; 
+							
+							/*d3.select(this).style("font-size", (fontSize+labelWeight))
+							d3.select(this).style("fill", "#94BFFF")
+							d3.select(this).style("font-weight", "bold") */
+							
+							
+							selctedTags.each(function(index, tag) {
+								var keyword = $(tag).clone().children().remove().end().text();
+								if(keyword == label) {
+									pos =  $(tag).attr("tag-pos"); 
+									
+								}
+								
+							});	
+							if(d3.select(this).classed("isSelected")) {
+							    LoggingHandler.log({ action: "Keyword removed", source: "landscape", component: "landscape", value : label}); 
+					        }
+					        else {
+					            LoggingHandler.log({ action: "Keyword added", source: "landscape", component: "landscape", value : label}); 
+					        }
+							//landscapeController.stateCurrent.onTagInCloudMouseEnter(pos, colorCategory); 
+							//landscapeController.stateCurrent.onTagInCloudClick(pos, colorCategory); 
+							landscapeController.stateCurrent.wordsCloud.onTagInCloudClick(pos, {"stem": stem, "label": label, "colorCategory": colorCategory}); 
+							// 							
+						
 						}
 
 					})
 					labelCounter++;
-						totalLabelCounter++;
+					totalLabelCounter++;
 				})
 
 		});
