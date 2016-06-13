@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>uRank</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/main-style.css" />
+        <script src="../dependencies/jquery.js"></script>
+        <style>
+            h3 {
+                font-size: 18px;
+            }
+            ol {
+                margin: auto;
+                width: 850px;
+                text-align: left;
+                font-size: 16px;
+            }
+            li {
+                margin-bottom: 5px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div style="margin: 100px; text-align:center;">
+            <h2>Welcome to our evaluation!</h2><br>
+            <h2>Let's get it started</h2>
+            <h3>Please watch the following demo video to understand the basic funcitonality of uRank before you start using it</h3>
+            <h3>(or follow this <a target="_blank" href="https://youtu.be/XUiPRFM5Wag">link</a>)</h3>
+            <br>
+            <iframe type="text/html" width="300" height="200" src="http://www.youtube.com/embed/XUiPRFM5Wag" frameborder="0"></iframe>
+            <br><br><br>
+            <h3>The task consists in exploring a collection of documents and finding the ones that most interest you.</h3><br>
+            <h4></h4>
+            <ol>
+                <li> Click on the link at the bottom to open uRank
+                <li> Select any topic from the dropdown list (free choice)</li>
+                <li> Use keyword tags to explore the collection, as shown in the video</li>
+                <li> When you find interesting keywords, drag and drop tags to rank the document list</li>
+                <li> Add the most interesting documents to your bookmarks (recommended between 5 and 10)</li>
+                <li> When you're done, click on Finish (please don't forget to do it, otherwise we can't collect action logs)</li>
+                <li> Please follow the instrcutions to fill a post-study questionnaire</li>
+            </ol>
+            <br>
+            <strong style="font-size:20px;"><a target="_blank" href="index.html">Go to uRank</a></strong>
+        </div>
+
+        <script>
+            $('#user-id').html(localStorage['user'])
+        </script>
+
+    </body>
+</html>

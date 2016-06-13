@@ -164,8 +164,11 @@
     })
 
     $('#btn-finish').click(function(){
+        var user = Math.random().toString(36).slice(2);
+        localStorage['user'] = user;
+
         var host = './server/save-log.php';
-        $.post(host, { data: actionLogger.getFullLogs(), filename: 'test-'+getTimestamp() })
+        $.post(host, { data: actionLogger.getFullLogs(), filename: user+'__'+getTimestamp() })
             .done(function(response){
                 console.log(response);
                 window.location.href = 'test-finished.html';
