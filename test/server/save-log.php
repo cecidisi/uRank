@@ -1,7 +1,7 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 include 'error.php';
-if(empty($_POST['data'])){
+if(empty($_POST['data']) || empty($_POST['filename'])){
     return_error('POST parameter missing', 1001);
     exit;
 }
@@ -17,8 +17,7 @@ if(!is_writable($output_dir)) {
     exit;
 }
 
-$timestamp = date('Y-m-d').'_'.date('h').'-'.date('i').'-'.date('s');
-$filename = 'test-'.$timestamp.'.json';
+$filename = $_POST['filename'].'.json';
 $data = $_POST['data'];
 $file = fopen($output_dir.'/'.$filename, 'w') or die('Unable to open file!');
 fwrite($file, json_encode($data));

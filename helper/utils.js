@@ -44,6 +44,18 @@ function toYear(date){
 }
 
 
+function getTimestamp() {
+    var date = new Date(),
+        year = date.getFullYear(),
+        month = (date.getMonth()+1) < 10 ? '0'+(date.getMonth()+1) : (date.getMonth()+1),
+        day = date.getDay() < 10 ? '0'+date.getDay() : date.getDay(),
+        hour = date.getHours(),
+        min = date.getMinutes(),
+        mil = date.getMilliseconds();
+    return year+'-'+month+'-'+day+'_'+hour+'.'+min+'.'+mil;
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * String prototype

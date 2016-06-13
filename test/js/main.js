@@ -165,15 +165,15 @@
 
     $('#btn-finish').click(function(){
         var host = './server/save-log.php';
-        $.post(host, { data: actionLogger.getFullLogs() })
+        $.post(host, { data: actionLogger.getFullLogs(), filename: 'test-'+getTimestamp() })
             .done(function(response){
-            console.log(response);
-            window.location.href = 'test-finished.html';
-        })
+                console.log(response);
+                window.location.href = 'test-finished.html';
+            })
             .fail(function(jqXHR){
-            console.log('post failed');
-            console.log(jqXHR);
-        });
+                console.log('post failed');
+                console.log(jqXHR);
+            });
     });
 
 
