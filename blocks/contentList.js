@@ -132,7 +132,7 @@ var ContentList = (function(){
 
     var formatTitles = function(colorScale) {
         _this.data.forEach(function(d, i){
-            var formattedTitle = (d.title.length > 60) ? (d.title.substring(0, 56) + '...') : d.title + '';
+            var formattedTitle = (d.title.length > 60) ? (d.title.substring(0, 80) + '...') : d.title + '';
             formattedTitle = (_this.selectedKeywords.length == 0) ? formattedTitle : getStyledText(formattedTitle, _this.selectedKeywords, colorScale);
             $('.'+liClass+'['+urankIdAttr+'="'+d.id+'"]').find('.'+liTitleClass).html(formattedTitle);
         });
