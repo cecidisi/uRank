@@ -1112,6 +1112,7 @@ Document Panel (right) - for visualizing highlighted text
     background: #999;
     z-index: 9999;
     box-shadow: 5px 5px 8px #333, -5px 5px 8px #333;
+    border-radius: 3px;
 }
 
 .urank-docviewer-details-section {
