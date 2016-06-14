@@ -12,6 +12,9 @@
         $bookmarkTitle = $('.control-panel h4');
 
     var testOptionsDef = {
+        model: {
+            social: false
+        },
         docViewer : {
             misc: {
                 facetsToShow: ['year']

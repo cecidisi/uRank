@@ -184,7 +184,7 @@ header .num-results-msg {
     color: white;
     box-shadow: inset 2px 2px 4px #bbb, inset -2px -2px 4px #bbb;
     font-weight: bold;
-    line-height: 1.9em;
+    line-height: 20px;
     padding: 2px;
 }
 
@@ -211,7 +211,7 @@ header input[type="button"] {
 
 .control-panel {
     min-width: 200px;
-    width: 10%;
+    width: 12%;
     height: 100%;
     float: left;
     display: inline-block;
@@ -229,7 +229,7 @@ header input[type="button"] {
 .left-panel {
     display: inline-block;
     float:  left;
-    width: 30%;
+    width: 35%;
     height: 100%;
 }
 
@@ -237,7 +237,7 @@ header input[type="button"] {
 .central-panel {
     display: inline-block;
     float:  left;
-    width: 40%;
+    width: 35%;
     /*    width: 31%;*/
     height: 100%;
 }
@@ -245,7 +245,7 @@ header input[type="button"] {
 /*    RIGHT */
 .right-panel {
     float: right;
-    width: 20%;
+    width: 18%;
     height: 100%;
 }
 
