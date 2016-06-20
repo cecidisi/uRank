@@ -11,7 +11,6 @@ var VisCanvas = (function(){
     // Helper
     var $root = $(''), $scrollable = $(''), $visContainer = $(''), $visContainerSocial = $('');
 
-
     var onScroll = function(event) {
         event.stopPropagation();
         s.onScroll.call(this, _this, $(this).scrollTop());
@@ -38,6 +37,7 @@ var VisCanvas = (function(){
         if(opt.misc.hideScrollbar) {
             $root.addClass(hiddenScrollbarClass);
             $scrollable = $('<div/>').appendTo($root).addClass(hiddenScrollbarInnerClass);
+            $scrollable = $root.mCustomScrollbar(customScrollOptions);
         }
         else {
             $scrollable = $root;

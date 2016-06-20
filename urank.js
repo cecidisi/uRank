@@ -69,7 +69,7 @@ var Urank = (function(){
                     liDarkBackgroundClass: ''
                 },
                 misc: {
-                    hideScrollbar: false
+                    hideScrollbar: true
                 }
             },
         },
@@ -81,7 +81,7 @@ var Urank = (function(){
                 darkBackgroundColor: ''
             },
             misc: {
-                hideScrollbar: true
+                hideScrollbar: false
             }
         },
         tagBox: {
