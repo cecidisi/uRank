@@ -1,4 +1,3 @@
-
 .urank-header-style {
     color: #888;
 /*    background: -webkit-linear-gradient(top, rgba(245, 245, 245, 1), rgba(230, 230, 230, 1));*/
@@ -13,9 +12,7 @@
 
 
 /************************************************************************************************
-
     TAG CLOUD
-
 ************************************************************************************************/
 
 /* default */
@@ -217,7 +214,7 @@
 
 .urank-tagcloud-tag.selected, .urank-tagcloud-tag.added {
     background: -webkit-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
-	background: -ms-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
+    background: -ms-linear-gradient(top, rgb(0, 102, 255), rgb(20, 122, 255), rgb(0, 102, 255));
     color: #eee;
     text-shadow: none;
     cursor: move;
@@ -447,9 +444,7 @@ div.urank-tagcloud-tag-tooltip p strong[name="tag"] {
 
 
 /************************************************************************************************
-
     TAG BOX
-
 ************************************************************************************************/
 
 .urank-tagbox {
@@ -730,9 +725,7 @@ a.urank-tagbox-clear-btn:before {
 
 
 /**********************************************************************************************************************
-
                                                     CONTENT LIST (center-left)
-
 **********************************************************************************************************************/
 
 /***************************    header     ************************************/
@@ -813,7 +806,7 @@ a.urank-tagbox-clear-btn:before {
 }
 
 
-/***************	<li> background style (the first 3 can be overwritteny)  **************/
+/***************    <li> background style (the first 3 can be overwritteny)  **************/
 
 /* <li> items' hover style */
 .urank-list-li-default.hovered {
@@ -857,26 +850,26 @@ a.urank-tagbox-clear-btn:before {
 }
 
 
-/***************	ranking indicators section	**************/
+/***************    ranking indicators section  **************/
 
 .urank-list-li-ranking-container {
     display: inline-block;
     float: left;
     height: 100%;
-	min-width: 51px;
+    min-width: 51px;
     padding-left: 1px;
 }
 
 .urank-list-li-ranking-pos {
     display: inline-block;
     float: left;
-    width: 20px;
-    height: 20  px;
+    width: 18px;
+    height: 18px;
     margin: 5px 2px;
     /*background: -webkit-linear-gradient(top, rgba(255, 175, 0, 0.8) 75%, rgba(235, 155, 0, 0.8));*/
     background: -webkit-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
-	background: -ms-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
-	/*background: linear-gradient(to top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));*/    
+    background: -ms-linear-gradient(top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));
+    /*background: linear-gradient(to top, rgba(100, 100, 100, 0.8) 75%, rgba(50, 50, 50, 0.8));*/
     -webkit-border-radius: 1em;
     box-shadow: 0.05em 0.15em 0.3em #888;
     line-height: 1.8em;
@@ -927,7 +920,7 @@ a.urank-tagbox-clear-btn:before {
 }
 
 
-/***************	Watch icon and fav icon section   **************/
+/***************    Watch icon and fav icon section   **************/
 
 .urank-list-li-buttons-container {
     float: right;
@@ -1005,7 +998,7 @@ a.urank-tagbox-clear-btn:before {
 }
 
 
-/***************	Watched effect   **************/
+/***************    Watched effect   **************/
 
 .urank-list-li.watched {
     box-shadow: inset 1px 1px 2px rgba(128, 128, 128, 0.6), inset -1px -1px 2px rgba(128, 128, 128, 0.6);
@@ -1017,7 +1010,7 @@ a.urank-tagbox-clear-btn:before {
     text-decoration: underline;
 }
 
-/***************	Moving effects     **************/
+/***************    Moving effects     **************/
 
 .urank-list-li-movingup {
     /*box-shadow: inset 1px 1px 2px rgba(0, 250, 0, 0.6), inset -1px -1px 2px rgba(0, 250, 0, 0.6);*/
@@ -1040,9 +1033,7 @@ a.urank-tagbox-clear-btn:before {
 
 
 /*****************************************************************************************************************
-
 Canvas section (right-center) - displays ranking vis
-
 *****************************************************************************************************************/
 
 
@@ -1081,9 +1072,7 @@ Contains a <span> for the message and optionally an <img> tag (for the loading i
 
 
 /********************************************************************************************************************************************
-
 Document Panel (right) - for visualizing highlighted text
-
 ********************************************************************************************************************************************/
 
 
@@ -1168,8 +1157,8 @@ Document Panel (right) - for visualizing highlighted text
     height: calc(100% - 6em);
     margin: 0.5em;
     background: -webkit-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
-	background: -ms-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
-	/*background: linear-gradient(to top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));*/     
+    background: -ms-linear-gradient(top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));
+    /*background: linear-gradient(to top, rgba(185, 185, 185, 1), rgba(180, 180, 180, 1));*/
     box-shadow: inset .2em .2em .5em #ccc, inset -.2em -.2em .5em #ccc;
     box-shadow: inset 1px 1px 1px #888, inset -1px -1px 1px #888;
     overflow-y: auto;
@@ -1221,17 +1210,16 @@ Document Panel (right) - for visualizing highlighted text
 .urank-hidden-scrollbar-inner {
     height: 100%;
     overflow-y: scroll;
-    overflow-x: hidden;`
+    overflow-x: hidden;
     margin-right: -100px;
     padding-right: 84px;
 }
 /*
-
 .urank-hidden-scrollbar-inner:before,
 .urank-hidden-scrollbar-inner:after {
     content: ".";
     display: block;
-    height: 0;p
+    height: 0;
     overflow-x: hidden;
 }
 .urank-hidden-scrollbar-inner:after { clear: both; }
