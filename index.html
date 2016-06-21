@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Urank by cecidisi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Urank</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/cecidisi/uRank" class="btn">View on GitHub</a>
+      <a href="https://github.com/cecidisi/uRank/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/cecidisi/uRank/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="urank" class="anchor" href="#urank" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>uRank</h1>
+
+<h2>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Description</h2>
+
+<p>Use uRank to visualize a colleciton of documents and rank them according to keywords selected by the user</p>
+
+<p><img src="https://cloud.githubusercontent.com/assets/6489976/6713829/25e9161e-cd95-11e4-88b5-6cf0ba685d9d.png" alt="alt tag"></p>
+
+<p>uRank consists of 5 components:</p>
+
+<ul>
+<li>Tag Cloud: shows keywords extracted for the whole collection as tags. Color intensity indicates term frequency</li>
+<li>Tag Box: the user can drag and drop tags here to query the collection, which in turns creates or updates the document ranking</li>
+<li>Content List: displays documents in a list. As the ranking is updated, it shows additional information, such as ranking position and number of positions changed respect to the last ranking state</li>
+<li>Vis Canvas: displays a ranking visualization as stacked bars. It depicts overall scores and query term contribution. Alternatively, documents can be ranked by maximum term score</li>
+<li>Doc Viewer: when a document is selected, its title, content and other metadata are displayed here</li>
+</ul>
+
+<p><img src="https://cloud.githubusercontent.com/assets/6489976/6714765/5c18502e-cd9a-11e4-95f3-925c0eeb9da4.png" alt="alt-tag"></p>
+
+<h2>
+<a id="how-to-use-it" class="anchor" href="#how-to-use-it" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to use it</h2>
+
+<p>Include the following files in the header:</p>
+
+<ul>
+<li>jquery (version 1.10.2 or higher)</li>
+<li>urank entry point (urank/urank-loader.js)</li>
+</ul>
+
+<p>E.g.</p>
+
+<pre><code>&lt;script type="text/javascript" src="../urank-loader.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>Create the DOM elements that will serve as containers for the 5 aforementioned blocks.
+In your code, call the Urank function passing 3 arguments: </p>
+
+<ol>
+<li>A callback function that will receive a UrankController object as argument</li>
+<li>An object specifying initialization settings</li>
+<li>A string with the path to urank folder</li>
+</ol>
+
+<p>Example:</p>
+
+<pre><code>var options = {
+   tagCloudRoot: '#tag_cloud',
+   tagBoxRoot: '#tag_box',
+   contentListRoot: '#content_list',
+   visCanvasRoot: '#vis_canvas',
+   docViewerRoot: '#doc_viewer'
+};
+
+var init = function(urank){
+   $('#btn_reset').click(urank.reset);
+   $('#btn_sort_by_overall_score').click(urank.rankByOverallScore);
+   $('#btn_sort_by_max_score').click(urank.rankByMaximumScore);
+   urank.loadData(data);
+};
+
+Urank(init, options, 'scripts/urank/');
+</code></pre>
+
+<p><code>options</code> passes the DOM elements that will be roots for each specific component (see full list below). <code>init</code> is the callback function that receives a UrankController object: <code>urank</code>. This controller provides three event handlers that can be bound to your own DOM elements: <code>reset</code>, <code>rankByOverallScore</code> and <code>rankByMaximumScore</code>. To load a collection of documents, call urank's <code>loadData</code> method passing your data array as argument.</p>
+
+<h2>
+<a id="full-list-of-initizialization-options" class="anchor" href="#full-list-of-initizialization-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Full list of initizialization options</h2>
+
+<ul>
+<li>root: {string} DOM selector for element that captures mousedown events and causes certain effects to disappear. Default: 'body'</li>
+<li>tagCloudRoot: {string} DOM selector for tagCloud container</li>
+<li>tagBoxRoot:  {string} DOM selector for tagBox container</li>
+<li>contentListRoot:  {string} DOM selector for contentList container</li>
+<li>visCanvasRoot:  {string} DOM selector for visCanvas container</li>
+<li>docViewerRoot:  {string} DOM selector for docViewer container</li>
+<li>tagColorArray: {array} (optional) HEX color strings for tags in Tag Cloud. It should be a palette for sequential data (see colorbrewer2.org)</li>
+<li>queryTermColorArray: {array} (optional) HEX color strings for tags in Tag Box. It should be a palette for qualitative data (see colorbrewer2.org)</li>
+</ul>
+
+<h4>
+<a id="callbacks-to-be-executed-after-homonymous-methods-optional" class="anchor" href="#callbacks-to-be-executed-after-homonymous-methods-optional" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Callbacks to be executed after homonymous methods (optional)</h4>
+
+<ul>
+<li>onLoad: receives array with keywords extracted from loaded data</li>
+<li>onChange: receives two parameters: ranking data array and seleced keywords array</li>
+<li>onReset</li>
+<li>onRankByOverallScore</li>
+<li>onRankByMaximumScore</li>
+<li>onItemClicked: receives document id as parameter</li>
+<li>onItemMouseEnter: receives document id as parameter</li>
+<li>onItemMouseLeave: receives document id as parameter</li>
+<li>onFaviconClicked: receives document id as parameter</li>
+<li>onWatchiconClicked: receives document id as parameter</li>
+<li>onTagInCloudMouseEnter: receives tag index in keywords array</li>
+<li>onTagInCloudMouseLeave: receives tag index in keywords array</li>
+<li>onTagInCloudClick: receives tag index in keywords array</li>
+<li>onTagDeleted: receives tag index in keywords array</li>
+<li>onTagInBoxMouseEnter: receives tag index in keywords array</li>
+<li>onTagInBoxMouseLeave: receives tag index in keywords array</li>
+<li>onTagInBoxClick: receives tag index in keywords array</li>
+<li>onDocumentHintClick: receives tag index in keywords array</li>
+<li>onKeywordHintMouseEnter: receives tag index in keywords array</li>
+<li>onKeywordHintMouseLeave: receives tag index in keywords array</li>
+<li>onKeywordHintClick: receives tag index in keywords array</li>
+</ul>
+
+<h6>
+<a id="notes" class="anchor" href="#notes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Notes:</h6>
+
+<ul>
+<li>Document Hint: green pie chart shown when a tag in the Tagcloud is hovered. Depicts the amount of documents in the collection containing the keyword. If this hint is clicked, the corresponding documents are highlighted in the content list and ranking view</li>
+<li>Keyword Hint: red circle shown when a tag in the Tagcloud is hovered. The white number indicates the number frequently co-occurring keywords. If the red circle is clicked, the view is "frozen" so it is possible to navigate in the Tagcloud.</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/cecidisi/uRank">Urank</a> is maintained by <a href="https://github.com/cecidisi">cecidisi</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
