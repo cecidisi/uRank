@@ -159,35 +159,12 @@
     /******************************************* End uRank **************************************************/
     /********************************************************************************************************/
 
-    // Bind event handlers for dataset select
+    // Bind event handler for dataset select
     $("#select-dataset").change(selectDatasetChanged);
-    // Bind event handlers for urank specific buttons
+    // Bind event handler for urank specific buttons
     $('#btn-action-logs').click(function(){
-        console.log(actionLogger.getFullLogs());
+        $.generateFile({ script: './server/download.php', filename: 'action_logs__'+getTimestamp()+'.json', content: JSON.stringify(actionLogger.getFullLogs()) });
     })
-
-    $('#btn-finish').click(function(){
-        var user = Math.random().toString(36).slice(2);
-        localStorage['user'] = user;
-
-        var host = './server/save-log.php';
-        $.post(host, { data: actionLogger.getFullLogs(), filename: user+'__'+getTimestamp() })
-            .done(function(response){
-                console.log(response);
-                window.location.href = 'test-finished.html';
-            })
-            .fail(function(jqXHR){
-                console.log('post failed');
-                console.log(jqXHR);
-            });
-    });
-
-
-    $.get("http://ipinfo.io", function(response) {
-        actionLogger.log(actionLogger.action.ipLogged, response);
-    }, "jsonp");
-
-    //actionLogger.getActionCount();
 
 })();
 

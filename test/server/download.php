@@ -1,28 +1,14 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-include 'error.php';
 
-$dir = './logs';
-
-if(!file_exists($dir)) {
-    return_error('ERROR directory does not exist', 404);
+if(empty($_POST['filename']) || empty($_POST['content'])){
+    echo "Exit";
     exit;
 }
-
-$files = glob($dir.'/*'); // get all file names
-$zipname = 'urank-test-logs.zip';
-$zip = new ZipArchive;
-
-$zip->open($zipname, ZipArchive::CREATE);
-
-foreach($files as $file){ // iterate files
-    $zip->addFile($file);
-}
-$zip->close();
-
+// Sanitizing the filename:
+$filename = preg_replace('/[^a-z0-9\-\_\.]/i','',$_POST['filename']);
 // Outputting headers:
-header('Content-Type: application/zip');
-header('Content-disposition: attachment; filename='.$zipname);
-header('Content-Length: ' . filesize($zipname));
-readfile($zipname);
+header("Cache-Control: ");
+header("Content-type: text/plain");
+header('Content-Disposition: attachment; filename="'.$filename.'"');
+echo $_POST['content'];
 ?>
