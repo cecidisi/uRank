@@ -117,8 +117,8 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 		mappingCombination_ = mappingCombination;  
 		iWidth_ = iWidth;
 		iHeight_ = iHeight; 
-		var color = d3.scale.category10();		
-		LANDSCAPE.Ext.colorScale = color;
+		//var color = d3.scale.category10();		
+		//LANDSCAPE.Ext.colorScale = color;
 		
         $("#eexcess_landscape_box").empty(); 
         LANDSCAPE.Dimensions = LANDSCAPE.Settings.getDimensions(domRoot, iWidth, iHeight);
@@ -168,10 +168,17 @@ function LandscapeVis(root, visTemplate, EEXCESSobj) {
 		}
 
 		color = d3.scale.category10().domain(facetAttributes);
-		LANDSCAPE.Ext.colorScale = color;
+		
 			
 
 		legendDomain = getLegendDomain(color.domain());
+		if (window.localStorageCustom !== undefined) {
+			var channelElements = JSON.parse(localStorageCustom.getItem(colorChannel+'-colors'));
+			if(channelElements != null) {
+				color = d3.scale.category10().domain(channelElements);	
+			}
+		}
+		LANDSCAPE.Ext.colorScale = color;
 
   		/*if( !$('#landscapeAlgrSelBox').length ) {
 		  LANDSCAPE.Internal.buildLandscapeAlgrSelectBox();
