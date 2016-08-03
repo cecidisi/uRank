@@ -210,6 +210,7 @@ var Urank = (function(){
 
         onChange: function(selectedFeatures) {
 
+            console.log('Change');
             _this.selectedFeatures = selectedFeatures || _this.selectedFeatures;
             _this.selectedId = undefined;
 
@@ -221,8 +222,9 @@ var Urank = (function(){
 //                ranking: _this.loadOpt.model
 //            };
 
-            var tsmp = $.now();
+            var tmsp = $.now();
             _this.rankedData = _this.rankingModel.selectFeatures(_this.selectedFeatures.map(function(f){ return f.name; }));
+            console.log($.now() - tmsp);
 //            var status = _this.rankingModel.getStatus();
 //            console.log(status);
 //            console.log(_this.rankingModel);
@@ -250,14 +252,17 @@ var Urank = (function(){
 
         onTagInBoxClick: function(index) {
             var feature = _this.features[index].name;
+            var tmsp = $.now();
             _this.rankedData = _this.rankingModel.sortByFeature(feature);
+            console.log('Update time = ' + ($.now() - tmsp));
+            console.log(_this.rankedData);
             contentList.update({ data: _this.rankedData, selectedFeatures: _this.selectedFeatures });
             visCanvas.update({
                 data: _this.rankedData,
                 selectedFeatures: _this.selectedFeatures,
                 colorScale: _this.queryTermColorScale
             });
-
+            console.log('Render ing time = ' + ($.now() - tmsp));
             s.onTagInBoxClick.call(this, index);
         },
 
