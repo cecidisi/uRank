@@ -36,7 +36,7 @@ function datasetManager(){
         }
     };
 
-    function adaptJSON(_data) {
+    function adaptJSON(_data, datasetId) {
         var data = [];
         _data.xml.records.record.forEach(function(d, i){
 
@@ -47,10 +47,8 @@ function datasetManager(){
                     return Array.isArray(contributors['secondary-authors'].author) ? contributors['secondary-authors'].author.join('; ') : contributors['secondary-authors'].author;
                 return '';
             }
-//            console.log('*************   ' + i + '   ************');
-//            console.log(d);
             data.push({
-                id: /*d.isbn ? (d.isbn + '-doc-' + i) :*/ 'doc-' + i,
+                id: 'doc-' + datasetId + '-' + Math.floor((Math.random() * 100000000) + 1),
                 title: d.titles.title,
                 creator: getCreators(d.contributors),
                 description: d.abstract || '',
@@ -78,9 +76,10 @@ function datasetManager(){
         if(datasetMappings[datasetId]){
             $.getJSON('datasets/'+datasetMappings[datasetId].file, function(data){
                 if(datasetMappings[datasetId].parse) {
-                    data = adaptJSON(data);
+                    data = adaptJSON(data, datasetId);
                 }
                 console.log('Dataset '+ datasetId +' retrieved --> (' + data.length + ' documents)');
+                //console.log(JSON.stringify(data));
                 callback.call(this, data);
             })
             .fail(function(jqXHR, textStatus, errorThrown) { console.log('getJSON request failed! ' + textStatus + ' --- ' + errorThrown.message);

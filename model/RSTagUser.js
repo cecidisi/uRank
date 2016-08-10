@@ -6,102 +6,27 @@ window.RSTagUser = (function(){
     //  constructor
     function RSTagUser() {
         _this = this;
-        this.userItemMatrix = {};       //  boolean values
-        this.itemTagMatrix = {};        //  counts repetitions
-        this.userTagMatrix = {};        //  counts repetitions
-        this.maxTagAcrossDocs = {};     //  highest frequency of each tag in a document. Depends on item-tag matrix
-        this.maxTagAccrossUsers = {};   //  highest frequency of each tag for a user. Depends on user-tag matrix
-        this.maxSingleTagFrequency = 0;
-
-        this.init();
+        this.simsDocUser = {};       //  1 if item was bookmarked by u, otherwise jaccard similarity
+        this.simsDocTag = {};        //  keys are doc ids counts repetitions
+        this.simsTagUser = {};        //  counts repetitions
     }
+
 
 
     RSTagUser.prototype = {
 
-        init: function() {
+        init: function(args) {
+            this.simsDocUser = args.simsDocUser || {};
+            this.simsDocTag = args.simsDocTag || {};
+            this.simsTagUser = args.simsTagUser || {};
 
-            var kw_aux = [
-                { query: 'women in workforce', keywords: ['participation&woman&workforce', 'gap&gender&wage', 'inequality&man&salary&wage&woman&workforce']},       // 9
-                { query: 'robot', keywords: ['autonomous&robot', 'human&interaction&robot', 'control&information&robot&sensor']},                                   // 7
-                { query: 'augmented reality', keywords: ['environment&virtual', 'context&object&recognition', 'augmented&environment&image&reality&video&world']},  // 10
-                { query: 'circular economy', keywords: ['management&waste', 'china&industrial&symbiosis', 'circular&economy&fossil&fuel&system&waste']}];           // 10
-
-            function getKeywords(query, questionNumber) {
-                var index = _.findIndex(kw_aux, function(kw){ return kw.query == query });
-                return kw_aux[index].keywords[questionNumber - 1].split('&');
-            }
-
-            function randomFromTo(from, to){
-                return Math.floor(Math.random() * (to - from + 1) + from);
-            }
-
-            function shuffle(o) {
-                for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-                return o;
-            }
-
-            var recData = [];
-
-            $.getJSON('../model/initial-bookmarks.json', function(data){
-                console.log('Bookmarks retrieved');
-                data.forEach(function(r, i){
-                    r['tasks-results'].forEach(function(t){
-                        t['questions-results'].forEach(function(q, j){
-                            var keywords = getKeywords(t.query, q['question-number']);
-                            var user = (r.user - 1) * 3 + q['question-number'];
-
-                            q['selected-items'].forEach(function(d){
-                                var usedKeywords = shuffle(keywords).slice(0, randomFromTo(2,keywords.length));
-
-                                recData.push({ user: user, doc: d.id, keywords: usedKeywords });
-                            });
-                        });
-                    });
-                });
-
-                //  add all evaluation results to recommender
-                recData.forEach(function(d){
-                    _this.addBookmark(d);
-                });
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                console.log('getJSON request failed! ' + textStatus + ' --- ' + errorThrown.message);
-            });
+            console.log(args);
         },
 
-        addBookmark: function(args) {
-            var p = $.extend({ user: undefined, doc: undefined, keywords: undefined }, args);
-
-            if(p.user == undefined || p.doc == undefined || p.keywords == undefined)
-                return 'Error -- parameter missing';
-
-            //  update user-item matrix
-           if(!_this.userItemMatrix[p.user])
-               _this.userItemMatrix[p.user] = {};
-
-            _this.userItemMatrix[p.user][p.doc] = true;
-
-            //  item-tag matrix
-            if(!_this.itemTagMatrix[p.doc])
-                _this.itemTagMatrix[p.doc] = {};
-
-            //  user-tag-matrix
-            if(!_this.userTagMatrix[p.user])
-                _this.userTagMatrix[p.user] = {};
-
-            // update item-tag, user-tag and tagMax matrices
-            p.keywords.forEach(function(k){
-                _this.itemTagMatrix[p.doc][k] = (_this.itemTagMatrix[p.doc][k]) ? _this.itemTagMatrix[p.doc][k] + 1 : 1;
-                _this.userTagMatrix[p.user][k] = (_this.userTagMatrix[p.user][k]) ? _this.userTagMatrix[p.user][k] + 1 : 1;
-
-                if(!_this.maxTagAcrossDocs[k] || _this.itemTagMatrix[p.doc][k] > _this.maxTagAcrossDocs[k])
-                    _this.maxTagAcrossDocs[k] = _this.itemTagMatrix[p.doc][k];
-
-                if(!_this.maxTagAccrossUsers[k] || _this.userTagMatrix[p.user][k] > _this.maxTagAccrossUsers[k])
-                    _this.maxTagAccrossUsers[k] = _this.userTagMatrix[p.user][k];
-            });
-            return 'success';
+        clear: function() {
+            this.simsDocUser = {};
+            this.simsDocTag = {};
+            this.simsTagUser = {};
         },
 
         getTagUserScores: function(args) {
@@ -110,113 +35,105 @@ window.RSTagUser = (function(){
                 keywords: [],
                 data: [],
                 options: {
-                    rWeight: 1,
-                    beta: 0.5,
+                    tWeight: 1.0,
+                    uWeight: 1.0,
                     neighborhoodSize: 20,
-                    recSize: 0,
+                    numRecs: 0,
+                    sort: false
                 }
             }, args);
 
-            var _data = p.data.slice();
-           //  Get neighbors
-            var neighbors = [];
+            var _data = p.data.slice(),
+                keywords = p.keywords,
+                user = p.user,
+                vSize = parseFloat(p.options.neighborhoodSize);
 
-            if(p.options.beta < 1) {
-                _.keys(_this.userTagMatrix).forEach(function(user){
-                    if(user != p.user) {
-                        var userScore = 0;
-                        p.keywords.forEach(function(k){
-                            if(_this.userTagMatrix[user][k.term]) {
-                                var normalizedFreq = _this.userTagMatrix[user][k.term] / _this.maxTagAccrossUsers[k.term];
-                                var scalingFactor = 1 / (Math.pow(Math.E, (1 / _this.userTagMatrix[user][k.term])));
-                                userScore += (normalizedFreq * k.weight * scalingFactor / p.keywords.length);
-                            }
-                        });
-                        if(userScore > 0)
-                            neighbors.push({ user: user, score: Math.roundTo(userScore, 3) });
-                    }
+            ////////////////////////////////////////////
+            //   Compute neighborhood
+            ////////////////////////////////////////////                    
+            if(p.options.uWeight) {
+                var initNeighbors = [], neighbors = [];
+                keywords.forEach(function(k){
+                    initNeighbors = _.union(neighbors, Object.keys(_this.simsTagUser[k.stem]));
                 });
 
-                neighbors = neighbors.sort(function(u1, u2){
-                    if(u1.score > u2.score) return -1;
-                    if(u1.score < u2.score) return 1;
+                for(var i=0, len=initNeighbors.length; i<len; ++i) {
+                    var v = initNeighbors[i];
+                    if(v != user) {
+                        var simUV = 0.0;
+                        keywords.forEach(function(k) {
+                            var tag = k.stem;
+                            simUV += (_this.simsTagUser[tag] && _this.simsTagUser[tag][v]) ? _this.simsTagUser[tag][v] : 0.0;
+                        });
+                        if(simUV) {
+                            neighbors.push({ user: v, simUV: simUV });
+                        }
+                    }
+                }
+                // Sort neighborhood
+                neighbors = neighbors.sort(function(v1, v2){
+                    if(v1.simUV > v2.simUV) return -1;
+                    if(v1.simUV < v2.simUV) return 1;
                     return 0;
-                }).slice(0, p.options.neighborhoodSize);
+                }).slice(0, vSize);
             }
-
-            _this.maxSingleTagFrequency = 0
-            //   Keys are doc ids
-            _data.forEach(function(doc, i){
+            ////////////////////////////////////////////
+            //   Set keywords weights
+            ////////////////////////////////////////////
+            var simUT = {};
+            keywords.forEach(function(k){ simUT[k.stem] = k.weight });
+            ////////////////////////////////////////////
+            //   Scores
+            ////////////////////////////////////////////
+            for(var i=0, docsLen=_data.length; i<docsLen; i++) {
+                var doc = _data[i],
+                    dID = doc.id;
+                    //dID = (doc.id).split("doc-").length > 0 ? (doc.id).split("doc-")[1] : doc.id;
                 //  Checks that current user has not made any boomark or selected the doc yet
-//                if(!_this.userItemMatrix[p.user] || !_this.userItemMatrix[p.user][doc.id]) {
+                if (!_this.simsDocUser[dID] || !_this.simsDocUser[dID][p.user]) {
 
-                var tagBasedScore = 0, userBasedScore = 0, tags = {}, users = 0, beta = p.options.beta;
+                    var tScore = 0.0, uScore = 0.0, tScoresByTag = {}, uScoresByTag = {};
 
-                    //  Compute tag-based score
-                    if(p.options.beta > 0) {
-                        p.keywords.forEach(function(k){
-                            if(_this.itemTagMatrix[doc.id] && _this.itemTagMatrix[doc.id][k.term]) {
-                                var normalizedFreq = _this.itemTagMatrix[doc.id][k.term] / _this.maxTagAcrossDocs[k.term];           // normalized item-tag frequency
-                                var scalingFactor = 1 / (Math.pow(Math.E, (1 / _this.itemTagMatrix[doc.id][k.term])));   // raises final score of items bookmarked many times
-                                var tagScore = Math.roundTo((normalizedFreq * k.weight * scalingFactor * p.options.rWeight / p.keywords.length), 3);
-                                tags[k.term] = { tagged: _this.itemTagMatrix[doc.id][k.term], score: tagScore, stem: k.stem };
-                                _this.maxSingleTagFrequency = tags[k.term].tagged > _this.maxSingleTagFrequency ? tags[k.term].tagged : _this.maxSingleTagFrequency;
-                                tagBasedScore += tagScore;
+                    for(var k=0; k<keywords.length; ++k) {                        
+                        var tag = keywords[k].stem;
+                        ////////////////////////////////////////////
+                        //   T-score
+                        ////////////////////////////////////////////
+                        if(p.options.tWeight) {
+                            tScoresByTag[tag] = (_this.simsDocTag[dID] && _this.simsDocTag[dID][tag]) ? _this.simsDocTag[dID][tag] * simUT[tag] * p.options.tWeight: 0.0;
+                            tScore += tScoresByTag[tag];
+                        }
+                        ////////////////////////////////////////////
+                        //   U-score
+                        ////////////////////////////////////////////
+                        uScoresByTag[tag] = 0.0;
+                        // search in neighborhood for current tag
+                        var simCurDocUsers = {};
+                        if(p.options.uWeight) {
+                            for(var j=0, nLen=neighbors.length; j<nLen; ++j) {
+                                var v = neighbors[j];
+                                var simDocNeighbor = (_this.simsDocUser[dID] && _this.simsDocUser[dID][v.user]) ? _this.simsDocUser[dID][v.user] : 0.0;
+                                var simTagNeighbor = (_this.simsTagUser[tag] && _this.simsTagUser[tag][v.user]) ? _this.simsTagUser[tag][v.user] : 0.0;
+                                var curUscore = (simTagNeighbor * simDocNeighbor * simUT[tag] * p.options.uWeight) / vSize;
+                                uScoresByTag[tag] += curUscore;
                             }
-                        });
+                            uScore += uScoresByTag[tag];
+                        }
                     }
 
-                    //  compute user-based score => neighbor similarity * 1 | 0
-                    if(p.options.beta < 1) {
-                        neighbors.forEach(function(n){
-                            if(_this.userItemMatrix[n.user] && _this.userItemMatrix[n.user][doc.id]) {
-                                var userScore = (n.score / neighbors.length) * p.options.rWeight;
-                                userBasedScore += userScore;
-                                users++;
-                            }
-                        });
-                    }
+                    if(!_data[i].ranking) _data[i].ranking;
+                    _data[i].ranking.tScore = { total: tScore, scoresByTag: tScoresByTag };
+                    _data[i].ranking.uScore = { total: uScore, scoresByTag: uScoresByTag };
 
-                    var finalScore = Math.roundTo(tagBasedScore * p.options.beta + userBasedScore * (1 - p.options.beta), 3);
-                    doc.ranking.tuScore = finalScore;
-                    doc.ranking.tuMisc = {
-                        tagScore: Math.roundTo(tagBasedScore, 3),
-                        userScore: Math.roundTo(userBasedScore, 3),
-                        tags: tags,
-                        users: users
-                    };
-//                }
-            });
+                    //console.log('T-score = ' +  _data[i].ranking.tScore.total);
+                    //console.log('U-score = ' + _data[i].ranking.uScore.total);
+   
+                } // end if (!_this.simsDocUser[p.user] || !_this.simsDocUser[p.user][dID])
+            }   // end for _data iteration
             return _data;
-        },
-
-        clear: function() {
-            this.userItemMatrix = {};
-            this.itemTagMatrix = {};
-            this.userTagMatrix = {};
-            this.maxTagAcrossDocs = {};
-            this.maxTagAccrossUsers = {};
-            this.maxSingleTagFrequency = 0;
-        },
-
-        //  Miscelaneous
-
-        getUserItemMatrix: function() {
-            return this.userItemMatrix;
-        },
-
-        getUserTagMatrix: function() {
-            return this.userTagMatrix;
-        },
-
-        getItemTagMatrix: function() {
-            return this.itemTagMatrix;
-        },
-
-        getmaxSingleTagFrequency: function(){
-            return this.maxSingleTagFrequency;
-        }
+        }   // end getTagUserScores
 
     };
     return RSTagUser;
 })();
+

@@ -231,7 +231,7 @@ var KeywordExtractor = (function(){
                 if(_keywordDict[current]) {   // current word is keyword
 
                     for(var j=i-s.maxKeywordDistance; j <= i+s.maxKeywordDistance; j++){
-                        var prox = tokens[j] ? tokens[j].stem() : STR_UNDEFINED;
+                        var prox = tokens[j] ? tokens[j].stem() : undefined;
 
                         if(_keywordDict[prox] && current != prox) {
                             //var proxStem = prox.stem();

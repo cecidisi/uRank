@@ -157,7 +157,7 @@ var Urank = (function(){
             _this.keywordsDict = keywordExtractor.getCollectionKeywordsDictionary();
             _this.rMode = RANKING_MODE.by_CB.attr;
             _this.rWeight = 0.5;
-            _this.rankingModel.clear().setData(_this.data);
+            _this.rankingModel.clear().setData(_this.data, trainingData);
             _this.selectedKeywords = [];
             _this.selectedId = undefined;
             RANKING_MODE.by_CB.active = _this.loadOpt.model.content;

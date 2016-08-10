@@ -13,7 +13,7 @@
 
     var testOptionsDef = {
         model: {
-            social: false
+            social: true
         },
         docViewer : {
             misc: {
