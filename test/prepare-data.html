@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>uRank</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+
+        <style type="text/css">
+            div {
+                margin: 10px;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                height: 150px;
+                overflow-y: auto;
+            }
+
+        </style>
+    </head>
+
+    <body>
+
+        <h5>Doc-User Similarities</h5>
+        <div id='doc-user'></div>
+        <h5>Doc-Tag Similarities</h5>
+        <div id='doc-tag'></div>
+        <h5>Tag-User Similarities</h5>
+        <div id='tag-user'></div>
+
+
+        <script type="text/javascript" src='../dependencies/jquery.js'></script>
+        <script type="text/javascript" src='../dependencies/underscore-min.js'></script>
+        <script type="text/javascript" src='../libs/natural-custom.js'></script>
+        <script type="text/javascript" src='../libs/pos/lexer.js'></script>
+        <script type="text/javascript" src='../libs/pos/lexicon.js'></script>
+        <script type="text/javascript" src='../libs/pos/pos.js'></script>
+        <script type="text/javascript" src='../libs/pos/POSTagger.js'></script>
+        <script type="text/javascript" src="../helper/utils.js"></script>
+        <script type="text/javascript" src='../model/keywordExtractor.js'></script>
+        <script type="text/javascript" src="../model/bookmarks.js"></script>
+        <script type="text/javascript" src="datasets/all-datasets.js"></script>
+        <script type="text/javascript" src="../model/prepareTrainingData.js"></script>
+
+        <script type="text/javascript">
+
+            var ptd = new prepareTrainingData();
+            var kwext = new KeywordExtractor();
+
+            //var bookmarks = ptd.processRawBookmarks(rawBookmarks);
+            //console.log('BOOKMARKS');
+            //console.log(JSON.stringify(bookmarks));
+
+            var allDocs = [];
+            Object.keys(allDatasets).forEach(function(topic){
+                kwext.clear();
+                var docs = allDatasets[topic];
+                for(var i=0, len=docs.length; i<len; i++) {
+                    docs[i].index = i;
+                    docs[i].title = docs[i].title.clean();
+                    docs[i].description = docs[i].description.clean();
+                    var text = (docs[i].description) ? docs[i].title +'. '+ docs[i].description : docs[i].title;
+                    kwext.addDocument(text.removeUnnecessaryChars(), docs[i].id);
+                }
+                kwext.processCollection();
+                for(var i=0, len=docs.length; i<len; i++) {
+                    docs[i].keywords = kwext.listDocumentKeywords(i);
+                }
+                allDocs = $.merge(allDocs, docs);
+            });
+
+            console.log(allDocs.length);
+            //var count = 0;
+            //allDocs.forEach(function(d){ if(d.id) count++; });
+            //console.log(count);
+
+            var trainingData = ptd.getTrainingData(bookmarks, allDocs);
+            console.log('/////////// doc-user');
+            //console.log(Object.keys(trainingData.simsDocUser))
+            //console.log(JSON.stringify(trainingData.simsDocUser));
+            console.log('/////////// doc-tag');
+            //console.log(Object.keys(trainingData.simsDocTag))
+            //console.log(JSON.stringify(trainingData.simsDocTag));
+            console.log('/////////// tag-user');
+            //console.log(Object.keys(trainingData.simsTagUser))
+            //console.log(JSON.stringify(trainingData.simsTagUser));
+
+            $('#doc-user').html(JSON.stringify(trainingData.simsDocUser));
+            $('#doc-tag').html(JSON.stringify(trainingData.simsDocTag));
+            $('#tag-user').html(JSON.stringify(trainingData.simsTagUser));
+
+        </script>
+
+    </body>
+</html>
